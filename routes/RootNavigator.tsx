@@ -1,0 +1,131 @@
+import React from 'react';
+
+import { createStackNavigator, HeaderStyleInterpolators, TransitionSpecs } from '@react-navigation/stack';
+
+import { WelcomeScreen } from '../features/auth/WelcomeScreen';
+
+import { LoginScreen } from '../features/auth/LoginScreen/LoginScreen';
+
+import { SignUpScreen } from '../features/auth/SignUpScreen/SignUpScreen';
+
+import { ResetPasswordScreen } from '../features/auth/ResetPasswordScreen/ResetPasswordScreen';
+
+import { VerificationScreen } from '../features/auth/VerificationScreen/VerificationScreen';
+
+import { AddNewPassword } from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
+
+import Routes from './Routes';
+
+import { NavigatorScreenParams } from '@react-navigation/native';
+
+import BottomTabNavigator, { BottomTabParamList } from './BottomTabNavigator';
+
+
+type AuthStackParamList = {
+  welcome: undefined;
+  login: undefined;
+  signup: undefined;
+  otp: { phone_number?: string, routName?: string };
+  resetPassword: undefined;
+  requestPassword: undefined;
+};
+
+const RootStack = createStackNavigator<RootStackParamList>();
+const AuthStack = createStackNavigator<AuthStackParamList>();
+
+type RootStackParamList = {
+  [Routes.BottomTabNavigator]: NavigatorScreenParams<BottomTabParamList>;
+};
+
+export const RootNavigator = () => {
+
+
+  const MyTransition: any = {
+     headerShown: false,
+    gestureDirection: 'vertical',
+    transitionSpec: {
+      open: TransitionSpecs.TransitionIOSSpec,
+      close: TransitionSpecs.TransitionIOSSpec,
+    },
+    headerStyleInterpolator: HeaderStyleInterpolators.forFade,
+    cardStyleInterpolator: ({ current, layouts }: any) => ({
+      cardStyle: {
+        transform: [
+          {
+            translateX: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [layouts.screen.width, 0],
+            }),
+          },
+        ],
+      },
+      overlayStyle: {
+        opacity: current.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 0.5],
+        }),
+      },
+    }),
+  }
+
+
+
+
+
+
+
+
+
+  return (
+    // <RootStack.Navigator>
+    //   <RootStack.Screen
+    //     name={Routes.BottomTabNavigator}
+    //     component={BottomTabNavigator}
+    //     options={{headerShown: false}}
+    //   />
+    // </RootStack.Navigator>
+    <AuthStack.Navigator
+      mode="modal"
+      screenOptions={{
+        headerShown: false,
+        headerTransparent: true,
+        headerBackTitleVisible: false,
+        headerTitleAllowFontScaling: true,
+        animationTypeForReplace: 'pop',
+        // ...TransitionPresets.ModalPresentationIOS,
+        gestureDirection: 'horizontal',
+        gestureEnabled: true,
+      }}>
+      <AuthStack.Screen
+        name="welcome"
+        component={WelcomeScreen}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="login"
+        component={LoginScreen}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="signup"
+        component={SignUpScreen}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="otp"
+        component={VerificationScreen}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="resetPassword"
+        component={ResetPasswordScreen}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="requestPassword"
+        component={AddNewPassword}
+        options={MyTransition}
+      />
+    </AuthStack.Navigator>
+  );
+};

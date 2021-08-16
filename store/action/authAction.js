@@ -171,7 +171,12 @@ export const _varifyCustomer = (getPhonneNumber, otpCode, getroutName, getsocial
             if (resp.data.status === 200) {
                 if (getroutName == "SocialSigninVerification") {
                     dispatch(_loading(false));
-                    dispatch(_googleAuth('testing', getsocialId, getsocialType))
+                    if(getsocialType=="GOOGLE"){
+                        dispatch(_googleAuth('testing', getsocialId, getsocialType))
+                    }else{
+
+                        dispatch(_facebookAuth('testing', getsocialId, getsocialType))
+                    }
 
 
                 } else {

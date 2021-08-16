@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Header } from '../../components/Header';
 import { StaticShop } from '../../data/StaticShop';
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
-import { _getCatogery } from '../../store/action/shopAction';
+import { _getCatogery, _getSubCatogery } from '../../store/action/shopAction';
 import { useDispatch, useSelector } from 'react-redux';
+import { Value } from 'react-native-reanimated';
 
 export const Shop: React.FC = ({ navigation }: any) => {
   const [catogery, setcatogery] = useState([]);
+  const [Subcatogery, setSubcatogery] = useState([]);
   const [flag, setflag] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const shopCatogery = useSelector((state: any) => state.reducer.shopCatogery)
-
-
-
+  const shopSubCatogery = useSelector((state: any) => state.reducer.shopSubCatogery)
+  const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
 
   useEffect(() => {
     dispatch(_getCatogery(currentUser))
@@ -23,65 +24,87 @@ export const Shop: React.FC = ({ navigation }: any) => {
   useEffect(() => {
     setcatogery(shopCatogery)
     setflag(!flag)
-    // console.log(shopCatogery, "shopCatogeryshopCatogeryshopCatogeryshopCatogery")
   }, [shopCatogery])
 
-
-
-
-
+  useEffect(() => {
+    setSubcatogery(shopSubCatogery)
+    setflag(!flag)
+  }, [shopSubCatogery])
 
   return (
     <ShopContainer>
       <Header />
-      <HeaderTitle>
-        Find the Best
-        Parts for your vehicle!
-      </HeaderTitle>
-      <View>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
-          {catogery.length>0 && catogery.map((item: any, index) => {
+      <ScrollView>
+
+        <HeaderTitle>
+          Find the Best
+          Parts for your vehicle!
+        </HeaderTitle>
+        <View>
+
+
+
+
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+            {catogery.length > 0 && catogery.map((item: any, index) => {
+              index === 1 && console.log(item, "sssssssssssss")
+              return (
+                <TouchableOpacity key={index} onPress={() => {
+                  dispatch(_getSubCatogery(currentUser, item._id))
+                  var cloneCatogery: any = catogery;
+                  cloneCatogery.map((x: any) => {
+                    x.isSelected = false;
+                    // return x
+                  });
+                  cloneCatogery[index].isSelected = true
+                  setcatogery(cloneCatogery);
+                  setflag(!flag);
+                }}>
+                  <Text style={{ marginLeft: 35, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
+                  {item.isSelected && <View style={{ marginLeft: 35, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
+                </TouchableOpacity>
+              )
+            })}
+
+
+          </ScrollView>
+        </View>
+        {isLoader ?
+          <ActivityIndicator
+            style={{ marginTop: "50%" }}
+            size="small" color={'#ffffff'}
+          /> :
+          Subcatogery.length > 0 && Subcatogery.map((v: any, i) => {
+            i === 5 && console.log(v, "sub catogeris in render")
             return (
-              <TouchableOpacity key={index} onPress={() => {
-                var cloneCatogery: any = catogery;
-                cloneCatogery.map((x: any) => {
-                  x.isSelected = false;
-                  // return x
-                });
-                cloneCatogery[index].isSelected = true
-                setcatogery(cloneCatogery);
-                setflag(!flag);
-              }}>
-                <Text style={{ marginLeft: 35, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
-                {item.isSelected && <View style={{ marginLeft: 35, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
-              </TouchableOpacity>
+              <>
+                <View>
+                  <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>Sub Category {i + 1}</Text>
+                </View>
+                <FlatList
+                  contentContainerStyle={{}}
+                  horizontal
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={item => item.id}
+                  data={v.items}
+                  renderItem={({ item }) => (
+                    <SubCategoryTile
+                      numberOfRates={item.total_rate}
+                      numberOfService={item.stock_count}
+                      serviceName={item.en_name}
+                      serviceImage={{ uri: item.icon }}
+                      price={item.price}
+                      onPress={() => navigation.push('shopDetail', item)}
+                    />
+                  )}
+                />
+              </>
             )
-          })}
+          })
+        }
 
 
-        </ScrollView>
-      </View>
-
-      <View>
-        <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>Sub Category 1</Text>
-      </View>
-      <FlatList
-        contentContainerStyle={{}}
-        horizontal
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => item.id}
-        data={StaticShop?.map(user => user)}
-        renderItem={({ item }) => (
-          <SubCategoryTile
-            numberOfRates={item.rate}
-            numberOfService={item.remaining}
-            serviceName={item.service_name}
-            serviceImage={item.uri}
-            price={item.price}
-            onPress={() => navigation.push('shopDetail', item)}
-          />
-        )}
-      />
+      </ScrollView>
 
     </ShopContainer>
   )

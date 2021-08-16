@@ -22,7 +22,8 @@ export const _loading = (bol) => {
 
 export function _error(err, time) {
     return dispatch => {
-        // dispatch({ type: ISERROR, payload: err });
+        dispatch({ type: ISERROR, payload: err });
+
         setTimeout(() => {
             dispatch({ type: ISERROR, payload: "" });
         }, time ? time : 3000)

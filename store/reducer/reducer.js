@@ -4,7 +4,7 @@ const INITIAL_STATE = {
     signUpUser: false,
     currentUser: {},
     isLoader: false,
-    isError: "",
+    isError: false,
 }
 
 export default (state = INITIAL_STATE, action) => {

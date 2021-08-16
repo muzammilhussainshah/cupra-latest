@@ -120,7 +120,7 @@ export const _signIn = ({ emailOrPhone, password }) => {
                 dispatch(_loading(false));
                 dispatch(_error(resp.data.error.messageEn));
 
-            } 
+            }
             console.log(resp, 'resp _signIn',)
             dispatch(_loading(false));
         }
@@ -257,7 +257,7 @@ export const _resetPasswordReq = (model, navigation) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
-                navigation.navigate('otp', { routName: "_resetPasswordReq", phone_number: emailOrPhone });
+                navigation.navigate('otp', { getroutName: "_resetPasswordReq", phone_number: emailOrPhone });
             } else {
                 dispatch(_loading(false));
                 dispatch(_error(resp.data.error.messageEn));
@@ -276,7 +276,7 @@ export const _resetPasswordReq = (model, navigation) => {
 export const _verifyResetPassOtp = (getPhonneNumber, otpCode, navigation,) => {
     const emailOrPhone = getPhonneNumber
     const getOtpCode = otpCode
-    console.log(getPhonneNumber, otpCode, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType, '555555')
+    // console.log(getPhonneNumber, otpCode, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType, '555555')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -613,6 +613,10 @@ export const _completeSignUp = (getPhonneNumber, navigation, getfullName, getEma
 
                 dispatch(_loading(false));
                 navigation.navigate('otp', { phone_number: getPhonneNumber, getroutName: "SocialSigninVerification", getsocialId, getsocialType })
+            } else {
+                dispatch(_loading(false));
+                dispatch(_error(resp.data.error.messageEn));
+
             }
             console.log(resp, '_completeSignUp')
 

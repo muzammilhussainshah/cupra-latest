@@ -45,7 +45,7 @@ export const VerificationScreen: React.FC = () => {
 
 
 
-  console.log(getsocialId, getsocialType, 'otp From Social')
+  console.log(getroutName, 'getroutName')
   return (
     <Container>
       <VerificationHeaderTitle />
@@ -117,8 +117,7 @@ export const VerificationScreen: React.FC = () => {
               <Button onPress={() => {
                 if (getroutName && getroutName == "_resetPasswordReq") {
                   dispatch(_verifyResetPassOtp(getPhonneNumber, otpCode, navigation,))
-                }
-                if (getroutName && getroutName == "SocialSigninVerification") {
+                } else if (getroutName && getroutName == "SocialSigninVerification") {
                   dispatch(_varifyCustomer(getPhonneNumber, otpCode, getroutName, getsocialId, getsocialType))
                 } else {
                   dispatch(_varifyCustomer(getPhonneNumber, otpCode,))

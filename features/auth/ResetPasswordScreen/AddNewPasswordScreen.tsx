@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, ButtonsContainer, ButtonText } from '../../../components/Button';
 
-import { _resetNewPassword } from '../../../store/action/auth';
+import { _resetNewPassword } from '../../../store/action/authAction';
 
 import FormTextField from '../../../components/FormTextField';
 

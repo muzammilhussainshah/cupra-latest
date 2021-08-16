@@ -3,21 +3,28 @@ import { FlatList, View, Text, ScrollView, TouchableOpacity } from 'react-native
 import { Header } from '../../components/Header';
 import { StaticShop } from '../../data/StaticShop';
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
-import { _getCatogery } from '../../store/action/shop';
-import { useDispatch,useSelector } from 'react-redux';
+import { _getCatogery } from '../../store/action/shopAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Shop: React.FC = ({ navigation }: any) => {
-  const [catogery, setcatogery] = useState([{ item: 0, isSelected: true }, { item: 0, isSelected: false }, { item: 0, isSelected: false }, { item: 0, isSelected: false }]);
+  const [catogery, setcatogery] = useState([]);
   const [flag, setflag] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const shopCatogery = useSelector((state: any) => state.reducer.shopCatogery)
 
 
 
 
   useEffect(() => {
-    dispatch(_getCatogery(currentUser)) 
-  },[])
+    dispatch(_getCatogery(currentUser))
+  }, [])
+
+  useEffect(() => {
+    setcatogery(shopCatogery)
+    setflag(!flag);
+    console.log(shopCatogery,"shopCatogeryshopCatogeryshopCatogeryshopCatogery")
+  }, [shopCatogery])
 
 
 
@@ -33,12 +40,12 @@ export const Shop: React.FC = ({ navigation }: any) => {
       </HeaderTitle>
       <View>
 
-        <ScrollView horizontal={true}>
-          {catogery.map((item, index) => {
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+          {catogery.length && catogery.map((item: any, index) => {
             return (
-              <TouchableOpacity onPress={() => {
-                var cloneCatogery = catogery;
-                cloneCatogery.map((x) => {
+              <TouchableOpacity key={index} onPress={() => {
+                var cloneCatogery: any = catogery;
+                cloneCatogery.map((x: any) => {
                   x.isSelected = false;
                   // return x
                 });
@@ -46,7 +53,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                 setcatogery(cloneCatogery);
                 setflag(!flag);
               }}>
-                <Text style={{ marginLeft: 35, color: '#fb9315', fontSize: 15 }}>Oil</Text>
+                <Text style={{ marginLeft: 35, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
                 {item.isSelected && <View style={{ marginLeft: 35, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
               </TouchableOpacity>
             )

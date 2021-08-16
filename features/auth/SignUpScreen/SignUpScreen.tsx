@@ -10,7 +10,7 @@ import FastImage from 'react-native-fast-image';
 
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import { _signUp } from '../../../store/action/auth';
+import { _signUp } from '../../../store/action/authAction';
 
 import { Button, ButtonsContainer, ButtonText } from '../../../components/Button';
 

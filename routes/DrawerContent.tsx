@@ -8,7 +8,7 @@ import {Button, ButtonsContainer, ButtonText} from '../components/Button';
 import FastImage from 'react-native-fast-image';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import {_logOut} from '../store/action/auth';
+import {_logOut} from '../store/action/authAction';
 
 const DrawerContaienr = styled.View`
   background-color: ${Colors.tangerine};

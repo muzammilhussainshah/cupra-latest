@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { ColorSchemeName, AsyncStorage } from 'react-native';
 import { DrawerNavigator } from './DrawerNavigator';
-import { _signIn, _googleAuth } from '../store/action/auth';
+import { _signIn, _googleAuth } from '../store/action/authAction';
 
 import { RootNavigator } from './RootNavigator';
 

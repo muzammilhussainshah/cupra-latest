@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 
-import { _signIn } from '../../../store/action/auth';
+import { _signIn } from '../../../store/action/authAction';
 
 import React from 'react';
 

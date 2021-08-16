@@ -10,7 +10,7 @@ import FastImage from 'react-native-fast-image';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { _resetPasswordReq, _resendCode, _varifyCustomer, _completeSignUp } from '../../../store/action/auth';
+import { _resetPasswordReq, _resendCode, _varifyCustomer, _completeSignUp } from '../../../store/action/authAction';
 
 import { Button, ButtonsContainer, ButtonText } from '../../../components/Button';
 

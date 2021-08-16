@@ -21,7 +21,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { _googleAuth, _facebookAuth } from '../../store/action/auth';
+import { _googleAuth, _facebookAuth } from '../../store/action/authAction';
 
 export const BackGroundContinerImage = styled(FastImage)`
   flex: 1;

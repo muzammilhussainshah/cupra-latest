@@ -25,7 +25,7 @@ import {
   OtpBackground,
 } from './VerificationStyled';
 
-import { _resendCode, _varifyCustomer, _verifyResetPassOtp, _completeSignUp } from '../../../store/action/auth';
+import { _resendCode, _varifyCustomer, _verifyResetPassOtp, _completeSignUp } from '../../../store/action/authAction';
 
 import { useDispatch } from 'react-redux';
 

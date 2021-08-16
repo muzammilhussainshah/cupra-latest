@@ -102,3 +102,35 @@ export const _getSubCatogery = (currentUser, catId) => {
         }
     }
 }
+
+export const _getItemDetails = (currentUser, itemId,navigation) => {
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/item/${itemId}?deviceToken=${deviceToken}&deviceKey=${uniqueId}&id=${itemId}`
+            const option = {
+                method: 'GET',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                navigation.push('shopDetail', resp.data.data)
+            }
+            console.log(resp, 'resp _getItemDetails',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            // dispatch(_error(resp.data.error.messageEn));
+            console.log(err.response, "error from _getItemDetails", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}

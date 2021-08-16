@@ -120,8 +120,7 @@ export const _signIn = ({ emailOrPhone, password }) => {
                 dispatch(_loading(false));
                 dispatch(_error(resp.data.error.messageEn));
 
-            }
-            console.log(resp.data.error.messageEn, 'resp.data.error.messageEn',)
+            } 
             console.log(resp, 'resp _signIn',)
             dispatch(_loading(false));
         }

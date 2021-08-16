@@ -22,8 +22,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
 
   useEffect(() => {
     setcatogery(shopCatogery)
-    setflag(!flag);
-    console.log(shopCatogery,"shopCatogeryshopCatogeryshopCatogeryshopCatogery")
+    setflag(!flag)
+    // console.log(shopCatogery, "shopCatogeryshopCatogeryshopCatogeryshopCatogery")
   }, [shopCatogery])
 
 
@@ -39,9 +39,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
         Parts for your vehicle!
       </HeaderTitle>
       <View>
-
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
-          {catogery.length && catogery.map((item: any, index) => {
+          {catogery.length>0 && catogery.map((item: any, index) => {
             return (
               <TouchableOpacity key={index} onPress={() => {
                 var cloneCatogery: any = catogery;
@@ -58,8 +57,6 @@ export const Shop: React.FC = ({ navigation }: any) => {
               </TouchableOpacity>
             )
           })}
-
-
 
 
         </ScrollView>

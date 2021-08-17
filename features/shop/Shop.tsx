@@ -3,7 +3,7 @@ import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator }
 import { Header } from '../../components/Header';
 import { StaticShop } from '../../data/StaticShop';
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
-import { _getCatogery, _getSubCatogery,_getItemDetails } from '../../store/action/shopAction';
+import { _getCatogery, _getSubCatogery, _getItemDetails } from '../../store/action/shopAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { Value } from 'react-native-reanimated';
 
@@ -16,7 +16,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const shopCatogery = useSelector((state: any) => state.reducer.shopCatogery)
   const shopSubCatogery = useSelector((state: any) => state.reducer.shopSubCatogery)
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
-
+  // console.log(Subcatogery, 'Subcatogery')
   useEffect(() => {
     dispatch(_getCatogery(currentUser))
   }, [])
@@ -34,39 +34,32 @@ export const Shop: React.FC = ({ navigation }: any) => {
   return (
     <ShopContainer>
       <Header />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
 
         <HeaderTitle>
           Find the Best
           Parts for your vehicle!
         </HeaderTitle>
         <View>
-
-
-
-
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}  >
             {catogery.length > 0 && catogery.map((item: any, index) => {
-              index === 1 && console.log(item, "sssssssssssss")
+              // index === 1 && console.log(item, "sssssssssssss")
               return (
                 <TouchableOpacity key={index} onPress={() => {
                   dispatch(_getSubCatogery(currentUser, item._id))
                   var cloneCatogery: any = catogery;
                   cloneCatogery.map((x: any) => {
                     x.isSelected = false;
-                    // return x
                   });
                   cloneCatogery[index].isSelected = true
                   setcatogery(cloneCatogery);
                   setflag(!flag);
                 }}>
-                  <Text style={{ marginLeft: 35, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
-                  {item.isSelected && <View style={{ marginLeft: 35, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
+                  <Text style={{ marginHorizontal: 20, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
+                  {item.isSelected && <View style={{ marginHorizontal: 20, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
                 </TouchableOpacity>
               )
             })}
-
-
           </ScrollView>
         </View>
         {isLoader ?
@@ -77,12 +70,11 @@ export const Shop: React.FC = ({ navigation }: any) => {
           Subcatogery.length > 0 && Subcatogery.map((v: any, i) => {
             // i === 5 && console.log(v, "sub catogeris in render")
             if (v.items.length > 0) {
-              console.log(v.en_name, "sub catogeris in render")
+              // console.log(v.en_name, "sub catogeris in render")
               return (
                 <>
-
                   <View>
-                    <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>‎{v.en_name }</Text>
+                    <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>‎{v.en_name}</Text>
                   </View>
                   <FlatList
                     contentContainerStyle={{}}
@@ -91,31 +83,27 @@ export const Shop: React.FC = ({ navigation }: any) => {
                     keyExtractor={item => item.id}
                     data={v.items}
                     renderItem={({ item }) => (
-                      <SubCategoryTile
-                        numberOfRates={item.total_rate}
-                        numberOfService={item.stock_count}
-                        serviceName={item.en_name}
-                        serviceImage={{ uri: item.icon }}
-                        price={item.price}
-                        onPress={() => dispatch(_getItemDetails(currentUser,item._id,navigation))}
+                      <>
+                        {/* {console.log(item.likes, 'itemitemitemitem')} */}
+                        <SubCategoryTile
+                          numberOfRates={item.total_rate}
+                          numberOfService={item.stock_count}
+                          serviceName={item.en_name}
+                          noOfLikes={item.likes}
+                          serviceImage={{ uri: item.icon }}
+                          price={item.price}
+                          onPress={() => dispatch(_getItemDetails(currentUser, item._id, navigation,))}
                         // onPress={() => navigation.push('shopDetail', item)}
-                      />
+                        />
+                      </>
                     )}
                   />
                 </>
               )
-
             }
-
-
-
-
           })
         }
-
-
       </ScrollView>
-
     </ShopContainer>
   )
 }

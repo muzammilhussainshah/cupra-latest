@@ -127,7 +127,6 @@ export const _signIn = ({ emailOrPhone, password }) => {
         catch (err) {
             dispatch(_loading(false));
             dispatch(_error(err.response.data.errors));
-
             console.log(err.response, "error from _signIn", JSON.parse(JSON.stringify(err.message)));
         }
     }

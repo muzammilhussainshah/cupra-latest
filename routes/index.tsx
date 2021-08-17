@@ -37,12 +37,12 @@ export const Navigation: React.FC<Props> = ({ children }) => {
       const getSocialtype = await AsyncStorage.getItem("socialType");
 
       // console.log(userEmail, password)
-      if (userEmail && password) {
-        dispatch(_signIn({ emailOrPhone: userEmail, password: password }))
-      } else if (getSocialId && getSocialtype) {
+      if (getSocialId && getSocialtype) {
 
 
         dispatch(_googleAuth('testing', getSocialId, getSocialtype))
+      } else {
+        dispatch(_signIn({ emailOrPhone: userEmail, password: password }))
       }
     }
 
@@ -52,10 +52,10 @@ export const Navigation: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     console.log(currentUser, 'currentUsercurrentUser')
-    if (currentUser?.email) {
+    if (currentUser?.email || currentUser?.mobile) {
       setislogged(true);
     }
-    else{
+    else {
       setislogged(false);
     }
   }, [currentUser])

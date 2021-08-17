@@ -1,10 +1,12 @@
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {Colors} from '../../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -36,7 +38,7 @@ export const CardBannerSection = () => (
     tension={50}
     friction={7}
     useNativeDriver
-    onPress={() => {}}>
+    onPress={() => { }}>
     <CardPlaceholder>
       <CardTileCoverContainer>
         <CardTileCover
@@ -69,12 +71,22 @@ export type IGreetingTypeProp = {
 export const ServicesGreeting: React.FC<IGreetingTypeProp> = ({
   name,
   seriveTitle,
-}) => (
-  <GreetingContainer>
-    <UserName>Hello {name} !</UserName>
-    <ServiceTitle>{seriveTitle}</ServiceTitle>
-  </GreetingContainer>
-);
+}) => {
+  const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
+  return (
+
+    <GreetingContainer>
+      <UserName>Hello {name} !</UserName>
+      <ServiceTitle>{seriveTitle}</ServiceTitle>
+      {isLoader &&
+        <ActivityIndicator
+          style={{ marginTop: "15%" }}
+          size="small" color={'#ffffff'}
+        />}
+    </GreetingContainer>
+  )
+}
+
 
 const SevicesPlaceholder = styled.View`
   height: 220px;
@@ -153,7 +165,7 @@ export const ServicesTile: React.FC<IServiceTypeProp> = ({
   isBooking,
 }) => (
   <TouchableScale
-    style={{flex: 1}}
+    style={{ flex: 1, maxWidth: "50%" }}
     activeScale={0.9}
     tension={50}
     friction={7}

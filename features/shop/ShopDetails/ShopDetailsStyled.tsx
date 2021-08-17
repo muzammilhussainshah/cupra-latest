@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
@@ -10,7 +10,7 @@ export const ShopDetailsContainer = styled.View`
 `;
 export const Backgroundimage = styled(FastImage)`
   width: ${width}px;
-  height: ${height - 450}px;
+  height: ${height - 400}px;
 `
 export const ItemName = styled.Text`
   font-size: 20px;
@@ -45,7 +45,7 @@ const SizeHeaderTitle = styled.Text`
   font-weight: 500;
   margin-top: 10px;
   margin-bottom: 10px;
-`;
+  `;
 const SizeContainerTitles = styled.Text`
 font-size: 12px;
 font-family: 'SourceSansPro-Regular';
@@ -87,31 +87,40 @@ export const CenterView = styled.View`
   align-items: flex-start;
   /* padding-right: 20px; */
 `;
-export const BackgroundColor = styled.View<{ color: string }>`
+export const BackgroundColor = styled.TouchableOpacity<{ color: string }>`
   border: 1px solid transparent;
   background: ${props => props.color ? props.color : 'transparent'};
   height: 20px;
-  width: 20px;
+  elevation: 2px;
+  width: 20px; 
   border-radius: 10px;
 `;
-export const ColorContianer = ({ color }: any) => (
+export const ColorContianer = ({ color, _func }: any) => (
   <>
-    <SizeHeaderTitle>Colors</SizeHeaderTitle>
-    <BackgroundColor color={color} />
+    <BackgroundColor color={color} onPress={_func} />
   </>
 );
-export const QuantityArea = () => (
-  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-    <SizeHeaderTitle>Quantity</SizeHeaderTitle>
-    <TouchableOpacity style={{ borderWidth: 1, backgroundColor: 'transparent', height: 30, width: 30, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
-      <Text> - </Text>
-    </TouchableOpacity>
-    <View style={{ margin: 10 }}><Text>1 </Text></View>
-    <TouchableOpacity style={{ borderWidth: 1, backgroundColor: '#947d5e', height: 30, width: 30, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: 'white' }}> + </Text>
-    </TouchableOpacity>
-  </View>
-);
+export const QuantityArea = ({ quantity, _func, _func2 }: any) => {
+  return (
+    <View style={{ justifyContent: "center", alignItems: 'center' }}>
+      <SizeHeaderTitle>Quantity</SizeHeaderTitle>
+      <View style={{ flexDirection: 'row', }}>
+
+        <TouchableOpacity
+          onPress={_func}
+          style={{ borderWidth: 1, backgroundColor: 'transparent', height: 30, width: 30, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+          <Text> - </Text>
+        </TouchableOpacity>
+        <View style={{ margin: 10 }}><Text>{quantity} </Text></View>
+        <TouchableOpacity
+          onPress={_func2}
+          style={{ borderWidth: 1, backgroundColor: '#947d5e', height: 30, width: 30, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: 'white' }}> + </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+};
 export const ReserveNowArea = styled.View`
   background-color: ${Colors.black};
   width: 100%;

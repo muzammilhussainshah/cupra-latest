@@ -40,9 +40,7 @@ export const AddNewPassword: React.FC = () => {
   const getpassToken = route?.params?.passToken;
   function onSubmit(model: IPasswordProp) {
     console.warn('form submitted', model);
-    dispatch(_resetNewPassword(model, getPhonneNumber, getpassToken))
-
-    // navigation.navigate('otp');
+    dispatch(_resetNewPassword(model, getPhonneNumber, getpassToken)) 
   }
 
   return (

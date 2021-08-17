@@ -103,7 +103,8 @@ export const _getSubCatogery = (currentUser, catId) => {
     }
 }
 
-export const _getItemDetails = (currentUser, itemId,navigation) => {
+export const _getItemDetails = (currentUser, itemId, navigation,) => {
+    // console.log(itemLikes, 'item.likesitem.likesv')
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -121,8 +122,9 @@ export const _getItemDetails = (currentUser, itemId,navigation) => {
                 },
             };
             var resp = await axios(option);
+            // console.log(resp, '_getItemDetails')
             if (resp.data.status === 200) {
-                navigation.push('shopDetail', resp.data.data)
+                navigation.push('shopDetail', resp.data.data,)
             }
             console.log(resp, 'resp _getItemDetails',)
             dispatch(_loading(false));
@@ -131,6 +133,40 @@ export const _getItemDetails = (currentUser, itemId,navigation) => {
             dispatch(_loading(false));
             // dispatch(_error(resp.data.error.messageEn));
             console.log(err.response, "error from _getItemDetails", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _makeItemReservation = (itemId, quantity, color,currentUser) => {
+    console.log(itemId, quantity, color, 'itemId, quantity,color')
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/make-item-reservation?deviceToken=${deviceToken}&deviceKey=${uniqueId}&id=${itemId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "item_id": itemId,
+                    "quantity": quantity.toString(),
+                    "color": color
+                }
+            };
+            var resp = await axios(option);
+
+            console.log(resp, 'resp _makeItemReservation')
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from _makeItemReservation", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, Alert, } from 'react-native';
+import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, ActivityIndicator, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -22,7 +22,7 @@ import { _makeItemReservation } from "../../../store/action/shopAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { likeDislike } from '../../../store/action/shopAction';
+import { likeDislike, _getItemDetails } from '../../../store/action/shopAction';
 import {
   Backgroundimage,
   ColorContianer,
@@ -52,6 +52,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
   const [title, setTitle] = useState("")
 
   const [imageSlider, setimageSlider] = useState(false)
+  const [flag, setflag] = useState(false)
 
   const [selectedImageIndex, setSelectedImageIndex] = useState()
 
@@ -65,14 +66,17 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, height, width, likes, stock_count, _id,likedByMe } = routes;
 
+  const isLoader = useSelector((state: any) => state.reducer.isLoader)
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const shopItemDetails = useSelector((state: any) => state.reducer.shopItemDetails)
 
+  const item = routes;
+  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price,en_treatment,colors,images, height, width, likes, stock_count, _id, likedByMe, } = shopItemDetails;
 
   const [totalLikes, settotalLikes] = useState(likes);
   const [sendLike, setsendLike] = useState(likedByMe);
-console.log(likes,likedByMe,"6666666666666666")
+  console.log(item, "6666666666666666")
 
   const dispatch = useDispatch()
 
@@ -93,15 +97,27 @@ console.log(likes,likedByMe,"6666666666666666")
   }
 
   useEffect(() => {
-    setCelectedClr(routes.colors[0])
-    let firstClr = routes.colors[0]
-    setcoverImage(icon)
+
+    dispatch(_getItemDetails(currentUser, item._id, navigation,))
+
+    // setCelectedClr(routes.colors[0])
+    // let firstClr = routes.colors[0]
+    // setcoverImage(icon)
   }, [])
 
+  useEffect(() => {
+    if (shopItemDetails && shopItemDetails.colors) {
+      setCelectedClr(shopItemDetails.colors[0])
+      let firstClr = shopItemDetails.colors[0]
+      setcoverImage(icon)
+      // console.log(shopItemDetails,"shopItemDetailsshopItemDetailsshopItemDetails")
+    }
+  }, [shopItemDetails])
 
-  
+
+
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id,currentUser,likedByMe))
+    dispatch(likeDislike(_id, currentUser, likedByMe))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -129,143 +145,162 @@ console.log(likes,likedByMe,"6666666666666666")
           }
         />
       }
-      <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
-        <TouchableOpacity onPress={() => {
-          setsendLike(!sendLike)
-          numberOfLikes()
 
-        }}
-          activeOpacity={0.8}
-          style={{
-            justifyContent: "center",
-            backgroundColor: "#fff",
-            elevation: 2,
-            borderRadius: 10,
-            height: 55,
-            width: 55,
-            alignItems: "center"
-          }}>
-          <FastImage
-            style={{ height: 25, width: 25, }}
-            source={require('../../../assets/images/RealHeart.png')}
-            resizeMode="contain"
-          />
-          <Text style={{}}>{totalLikes}</Text>
-        </TouchableOpacity>
-      </View>
+      <>
+        <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
+          <TouchableOpacity onPress={() => {
+            setsendLike(!sendLike)
+            numberOfLikes()
 
-      <ShopDetailsContainer>
-        {imageSlider ?
-          <SliderBox
-            images={coverImage}
-            sliderBoxHeight={Wheight - 390}
-            autoplay
-            resizeMode={'cover'}
-            onCurrentImagePressed={(index: number) => {
-              console.log(index, 'indexindexindex')
-              setFullImageScreen(true)
-              setSelectedImageIndex(index)
-            }}
-          />
-          :
-          <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
-        }
-        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
-        </TouchableOpacity>
-        <MainSheet scroll sheetHeight={0.4}>
-          <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
-            <View style={{ width: "60%" }}>
-              <ItemName>{en_name}</ItemName>
-            </View>
-            <View style={{ flexDirection: "row", marginVertical: 5 }}>
-              <View style={{}}>
-                <FlatList
-                  contentContainerStyle={{ alignItems: "center", }}
-                  horizontal={true}
-                  data={[1, 2, 3, 4, 5]}
-                  renderItem={({ item }) => (
-                    <SteeringImage
-                      tintColor={item > rating && "#ffffff"}
-                      resizeMode={FastImage.resizeMode.contain}
-                      source={require('../../../assets/images/RealStar.png')}
-                    />
-                  )}
-                />
-              </View>
-              <View><Text
-                style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
-              >({rating})</Text></View>
-            </View>
-            <DescriptionArea description={en_desc} navigation={navigation} />
-            <View style={{ flexDirection: "row", }}>
-              <View style={{ width: "50%", }}>
-                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
-                <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{fromYear && fromYear}</Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>To Year</Text>
-                <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{toYear && toYear}</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', }}>
-              <View style={{ width: "50%" }}
-              >
-                <SizeArea size={{ height, width, diameter: size }} />
-              </View>
-              <View style={{ width: "50%" }}>
-                <TreatmentArea treatment={routes.en_treatment} />
-              </View>
-            </View>
-            <View style={{ flexDirection: "row", }}>
-              <View style={{ width: "50%", }}>
-                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  {routes.colors && routes.colors.map((v: string, i: number) => {
-                    let colorHex = dispatch(_getHexColor(v))
-                    return (
-                      <View style={{ flexDirection: 'row', margin: 2, }}>
-                        <ColorContianer color={colorHex} _func={() => {
-                          setCelectedClr(v)
-                          if (routes.images && !(Object.keys(routes.images).length === 0 && routes.images.constructor === Object)) {
-                            setcoverImage(routes.images[v])
-                            setimageSlider(true)
-                            console.log(routes.images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
-                          }
-                        }} />
-                      </View>
-                    )
-                  })
-                  }
-                </View>
-              </View>
-              <View style={{ width: "50%" }}>
-                <QuantityArea quantity={quantity}
-                  _func={() => { manageQuantity('-') }}
-                  _func2={() => { manageQuantity('+') }}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </MainSheet>
-        <ReserveNowArea>
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              if (quantity == 0) {
-                setConfirmModal(true)
-                setTitle("Please enter the quantity you want to reserve!")
-              } else {
-                setConfirmModal(true)
-                setTitle("Are you sure you want to make this reservation?")
-              }
-            }
-            }
-            style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 15 }}>Reserve Now</Text>
+          }}
+            activeOpacity={0.8}
+            style={{
+              justifyContent: "center",
+              backgroundColor: "#fff",
+              elevation: 2,
+              borderRadius: 10,
+              height: 55,
+              width: 55,
+              alignItems: "center"
+            }}>
+            <FastImage
+              style={{ height: 25, width: 25, }}
+              source={require('../../../assets/images/RealHeart.png')}
+              resizeMode="contain"
+            />
+            <Text style={{}}>{totalLikes}</Text>
           </TouchableOpacity>
-        </ReserveNowArea>
-      </ShopDetailsContainer>
+        </View>
+
+        <ShopDetailsContainer>
+          {imageSlider ?
+            <SliderBox
+              images={coverImage}
+              sliderBoxHeight={Wheight - 390}
+              autoplay
+              resizeMode={'cover'}
+              onCurrentImagePressed={(index: any) => {
+                console.log(index, 'indexindexindex')
+                setFullImageScreen(true)
+                setSelectedImageIndex(index)
+              }}
+            />
+            :
+            isLoader ?
+              <ActivityIndicator
+                style={{ marginTop: "20%" }}
+                size="small" color={'black'}
+              /> :
+              <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+
+
+
+          }
+          <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
+          </TouchableOpacity>
+          <MainSheet scroll sheetHeight={0.4}>
+
+            {isLoader ?
+              <ActivityIndicator
+                style={{ marginTop: "20%" }}
+                size="small" color={'black'}
+              /> :
+
+              <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
+                <View style={{ width: "60%" }}>
+                  <ItemName>{en_name}</ItemName>
+                </View>
+                <View style={{ flexDirection: "row", marginVertical: 5 }}>
+                  <View style={{}}>
+                    <FlatList
+                      contentContainerStyle={{ alignItems: "center", }}
+                      horizontal={true}
+                      data={[1, 2, 3, 4, 5]}
+                      renderItem={({ item }) => (
+                        <SteeringImage
+                          tintColor={item > rating && "#ffffff"}
+                          resizeMode={FastImage.resizeMode.contain}
+                          source={require('../../../assets/images/RealStar.png')}
+                        />
+                      )}
+                    />
+                  </View>
+                  <View><Text
+                    style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
+                  >({rating})</Text></View>
+                </View>
+                <DescriptionArea description={en_desc} navigation={navigation} />
+                <View style={{ flexDirection: "row", }}>
+                  <View style={{ width: "50%", }}>
+                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
+                    <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{fromYear && fromYear}</Text>
+                  </View>
+                  <View style={{ width: "50%" }}>
+                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>To Year</Text>
+                    <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{toYear && toYear}</Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', }}>
+                  <View style={{ width: "50%" }}
+                  >
+                    <SizeArea size={{ height, width, diameter: size }} />
+                  </View>
+                  <View style={{ width: "50%" }}>
+                    <TreatmentArea treatment={en_treatment} />
+                  </View>
+                </View>
+                <View style={{ flexDirection: "row", }}>
+                  <View style={{ width: "50%", }}>
+                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                      {colors &&colors.map((v: string, i: number) => {
+                        let colorHex = dispatch(_getHexColor(v))
+                        return (
+                          <View style={{ flexDirection: 'row', margin: 2, }}>
+                            <ColorContianer color={colorHex} _func={() => {
+                              setCelectedClr(v)
+                              if (images && !(Object.keys(images).length === 0 && images.constructor === Object)) {
+                                setcoverImage(images[v])
+                                setimageSlider(true)
+                                console.log(images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
+                              }
+                            }} />
+                          </View>
+                        )
+                      })
+                      }
+                    </View>
+                  </View>
+                  <View style={{ width: "50%" }}>
+                    <QuantityArea quantity={quantity}
+                      _func={() => { manageQuantity('-') }}
+                      _func2={() => { manageQuantity('+') }}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+            }
+          </MainSheet>
+          <ReserveNowArea>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (quantity == 0) {
+                  setConfirmModal(true)
+                  setTitle("Please enter the quantity you want to reserve!")
+                } else {
+                  setConfirmModal(true)
+                  setTitle("Are you sure you want to make this reservation?")
+                }
+              }
+              }
+              style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontSize: 15 }}>Reserve Now</Text>
+            </TouchableOpacity>
+          </ReserveNowArea>
+        </ShopDetailsContainer>
+      </>
 
       {/* </View>
       </ScrollView> */}

@@ -1,10 +1,11 @@
-import { SIGNUPUSER, CURRENTUSER, SERVICES,SUBSERVICES, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, SERVICES,SUBSERVICES, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY,ITEMDETAILS } from "../constant/constant";
 
 const INITIAL_STATE = {
     signUpUser: false,
     currentUser: {},
     shopCatogery: {},
     shopSubCatogery: {},
+    shopItemDetails: {},
     services: {},
     subservices: {},
     isLoader: false,
@@ -42,6 +43,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 shopSubCatogery: action.payload
+            })
+        case ITEMDETAILS:
+            return ({
+                ...state,
+                shopItemDetails: action.payload
             })
         case SERVICES:
             return ({

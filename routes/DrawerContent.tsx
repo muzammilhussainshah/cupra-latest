@@ -168,7 +168,7 @@ export const DrawerContent: React.FC = (props:any) => {
       </DrawerContentScrollView>
       <BottomSection>
         <LogoutButton
-          onPress={() => {dispatch(_logOut())}}
+          onPress={() => {dispatch(_logOut(props.navigation))}}
           icon={() => (
             <Ionicons name="power-outline" size={30} color={Colors.primary} />
           )}

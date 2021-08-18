@@ -37,7 +37,7 @@ export const Navigation: React.FC<Props> = ({children}) => {
       // console.log(userEmail, password)
       if (getSocialId && getSocialtype) {
         dispatch(_googleAuth('testing', getSocialId, getSocialtype));
-      } else {
+      } else if(userEmail&&password){
         dispatch(_signIn({emailOrPhone: userEmail, password: password}));
       }
     }

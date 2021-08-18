@@ -12,6 +12,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from "@react-native-firebase/auth";
 
 import { Alert, AsyncStorage } from 'react-native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
 
 export const _loading = (bol) => {
@@ -84,7 +85,7 @@ export const _signUp = (model, navigation) => {
     }
 }
 
-export const _signIn = ({ emailOrPhone, password }) => {
+export const _signIn = ({ emailOrPhone, password },navigation) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -108,6 +109,7 @@ export const _signIn = ({ emailOrPhone, password }) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch({ type: CURRENTUSER, payload: resp.data.data.data })
+                navigation.navigate("drawerStack")
                 try {
                     await AsyncStorage.setItem("userEmail", emailOrPhone);
                     await AsyncStorage.setItem("password", password);
@@ -132,12 +134,19 @@ export const _signIn = ({ emailOrPhone, password }) => {
     }
 }
 
-export const _logOut = () => {
+export const _logOut = (navigation) => {
     return async (dispatch) => {
         try {
             const userEmail = await AsyncStorage.removeItem('userEmail');
             const password = await AsyncStorage.removeItem('password');
             dispatch({ type: CURRENTUSER, payload: {} })
+            navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{name: 'welcome'}],
+                })
+            )
+            
         }
         catch (err) {
             console.log(err.response, "error from _signIn", JSON.parse(JSON.stringify(err.message)));

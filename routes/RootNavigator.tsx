@@ -87,7 +87,7 @@ export const RootNavigator = () => {
         headerTransparent: true,
         headerBackTitleVisible: false,
         headerTitleAllowFontScaling: true,
-        animationTypeForReplace: 'pop',
+        // animationTypeForReplace: 'pop',
         // ...TransitionPresets.ModalPresentationIOS,
         gestureDirection: 'horizontal',
         gestureEnabled: true,

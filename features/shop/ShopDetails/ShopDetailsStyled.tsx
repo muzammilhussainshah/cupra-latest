@@ -13,58 +13,62 @@ export const Backgroundimage = styled(FastImage)`
   height: ${height - 400}px;
 `
 export const ItemName = styled.Text`
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   font-family: 'SourceSansPro-Regular';
 `;
 const DescriptionHeaderTitle = styled.Text`
-  font-size: 12px;
-  font-family: 'SourceSansPro-Regular';
-  font-weight: 500;
-  margin-top: 5px;
+  font-size: 16px;
+  font-family: 'SourceSansPro-SemiBold';
   /* margin-bottom: 5px; */
-`;
+  `;
+// font-weight: 900;
+// margin-top: 5px;
 const DescriptionText = styled.Text`
-  font-size: 12px;
   font-family: 'SourceSansPro-Regular';
-  /* margin-top: 5px; */
-  margin-bottom: 5px;
-  width: 300px;
-  line-height:18px;
-  color: ${Colors.darkGray}
-`;
-export const DescriptionArea = ({ description,navigation }: any) => (
+    margin-top: 5px;  
+    width: 300px;
+    line-height:18px;
+    color: ${Colors.darkGray}
+    `;
+// margin-bottom: 5px;
+// font-size: 12px;
+export const DescriptionArea = ({ description, navigation }: any) => (
   <>
     <View style={{ flexDirection: "row" }}>
       <DescriptionHeaderTitle>Description</DescriptionHeaderTitle>
-      <TouchableOpacity onPress={()=>{navigation.navigate("shopSendReview")}}>
-        <DescriptionHeaderTitle style={{ marginLeft: 30 }}>Review</DescriptionHeaderTitle>
+      <TouchableOpacity onPress={() => { navigation.navigate("shopSendReview") }}>
+        <DescriptionHeaderTitle style={{ marginLeft: 30, color: '#947d5e' }}>Review</DescriptionHeaderTitle>
       </TouchableOpacity>
     </View>
     <DescriptionText>{description}</DescriptionText>
   </>
 );
 const SizeHeaderTitle = styled.Text`
-  font-size: 12px;
-  font-family: 'SourceSansPro-bold';
+  font-size: 16px;
+  font-family: 'SourceSansPro-SemiBold';
   font-weight: 500;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   `;
+
+
+// margin-bottom: 10px;
+// font-size: 12px;
 const SizeContainerTitles = styled.Text`
-font-size: 12px;
 font-family: 'SourceSansPro-Regular';
 margin-top: 5px;
 margin-bottom: 5px;
 color: ${Colors.darkGray}
 `;
+// font-size: 12px;
 const TreatmentTitle = styled.Text`
-  font-size: 12px;
-  font-family: 'SourceSansPro-bold';
-  font-weight: 500;
-  margin-top: 10px;
-  margin-bottom: 10px;
+font-size: 16px;
+font-family: 'SourceSansPro-SemiBold';
+font-weight: 500;
+margin-top: 10px;
 `;
+// margin-bottom: 10px;
 const TreatmentDescription = styled.Text`
 font-size: 12px;
 font-family: 'SourceSansPro-Regular';
@@ -107,9 +111,9 @@ export const ColorContianer = ({ color, _func }: any) => (
 );
 export const QuantityArea = ({ quantity, _func, _func2 }: any) => {
   return (
-    <View style={{ justifyContent: "center", alignItems: 'center' }}>
+    <View style={{}}>
       <SizeHeaderTitle>Quantity</SizeHeaderTitle>
-      <View style={{ flexDirection: 'row', }}>
+      <View style={{ flexDirection: 'row' }}>
 
         <TouchableOpacity
           onPress={_func}
@@ -129,7 +133,7 @@ export const QuantityArea = ({ quantity, _func, _func2 }: any) => {
 export const ReserveNowArea = styled.View`
   background-color: ${Colors.black};
   width: 100%;
-  height: 100px;
+  height: 13%;
   border-top-left-radius: 50px;
   position: absolute;
   bottom:0;

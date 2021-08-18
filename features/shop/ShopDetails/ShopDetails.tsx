@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TouchableOpacity, View, Alert, } from 'react-native';
+import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, Alert, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
 import { MainSheet } from '../../../components/MainSheet';
+
+import FullImage from '../../../components/fullImage';
+
+import styled from 'styled-components/native';
 
 import ReservationModal from '../../../components/reservationModal'
 
@@ -29,6 +33,12 @@ import {
   SizeArea,
   TreatmentArea,
 } from './ShopDetailsStyled';
+const SteeringImage: any = styled(FastImage)`
+  width: 15px;
+  height: 15px;
+  margin-right:10px
+  `;
+// background:"red";
 
 // TODO: Remove the views and handle the component from the styled
 export const ShopDetails = ({ route, navigation }: any) => {
@@ -42,6 +52,10 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const [imageSlider, setimageSlider] = useState(false)
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState()
+
+  const [fullImageScreen, setFullImageScreen] = useState(false)
+
   const [selectedClr, setCelectedClr] = useState('')
 
   const [confirmModal, setConfirmModal] = useState(false)
@@ -50,12 +64,11 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-  const { en_name, icon, en_desc, size, price, height, width, likes, stock_count, _id } = routes;
+  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, height, width, likes, stock_count, _id } = routes;
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
   const dispatch = useDispatch()
-
 
   const manageQuantity = (integers: string) => {
     if (integers == "-") {
@@ -69,8 +82,6 @@ export const ShopDetails = ({ route, navigation }: any) => {
       } else {
         setConfirmModal(true)
         setTitle("Sorry, This item is not available now!")
-
-        // alert("")
       }
     }
   }
@@ -83,6 +94,11 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   return (
     <>
+      {fullImageScreen &&
+        <View style={{ height: "100%", width: "100%" }}>
+          <FullImage selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
+        </View>
+      }
       {confirmModal &&
         < ReservationModal
           Title={title}
@@ -123,6 +139,9 @@ export const ShopDetails = ({ route, navigation }: any) => {
             autoplay
             resizeMode={'cover'}
             onCurrentImagePressed={(index: number) => {
+              console.log(index, 'indexindexindex')
+              setFullImageScreen(true)
+              setSelectedImageIndex(index)
             }}
           />
           :
@@ -132,22 +151,52 @@ export const ShopDetails = ({ route, navigation }: any) => {
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
         </TouchableOpacity>
         <MainSheet scroll sheetHeight={0.4}>
-          <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
-            <ItemName>{en_name}</ItemName>
+          <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
+            <View style={{ width: "60%" }}>
+              <ItemName>{en_name}</ItemName>
+            </View>
+            <View style={{ flexDirection: "row", marginVertical: 5 }}>
+              <View style={{}}>
+                <FlatList
+                  contentContainerStyle={{ alignItems: "center", }}
+                  horizontal={true}
+                  data={[1, 2, 3, 4, 5]}
+                  renderItem={({ item }) => (
+                    <SteeringImage
+                      tintColor={item > rating && "#ffffff"}
+                      resizeMode={FastImage.resizeMode.contain}
+                      source={require('../../../assets/images/RealStar.png')}
+                    />
+                  )}
+                />
+              </View>
+              <View><Text
+                style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
+              >({rating})</Text></View>
+            </View>
             <DescriptionArea description={en_desc} navigation={navigation} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <View>
+            <View style={{ flexDirection: "row", }}>
+              <View style={{ width: "50%", }}>
+                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
+                <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{fromYear && fromYear}</Text>
+              </View>
+              <View style={{ width: "50%" }}>
+                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>To Year</Text>
+                <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{toYear && toYear}</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', }}>
+              <View style={{ width: "50%" }}
+              >
                 <SizeArea size={{ height, width, diameter: size }} />
               </View>
-              <View>
+              <View style={{ width: "50%" }}>
                 <TreatmentArea treatment={routes.en_treatment} />
               </View>
             </View>
             <View style={{ flexDirection: "row", }}>
-              <View style={{}}>
-                <Text style={{ marginTop: 10, marginBottom: 10 }}>
-                  Colors
-                </Text>
+              <View style={{ width: "50%", }}>
+                <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
                 <View style={{ flexDirection: 'row' }}>
                   {routes.colors && routes.colors.map((v: string, i: number) => {
                     let colorHex = dispatch(_getHexColor(v))
@@ -167,7 +216,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
                   }
                 </View>
               </View>
-              <View style={{ paddingLeft: 130 }}>
+              <View style={{ width: "50%" }}>
                 <QuantityArea quantity={quantity}
                   _func={() => { manageQuantity('-') }}
                   _func2={() => { manageQuantity('+') }}
@@ -180,18 +229,14 @@ export const ShopDetails = ({ route, navigation }: any) => {
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
           <TouchableOpacity
             onPress={() => {
-
               if (quantity == 0) {
-
                 setConfirmModal(true)
                 setTitle("Please enter the quantity you want to reserve!")
-
               } else {
                 setConfirmModal(true)
                 setTitle("Are you sure you want to make this reservation?")
               }
             }
-              // dispatch(_makeItemReservation(_id, quantity, selectedClr))
             }
             style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 15 }}>Reserve Now</Text>

@@ -1,8 +1,8 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
-import {Colors} from '../constants/Colors';
+import { Colors } from '../constants/Colors';
 
 const BackgroundContiner = styled.View`
   background-color: ${Colors.black};
@@ -40,12 +40,15 @@ export type IHeaderTypeProp = {
   onOpenDrawer?: () => void;
   onPress?: () => void;
   isGoBack?: boolean;
+  RatingScreen?: boolean;
+
   navigateBack?: () => void;
 };
 export const Header: React.FC<IHeaderTypeProp> = ({
   onPress,
   onOpenDrawer,
   isGoBack,
+  RatingScreen,
   navigateBack,
 }) => {
   return (
@@ -76,13 +79,15 @@ export const Header: React.FC<IHeaderTypeProp> = ({
             source={require('../assets/images/bell.png')}
           />
         </IconPlaceholder>
-        <IconPlaceholder onPress={onPress} activeOpacity={0.6}>
-          <HeaderIcons
-            resizeMode={FastImage.resizeMode.contain}
-            tintColor={'#FFF'}
-            source={require('../assets/images/search.png')}
-          />
-        </IconPlaceholder>
+        {!RatingScreen &&
+          <IconPlaceholder onPress={onPress} activeOpacity={0.6}>
+            <HeaderIcons
+              resizeMode={FastImage.resizeMode.contain}
+              tintColor={'#FFF'}
+              source={require('../assets/images/search.png')}
+            />
+          </IconPlaceholder>
+        }
       </LogoContainer>
     </BackgroundContiner>
   );

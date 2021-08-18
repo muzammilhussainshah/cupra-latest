@@ -33,17 +33,21 @@ const DescriptionText = styled.Text`
     `;
 // margin-bottom: 5px;
 // font-size: 12px;
-export const DescriptionArea = ({ description, navigation }: any) => (
-  <>
-    <View style={{ flexDirection: "row" }}>
-      <DescriptionHeaderTitle>Description</DescriptionHeaderTitle>
-      <TouchableOpacity onPress={() => { navigation.navigate("shopSendReview") }}>
-        <DescriptionHeaderTitle style={{ marginLeft: 30, color: '#947d5e' }}>Review</DescriptionHeaderTitle>
-      </TouchableOpacity>
-    </View>
-    <DescriptionText>{description}</DescriptionText>
-  </>
-);
+export const DescriptionArea = ({ description, _func,_func2, navigation }: any) => {
+  return (
+    <>
+      <View style={{ flexDirection: "row" }}>
+        <DescriptionHeaderTitle>Description</DescriptionHeaderTitle>
+        <TouchableOpacity
+          onPress={() => _func()}
+        >
+          <DescriptionHeaderTitle style={{ marginLeft: 30, color: '#947d5e' }}>Review</DescriptionHeaderTitle>
+        </TouchableOpacity>
+      </View>
+     {description&& <DescriptionText>{description}</DescriptionText>}
+    </>
+  )
+};
 const SizeHeaderTitle = styled.Text`
   font-size: 16px;
   font-family: 'SourceSansPro-SemiBold';

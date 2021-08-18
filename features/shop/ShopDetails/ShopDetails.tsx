@@ -4,6 +4,8 @@ import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, Alert, 
 
 import FastImage from 'react-native-fast-image';
 
+import ReviewComponent from "../../../components/ReviewComponent";
+
 import { MainSheet } from '../../../components/MainSheet';
 
 import FullImage from '../../../components/fullImage';
@@ -65,14 +67,15 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, height, width, likes, stock_count, _id,likedByMe } = routes;
+  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, height, width, likes, stock_count, _id, likedByMe } = routes;
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
-
   const [totalLikes, settotalLikes] = useState(likes);
+
   const [sendLike, setsendLike] = useState(likedByMe);
-console.log(likes,likedByMe,"6666666666666666")
+
+  const [reviewScreen, setreviewScreen] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -99,9 +102,9 @@ console.log(likes,likedByMe,"6666666666666666")
   }, [])
 
 
-  
+
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id,currentUser,likedByMe))
+    dispatch(likeDislike(_id, currentUser, likedByMe))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -113,9 +116,11 @@ console.log(likes,likedByMe,"6666666666666666")
 
   return (
     <>
+      {reviewScreen && <ReviewComponent  itemName={en_name} _func2={() => setreviewScreen(false)} />}
+
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage selectedImageIndex={selectedImageIndex} coverImage={coverImage}  _func={() => setFullImageScreen(false)} />
         </View>
       }
       {confirmModal &&
@@ -153,18 +158,16 @@ console.log(likes,likedByMe,"6666666666666666")
           <Text style={{}}>{totalLikes}</Text>
         </TouchableOpacity>
       </View>
-
       <ShopDetailsContainer>
         {imageSlider ?
           <SliderBox
             images={coverImage}
             sliderBoxHeight={Wheight - 390}
-            autoplay
             resizeMode={'cover'}
-            onCurrentImagePressed={(index: number) => {
+            onCurrentImagePressed={(index: any) => {
               console.log(index, 'indexindexindex')
-              setFullImageScreen(true)
               setSelectedImageIndex(index)
+              setFullImageScreen(true)
             }}
           />
           :
@@ -197,7 +200,9 @@ console.log(likes,likedByMe,"6666666666666666")
                 style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
               >({rating})</Text></View>
             </View>
-            <DescriptionArea description={en_desc} navigation={navigation} />
+            <DescriptionArea description={en_desc} navigation={navigation}
+              _func2={() => setreviewScreen(true)}
+              _func={() => setreviewScreen(true)} />
             <View style={{ flexDirection: "row", }}>
               <View style={{ width: "50%", }}>
                 <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>

@@ -6,6 +6,8 @@ import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
 import { Colors } from '../../constants/Colors';
 import { height, width } from '../../constants/Layout';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeDislike } from '../../store/action/shopAction';
 
 export const ShopContainer = styled(SafeAreaView)`
   flex: 1;
@@ -80,7 +82,10 @@ export type ISubCategoryTypeProp = {
   numberOfService?: number;
   numberOfRates?: number;
   noOfLikes?: any;
+  item_id?: string;
   rating?: number;
+  currentUser?: any;
+  likedByMe?: string;
   onPress?: () => void;
   price?: number;
 };
@@ -89,14 +94,20 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   serviceName,
   numberOfService,
   numberOfRates,
+  item_id,
   noOfLikes,
   rating,
   onPress,
+  currentUser,
+  likedByMe,
   price
-}) => {
+}:any) => {
   const [totalLikes, settotalLikes] = useState(noOfLikes);
-  const [sendLike, setsendLike] = useState(false);
+  const [sendLike, setsendLike] = useState(likedByMe);
+  const dispatch = useDispatch();
+
   const numberOfLikes = () => {
+    dispatch(likeDislike(item_id,currentUser,likedByMe))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -119,6 +130,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             onPress={() => {
               setsendLike(!sendLike)
               numberOfLikes()
+
             }}
             activeOpacity={0.9}
             style={{

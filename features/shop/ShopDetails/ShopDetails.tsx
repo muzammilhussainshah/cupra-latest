@@ -18,6 +18,7 @@ import { _makeItemReservation } from "../../../store/action/shopAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { likeDislike } from '../../../store/action/shopAction';
 import {
   Backgroundimage,
   ColorContianer,
@@ -50,9 +51,14 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-  const { en_name, icon, en_desc, size, price, height, width, likes, stock_count, _id } = routes;
+  const { en_name, icon, en_desc, size, price, height, width, likes, stock_count, _id,likedByMe } = routes;
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+
+  const [totalLikes, settotalLikes] = useState(likes);
+  const [sendLike, setsendLike] = useState(likedByMe);
+console.log(likes,likedByMe,"6666666666666666")
 
   const dispatch = useDispatch()
 
@@ -81,6 +87,19 @@ export const ShopDetails = ({ route, navigation }: any) => {
     setcoverImage(icon)
   }, [])
 
+
+  
+  const numberOfLikes = () => {
+    dispatch(likeDislike(_id,currentUser,likedByMe))
+    if (!sendLike) {
+      settotalLikes(totalLikes + 1)
+    } else {
+      if (totalLikes > 0) {
+        settotalLikes(totalLikes - 1)
+      }
+    }
+  }
+
   return (
     <>
       {confirmModal &&
@@ -95,7 +114,11 @@ export const ShopDetails = ({ route, navigation }: any) => {
         />
       }
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
-        <TouchableOpacity
+        <TouchableOpacity onPress={() => {
+          setsendLike(!sendLike)
+          numberOfLikes()
+
+        }}
           activeOpacity={0.8}
           style={{
             justifyContent: "center",
@@ -111,7 +134,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
             source={require('../../../assets/images/RealHeart.png')}
             resizeMode="contain"
           />
-          <Text style={{}}>{likes}</Text>
+          <Text style={{}}>{totalLikes}</Text>
         </TouchableOpacity>
       </View>
 

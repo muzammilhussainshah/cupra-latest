@@ -80,6 +80,7 @@ export type ISubCategoryTypeProp = {
   numberOfService?: number;
   numberOfRates?: number;
   noOfLikes?: any;
+  rating?: number;
   onPress?: () => void;
   price?: number;
 };
@@ -89,6 +90,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   numberOfService,
   numberOfRates,
   noOfLikes,
+  rating,
   onPress,
   price
 }) => {
@@ -118,9 +120,10 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
               setsendLike(!sendLike)
               numberOfLikes()
             }}
+            activeOpacity={0.9}
             style={{
               justifyContent: "center",
-              // backgroundColor: "rgba( 85 , 83 , 85 , 0.9 )",
+              backgroundColor: "rgba( 85 , 83 , 85 , 0.9 )",
               borderRadius: 10,
               height: 50,
               width: 50,
@@ -131,7 +134,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
               source={require('../../assets/images/RealHeart.png')}
               resizeMode="contain"
             />
-            <Text style={{ color: "#ffffff" }}>{totalLikes}</Text>
+            <Text style={{ color: "#ffffff",elevation:2 }}>{totalLikes}</Text>
           </TouchableOpacity>
         </View>
         <SubCategoryTileCover source={serviceImage} />
@@ -151,10 +154,10 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             <SubCategoryNumber>Remaining {numberOfService}+</SubCategoryNumber>
           </RowView>
           <RowView>
-            <NumberOfRates>{numberOfRates}</NumberOfRates>
+            <NumberOfRates>{rating}</NumberOfRates>
             <SteeringImage
               resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/star.png')}
+              source={require('../../assets/images/RealStar.png')}
             />
           </RowView>
         </BottomContainer>

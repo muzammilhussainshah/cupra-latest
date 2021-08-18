@@ -108,7 +108,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({
           <NumberOfRates>20</NumberOfRates>
           <SteeringImage
             resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/heart.png')}
+            source={require('../../assets/images/RealHeart.png')}
           />
           <NumberOfRates>20</NumberOfRates>
         </RowView>

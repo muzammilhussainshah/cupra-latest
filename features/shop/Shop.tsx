@@ -70,7 +70,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
           Subcatogery.length > 0 && Subcatogery.map((v: any, i) => {
             // i === 5 && console.log(v, "sub catogeris in render")
             if (v.items.length > 0) {
-              // console.log(v.en_name, "sub catogeris in render")
+              console.log(v, "sub catogeris in render")
               return (
                 <>
                   <View>
@@ -84,7 +84,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                     data={v.items}
                     renderItem={({ item }) => (
                       <>
-                        {/* {console.log(item.likes, 'itemitemitemitem')} */}
+                        {console.log(item, 'itemitemitemitem')}
                         <SubCategoryTile
                           numberOfRates={item.total_rate}
                           numberOfService={item.stock_count}
@@ -92,6 +92,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                           noOfLikes={item.likes}
                           serviceImage={{ uri: item.icon }}
                           price={item.price}
+                          rating={item.rating}
                           onPress={() => dispatch(_getItemDetails(currentUser, item._id, navigation,))}
                         // onPress={() => navigation.push('shopDetail', item)}
                         />

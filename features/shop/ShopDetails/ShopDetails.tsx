@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TouchableOpacity, View } from 'react-native';
+import { Text, ScrollView, Dimensions, TouchableOpacity, View, Alert, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -9,6 +9,8 @@ import { MainSheet } from '../../../components/MainSheet';
 import ReservationModal from '../../../components/reservationModal'
 
 import { Colors } from '../../../constants/Colors';
+
+import { SliderBox } from "react-native-image-slider-box";
 
 import { _getHexColor, } from "../../../store/action/action"
 
@@ -30,7 +32,15 @@ import {
 
 // TODO: Remove the views and handle the component from the styled
 export const ShopDetails = ({ route, navigation }: any) => {
+  const Wwidth = Dimensions.get('window').width;
+
+  const Wheight = Dimensions.get('window').height;
+
   const [coverImage, setcoverImage] = useState()
+
+  const [title, setTitle] = useState("")
+
+  const [imageSlider, setimageSlider] = useState(false)
 
   const [selectedClr, setCelectedClr] = useState('')
 
@@ -56,6 +66,11 @@ export const ShopDetails = ({ route, navigation }: any) => {
     if (integers == "+") {
       if (quantity >= 0 && quantity < stock_count) {
         setQuantity(quantity + 1)
+      } else {
+        setConfirmModal(true)
+        setTitle("Sorry, This item is not available now!")
+
+        // alert("")
       }
     }
   }
@@ -63,18 +78,14 @@ export const ShopDetails = ({ route, navigation }: any) => {
   useEffect(() => {
     setCelectedClr(routes.colors[0])
     let firstClr = routes.colors[0]
-    if (routes.images && !(Object.keys(routes.images).length === 0 && routes.images.constructor === Object)) {
-      setcoverImage(routes.images[firstClr][0])
-    }
-    else {
-      setcoverImage(icon)
-    }
+    setcoverImage(icon)
   }, [])
 
   return (
     <>
       {confirmModal &&
         < ReservationModal
+          Title={title}
           _func={() => setConfirmModal(false)}
           _func2={() => {
             dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser))
@@ -83,27 +94,40 @@ export const ShopDetails = ({ route, navigation }: any) => {
           }
         />
       }
-      <View style={{ height: "50%", width: "50%", position: "absolute", zIndex: 1, alignItems: "flex-end", justifyContent: "flex-end", top: -50, left: "40%" }}>
-        <View style={{
-          justifyContent: "center",
-          backgroundColor: "#fff",
-          elevation: 2,
-          borderRadius: 10,
-          height: 55,
-          width: 55,
-          alignItems: "center"
-        }}>
+      <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{
+            justifyContent: "center",
+            backgroundColor: "#fff",
+            elevation: 2,
+            borderRadius: 10,
+            height: 55,
+            width: 55,
+            alignItems: "center"
+          }}>
           <FastImage
             style={{ height: 25, width: 25, }}
-            source={require('../../../assets/images/heart.png')}
+            source={require('../../../assets/images/RealHeart.png')}
             resizeMode="contain"
           />
           <Text style={{}}>{likes}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <ShopDetailsContainer>
-        <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+        {imageSlider ?
+          <SliderBox
+            images={coverImage}
+            sliderBoxHeight={Wheight - 390}
+            autoplay
+            resizeMode={'cover'}
+            onCurrentImagePressed={(index: number) => {
+            }}
+          />
+          :
+          <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+        }
         <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
         </TouchableOpacity>
@@ -132,7 +156,9 @@ export const ShopDetails = ({ route, navigation }: any) => {
                         <ColorContianer color={colorHex} _func={() => {
                           setCelectedClr(v)
                           if (routes.images && !(Object.keys(routes.images).length === 0 && routes.images.constructor === Object)) {
-                            setcoverImage(routes.images[v][0])
+                            setcoverImage(routes.images[v])
+                            setimageSlider(true)
+                            console.log(routes.images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
                           }
                         }} />
                       </View>
@@ -151,10 +177,20 @@ export const ShopDetails = ({ route, navigation }: any) => {
           </ScrollView>
         </MainSheet>
         <ReserveNowArea>
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity<1?price:price*quantity}</Text>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
           <TouchableOpacity
-            onPress={() =>
-              setConfirmModal(true)
+            onPress={() => {
+
+              if (quantity == 0) {
+
+                setConfirmModal(true)
+                setTitle("Please enter the quantity you want to reserve!")
+
+              } else {
+                setConfirmModal(true)
+                setTitle("Are you sure you want to make this reservation?")
+              }
+            }
               // dispatch(_makeItemReservation(_id, quantity, selectedClr))
             }
             style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>

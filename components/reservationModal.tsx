@@ -11,6 +11,7 @@ import { Colors } from '../constants/Colors';
 export type ReservationModalprops = PressableProps & {
   _func?: Function;
   _func2?: Function;
+  Title?: string;
 };
 
 /**
@@ -18,7 +19,7 @@ export type ReservationModalprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const ReservationModal: React.FunctionComponent<ReservationModalprops> = ({ _func, _func2 }: any) => {
+export const ReservationModal: React.FunctionComponent<ReservationModalprops> = ({ _func, Title, _func2 }: any) => {
   return (
     <TouchableOpacity
       onPress={() => _func()}
@@ -32,21 +33,33 @@ export const ReservationModal: React.FunctionComponent<ReservationModalprops> = 
         </View>
 
         <View style={{ flex: 2, justifyContent: "center", alignItems: "center", }}>
-          <Text style={{ fontSize: 12.5, color: Colors.white }}>Are you sure you want to make this reservation?</Text>
+          <Text style={{ fontSize: 12.5, color: Colors.white }}>
+            {Title}
+          </Text>
         </View>
 
         <View style={{ flex: 6, flexDirection: "row", justifyContent: "space-evenly", }}>
-          <TouchableOpacity
-            onPress={() => _func2()}
-            style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
-            <Text style={{ color: Colors.white }}>Confirm</Text>
-          </TouchableOpacity>
+          {Title == "Are you sure you want to make this reservation?" ?
+            <>
+              <TouchableOpacity
+                onPress={() => _func2()}
+                style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
+                <Text style={{ color: Colors.white }}>Confirm</Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => _func()}
-            style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
-            <Text style={{ color: Colors.white }}>Cancel</Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => _func()}
+                style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
+                <Text style={{ color: Colors.white }}>Cancel</Text>
+              </TouchableOpacity>
+            </>
+            :
+            <TouchableOpacity
+              onPress={() => _func()}
+              style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
+              <Text style={{ color: Colors.white }}>Okay</Text>
+            </TouchableOpacity>
+          }
         </View>
 
       </TouchableOpacity >

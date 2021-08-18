@@ -1,31 +1,36 @@
 import React from 'react';
 
-import { createStackNavigator, HeaderStyleInterpolators, TransitionSpecs } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  HeaderStyleInterpolators,
+  TransitionSpecs,
+} from '@react-navigation/stack';
 
-import { WelcomeScreen } from '../features/auth/WelcomeScreen';
+import {WelcomeScreen} from '../features/auth/WelcomeScreen';
 
-import { LoginScreen } from '../features/auth/LoginScreen/LoginScreen';
+import {LoginScreen} from '../features/auth/LoginScreen/LoginScreen';
 
-import { SignUpScreen } from '../features/auth/SignUpScreen/SignUpScreen';
+import {SignUpScreen} from '../features/auth/SignUpScreen/SignUpScreen';
 
-import { ResetPasswordScreen } from '../features/auth/ResetPasswordScreen/ResetPasswordScreen';
+import {ResetPasswordScreen} from '../features/auth/ResetPasswordScreen/ResetPasswordScreen';
 
-import { VerificationScreen } from '../features/auth/VerificationScreen/VerificationScreen';
+import {VerificationScreen} from '../features/auth/VerificationScreen/VerificationScreen';
 
-import { AddNewPassword } from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
+import {AddNewPassword} from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
 
 import Routes from './Routes';
 
-import { NavigatorScreenParams } from '@react-navigation/native';
+import {NavigatorScreenParams} from '@react-navigation/native';
 
-import BottomTabNavigator, { BottomTabParamList } from './BottomTabNavigator';
-
+import {BottomTabParamList} from './BottomTabNavigator';
+import {DrawerNavigator} from './DrawerNavigator';
 
 type AuthStackParamList = {
+  drawerStack: undefined;
   welcome: undefined;
   login: undefined;
   signup: undefined;
-  otp: { phone_number?: string, routName?: string };
+  otp: {phone_number?: string; routName?: string};
   resetPassword: undefined;
   requestPassword: undefined;
 };
@@ -38,17 +43,15 @@ type RootStackParamList = {
 };
 
 export const RootNavigator = () => {
-
-
   const MyTransition: any = {
-     headerShown: false,
+    headerShown: false,
     gestureDirection: 'vertical',
     transitionSpec: {
       open: TransitionSpecs.TransitionIOSSpec,
       close: TransitionSpecs.TransitionIOSSpec,
     },
     headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-    cardStyleInterpolator: ({ current, layouts }: any) => ({
+    cardStyleInterpolator: ({current, layouts}: any) => ({
       cardStyle: {
         transform: [
           {
@@ -66,15 +69,7 @@ export const RootNavigator = () => {
         }),
       },
     }),
-  }
-
-
-
-
-
-
-
-
+  };
 
   return (
     // <RootStack.Navigator>
@@ -86,16 +81,23 @@ export const RootNavigator = () => {
     // </RootStack.Navigator>
     <AuthStack.Navigator
       mode="modal"
+      initialRouteName={'welcome'}
       screenOptions={{
         headerShown: false,
         headerTransparent: true,
         headerBackTitleVisible: false,
         headerTitleAllowFontScaling: true,
-        animationTypeForReplace: 'pop',
+        // animationTypeForReplace: 'pop',
         // ...TransitionPresets.ModalPresentationIOS,
         gestureDirection: 'horizontal',
         gestureEnabled: true,
       }}>
+      <AuthStack.Screen
+        name="drawerStack"
+        component={DrawerNavigator}
+        options={MyTransition}
+      />
+
       <AuthStack.Screen
         name="welcome"
         component={WelcomeScreen}

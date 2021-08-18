@@ -4,15 +4,15 @@
  *
  */
 
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { ColorSchemeName, AsyncStorage } from 'react-native';
-import { DrawerNavigator } from './DrawerNavigator';
-import { _signIn, _googleAuth } from '../store/action/authAction';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ColorSchemeName, AsyncStorage} from 'react-native';
+import {DrawerNavigator} from './DrawerNavigator';
+import {_signIn, _googleAuth} from '../store/action/authAction';
 
-import { RootNavigator } from './RootNavigator';
+import {RootNavigator} from './RootNavigator';
 
 type Props = {
   colorScheme?: ColorSchemeName;
@@ -20,54 +20,35 @@ type Props = {
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-export const Navigation: React.FC<Props> = ({ children }) => {
-
+export const Navigation: React.FC<Props> = ({children}) => {
   const [islogged, setislogged] = useState(false);
   // const currentUser = useSelector(({ currentUser }) => auth.currentUser);
-  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
   const dispatch = useDispatch();
   // console.log(Navigation)
 
   useEffect(() => {
     async function fetchMyAPI() {
-
       const userEmail = await AsyncStorage.getItem('userEmail');
       const password = await AsyncStorage.getItem('password');
-      const getSocialId = await AsyncStorage.getItem("socialId");
-      const getSocialtype = await AsyncStorage.getItem("socialType");
+      const getSocialId = await AsyncStorage.getItem('socialId');
+      const getSocialtype = await AsyncStorage.getItem('socialType');
 
       // console.log(userEmail, password)
       if (getSocialId && getSocialtype) {
-
-
-        dispatch(_googleAuth('testing', getSocialId, getSocialtype))
-      } else {
-        dispatch(_signIn({ emailOrPhone: userEmail, password: password }))
+        dispatch(_googleAuth('testing', getSocialId, getSocialtype));
+      } else if(userEmail&&password){
+        dispatch(_signIn({emailOrPhone: userEmail, password: password}));
       }
     }
 
-    fetchMyAPI()
-  }, [])
-
-
-  useEffect(() => {
-    console.log(currentUser, 'currentUsercurrentUser')
-    if (currentUser?.email || currentUser?.mobile) {
-      setislogged(true);
-    }
-    else {
-      setislogged(false);
-    }
-  }, [currentUser])
-
+    fetchMyAPI();
+  }, []);
 
   return (
     <NavigationContainer>
-      {islogged ?
-        <DrawerNavigator /> :
-        <RootNavigator />
-      }
+      {<RootNavigator />}
       {children}
     </NavigationContainer>
-  )
-}
+  );
+};

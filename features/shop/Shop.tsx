@@ -92,6 +92,9 @@ export const Shop: React.FC = ({ navigation }: any) => {
                           noOfLikes={item.likes}
                           serviceImage={{ uri: item.icon }}
                           price={item.price}
+                          item_id={item._id}
+                          likedByMe={item.likedByMe}
+                          currentUser={currentUser}
                           rating={item.rating}
                           onPress={() => dispatch(_getItemDetails(currentUser, item._id, navigation,))}
                         // onPress={() => navigation.push('shopDetail', item)}

@@ -57,7 +57,7 @@ export const _getCatogery = (currentUser) => {
                 dispatch({ type: SHOPCATOGERY, payload: catogery })
                 dispatch(_getSubCatogery(currentUser))
             }
-            console.log(resp.data.data, 'resp _getCatogery',)
+            console.log(resp, 'resp _getCatogery',)
         }
         catch (err) {
             dispatch(_loading(false));
@@ -162,6 +162,40 @@ export const _makeItemReservation = (itemId, quantity, color,currentUser) => {
             var resp = await axios(option);
 
             console.log(resp, 'resp _makeItemReservation')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from _makeItemReservation", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const likeDislike = (itemId,currentUser,likedByMe ) => {
+    console.log(itemId, 'itemId,likeDislike')
+    return async (dispatch) => {
+        // dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/like-item?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "item_id": itemId,
+                }
+            };
+            var resp = await axios(option);
+
+            console.log(resp, 'resp likeDislike')
+            // dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));

@@ -120,7 +120,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             }}
             style={{
               justifyContent: "center",
-              backgroundColor: "rgba( 85 , 83 , 85 , 0.9 )",
+              // backgroundColor: "rgba( 85 , 83 , 85 , 0.9 )",
               borderRadius: 10,
               height: 50,
               width: 50,
@@ -128,7 +128,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             }}>
             <FastImage
               style={{ height: 25, width: 25, }}
-              source={require('../../assets/images/heart.png')}
+              source={require('../../assets/images/RealHeart.png')}
               resizeMode="contain"
             />
             <Text style={{ color: "#ffffff" }}>{totalLikes}</Text>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors } from '../../../constants/Colors';
@@ -33,11 +33,11 @@ const DescriptionText = styled.Text`
   line-height:18px;
   color: ${Colors.darkGray}
 `;
-export const DescriptionArea = ({ description,navigation }: any) => (
+export const DescriptionArea = ({ description }: any) => (
   <>
     <View style={{ flexDirection: "row" }}>
       <DescriptionHeaderTitle>Description</DescriptionHeaderTitle>
-      <TouchableOpacity onPress={()=>{navigation.navigate("shopSendReview")}}>
+      <TouchableOpacity>
         <DescriptionHeaderTitle style={{ marginLeft: 30 }}>Review</DescriptionHeaderTitle>
       </TouchableOpacity>
     </View>

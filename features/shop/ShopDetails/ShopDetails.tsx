@@ -110,7 +110,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
         <MainSheet scroll sheetHeight={0.4}>
           <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
             <ItemName>{en_name}</ItemName>
-            <DescriptionArea description={en_desc} />
+            <DescriptionArea description={en_desc} navigation={navigation} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <View>
                 <SizeArea size={{ height, width, diameter: size }} />

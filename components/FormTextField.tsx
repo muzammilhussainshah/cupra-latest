@@ -1,5 +1,5 @@
 import React from 'react';
-import {Controller, RegisterOptions, useFormContext} from 'react-hook-form';
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form';
 import Select from './Select';
 
 import TextValidator from './TextValidator';
@@ -14,7 +14,7 @@ type Props = React.ComponentProps<typeof TextValidator> & {
   color?: string;
   fontColor?: string;
   radius?: number;
-  items?: string[] | undefined;
+  items?: string[] | undefined | any;
 };
 
 const FormTextField: React.FC<Props> = props => {
@@ -29,18 +29,18 @@ const FormTextField: React.FC<Props> = props => {
     radius,
     items,
     ...restOfProps
-  } = props;
-  const {control, errors} = useFormContext();
+  } = (props);
+  const { control, errors } = useFormContext();
   return props.isSelectInput ? (
     <Controller
       control={control}
-      render={({onChange, value}) => (
+      render={({ onChange, value }) => (
         <Select
           background={background}
           color={color}
           style={style}
           placeholder={placeholder}
-          items={items.map(i => ({
+          items={items.map((i: number) => ({
             id: i,
             name: i,
           }))}
@@ -51,7 +51,7 @@ const FormTextField: React.FC<Props> = props => {
           onChange={val => onChange(val.name)}
           value={
             value !== undefined
-              ? {id: value, name: value.toString()}
+              ? { id: value, name: value.toString() }
               : undefined
           }
         />
@@ -62,7 +62,7 @@ const FormTextField: React.FC<Props> = props => {
   ) : (
     <Controller
       control={control}
-      render={({onChange, onBlur, value}) => (
+      render={({ onChange, onBlur, value }) => (
         <TextValidator
           background={background}
           color={color}

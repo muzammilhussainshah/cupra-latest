@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
 
@@ -248,6 +248,50 @@ export const submitReview = (itemId, numberOfReview, currentUser, _func2) => {
             dispatch(_loading(false));
 
             console.log(err, "error from submitReview", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const getReview = (itemId, currentUser, navigation, serviceName) => {
+    console.log(itemId, 'itemId,likeDislike')
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            // let url = `https://cupranationapp.herokuapp.com/apis/mobile/item/${itemId}?deviceToken=${deviceToken}&deviceKey=${uniqueId}&id=${itemId}`
+
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/item-reviews/${itemId}?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'GET',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "item_id": itemId,
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: GETREVIEWS, payload: resp.data.data })
+                dispatch(_loading(false));
+                navigation.push('GetReview', navigation,)
+
+            } else {
+                dispatch(_loading(false));
+                dispatch(_error(resp.data.error.messageEn));
+            }
+            console.log(resp, 'resp getReview')
+
+
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from getReview", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

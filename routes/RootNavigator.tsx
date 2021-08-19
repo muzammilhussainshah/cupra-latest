@@ -18,6 +18,8 @@ import {VerificationScreen} from '../features/auth/VerificationScreen/Verificati
 
 import {AddNewPassword} from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
 
+import {GetReview} from '../features/shop/GetReviews/GetReview';
+
 import Routes from './Routes';
 
 import {NavigatorScreenParams} from '@react-navigation/native';
@@ -29,6 +31,7 @@ type AuthStackParamList = {
   drawerStack: undefined;
   welcome: undefined;
   login: undefined;
+  GetReview: undefined;
   signup: undefined;
   otp: {phone_number?: string; routName?: string};
   resetPassword: undefined;
@@ -95,6 +98,11 @@ export const RootNavigator = () => {
       <AuthStack.Screen
         name="drawerStack"
         component={DrawerNavigator}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="GetReview"
+        component={GetReview}
         options={MyTransition}
       />
 

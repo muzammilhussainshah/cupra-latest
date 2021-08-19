@@ -8,4 +8,5 @@ export const ISLOADER = 'ISLOADER'
 export const ISERROR = 'ISERROR'
 export const SERVICES = 'SERVICES'
 export const SUBSERVICES = 'SUBSERVICES'
+export const GETREVIEWS = 'GETREVIEWS'
 

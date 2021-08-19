@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, SERVICES,SUBSERVICES, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY,ITEMDETAILS } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, SERVICES,SUBSERVICES, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY,ITEMDETAILS ,GETREVIEWS} from "../constant/constant";
 
 const INITIAL_STATE = {
     signUpUser: false,
@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     shopItemDetails: {},
     services: {},
     subservices: {},
+    getReviews:{},
     isLoader: false,
     isError: false,
 }
@@ -58,6 +59,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 subservices: action.payload
+            })
+        case GETREVIEWS:
+            return ({
+                ...state,
+                getReviews: action.payload
             })
         default:
             return state;

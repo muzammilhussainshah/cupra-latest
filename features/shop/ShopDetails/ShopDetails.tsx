@@ -10,6 +10,8 @@ import { MainSheet } from '../../../components/MainSheet';
 
 import FullImage from '../../../components/fullImage';
 
+// import getReview from '../../../store/action/shopAction'
+
 import styled from 'styled-components/native';
 
 import ReservationModal from '../../../components/reservationModal'
@@ -24,7 +26,7 @@ import { _makeItemReservation } from "../../../store/action/shopAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { likeDislike, _getItemDetails } from '../../../store/action/shopAction';
+import { likeDislike, _getItemDetails, getReview } from '../../../store/action/shopAction';
 import {
   Backgroundimage,
   ColorContianer,
@@ -73,13 +75,13 @@ export const ShopDetails = ({ route, navigation }: any) => {
   const shopItemDetails = useSelector((state: any) => state.reducer.shopItemDetails)
 
   const item = routes;
-  
+
   const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, en_treatment, colors, images, height, width, stock_count, _id, likedByMe, } = shopItemDetails;
-  
-  console.log(routes,'isLoaderisLoaderisLoader')
+
+  console.log(routes, 'isLoaderisLoaderisLoader')
 
   const [totalLikes, settotalLikes] = useState(item.likes);
-  
+
   const [sendLike, setsendLike] = useState(likedByMe);
 
   const [reviewScreen, setreviewScreen] = useState(false)
@@ -154,163 +156,159 @@ export const ShopDetails = ({ route, navigation }: any) => {
         />
       }
 
-      <>
-        <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
-          <TouchableOpacity onPress={() => {
-            setsendLike(!sendLike)
-            numberOfLikes()
+      <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
+        <TouchableOpacity onPress={() => {
+          setsendLike(!sendLike)
+          numberOfLikes()
 
-          }}
-            activeOpacity={0.8}
-            style={{
-              justifyContent: "center",
-              backgroundColor: "#fff",
-              elevation: 2,
-              borderRadius: 10,
-              height: 55,
-              width: 55,
-              alignItems: "center"
-            }}>
-            <FastImage
-              style={{ height: 25, width: 25, }}
-              source={require('../../../assets/images/RealHeart.png')}
-              resizeMode="contain"
-            />
-            <Text style={{}}>{totalLikes}</Text>
-          </TouchableOpacity>
-        </View>
+        }}
+          activeOpacity={0.8}
+          style={{
+            justifyContent: "center",
+            backgroundColor: "#fff",
+            elevation: 2,
+            borderRadius: 10,
+            height: 55,
+            width: 55,
+            alignItems: "center"
+          }}>
+          <FastImage
+            style={{ height: 25, width: 25, }}
+            source={require('../../../assets/images/RealHeart.png')}
+            resizeMode="contain"
+          />
+          <Text style={{}}>{totalLikes}</Text>
+        </TouchableOpacity>
+      </View>
 
-        <ShopDetailsContainer>
-          {imageSlider ?
-            <SliderBox
-              images={coverImage}
-              sliderBoxHeight={Wheight - 390}
-              resizeMode={'cover'}
-              onCurrentImagePressed={(index: any) => {
-                console.log(index, 'indexindexindex')
-                setSelectedImageIndex(index)
-                setFullImageScreen(true)
-              }}
-            />
+      <ShopDetailsContainer>
+        {imageSlider ?
+          <SliderBox
+            images={coverImage}
+            sliderBoxHeight={Wheight - 390}
+            resizeMode={'cover'}
+            onCurrentImagePressed={(index: any) => {
+              console.log(index, 'indexindexindex')
+              setSelectedImageIndex(index)
+              setFullImageScreen(true)
+            }}
+          />
+          :
+          isLoader ?
+            <ActivityIndicator
+              style={{ marginTop: "20%" }}
+              size="small" color={'black'}
+            /> :
+            <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+        }
+        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
+        </TouchableOpacity>
+        <MainSheet scroll sheetHeight={0.4}>
 
-            :
-            isLoader ?
-              <ActivityIndicator
-                style={{ marginTop: "20%" }}
-                size="small" color={'black'}
-              /> :
-              <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+          {isLoader ?
+            <ActivityIndicator
+              style={{ marginTop: "20%" }}
+              size="small" color={'black'}
+            /> :
 
-
-
+            <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
+              <View style={{ width: "60%" }}>
+                <ItemName>{en_name}</ItemName>
+              </View>
+              <View style={{ flexDirection: "row", marginVertical: 5 }}>
+                <TouchableOpacity
+                  onPress={() => dispatch(getReview(_id, currentUser, navigation))}
+                  style={{}}>
+                  <FlatList
+                    contentContainerStyle={{ alignItems: "center", }}
+                    horizontal={true}
+                    data={[1, 2, 3, 4, 5]}
+                    renderItem={({ item }) => (
+                      <SteeringImage
+                        tintColor={item > rating && "#ffffff"}
+                        resizeMode={FastImage.resizeMode.contain}
+                        source={require('../../../assets/images/RealStar.png')}
+                      />
+                    )}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity><Text
+                  style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
+                >({rating})</Text></TouchableOpacity>
+              </View>
+              <DescriptionArea description={en_desc} navigation={navigation}
+                _func2={() => setreviewScreen(true)}
+                _func={() => setreviewScreen(true)} />
+              <View style={{ flexDirection: "row", }}>
+                <View style={{ width: "50%", }}>
+                  <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
+                  <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{fromYear && fromYear}</Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>To Year</Text>
+                  <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{toYear && toYear}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row', }}>
+                <View style={{ width: "50%" }}
+                >
+                  <SizeArea size={{ height, width, diameter: size }} />
+                </View>
+                <View style={{ width: "50%" }}>
+                  <TreatmentArea treatment={en_treatment} />
+                </View>
+              </View>
+              <View style={{ flexDirection: "row", }}>
+                <View style={{ width: "50%", }}>
+                  <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    {colors && colors.map((v: string, i: number) => {
+                      let colorHex = dispatch(_getHexColor(v))
+                      return (
+                        <View style={{ flexDirection: 'row', margin: 2, }}>
+                          <ColorContianer color={colorHex} _func={() => {
+                            setCelectedClr(v)
+                            if (images && !(Object.keys(images).length === 0 && images.constructor === Object)) {
+                              setcoverImage(images[v])
+                              setimageSlider(true)
+                              console.log(images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
+                            }
+                          }} />
+                        </View>
+                      )
+                    })
+                    }
+                  </View>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <QuantityArea quantity={quantity}
+                    _func={() => { manageQuantity('-') }}
+                    _func2={() => { manageQuantity('+') }}
+                  />
+                </View>
+              </View>
+            </ScrollView>
           }
-          <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
-            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
-          </TouchableOpacity>
-          <MainSheet scroll sheetHeight={0.4}>
-
-            {isLoader ?
-              <ActivityIndicator
-                style={{ marginTop: "20%" }}
-                size="small" color={'black'}
-              /> :
-
-              <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
-                <View style={{ width: "60%" }}>
-                  <ItemName>{en_name}</ItemName>
-                </View>
-                <View style={{ flexDirection: "row", marginVertical: 5 }}>
-                  <View style={{}}>
-                    <FlatList
-                      contentContainerStyle={{ alignItems: "center", }}
-                      horizontal={true}
-                      data={[1, 2, 3, 4, 5]}
-                      renderItem={({ item }) => (
-                        <SteeringImage
-                          tintColor={item > rating && "#ffffff"}
-                          resizeMode={FastImage.resizeMode.contain}
-                          source={require('../../../assets/images/RealStar.png')}
-                        />
-                      )}
-                    />
-                  </View>
-                  <View><Text
-                    style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
-                  >({rating})</Text></View>
-                </View>
-                <DescriptionArea description={en_desc} navigation={navigation}
-                  _func2={() => setreviewScreen(true)}
-                  _func={() => setreviewScreen(true)} />
-                <View style={{ flexDirection: "row", }}>
-                  <View style={{ width: "50%", }}>
-                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
-                    <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{fromYear && fromYear}</Text>
-                  </View>
-                  <View style={{ width: "50%" }}>
-                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>To Year</Text>
-                    <Text style={{ fontFamily: 'SourceSansPro-Regular', marginBottom: 5 }}>{toYear && toYear}</Text>
-                  </View>
-                </View>
-                <View style={{ flexDirection: 'row', }}>
-                  <View style={{ width: "50%" }}
-                  >
-                    <SizeArea size={{ height, width, diameter: size }} />
-                  </View>
-                  <View style={{ width: "50%" }}>
-                    <TreatmentArea treatment={en_treatment} />
-                  </View>
-                </View>
-                <View style={{ flexDirection: "row", }}>
-                  <View style={{ width: "50%", }}>
-                    <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                      {colors && colors.map((v: string, i: number) => {
-                        let colorHex = dispatch(_getHexColor(v))
-                        return (
-                          <View style={{ flexDirection: 'row', margin: 2, }}>
-                            <ColorContianer color={colorHex} _func={() => {
-                              setCelectedClr(v)
-                              if (images && !(Object.keys(images).length === 0 && images.constructor === Object)) {
-                                setcoverImage(images[v])
-                                setimageSlider(true)
-                                console.log(images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
-                              }
-                            }} />
-                          </View>
-                        )
-                      })
-                      }
-                    </View>
-                  </View>
-                  <View style={{ width: "50%" }}>
-                    <QuantityArea quantity={quantity}
-                      _func={() => { manageQuantity('-') }}
-                      _func2={() => { manageQuantity('+') }}
-                    />
-                  </View>
-                </View>
-              </ScrollView>
+        </MainSheet>
+        <ReserveNowArea>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              if (quantity == 0) {
+                setConfirmModal(true)
+                setTitle("Please enter the quantity you want to reserve!")
+              } else {
+                setConfirmModal(true)
+                setTitle("Are you sure you want to make this reservation?")
+              }
             }
-          </MainSheet>
-          <ReserveNowArea>
-            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>JD {quantity < 1 ? price : price * quantity}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                if (quantity == 0) {
-                  setConfirmModal(true)
-                  setTitle("Please enter the quantity you want to reserve!")
-                } else {
-                  setConfirmModal(true)
-                  setTitle("Are you sure you want to make this reservation?")
-                }
-              }
-              }
-              style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Reserve Now</Text>
-            </TouchableOpacity>
-          </ReserveNowArea>
-        </ShopDetailsContainer>
-      </>
+            }
+            style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: 55, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 15 }}>Reserve Now</Text>
+          </TouchableOpacity>
+        </ReserveNowArea>
+      </ShopDetailsContainer>
 
       {/* </View>
       </ScrollView> */}

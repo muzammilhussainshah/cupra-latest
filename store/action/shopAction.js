@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY,ITEMDETAILS } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
 
@@ -106,6 +106,7 @@ export const _getSubCatogery = (currentUser, catId) => {
 export const _getItemDetails = (currentUser, itemId, navigation,) => {
     // console.log(itemLikes, 'item.likesitem.likesv')
     return async (dispatch) => {
+        dispatch({ type: ITEMDETAILS, payload: {} })
         dispatch(_loading(true));
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -124,7 +125,9 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
             var resp = await axios(option);
             // console.log(resp, '_getItemDetails')
             if (resp.data.status === 200) {
-                navigation.push('shopDetail', resp.data.data,)
+                dispatch({ type: ITEMDETAILS, payload: resp.data.data })
+
+                // navigation.push('shopDetail', resp.data.data,)
             }
             console.log(resp, 'resp _getItemDetails',)
             dispatch(_loading(false));

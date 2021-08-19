@@ -6,6 +6,10 @@ import { Text, View } from 'react-native-animatable';
 
 import { Header } from '../components/Header';
 
+import { submitReview } from '../store/action/shopAction';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import FastImage from 'react-native-fast-image';
 
 import styled from 'styled-components/native';
@@ -21,6 +25,7 @@ export type ReviewComponent = PressableProps & {
   _func2?: Function;
   coverImage?: any;
   itemName?: string;
+  _id?: string;
   selectedImageIndex?: number;
 };
 
@@ -29,8 +34,14 @@ export type ReviewComponent = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, coverImage, selectedImageIndex,itemName }: any) => {
+export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, _id, itemName }: any) => {
   const [numberOfReview, setnumberOfReview] = useState(0)
+  const dispatch = useDispatch()
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+
+
+
 
   return (
 
@@ -87,7 +98,9 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
               style={{ height: 15, width: 15, marginHorizontal: 5 }} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>
+        <TouchableOpacity
+          onPress={() => { dispatch(submitReview(_id,numberOfReview,currentUser)) }}
+          style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>
           <Text style={{ color: Colors.white }}>Submit Review</Text>
         </TouchableOpacity>
 

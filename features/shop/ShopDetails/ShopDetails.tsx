@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, ActivityIndicator,Alert } from 'react-native';
+import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, ActivityIndicator, Alert } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -73,9 +73,13 @@ export const ShopDetails = ({ route, navigation }: any) => {
   const shopItemDetails = useSelector((state: any) => state.reducer.shopItemDetails)
 
   const item = routes;
-  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price,en_treatment,colors,images, height, width, likes, stock_count, _id, likedByMe, } = shopItemDetails;
+  
+  const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, en_treatment, colors, images, height, width, stock_count, _id, likedByMe, } = shopItemDetails;
+  
+  console.log(routes,'isLoaderisLoaderisLoader')
 
-  const [totalLikes, settotalLikes] = useState(likes);
+  const [totalLikes, settotalLikes] = useState(item.likes);
+  
   const [sendLike, setsendLike] = useState(likedByMe);
 
   const [reviewScreen, setreviewScreen] = useState(false)
@@ -131,7 +135,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   return (
     <>
-      {reviewScreen && <ReviewComponent  itemName={en_name} _func2={() => setreviewScreen(false)} />}
+      {reviewScreen && <ReviewComponent itemName={en_name} _id={_id} _func2={() => setreviewScreen(false)} />}
 
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
@@ -178,16 +182,16 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
         <ShopDetailsContainer>
           {imageSlider ?
-                     <SliderBox
-            images={coverImage}
-            sliderBoxHeight={Wheight - 390}
-            resizeMode={'cover'}
-            onCurrentImagePressed={(index: any) => {
-              console.log(index, 'indexindexindex')
-              setSelectedImageIndex(index)
-              setFullImageScreen(true)
-            }}
-          />
+            <SliderBox
+              images={coverImage}
+              sliderBoxHeight={Wheight - 390}
+              resizeMode={'cover'}
+              onCurrentImagePressed={(index: any) => {
+                console.log(index, 'indexindexindex')
+                setSelectedImageIndex(index)
+                setFullImageScreen(true)
+              }}
+            />
 
             :
             isLoader ?
@@ -234,9 +238,9 @@ export const ShopDetails = ({ route, navigation }: any) => {
                     style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
                   >({rating})</Text></View>
                 </View>
-                 <DescriptionArea description={en_desc} navigation={navigation}
-              _func2={() => setreviewScreen(true)}
-              _func={() => setreviewScreen(true)} />
+                <DescriptionArea description={en_desc} navigation={navigation}
+                  _func2={() => setreviewScreen(true)}
+                  _func={() => setreviewScreen(true)} />
                 <View style={{ flexDirection: "row", }}>
                   <View style={{ width: "50%", }}>
                     <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>From Year</Text>
@@ -260,7 +264,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
                   <View style={{ width: "50%", }}>
                     <Text style={{ marginTop: 10, fontSize: 16, fontFamily: 'SourceSansPro-SemiBold', marginBottom: 5 }}>Colors</Text>
                     <View style={{ flexDirection: 'row' }}>
-                      {colors &&colors.map((v: string, i: number) => {
+                      {colors && colors.map((v: string, i: number) => {
                         let colorHex = dispatch(_getHexColor(v))
                         return (
                           <View style={{ flexDirection: 'row', margin: 2, }}>

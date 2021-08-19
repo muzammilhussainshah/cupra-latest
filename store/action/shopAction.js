@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY,ITEMDETAILS } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
 
@@ -139,7 +139,7 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
         }
     }
 }
-export const _makeItemReservation = (itemId, quantity, color,currentUser) => {
+export const _makeItemReservation = (itemId, quantity, color, currentUser) => {
     console.log(itemId, quantity, color, 'itemId, quantity,color')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -174,7 +174,7 @@ export const _makeItemReservation = (itemId, quantity, color,currentUser) => {
         }
     }
 }
-export const likeDislike = (itemId,currentUser,likedByMe ) => {
+export const likeDislike = (itemId, currentUser, likedByMe) => {
     console.log(itemId, 'itemId,likeDislike')
     return async (dispatch) => {
         // dispatch(_loading(true));
@@ -203,7 +203,42 @@ export const likeDislike = (itemId,currentUser,likedByMe ) => {
         catch (err) {
             dispatch(_loading(false));
 
-            console.log(err, "error from _makeItemReservation", JSON.parse(JSON.stringify(err.message)));
+            console.log(err, "error from likeDislike", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const submitReview = (itemId, numberOfReview, currentUser,) => {
+    console.log(itemId, 'itemId,likeDislike')
+    return async (dispatch) => {
+        // dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/rate-item?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "item_id": itemId,
+                    "rate": numberOfReview,
+                }
+            };
+            var resp = await axios(option);
+
+            console.log(resp, 'resp submitReview')
+            // dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from submitReview", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

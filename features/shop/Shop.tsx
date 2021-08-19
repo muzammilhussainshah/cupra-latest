@@ -18,7 +18,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
   // console.log(Subcatogery, 'Subcatogery')
   useEffect(() => {
-    dispatch(_getCatogery(currentUser))
+    dispatch(_getCatogery(currentUser,navigation))
   }, [])
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
               // index === 1 && console.log(item, "sssssssssssss")
               return (
                 <TouchableOpacity key={index} onPress={() => {
-                  dispatch(_getSubCatogery(currentUser, item._id))
+                  dispatch(_getSubCatogery(currentUser, item._id,navigation))
                   var cloneCatogery: any = catogery;
                   cloneCatogery.map((x: any) => {
                     x.isSelected = false;
@@ -94,6 +94,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                           price={item.price}
                           item_id={item._id}
                           likedByMe={item.likedByMe}
+                          navigation={navigation}
                           currentUser={currentUser}
                           rating={item.rating}
                           // onPress={() => dispatch(_getItemDetails(currentUser, item._id, navigation,))}

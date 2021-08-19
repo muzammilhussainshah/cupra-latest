@@ -1,6 +1,7 @@
 import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
+import { _logOut } from './authAction';
 
 
 export const _loading = (bol) => {
@@ -29,7 +30,7 @@ export const _checkIsEmptyObj = (obj) => {
 }
 
 
-export const _getCatogery = (currentUser) => {
+export const _getCatogery = (currentUser,navigation) => {
     console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         try {
@@ -57,6 +58,20 @@ export const _getCatogery = (currentUser) => {
                 dispatch({ type: SHOPCATOGERY, payload: catogery })
                 dispatch(_getSubCatogery(currentUser))
             }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
             console.log(resp, 'resp _getCatogery',)
         }
         catch (err) {
@@ -69,7 +84,7 @@ export const _getCatogery = (currentUser) => {
 
 
 
-export const _getSubCatogery = (currentUser, catId) => {
+export const _getSubCatogery = (currentUser, catId, navigation) => {
     console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -91,6 +106,20 @@ export const _getSubCatogery = (currentUser, catId) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch({ type: SHOPSUBCATOGERY, payload: resp.data.data })
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
             }
             console.log(resp, 'resp _getSubCatogery',)
             dispatch(_loading(false));
@@ -126,8 +155,21 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
             // console.log(resp, '_getItemDetails')
             if (resp.data.status === 200) {
                 dispatch({ type: ITEMDETAILS, payload: resp.data.data })
-
                 // navigation.push('shopDetail', resp.data.data,)
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
             }
             console.log(resp, 'resp _getItemDetails',)
             dispatch(_loading(false));
@@ -139,7 +181,7 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
         }
     }
 }
-export const _makeItemReservation = (itemId, quantity, color, currentUser) => {
+export const _makeItemReservation = (itemId, quantity, color, currentUser,setConfirmModal,navigation) => {
     console.log(itemId, quantity, color, 'itemId, quantity,color')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -163,7 +205,23 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser) => {
                 }
             };
             var resp = await axios(option);
-
+            if (resp.data.status === 200) {
+                setConfirmModal(false)
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
             console.log(resp, 'resp _makeItemReservation')
             dispatch(_loading(false));
         }
@@ -174,7 +232,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser) => {
         }
     }
 }
-export const likeDislike = (itemId, currentUser, likedByMe) => {
+export const likeDislike = (itemId, currentUser, likedByMe,navigation) => {
     console.log(itemId, 'itemId,likeDislike')
     return async (dispatch) => {
         // dispatch(_loading(true));
@@ -196,7 +254,20 @@ export const likeDislike = (itemId, currentUser, likedByMe) => {
                 }
             };
             var resp = await axios(option);
-
+             if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
             console.log(resp, 'resp likeDislike')
             // dispatch(_loading(false));
         }
@@ -208,7 +279,7 @@ export const likeDislike = (itemId, currentUser, likedByMe) => {
     }
 }
 
-export const submitReview = (itemId, numberOfReview, currentUser, _func2) => {
+export const submitReview = (itemId, numberOfReview, currentUser, _func2,navigation) => {
     console.log(itemId, 'itemId,likeDislike')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -234,15 +305,27 @@ export const submitReview = (itemId, numberOfReview, currentUser, _func2) => {
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 _func2()
-
-            } else {
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                          {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
                 dispatch(_loading(false));
                 dispatch(_error(resp.data.error.messageEn));
             }
             console.log(resp, 'resp submitReview')
             // dispatch(_loading(false));
-
-
         }
         catch (err) {
             dispatch(_loading(false));

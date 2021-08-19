@@ -123,7 +123,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id, currentUser, likedByMe))
+    dispatch(likeDislike(_id, currentUser, likedByMe,navigation))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -135,7 +135,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   return (
     <>
-      {reviewScreen && <ReviewComponent itemName={en_name} _id={_id} _func2={() => setreviewScreen(false)} />}
+      {reviewScreen && <ReviewComponent itemName={en_name} _id={_id} _func2={() => setreviewScreen(false)} navigation={navigation} />}
 
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
@@ -147,8 +147,8 @@ export const ShopDetails = ({ route, navigation }: any) => {
           Title={title}
           _func={() => setConfirmModal(false)}
           _func2={() => {
-            dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser))
-            setConfirmModal(false)
+            dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser,setConfirmModal,navigation))
+            // setConfirmModal(false)
           }
           }
         />

@@ -26,6 +26,7 @@ export type ReviewComponent = PressableProps & {
   coverImage?: any;
   itemName?: string;
   _id?: string;
+  navigation?: string;
   selectedImageIndex?: number;
 };
 
@@ -34,7 +35,7 @@ export type ReviewComponent = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, _id, itemName }: any) => {
+export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, _id, itemName,navigation }: any) => {
   const [numberOfReview, setnumberOfReview] = useState(0)
   const dispatch = useDispatch()
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
@@ -108,7 +109,7 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
           /> :
           <TouchableOpacity
             onPress={() => {
-              dispatch(submitReview(_id, numberOfReview, currentUser,_func2))
+              dispatch(submitReview(_id, numberOfReview, currentUser,_func2,navigation))
               // _func2()
             }}
             style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>

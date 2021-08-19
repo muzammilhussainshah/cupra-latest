@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { PressableProps, TouchableOpacity, FlatList } from 'react-native';
+import { PressableProps, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
 
-import { Text, View } from 'react-native-animatable';
+import { Text, View, } from 'react-native-animatable';
 
 import { Header } from '../components/Header';
 
@@ -39,9 +39,11 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
   const dispatch = useDispatch()
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
+  const isError = useSelector((state: any) => state.reducer.isError);
 
 
-
+  console.log(isError, 'isErrorisErrorisErrorisError')
 
   return (
 
@@ -98,11 +100,25 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
               style={{ height: 15, width: 15, marginHorizontal: 5 }} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => { dispatch(submitReview(_id,numberOfReview,currentUser)) }}
-          style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>
-          <Text style={{ color: Colors.white }}>Submit Review</Text>
-        </TouchableOpacity>
+
+        {isLoader ?
+          <ActivityIndicator
+            style={{ marginTop: "5%" }}
+            size="small" color={'#ffffff'}
+          /> :
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(submitReview(_id, numberOfReview, currentUser,_func2))
+              // _func2()
+            }}
+            style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>
+            <Text style={{ color: Colors.white }}>Submit Review</Text>
+          </TouchableOpacity>
+        }
+        {isError !== "" &&
+          <Text style={{ color: "red", fontSize: 12, marginTop: 5, alignSelf: "center" }}>{isError}
+          </Text>}
+
 
       </View>
     </View >

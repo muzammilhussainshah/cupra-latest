@@ -208,10 +208,10 @@ export const likeDislike = (itemId, currentUser, likedByMe) => {
     }
 }
 
-export const submitReview = (itemId, numberOfReview, currentUser,) => {
+export const submitReview = (itemId, numberOfReview, currentUser, _func2) => {
     console.log(itemId, 'itemId,likeDislike')
     return async (dispatch) => {
-        // dispatch(_loading(true));
+        dispatch(_loading(true));
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -231,9 +231,18 @@ export const submitReview = (itemId, numberOfReview, currentUser,) => {
                 }
             };
             var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch(_loading(false));
+                _func2()
 
+            } else {
+                dispatch(_loading(false));
+                dispatch(_error(resp.data.error.messageEn));
+            }
             console.log(resp, 'resp submitReview')
             // dispatch(_loading(false));
+
+
         }
         catch (err) {
             dispatch(_loading(false));

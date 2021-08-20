@@ -114,7 +114,6 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   noOfLikes,
   rating,
   _func,
-  navigation,
   onPress,
   currentUser,
   likedByMe,
@@ -126,7 +125,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   const dispatch = useDispatch();
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(item_id,currentUser,likedByMe,navigation))
+    dispatch(likeDislike(item_id, currentUser, likedByMe, navigation))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -185,7 +184,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             <SubCategoryNumber>Remaining {numberOfService}+</SubCategoryNumber>
           </RowView>
           <TouchableOpacity
-            onPress={() => dispatch(getReview(item_id, currentUser, navigation,serviceName))}
+            onPress={() => dispatch(getReview(item_id, currentUser, navigation, serviceName))}
             style={{ flexDirection: "row" }}>
             <NumberOfRates>{rating}</NumberOfRates>
             <SteeringImage

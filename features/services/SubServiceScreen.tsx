@@ -56,7 +56,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(_getSubServices(currentUser, serviceId,navigation))
+    dispatch(_getSubServices(currentUser, serviceId, navigation))
   }, [])
 
 
@@ -73,7 +73,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
         seriveTitle={'You want to book this service ?'}
       />
 
-      <FlatList
+      {subservices.length > 0 && <FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -92,6 +92,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
           />
         )}
       />
+      }
     </Container>
   );
 };

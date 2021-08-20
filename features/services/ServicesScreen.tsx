@@ -50,7 +50,7 @@ export const ServicesScreen: React.FC = () => {
         name={currentUser.full_name}
         seriveTitle={'You want to book a service ?'}
       />
-      <FlatList
+      {services.length>0&&<FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -66,7 +66,7 @@ export const ServicesScreen: React.FC = () => {
             onPress={() => navigation.navigate('subservice', { item, 'serviceId': item._id })}
           />
         )}
-      />
+      />}
     </Container>
   );
 };

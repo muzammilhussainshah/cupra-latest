@@ -154,7 +154,7 @@ export const _bookService = (currentUser, model, date, serviceId, selectedDate, 
                 // var subservices = resp.data.data;
                 // dispatch({ type: SUBSERVICES, payload: subservices })
                 // dispatch(_loading(false));
-
+                dispatch(_loading(false));
             } else {
                 console.log(resp, 'resp _bookService',)
                 setopenModal(false)
@@ -163,6 +163,7 @@ export const _bookService = (currentUser, model, date, serviceId, selectedDate, 
 
                 dispatch(_loading(false));
             }
+            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));

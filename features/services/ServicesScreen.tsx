@@ -29,9 +29,10 @@ export const ServicesScreen: React.FC = () => {
   const getServices = useSelector((state: any) => state.reducer.services)
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(_getServices(currentUser))
+    dispatch(_getServices(currentUser,navigation))
   }, [])
 
   useEffect(() => {
@@ -39,7 +40,6 @@ export const ServicesScreen: React.FC = () => {
     setflag(!flag)
   }, [getServices])
 
-  const navigation = useNavigation();
   return (
     <Container>
       <Header

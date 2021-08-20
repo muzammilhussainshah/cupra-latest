@@ -118,6 +118,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   onPress,
   currentUser,
   likedByMe,
+  navigation,
   price
 }: any) => {
   const [totalLikes, settotalLikes] = useState(noOfLikes);
@@ -125,7 +126,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   const dispatch = useDispatch();
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(item_id, currentUser, likedByMe))
+    dispatch(likeDislike(item_id,currentUser,likedByMe,navigation))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {

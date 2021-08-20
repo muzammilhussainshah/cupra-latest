@@ -36,7 +36,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
   // console.log(Subcatogery, 'Subcatogery')
   useEffect(() => {
-    dispatch(_getCatogery(currentUser))
+    dispatch(_getCatogery(currentUser,navigation))
   }, [])
 
   useEffect(() => {

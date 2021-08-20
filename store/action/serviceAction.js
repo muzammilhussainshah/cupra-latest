@@ -1,6 +1,7 @@
 import { ISLOADER, ISERROR, SERVICES, SUBSERVICES } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
+import {_logOut } from './authAction';
 
 
 export const _loading = (bol) => {
@@ -29,7 +30,7 @@ export const _checkIsEmptyObj = (obj) => {
 }
 
 
-export const _getServices = (currentUser) => {
+export const _getServices = (currentUser,navigation) => {
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -46,15 +47,23 @@ export const _getServices = (currentUser) => {
                 },
             };
             var resp = await axios(option);
+            console.log(resp, 'resp _getServices',)
             if (resp.data.status === 200) {
                 var services = resp.data.data;
                 dispatch({ type: SERVICES, payload: services })
                 dispatch(_loading(false));
-
-            } else {
-                console.log(resp, 'resp _getServices',)
-                dispatch(_loading(false));
             }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+
+            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));
@@ -62,7 +71,7 @@ export const _getServices = (currentUser) => {
         }
     }
 }
-export const _getSubServices = (currentUser, serviceId) => {
+export const _getSubServices = (currentUser, serviceId,navigation) => {
     // console.log(serviceId, 'serviceId')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -85,11 +94,18 @@ export const _getSubServices = (currentUser, serviceId) => {
                 var subservices = resp.data.data;
                 dispatch({ type: SUBSERVICES, payload: subservices })
                 dispatch(_loading(false));
-
-            } else {
-                console.log(resp, 'resp subservices',)
-                dispatch(_loading(false));
+                
             }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                    );
+                }
+                dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));

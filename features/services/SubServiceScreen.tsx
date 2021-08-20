@@ -56,7 +56,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(_getSubServices(currentUser, serviceId))
+    dispatch(_getSubServices(currentUser, serviceId,navigation))
   }, [])
 
 

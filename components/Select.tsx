@@ -138,7 +138,10 @@ export const Select: React.FC<SelectProps> = props => {
               data={props.items}
               // data={props.items.filter(item => item?.name) as SelectItem[]}
               renderItem={({ item }) => (
-                <Item onChange={() => handleChange(item as SelectItem)}>
+                <Item onChange={() => {
+                  // console.log(item,"itemitemitem")
+                  handleChange(item as SelectItem)
+                }}>
                   {/* {item.name} */}
                   {(item as SelectItem)?.name}
                 </Item>

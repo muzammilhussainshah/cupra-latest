@@ -20,13 +20,16 @@ export type FullImage = PressableProps & {
  * @param props {@link PressableProps}
  */
 export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex }: any) => {
-  console.log(coverImage, selectedImageIndex, 'coverImagecoverImage')
+  // console.log(coverImage,
+  //    typeof (coverImage)
+  //    , selectedImageIndex, 'coverImagecoverImage')
+  let type = typeof (coverImage)
   return (
 
     <View
       style={{ height: "100%", width: "100%", backgroundColor: Colors.black, position: "absolute", zIndex: 2 }}>
       <View
-        style={{ height: "15%",  justifyContent: "flex-end", alignItems: "flex-end" }}>
+        style={{ height: "15%", justifyContent: "flex-end", alignItems: "flex-end" }}>
         <TouchableOpacity
           onPress={() => _func()}
         >
@@ -34,8 +37,11 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
             resizeMode={FastImage.resizeMode.contain} />
         </TouchableOpacity>
       </View>
-      <View style={{ height: "85%",  justifyContent: "center" }}>
-        <FastImage style={{ width: "100%", height: "100%" }} source={{ uri: coverImage[selectedImageIndex] }}
+      <View style={{ height: "85%", justifyContent: "center" }}>
+        <FastImage style={{ width: "100%", height: "100%" }} source={
+
+          { uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }
+        }
           resizeMode={FastImage.resizeMode.contain} />
       </View>
     </View >

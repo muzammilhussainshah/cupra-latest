@@ -22,7 +22,7 @@ import { SliderBox } from "react-native-image-slider-box";
 
 import { _getHexColor, } from "../../../store/action/action"
 
-import { _makeItemReservation } from "../../../store/action/shopAction"
+import { _makeItem } from "../../../store/action/shopAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -69,9 +69,10 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-
   const isLoader = useSelector((state: any) => state.reducer.isLoader)
+
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
   const shopItemDetails = useSelector((state: any) => state.reducer.shopItemDetails)
 
   const item = routes;
@@ -199,7 +200,9 @@ export const ShopDetails = ({ route, navigation }: any) => {
               style={{ marginTop: "20%" }}
               size="small" color={'black'}
             /> :
-            <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+            <TouchableOpacity onPress={() => setFullImageScreen(true)}>
+              <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
+            </TouchableOpacity>
         }
         <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>

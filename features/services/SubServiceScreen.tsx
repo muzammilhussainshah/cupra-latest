@@ -87,7 +87,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
             serviceName={item.en_name}
             serviceImage={{ uri: item.icon }}
             onPress={() => {
-              navigation.push('booking');
+              navigation.push('booking', { serviceId });
             }}
           />
         )}

@@ -30,7 +30,7 @@ export const _checkIsEmptyObj = (obj) => {
 }
 
 
-export const _getCatogery = (currentUser,navigation) => {
+export const _getCatogery = (currentUser, navigation) => {
     console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         try {
@@ -80,7 +80,7 @@ export const _getCatogery = (currentUser,navigation) => {
 
 
 export const _getSubCatogery = (currentUser, catId, navigation) => {
-    console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
+    console.log(currentUser, catId, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -166,7 +166,7 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
         }
     }
 }
-export const _makeItemReservation = (itemId, quantity, color, currentUser,setConfirmModal,navigation) => {
+export const _makeItemReservation = (itemId, quantity, color, currentUser, setConfirmModal, navigation) => {
     console.log(itemId, quantity, color, 'itemId, quantity,color')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -191,9 +191,12 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser,setCon
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
+                dispatch(_loading(false));
                 setConfirmModal(false)
+
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
                 Alert.alert(
                     "Authentication!",
                     "You Are Unauthorized Please Login.",
@@ -201,6 +204,10 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser,setCon
                         { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
                     ]
                 );
+            } else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+
             }
             console.log(resp, 'resp _makeItemReservation')
             dispatch(_loading(false));
@@ -212,7 +219,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser,setCon
         }
     }
 }
-export const likeDislike = (itemId, currentUser, likedByMe,navigation) => {
+export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
     console.log(itemId, 'itemId,likeDislike')
     return async (dispatch) => {
         // dispatch(_loading(true));
@@ -234,7 +241,7 @@ export const likeDislike = (itemId, currentUser, likedByMe,navigation) => {
                 }
             };
             var resp = await axios(option);
-             if (resp.data.error.messageEn === "You Are Unauthorized") {
+            if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(
                     "Authentication!",
                     "You Are Unauthorized Please Login.",
@@ -254,8 +261,8 @@ export const likeDislike = (itemId, currentUser, likedByMe,navigation) => {
     }
 }
 
-export const submitReview = (itemId, numberOfReview, currentUser, _func2,navigation) => {
-    console.log(itemId, 'itemId,likeDislike')
+export const submitReview = (itemId, numberOfReview, currentUser, _func2, navigation, item) => {
+    console.log(currentUser, item.category._id, "currentUser, item.sub_category._id,")
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -279,7 +286,9 @@ export const submitReview = (itemId, numberOfReview, currentUser, _func2,navigat
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
+                dispatch(_getSubCatogery(currentUser, item.category._id, navigation));
                 _func2()
+                navigation.goBack()
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(

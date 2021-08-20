@@ -43,7 +43,7 @@ export const GetReviewComponent: React.FunctionComponent<GetReviewComponent> = (
   const isError = useSelector((state: any) => state.reducer.isError);
 
 
-  console.log(isError, 'isErrorisErrorisErrorisError')
+  // console.log(isError, 'isErrorisErrorisErrorisError')
 
   return (
 

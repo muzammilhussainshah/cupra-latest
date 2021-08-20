@@ -22,7 +22,7 @@ import { SliderBox } from "react-native-image-slider-box";
 
 import { _getHexColor, } from "../../../store/action/action"
 
-import { _makeItem } from "../../../store/action/shopAction"
+import { _makeItemReservation } from "../../../store/action/shopAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -98,7 +98,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
     if (integers == "+") {
       if (quantity >= 0 && quantity < stock_count) {
         setQuantity(quantity + 1)
-      } else {
+      } else if (quantity == 0) {
         setConfirmModal(true)
         setTitle("Sorry, This item is not available now!")
       }
@@ -126,7 +126,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id, currentUser, likedByMe,navigation))
+    dispatch(likeDislike(_id, currentUser, likedByMe, navigation))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -138,7 +138,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   return (
     <>
-      {reviewScreen && <ReviewComponent itemName={en_name} _id={_id} _func2={() => setreviewScreen(false)} navigation={navigation} />}
+      {reviewScreen && <ReviewComponent itemName={en_name} item={shopItemDetails} _id={_id} _func2={() => setreviewScreen(false)} navigation={navigation} />}
 
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
@@ -150,7 +150,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
           Title={title}
           _func={() => setConfirmModal(false)}
           _func2={() => {
-            dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser,setConfirmModal,navigation))
+            dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser, setConfirmModal, navigation))
             // setConfirmModal(false)
           }
           }

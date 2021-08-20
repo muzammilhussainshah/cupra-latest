@@ -1,10 +1,12 @@
 import React from 'react';
 
-import { PressableProps, TouchableOpacity } from 'react-native';
+import { PressableProps, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { Text, View } from 'react-native-animatable';
 
 import FastImage from 'react-native-fast-image';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Colors } from '../constants/Colors';
 
@@ -20,6 +22,9 @@ export type ReservationModalprops = PressableProps & {
  * @param props {@link PressableProps}
  */
 export const ReservationModal: React.FunctionComponent<ReservationModalprops> = ({ _func, Title, _func2 }: any) => {
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
+  const isError = useSelector((state: any) => state.reducer.isError);
+
   return (
     <TouchableOpacity
       onPress={() => _func()}
@@ -41,17 +46,36 @@ export const ReservationModal: React.FunctionComponent<ReservationModalprops> = 
         <View style={{ flex: 6, flexDirection: "row", justifyContent: "space-evenly", }}>
           {Title == "Are you sure you want to make this reservation?" ?
             <>
-              <TouchableOpacity
-                onPress={() => _func2()}
-                style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
-                <Text style={{ color: Colors.white }}>Confirm</Text>
-              </TouchableOpacity>
 
-              <TouchableOpacity
+              {isLoader ?
+                <ActivityIndicator
+                  style={{ marginBottom: "30%", marginLeft: "20%" }}
+                  size="small" color={'#ffffff'}
+                /> :
+                <>
+                  <TouchableOpacity
+                    onPress={() => _func2()}
+                    style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
+                    <Text style={{ color: Colors.white }}>Confirm</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => _func()}
+                    style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
+                    <Text style={{ color: Colors.white }}>Cancel</Text>
+                  </TouchableOpacity>
+                </>
+
+              }
+              {isError !== "" &&
+                <Text style={{ color: "red", fontSize: 12, marginTop: 5, alignSelf: "center" }}>{isError}
+                </Text>}
+
+
+              {/* <TouchableOpacity
                 onPress={() => _func()}
                 style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
                 <Text style={{ color: Colors.white }}>Cancel</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </>
             :
             <TouchableOpacity

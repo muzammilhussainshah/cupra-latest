@@ -20,6 +20,8 @@ export const GetReview = ({ navigation }) => {
   const { width } = Dimensions.get('window');
   const flex1 = width / 10
   const getReviews = useSelector((state: any) => state.reducer.getReviews);
+  // console.log(moment('2021-08-20T17:31:40.678Z', "YYYYMMDD").fromNow(),"+++++++++++++++++++++")
+  // console.log(moment(item.date).fromNow(),"+++++++++++++++++++++")
   return (
     <View
       style={{ height: "100%", width: "100%", backgroundColor: Colors.black, }}>
@@ -54,7 +56,7 @@ export const GetReview = ({ navigation }) => {
                   </View>
                   <View style={{ flex: 8, justifyContent: "space-between" }}>
                     <Text style={{ color: Colors.white, fontSize: 16, fontWeight: "bold" }}>{item.customer_id.full_name}</Text>
-                    <Text style={{ color: Colors.brownishGrey, fontWeight: "bold" }}>{moment(item.date, "YYYYMMDD").fromNow()}</Text>
+                    <Text style={{ color: Colors.brownishGrey, fontWeight: "bold" }}>{moment(item.date,).fromNow()}</Text>
                     <View  >
                       <FlatList
                         data={[1, 2, 3, 4, 5]}

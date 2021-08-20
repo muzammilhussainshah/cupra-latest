@@ -79,6 +79,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
     if (selectedDate && selectedDate.year) {
       dispatch(_bookService(currentUser, model, date, serviceId, selectedDate, setopenModal))
     } else {
+      console.log(new Date())
       dispatch(_error('Date is not selected'))
 
     }
@@ -242,7 +243,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
 
           </FormProvider>
         </Body>
-        {/* <KeyboardSpacer /> */}
+        {/* <KeyboardSpacer /> */} 
       </Container>
     </>
 

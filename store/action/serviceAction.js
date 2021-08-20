@@ -1,7 +1,7 @@
 import { ISLOADER, ISERROR, SERVICES, SUBSERVICES } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
-import {_logOut } from './authAction';
+import { _logOut } from './authAction';
 
 
 export const _loading = (bol) => {
@@ -30,7 +30,7 @@ export const _checkIsEmptyObj = (obj) => {
 }
 
 
-export const _getServices = (currentUser,navigation) => {
+export const _getServices = (currentUser, navigation) => {
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -71,7 +71,7 @@ export const _getServices = (currentUser,navigation) => {
         }
     }
 }
-export const _getSubServices = (currentUser, serviceId,navigation) => {
+export const _getSubServices = (currentUser, serviceId, navigation) => {
     // console.log(serviceId, 'serviceId')
     return async (dispatch) => {
         dispatch(_loading(true));
@@ -94,7 +94,7 @@ export const _getSubServices = (currentUser, serviceId,navigation) => {
                 var subservices = resp.data.data;
                 dispatch({ type: SUBSERVICES, payload: subservices })
                 dispatch(_loading(false));
-                
+
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(
@@ -103,9 +103,9 @@ export const _getSubServices = (currentUser, serviceId,navigation) => {
                     [
                         { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
                     ]
-                    );
-                }
-                dispatch(_loading(false));
+                );
+            }
+            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));
@@ -113,22 +113,18 @@ export const _getSubServices = (currentUser, serviceId,navigation) => {
         }
     }
 }
-export const _bookService = (currentUser, model, date, serviceId, selectedDate, setopenModal) => {
-
+export const _bookService = (currentUser, model, date, serviceId, setopenModal, navigation) => {
     let name = model.name
     let getDate = date
     let mobile1 = model.phone_number
     let mobile2 = model.second_phone_number
     let comments = model.note
     let getserviceId = serviceId
-    console.log(name, getDate, mobile1, mobile2, comments, serviceId, 'name,date,mobile1,mobile2,comments, ')
-    console.log(getDate, selectedDate, 'name,date,mobile1,mobile2,comments, ')
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
-            console.log(deviceToken, uniqueId, '566+98')
             const option = {
                 method: 'POST',
                 url: `https://cupranationapp.herokuapp.com/apis/mobile/book-subservice?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
@@ -148,19 +144,22 @@ export const _bookService = (currentUser, model, date, serviceId, selectedDate, 
                 }
             };
             var resp = await axios(option);
+            console.log(resp, '_bookService')
             if (resp.data.status === 200) {
-                console.log(resp, 'resp _bookService',)
                 setopenModal(true)
-                // var subservices = resp.data.data;
-                // dispatch({ type: SUBSERVICES, payload: subservices })
-                // dispatch(_loading(false));
                 dispatch(_loading(false));
-            } else {
-                console.log(resp, 'resp _bookService',)
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
                 setopenModal(false)
                 dispatch(_error(resp.data.error.messageEn));
-
-
                 dispatch(_loading(false));
             }
             dispatch(_loading(false));

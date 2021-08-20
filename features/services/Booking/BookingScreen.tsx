@@ -227,7 +227,7 @@ export const BookingScreen: React.FC = () => {
           </ButtonsContainer>
         </FormProvider>
       </Body>
-      <KeyboardSpacer />
+      {/* <KeyboardSpacer /> */}
     </Container>
   );
 };

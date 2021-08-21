@@ -94,8 +94,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
       let currentDateInNmbr = Date.now()
       let selectedDateInNmbr = Date.parse(date)
       if (selectedDateInNmbr < currentDateInNmbr) {
-        dispatch(_error('Date formate is not valid'))
-
+        dispatch(_error('Please enter a correct comming date'))
       } else {
         dispatch(_bookService(currentUser, model, date, subserviceId, setopenModal, navigation))
       }
@@ -126,7 +125,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
               render={({ onChange, value }) => {
                 // setmonthSelection(false)
                 return (<>
-                  {!monthSelection ?
+                  {/* {!monthSelection ? */}
                     <Select
                       style={{
                         width: 109,
@@ -143,7 +142,8 @@ export const BookingScreen: React.FC = ({ route }: any) => {
                           ? { id: value, name: value.toString() }
                           : undefined
                       }
-                    /> :
+                    /> 
+                    {/* :
                     <View>
                       <Text style={{
                         color: "white", fontSize: 20
@@ -151,7 +151,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
                         {monthSelection}
                       </Text>
                     </View>
-                  }
+                  } */}
                 </>
                 )
               }}

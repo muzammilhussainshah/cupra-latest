@@ -5,6 +5,6 @@ export const Body: React.FC = props => (
   <ScrollView
     showsVerticalScrollIndicator={false}
     {...props}
-    contentContainerStyle={{paddingBottom: 100}}
+    contentContainerStyle={{paddingBottom: 130}}
   />
 );

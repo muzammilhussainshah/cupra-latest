@@ -154,6 +154,7 @@ export const _bookService = (currentUser, model, date, serviceId, setopenModal, 
             if (resp.data.status === 200) {
                 setopenModal(true)
                 dispatch(_loading(false));
+                
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(
                     "Authentication!",

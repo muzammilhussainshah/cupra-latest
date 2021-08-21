@@ -81,7 +81,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
         data={subservices}
         renderItem={({ item }: any) => (
           <>
-            {console.log(item, '++++++++++++++')}
+            {/* {console.log(item, '++++++++++++++')} */}
 
             <ServicesTile
               navigation={navigation}

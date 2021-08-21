@@ -86,7 +86,7 @@ export const ServicesGreeting: React.FC<IGreetingTypeProp> = ({
   return (
 
     <GreetingContainer>
-      <UserName>Hello {name} !</UserName>
+      <ServiceTitle>Hello {name} !</ServiceTitle>
       <ServiceTitle>{seriveTitle}</ServiceTitle>
       {isLoader &&
         <ActivityIndicator

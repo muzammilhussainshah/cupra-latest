@@ -59,7 +59,6 @@ export const ServicesScreen: React.FC = () => {
         data={services}
         renderItem={({ item }: any) => (
           <>
-            {console.log(item,'----------------------------------')}
             < ServicesTile
               numberOfRates={item.rating}
               numberOfService={item.total_bookings}

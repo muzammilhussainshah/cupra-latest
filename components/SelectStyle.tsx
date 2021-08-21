@@ -4,10 +4,10 @@ import {
   FlatList,
   View,
   KeyboardAvoidingView,
-  Platform,
+  Platform, Text,
 } from 'react-native';
 import styled from 'styled-components/native';
-import {Colors} from '../constants/Colors';
+import { Colors } from '../constants/Colors';
 
 type Props = {
   fontSize?: number;
@@ -34,10 +34,26 @@ const ItemText = styled.Text`
   padding-bottom: 20px;
   padding-top: 5px;
 `;
-export const Item = ({onChange, children}) => (
-  <TouchableOpacity onPress={onChange}>
-    <ItemText>{children}</ItemText>
-  </TouchableOpacity>
+// {/* {console.log(getDisable, 'getDisablegetDisablegetDisable')} */}
+export const Item = ({ onChange, getDisable, children }) => (
+  <>
+    {getDisable ?
+      <View
+      // onPress={onChange}
+      >
+        <Text style={{
+          color: Colors.titleGray, fontSize: 20, paddingBottom: 20, paddingTop: 5
+          //  font-size: 20px;
+          //  color: ${Colors.black};
+          //  padding-bottom: 20px;
+          //  padding-top: 5px;
+        }}>{children}</Text>
+      </View> :
+      <TouchableOpacity onPress={onChange}>
+        <ItemText>{children}</ItemText>
+      </TouchableOpacity>
+    }
+  </>
 );
 export const List = styled(FlatList)`
   width: 100%;

@@ -20,6 +20,8 @@ import {AddNewPassword} from '../features/auth/ResetPasswordScreen/AddNewPasswor
 
 import {GetReview} from '../features/shop/GetReviews/GetReview';
 
+import {GetAndSubmitReview} from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
+
 import Routes from './Routes';
 
 import {NavigatorScreenParams} from '@react-navigation/native';
@@ -32,6 +34,7 @@ type AuthStackParamList = {
   welcome: undefined;
   login: undefined;
   GetReview: undefined;
+  GetAndSubmitReview: undefined;
   signup: undefined;
   otp: {phone_number?: string; routName?: string};
   resetPassword: undefined;
@@ -103,6 +106,11 @@ export const RootNavigator = () => {
       <AuthStack.Screen
         name="GetReview"
         component={GetReview}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="GetAndSubmitReview"
+        component={GetAndSubmitReview}
         options={MyTransition}
       />
 

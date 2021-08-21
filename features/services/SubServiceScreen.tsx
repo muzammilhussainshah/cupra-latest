@@ -80,16 +80,23 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
         keyExtractor={(item: any) => item.id}
         data={subservices}
         renderItem={({ item }: any) => (
-          <ServicesTile
-            isBooking={true}
-            numberOfRates={item.total_rate}
-            numberOfService={item.total_bookings}
-            serviceName={item.en_name}
-            serviceImage={{ uri: item.icon }}
-            onPress={() => {
-              navigation.push('booking', { serviceId });
-            }}
-          />
+          <>
+            {console.log(item, 'aaaaaaaaaaaaaaaaaaa')}
+
+            <ServicesTile
+              navigation={navigation}
+              isBooking={true}
+              numberOfRates={item.rating}
+              numberOfService={item.total_bookings}
+              serviceName={item.en_name}
+              itemId={item._id}
+              getserviceId={serviceId}
+              serviceImage={{ uri: item.icon }}
+              onPress={() => {
+                navigation.push('booking', { serviceId ,subserviceId:item._id});
+              }}
+            />
+          </>
         )}
       />
       }

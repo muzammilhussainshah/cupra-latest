@@ -52,7 +52,7 @@ interface IBookingProp {
 const Services = ['service2', 'Nano Ceramic', 'service3'];
 
 export const BookingScreen: React.FC = ({ route }: any) => {
-  const { serviceId } = route.params
+  const { serviceId,subserviceId } = route.params
   const [openModal, setopenModal] = useState(false);
 
   let dispatch = useDispatch()
@@ -97,7 +97,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
         dispatch(_error('Date formate is not valid'))
 
       } else {
-        dispatch(_bookService(currentUser, model, date, serviceId, setopenModal, navigation))
+        dispatch(_bookService(currentUser, model, date, subserviceId, setopenModal, navigation))
       }
     } else {
       dispatch(_error('Date is not selected'))

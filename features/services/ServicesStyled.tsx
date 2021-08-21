@@ -1,18 +1,18 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { _getSubServiceRating } from '../../store/action/serviceAction'
 import { Colors } from '../../constants/Colors';
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${Colors.secondary};
-  justify-content: center;
-`;
+  `;
+  // justify-content: center;
 const CardTileCoverContainer = styled.View`
   justify-content: center;
   align-items: center;
@@ -152,49 +152,81 @@ export type IServiceTypeProp = {
   serviceImage?: any;
   serviceName: string | undefined;
   numberOfService?: number;
+  navigation?: any;
   numberOfRates?: number;
+  getserviceId?: string;
+  itemId?: string;
+
   onPress?: () => void;
   isBooking?: boolean;
 };
 export const ServicesTile: React.FC<IServiceTypeProp> = ({
   serviceImage,
   serviceName,
+  getserviceId,
   numberOfService,
   numberOfRates,
+  itemId,
+  navigation,
   onPress,
   isBooking,
-}) => (
-  <TouchableScale
-    style={{ flex: 1, maxWidth: "50%" }}
-    activeScale={0.9}
-    tension={50}
-    friction={7}
-    useNativeDriver
-    onPress={onPress}>
-    <SevicesPlaceholder>
-      <ServiceTileCover source={serviceImage} />
-      {isBooking && (
-        <BookingLabel>
-          <BookingTitle>Book Now</BookingTitle>
-        </BookingLabel>
-      )}
-      <ServiceName numberOfLines={1}>{serviceName}</ServiceName>
-      <BottomContainer>
-        <RowView>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/steering.png')}
-          />
-          <ServiceNumber>{numberOfService}+</ServiceNumber>
-        </RowView>
-        <RowView>
-          <NumberOfRates>{numberOfRates}</NumberOfRates>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/star.png')}
-          />
-        </RowView>
-      </BottomContainer>
-    </SevicesPlaceholder>
-  </TouchableScale>
-);
+}) => {
+  let dispatch = useDispatch()
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+console.log(getserviceId,'vvv')
+  return (
+    <TouchableScale
+      style={{ flex: 1, maxWidth: "50%" }}
+      activeScale={0.9}
+      tension={50}
+      friction={7}
+      useNativeDriver
+      onPress={onPress}>
+      <SevicesPlaceholder>
+        <ServiceTileCover source={serviceImage} />
+        {isBooking && (
+          <BookingLabel>
+            <BookingTitle>Book Now</BookingTitle>
+          </BookingLabel>
+        )}
+        <ServiceName numberOfLines={1}>{serviceName}</ServiceName>
+        <BottomContainer>
+          <RowView>
+            <SteeringImage
+              resizeMode={FastImage.resizeMode.contain}
+              source={require('../../assets/images/steering.png')}
+            />
+            <ServiceNumber>{numberOfService}+</ServiceNumber>
+          </RowView>
+          {isBooking ?
+            <TouchableOpacity
+
+              onPress={() =>
+                dispatch(_getSubServiceRating(currentUser, itemId,serviceName, navigation,getserviceId))
+                // navigation.navigate('GetAndSubmitReview', navigation,)
+
+              }
+              >
+
+              <RowView>
+                <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>
+                <SteeringImage
+                  resizeMode={FastImage.resizeMode.contain}
+                  source={require('../../assets/images/RealStar.png')}
+                />
+              </RowView>
+            </TouchableOpacity>
+            :
+            <RowView>
+              <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>
+              <SteeringImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../../assets/images/RealStar.png')}
+              />
+            </RowView>
+          }
+        </BottomContainer>
+      </SevicesPlaceholder>
+    </TouchableScale >
+  )
+};

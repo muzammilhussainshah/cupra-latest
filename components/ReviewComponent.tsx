@@ -8,6 +8,8 @@ import { Header } from '../components/Header';
 
 import { submitReview } from '../store/action/shopAction';
 
+import { submitServiceReview } from '../store/action/serviceAction';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 import FastImage from 'react-native-fast-image';
@@ -23,12 +25,14 @@ const SteeringImage: any = styled(FastImage)`
   `;
 export type ReviewComponent = PressableProps & {
   _func2?: Function;
-  item:any;
+  item: any;
   coverImage?: any;
   itemName?: string;
+  serviceId?: string;
   _id?: string;
   navigation?: string;
   selectedImageIndex?: number;
+  mix?: any;
 };
 
 /**
@@ -36,7 +40,7 @@ export type ReviewComponent = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, _id,item, itemName,navigation }: any) => {
+export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _func2, _id, item, itemName,serviceId, navigation, mix }: any) => {
   const [numberOfReview, setnumberOfReview] = useState(0)
   const dispatch = useDispatch()
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
@@ -51,11 +55,13 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
 
     <View
       style={{ height: "100%", width: "100%", backgroundColor: Colors.black, position: "absolute", zIndex: 2 }}>
-      <View style={{ height: "20%", justifyContent: "center" }}>
-        <Header isGoBack={true} RatingScreen={true} navigateBack={() => _func2()} />
-      </View>
+      {!mix &&
+        <View style={{ height: "20%", justifyContent: "center" }}>
+          < Header isGoBack={true} RatingScreen={true} navigateBack={() => _func2()} />
+        </View>
+      }
       <View style={{
-        flex: 8, alignItems: "center", borderColor: Colors.brownishGrey, borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30,
+        flex: 8, alignItems: "center", borderColor: Colors.brownishGrey, borderTopWidth: mix == false ? 1 : 0, borderLeftWidth: mix == false ? 1 : 0, borderRightWidth: mix == false ? 1 : 0, borderTopLeftRadius: mix == false ? 30 : 0, borderTopRightRadius: 30,
       }}>
         <Text style={{ color: Colors.white, marginVertical: 50 }}>{itemName}</Text>
         <Text style={{ color: Colors.white }}>What Do you think this item rate should be?</Text>
@@ -110,7 +116,12 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
           /> :
           <TouchableOpacity
             onPress={() => {
-              dispatch(submitReview(_id, numberOfReview, currentUser,_func2,navigation,item))
+              if (mix) {
+                dispatch(submitServiceReview(_id,numberOfReview,currentUser,navigation ,serviceId))
+              } else {
+
+                dispatch(submitReview(_id, numberOfReview, currentUser, _func2, navigation, item))
+              }
               // _func2()
             }}
             style={{ height: 40, justifyContent: "center", alignItems: "center", borderRadius: 10, width: 110, backgroundColor: Colors.primary }}>

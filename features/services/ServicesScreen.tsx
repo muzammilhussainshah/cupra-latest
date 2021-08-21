@@ -32,7 +32,7 @@ export const ServicesScreen: React.FC = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(_getServices(currentUser,navigation))
+    dispatch(_getServices(currentUser, navigation))
   }, [])
 
   useEffect(() => {
@@ -50,23 +50,27 @@ export const ServicesScreen: React.FC = () => {
         name={currentUser.full_name}
         seriveTitle={'You want to book a service ?'}
       />
-      {services.length>0&&<FlatList
+      
+      {services.length > 0 && <FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item: any) => item._id}
         data={services}
         renderItem={({ item }: any) => (
-
-          <ServicesTile
-            numberOfRates={item.total_rate}
-            numberOfService={item.total_bookings}
-            serviceName={item.en_name}
-            serviceImage={{ uri: item.image }}
-            onPress={() => navigation.navigate('subservice', { item, 'serviceId': item._id })}
-          />
+          <>
+            {/* {console.log(item,'aaaaaaaaaaaaaaaaaaa')} */}
+            < ServicesTile
+              numberOfRates={item.rating}
+              numberOfService={item.total_bookings}
+              serviceName={item.en_name}
+              serviceImage={{ uri: item.image }}
+              onPress={() => navigation.navigate('subservice', { item, 'serviceId': item._id })}
+            />
+          </>
         )}
       />}
+      
     </Container>
   );
 };

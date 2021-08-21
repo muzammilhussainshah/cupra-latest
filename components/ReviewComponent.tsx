@@ -49,7 +49,6 @@ export const ReviewComponent: React.FunctionComponent<ReviewComponent> = ({ _fun
   const isError = useSelector((state: any) => state.reducer.isError);
 
 
-  // console.log(isError, 'isErrorisErrorisErrorisError')
 
   return (
 

@@ -186,7 +186,8 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
           <TouchableOpacity
             onPress={() => dispatch(getReview(item_id, currentUser, navigation, serviceName))}
             style={{ flexDirection: "row" }}>
-            <NumberOfRates>{rating}</NumberOfRates>
+            <NumberOfRates>{Math.floor(rating * 10) / 10}</NumberOfRates>
+            {/* <NumberOfRates>{rating}1</NumberOfRates> */}
             <SteeringImage
               resizeMode={FastImage.resizeMode.contain}
               source={require('../../assets/images/RealStar.png')}

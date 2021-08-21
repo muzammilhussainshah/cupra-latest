@@ -70,7 +70,7 @@ export const SignUpScreen: React.FC = () => {
     //   phone_number: model.country_number?.concat(model.phone_number),
     // });
     dispatch(_signUp(model, navigation))
-    console.log(model, 'aaa', model.country_number?.concat(model.phone_number));
+    // console.log(model, 'aaa', model.country_number?.concat(model.phone_number));
   }
   const dispatch = useDispatch();
 

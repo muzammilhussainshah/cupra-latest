@@ -12,7 +12,7 @@ export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${Colors.secondary};
   `;
-  // justify-content: center;
+// justify-content: center;
 const CardTileCoverContainer = styled.View`
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ const CardPlaceholder = styled.View`
   margin-left: 20px;
 `;
 
-export const CardBannerSection = () => (
+export const CardBannerSection = ({ bannerPath }: any) => (
   <TouchableScale
     style={{}}
     activeScale={0.9}
@@ -41,10 +41,20 @@ export const CardBannerSection = () => (
     onPress={() => { }}>
     <CardPlaceholder>
       <CardTileCoverContainer>
-        <CardTileCover
-          resizeMode={FastImage.resizeMode.cover}
-          source={require('../../assets/images/car.png')}
-        />
+        {
+          bannerPath ?
+            <CardTileCover
+              resizeMode={FastImage.resizeMode.cover}
+              source={{ uri: bannerPath }}
+            /> :
+            <CardTileCover
+              resizeMode={FastImage.resizeMode.cover}
+              source={
+                require('../../assets/images/car.png')
+              }
+            />
+
+        }
       </CardTileCoverContainer>
     </CardPlaceholder>
   </TouchableScale>
@@ -173,7 +183,7 @@ export const ServicesTile: React.FC<IServiceTypeProp> = ({
 }) => {
   let dispatch = useDispatch()
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-console.log(getserviceId,'vvv')
+  console.log(getserviceId, 'vvv')
   return (
     <TouchableScale
       style={{ flex: 1, maxWidth: "50%" }}
@@ -202,11 +212,11 @@ console.log(getserviceId,'vvv')
             <TouchableOpacity
 
               onPress={() =>
-                dispatch(_getSubServiceRating(currentUser, itemId,serviceName, navigation,getserviceId))
+                dispatch(_getSubServiceRating(currentUser, itemId, serviceName, navigation, getserviceId))
                 // navigation.navigate('GetAndSubmitReview', navigation,)
 
               }
-              >
+            >
 
               <RowView>
                 <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>

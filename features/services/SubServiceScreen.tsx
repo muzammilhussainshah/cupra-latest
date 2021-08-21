@@ -52,7 +52,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const routes = route.params
 
   const { serviceId } = routes;
-
+  console.log(routes, 'routerouterouterouterouterouteroute')
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   return (
     <Container>
       <Header isGoBack={true} navigateBack={() => navigation.goBack()} />
-      <CardBannerSection />
+      <CardBannerSection bannerPath={routes.item.banner} />
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book this service ?'}
@@ -81,7 +81,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
         data={subservices}
         renderItem={({ item }: any) => (
           <>
-            {console.log(item, 'aaaaaaaaaaaaaaaaaaa')}
+            {console.log(item, '++++++++++++++')}
 
             <ServicesTile
               navigation={navigation}
@@ -93,7 +93,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
               getserviceId={serviceId}
               serviceImage={{ uri: item.icon }}
               onPress={() => {
-                navigation.push('booking', { serviceId ,subserviceId:item._id});
+                navigation.push('booking', { serviceId, subserviceId: item._id });
               }}
             />
           </>

@@ -238,7 +238,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
                 </TouchableOpacity>
                 <TouchableOpacity><Text
                   style={{ fontFamily: "SourceSansPro-Regular", fontSize: 15 }}
-                >({rating})</Text></TouchableOpacity>
+                >({Math.floor(rating * 10) / 10})</Text></TouchableOpacity>
               </View>
               <DescriptionArea description={en_desc} navigation={navigation}
                 _func2={() => setreviewScreen(true)}

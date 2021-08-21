@@ -45,7 +45,7 @@ export const ServicesScreen: React.FC = () => {
       <Header
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
       />
-      <CardBannerSection />
+      {/* <CardBannerSection /> */}
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book a service ?'}
@@ -59,7 +59,7 @@ export const ServicesScreen: React.FC = () => {
         data={services}
         renderItem={({ item }: any) => (
           <>
-            {/* {console.log(item,'aaaaaaaaaaaaaaaaaaa')} */}
+            {console.log(item,'----------------------------------')}
             < ServicesTile
               numberOfRates={item.rating}
               numberOfService={item.total_bookings}

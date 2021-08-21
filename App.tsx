@@ -36,9 +36,7 @@ export default function App() {
   useEffect(() => {
     // var language = getDeviceLocale()
     const language = NativeModules.I18nManager.localeIdentifier // "fr_FR"
-    uniqueId = DeviceInfo.getUniqueId();
-    // console.log(uniqueId, 'deviceId')
-    // console.log(locale, '123456')
+    uniqueId = DeviceInfo.getUniqueId(); 
     messaging().getToken().then((token: string) => {
       _onChangeToken(token, language)
     });
@@ -46,8 +44,7 @@ export default function App() {
     messaging().onTokenRefresh((token) => {
       _onChangeToken(token, language)
     });
-    LogBox.ignoreAllLogs();
-    // console.log(uniqueId, '2222222')
+    LogBox.ignoreAllLogs(); 
   }, [])
 
   const _onChangeToken = (token: string, language: string) => {
@@ -61,9 +58,7 @@ export default function App() {
   }
   const _loadDeviceInfo = async (deviceData: DeviceTokenProp) => {
     deviceToken = deviceData.device_token
-
-    console.log(deviceToken,uniqueId, 'deviceData')
-    // return deviceToken
+  // return deviceToken
 
     try {
       await AsyncStorage.setItem("deviceToken", deviceToken);

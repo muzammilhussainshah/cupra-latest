@@ -193,6 +193,13 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 setConfirmModal(false)
+                Alert.alert(
+                    "Your reservation succesfully sent!",
+                    "Cupra will contact you!",
+                    [
+                        { text: "OK" }
+                    ]
+                );
 
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
@@ -298,13 +305,14 @@ export const submitReview = (itemId, numberOfReview, currentUser, _func2, naviga
                         { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
                     ]
                 );
+                dispatch(_loading(false));
             }
             else {
                 dispatch(_loading(false));
                 dispatch(_error(resp.data.error.messageEn));
             }
             console.log(resp, 'resp submitReview')
-            // dispatch(_loading(false));
+            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));

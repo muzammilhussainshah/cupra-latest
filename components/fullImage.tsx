@@ -20,10 +20,7 @@ export type FullImage = PressableProps & {
  * @param props {@link PressableProps}
  */
 export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex }: any) => {
-  // console.log(coverImage,
-  //    typeof (coverImage)
-  //    , selectedImageIndex, 'coverImagecoverImage')
-  let type = typeof (coverImage)
+    let type = typeof (coverImage)
   return (
 
     <View

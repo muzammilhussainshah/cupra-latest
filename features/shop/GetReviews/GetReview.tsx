@@ -10,9 +10,7 @@ import moment from 'moment';
 
 import { Colors } from '../../../constants/Colors';
 
-
 import { _getHexColor, } from "../../../store/action/action"
-
 
 import { useSelector } from 'react-redux';
 

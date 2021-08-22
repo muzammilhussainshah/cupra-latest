@@ -106,6 +106,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
+                console.log(resp.data.status ,'resp.data.status resp.data.status ')
                 dispatch({ type: CURRENTUSER, payload: resp.data.data.data })
                 navigation.navigate("drawerStack")
                 try {
@@ -121,7 +122,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
                 dispatch(_error(resp.data.error.messageEn));
 
             }
-            console.log(resp, 'resp _signIn',)
+            // console.log(resp, 'resp _signIn',)
             dispatch(_loading(false));
         }
         catch (err) {

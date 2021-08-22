@@ -248,7 +248,12 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
                 }
             };
             var resp = await axios(option);
-            if (resp.data.error.messageEn === "You Are Unauthorized") {
+            if (resp.data.status === 200) {
+                console.log(resp, 'resp likeDislike')
+
+                dispatch(_loading(false));
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
                 Alert.alert(
                     "Authentication!",
                     "You Are Unauthorized Please Login.",
@@ -257,8 +262,8 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
                     ]
                 );
             }
-            console.log(resp, 'resp likeDislike')
-            // dispatch(_loading(false));
+            // console.log(resp, 'resp likeDislike')
+            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));

@@ -9,4 +9,6 @@ export const ISERROR = 'ISERROR'
 export const SERVICES = 'SERVICES'
 export const SUBSERVICES = 'SUBSERVICES'
 export const GETREVIEWS = 'GETREVIEWS'
+export const GETNEWS = 'GETNEWS'
+export const NEWSITEMDETAILS = 'NEWSITEMDETAILS'
 

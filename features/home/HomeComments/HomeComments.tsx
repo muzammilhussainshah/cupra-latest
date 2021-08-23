@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, View, ActivityIndicator, Alert } from 'react-native';
+import { Text, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, View,  } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -17,9 +17,6 @@ import { _commentOnNews, _dltCommentOnNews } from "../../../store/action/newsAct
 import { useDispatch, useSelector } from 'react-redux';
 
 import { _getItemDetails, getReview } from '../../../store/action/shopAction';
-// background:"red";
-
-// TODO: Remove the views and handle the component from the styled
 export const HomeComments = ({ route, navigation, }: any) => {
 
   const Wheight = Dimensions.get('window').height;
@@ -30,8 +27,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
 
   const routes = route.params
 
-  const { newsId,filterdBy } = routes
-  console.log(routes,'sss')
+  const { newsId, filterdBy } = routes
 
   const newsComment = useSelector((state: any) => state.reducer.newsComment)
 
@@ -81,7 +77,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
                       </View>
                       {mine &&
                         <TouchableOpacity
-                          onPress={() => dispatch(_dltCommentOnNews(currentUser, news_id, _id, navigation,filterdBy))}
+                          onPress={() => dispatch(_dltCommentOnNews(currentUser, news_id, _id, navigation, filterdBy))}
                           activeOpacity={0.8}
                           style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
                           <FastImage
@@ -112,7 +108,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
             <View style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(_commentOnNews(currentUser, newsId, text, navigation,filterdBy))
+                  dispatch(_commentOnNews(currentUser, newsId, text, navigation, filterdBy))
                   setText("")
                 }
                 }

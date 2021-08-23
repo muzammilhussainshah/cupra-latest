@@ -148,10 +148,10 @@ export const _storiesList = (currentUser, page_size, page_index, filterd_by, nav
         }
     }
 }
-export const _stories = (currentUser,filterd_by, navigation) => {
+export const _stories = (currentUser, filterd_by, navigation) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
-        const uniqueId = await AsyncStorage.getItem('uniqueId'); 
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
         dispatch(_loading(true));
         try {
             const option = {
@@ -340,7 +340,7 @@ export const _getNewsItemDetails = (currentUser, itemId, navigation,) => {
         }
     }
 }
-export const _getNewsComment = (currentUser, newsId, navigation,filterdBy) => {
+export const _getNewsComment = (currentUser, newsId, navigation, filterdBy) => {
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -361,7 +361,7 @@ export const _getNewsComment = (currentUser, newsId, navigation,filterdBy) => {
 
             if (resp.data.status === 200) {
                 dispatch({ type: NEWSCOMMENT, payload: resp.data.data })
-                navigation.navigate('HomeComments', { newsId,filterdBy })
+                navigation.navigate('HomeComments', { newsId, filterdBy })
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(
@@ -381,8 +381,8 @@ export const _getNewsComment = (currentUser, newsId, navigation,filterdBy) => {
         }
     }
 }
-export const _commentOnNews = (currentUser, newsId, text, navigation,filterdBy) => {
-    console.log(currentUser, newsId, text, navigation, '_commentOnNews')
+export const _commentOnNews = (currentUser, newsId, text, navigation, filterdBy) => {
+    console.log(currentUser, newsId, text, navigation, filterdBy, '_commentOnNews')
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -406,8 +406,9 @@ export const _commentOnNews = (currentUser, newsId, text, navigation,filterdBy) 
             var resp = await axios(option);
 
             if (resp.data.status === 200) {
-                
                 dispatch(_getNewsComment(currentUser, newsId, navigation))
+                dispatch(_getNewsItemDetails(currentUser, newsId, navigation,));
+                dispatch(_getNews(currentUser, 10, 1, filterdBy, navigation));
 
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
@@ -429,7 +430,7 @@ export const _commentOnNews = (currentUser, newsId, text, navigation,filterdBy) 
         }
     }
 }
-export const _dltCommentOnNews = (currentUser, newsId, _id, navigation,) => {
+export const _dltCommentOnNews = (currentUser, newsId, _id, navigation, filterdBy) => {
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -452,7 +453,8 @@ export const _dltCommentOnNews = (currentUser, newsId, _id, navigation,) => {
             var resp = await axios(option);
 
             if (resp.data.status === 200) {
-                
+                dispatch(_getNews(currentUser, 10, 1, filterdBy, navigation));
+                dispatch(_getNewsItemDetails(currentUser, newsId, navigation,));
                 dispatch(_getNewsComment(currentUser, newsId, navigation))
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {

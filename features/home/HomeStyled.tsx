@@ -91,7 +91,7 @@ const CommentText = styled.Text`
   font-family: 'SourceSansPro-Regular';
 `;
 
-export const CardView = ({ _id, name, postTime, commentCount,filterdBy, disc, icon, navigation, likedByMe, likes_count, onPress }: any) => {
+export const CardView = ({ _id, name, postTime, commentCount, filterdBy, disc, icon, navigation, likedByMe, likes_count, onPress }: any) => {
   const [totalLikes, settotalLikes] = useState(likes_count);
   const [sendLike, setsendLike] = useState(likedByMe);
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
@@ -111,7 +111,7 @@ export const CardView = ({ _id, name, postTime, commentCount,filterdBy, disc, ic
       <TouchableOpacity
 
         onPress={() => {
-          dispatch(_getNewsComment(currentUser, _id, navigation,filterdBy))
+          dispatch(_getNewsComment(currentUser, _id, navigation, filterdBy))
         }}
         style={{ justifyContent: 'center', alignItems: 'center', position: "absolute", bottom: "26%", right: "12%", zIndex: 1 }}>
         <CommentIcon

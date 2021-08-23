@@ -121,7 +121,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                             rating={item.rating}
                             _func={() => setgetReview(true)}
                             // onPress={() => dispatch(_getItemDetails(currentUser, item._id, navigation,))}
-                            onPress={() => navigation.push('shopDetail', item)}
+                            onPress={() => navigation.navigate('shopDetail', item)}
                           />
                         </>
                       )}

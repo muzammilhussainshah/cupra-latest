@@ -123,7 +123,7 @@ export const HomeScreen: React.FC = () => {
                     postTime={item.createdAt}
                     _id={item._id}
                     filterdBy={filterdBy}
-                    onPress={() => navigation.navigate("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count })}
+                    onPress={() => navigation.navigate("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy })}
                   />
 
                 )

@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -63,7 +63,7 @@ export const _getAdds = (currentUser, navigation, filterd_by) => {
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-
+                // dispatch({ type: GETNEWS, payload: resp.data.data })
                 dispatch(_loading(false));
                 dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation));
                 // dispatch(_loading(false));
@@ -91,6 +91,110 @@ export const _getAdds = (currentUser, navigation, filterd_by) => {
             dispatch(_loading(false));
 
             console.log(err.response, "error from _getAdds", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _storiesList = (currentUser, page_size, page_index, filterd_by, navigation) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        // console.log(deviceToken, 'deviceToken', model)
+        console.log(uniqueId, 'uniqueId')
+        console.log(deviceToken, 'uniqueId')
+        console.log(currentUser, 'currentUser')
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/news-videos?deviceToken=${deviceToken}&deviceKey=${uniqueId}&page_size=${page_size}&page_index=${page_index}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: STORIESLIST, payload: resp.data.data })
+                dispatch(_loading(false));
+                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation));
+                // dispatch(_loading(false));
+                // console.log(resp, 'resp _getAdds')
+
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+
+            console.log(resp, 'resp _storiesList')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err.response, "error from _storiesList", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _stories = (currentUser,filterd_by, navigation) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId'); 
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/stories?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: GETSTORIES, payload: resp.data.data })
+                dispatch(_loading(false));
+                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation));
+                // dispatch(_loading(false));
+                // console.log(resp, 'resp _getAdds')
+
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+
+            console.log(resp, 'resp _stories')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err.response, "error from _stories", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }
@@ -233,6 +337,139 @@ export const _getNewsItemDetails = (currentUser, itemId, navigation,) => {
             dispatch(_loading(false));
             // dispatch(_error(resp.data.error.messageEn));
             console.log(err.response, "error from _getNewsItemDetails", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _getNewsComment = (currentUser, newsId, navigation,filterdBy) => {
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/news-comments/${newsId}?deviceToken=${deviceToken}&deviceKey=${uniqueId}&id=${newsId}`
+            const option = {
+                method: 'GET',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+            };
+            var resp = await axios(option);
+
+            if (resp.data.status === 200) {
+                dispatch({ type: NEWSCOMMENT, payload: resp.data.data })
+                navigation.navigate('HomeComments', { newsId,filterdBy })
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            console.log(resp, 'resp _getNewsComment',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _getNewsComment", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _commentOnNews = (currentUser, newsId, text, navigation,filterdBy) => {
+    console.log(currentUser, newsId, text, navigation, '_commentOnNews')
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/news-comment?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "news_id": newsId.toString(),
+                    "text": text
+                }
+            };
+            var resp = await axios(option);
+
+            if (resp.data.status === 200) {
+                
+                dispatch(_getNewsComment(currentUser, newsId, navigation))
+
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            console.log(resp, 'resp _commentOnNews',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            // dispatch(_error(resp.data.error.messageEn));
+            console.log(err.response, "error from _commentOnNews", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _dltCommentOnNews = (currentUser, newsId, _id, navigation,) => {
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/news-comment?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'DELETE',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "comment_id": _id.toString()
+                }
+            };
+            var resp = await axios(option);
+
+            if (resp.data.status === 200) {
+                
+                dispatch(_getNewsComment(currentUser, newsId, navigation))
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            console.log(resp, 'resp _dltCommentOnNews',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _dltCommentOnNews", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

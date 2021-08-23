@@ -12,7 +12,7 @@ import { Container, CardView } from './HomeStyled';
 
 import { UserStory } from './userStory/UserStory';
 
-import { _getAdds, _getNews } from '../../store/action/newsAction'
+import { _getAdds, _getNews, _storiesList, _stories } from '../../store/action/newsAction'
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,23 +20,37 @@ export type HomeScreenTypeProp = {
   title: string;
 };
 export const HomeScreen: React.FC = () => {
-  const [filterdBy, setfilterdBy] = useState('Mine')
+  const [filterdBy, setfilterdBy] = useState('MINE')
+
   const [getNewsSt, setgetNewsSt] = useState('')
+
+  const [getStoriesSt, setgetStoriesSt] = useState('')
+
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
+
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+  const getStories = useSelector((state: any) => state.reducer.getStories)
+
   const getNews = useSelector((state: any) => state.reducer.getNews)
+
   const navigation = useNavigation();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
-      dispatch(_getAdds(currentUser, navigation, filterdBy))
+      dispatch(_stories(currentUser, filterdBy, navigation,))
     }
   }, [currentUser])
   useEffect(() => {
-    console.log(getNews, '1234567897897456123')
     setgetNewsSt(getNews)
-  }, [getNews])
+  }, [getNews,])
+  useEffect(() => {
+    if (Object.keys(currentUser).length > 0) {
+      setgetStoriesSt(getStories)
+    }
+  }, [getStories])
   return (
     < Container >
       <Header
@@ -49,7 +63,7 @@ export const HomeScreen: React.FC = () => {
           size="small" color={'#ffffff'}
         /> :
         <>
-          <UserStory />
+          <UserStory data={getStories} />
           <View
             style={{
               justifyContent: 'space-around',
@@ -57,38 +71,38 @@ export const HomeScreen: React.FC = () => {
               paddingVertical: 20,
             }}>
             <TouchableOpacity onPress={() => {
-              setfilterdBy("Mine")
+              setfilterdBy("MINE")
               dispatch(_getNews(currentUser, 10, 1, filterdBy));
             }}  >
-              <Text style={{ color: 'white', fontSize: 15 }}>Mine</Text>
-              {filterdBy == "Mine" &&
+              <Text style={{ color: 'white', fontSize: 15 }}>For you</Text>
+              {filterdBy == "MINE" &&
                 <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              setfilterdBy("Latest")
+              setfilterdBy("LATEST")
               dispatch(_getNews(currentUser, 10, 1, filterdBy));
             }}>
               <Text style={{ color: 'white', fontSize: 15 }}>Latest</Text>
-              {filterdBy == "Latest" &&
+              {filterdBy == "LATEST" &&
                 <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              setfilterdBy("Popular")
+              setfilterdBy("POPULAR")
               dispatch(_getNews(currentUser, 10, 1, filterdBy));
             }}>
               <Text style={{ color: 'white', fontSize: 15 }}>Popular</Text>
-              {filterdBy == "Popular" &&
+              {filterdBy == "POPULAR" &&
                 <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              setfilterdBy("Featured")
+              setfilterdBy("FEATURED")
               dispatch(_getNews(currentUser, 10, 1, filterdBy));
             }}>
               <Text style={{ color: 'white', fontSize: 15 }}>Featured</Text>
-              {filterdBy == "Featured" &&
+              {filterdBy == "FEATURED" &&
                 <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
               }
             </TouchableOpacity>
@@ -103,11 +117,12 @@ export const HomeScreen: React.FC = () => {
                     icon={item.icon}
                     likedByMe={item.likedByMe}
                     likes_count={item.likes_count}
-                    name={item.en_client_name}
+                    name={item.en_header}
                     disc={item.en_header}
                     commentCount={item.comments_count}
                     postTime={item.createdAt}
                     _id={item._id}
+                    filterdBy={filterdBy}
                     onPress={() => navigation.navigate("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count })}
                   />
 

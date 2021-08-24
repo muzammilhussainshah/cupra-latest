@@ -3,14 +3,18 @@ import {
   CURRENTUSER,
   SERVICES,
   SUBSERVICES,
+  NEWSCOMMENT,
   ISLOADER,
   ISERROR,
+  GETSTORIES,
   SHOPCATOGERY,
   SHOPSUBCATOGERY,
   ITEMDETAILS,
   GETREVIEWS,
   GETNEWS,
   NEWSITEMDETAILS,
+  GETADDS,
+  STORIESLIST,
   VIDEOS,
 } from '../constant/constant';
 
@@ -24,6 +28,10 @@ const INITIAL_STATE = {
   services: {},
   subservices: {},
   getNews: {},
+  newsComment: {},
+  getAdds: {},
+  getStories: {},
+  storiesList: {},
   getReviews: {},
   isLoader: false,
   isError: false,
@@ -91,6 +99,26 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         newsItemDetails: action.payload,
+      };
+    case GETADDS:
+      return {
+        ...state,
+        getAdds: action.payload,
+      };
+    case STORIESLIST:
+      return {
+        ...state,
+        storiesList: action.payload,
+      };
+    case NEWSCOMMENT:
+      return {
+        ...state,
+        newsComment: action.payload,
+      };
+    case GETSTORIES:
+      return {
+        ...state,
+        getStories: action.payload,
       };
     case VIDEOS:
       return {

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
+import moment from 'moment';
 import { Colors } from '../../../constants/Colors';
 import { width, height } from '../../../constants/Layout';
 export const ShopDetailsContainer = styled.View`
@@ -19,32 +20,79 @@ export const ItemName = styled.Text`
 `;
 const DescriptionHeaderTitle = styled.Text`
   font-size: 16px;
-  font-family: 'SourceSansPro-SemiBold';
+  font-family: 'SourceSansPro-Regular;
   /* margin-bottom: 5px; */
   `;
-// font-weight: 900;
-// margin-top: 5px;
+const ServiceHeaderTitle = styled.Text`
+  font-size: 16px;
+  font-family: 'SourceSansPro-Regular;
+  /* margin-bottom: 5px; */
+  `;
 const DescriptionText = styled.Text`
   font-family: 'SourceSansPro-Regular';
-    margin-top: 5px;  
-    width: 300px;
-    line-height:18px;
-    color: ${Colors.darkGray}
-    `;
-// margin-bottom: 5px;
-// font-size: 12px;
-export const DescriptionArea = ({ description, _func,_func2, navigation }: any) => {
+  line-height:18px;
+  color: ${Colors.darkGray}
+  `;
+const removeTags = (str) => {
+  if ((str === null) || (str === ''))
+    return false;
+  else
+    str = str.toString();
+
+  // Regular expression to identify HTML tags in 
+  // the input string. Replacing the identified 
+  // HTML tag with a null string.
+  return str.replace(/(<([^>]+)>)/ig, '');
+}
+export const DescriptionArea = ({ description, _func, _func2, navigation }: any) => {
   return (
     <>
-      <View style={{ flexDirection: "row" }}>
-        <DescriptionHeaderTitle>Description</DescriptionHeaderTitle>
+      <View  >
+        <DescriptionHeaderTitle style={{ fontFamily: "SourceSansPro-SemiBold", fontSize: 18 }}>Description</DescriptionHeaderTitle>
+        {description && <DescriptionText>{removeTags(description)}</DescriptionText>}
+      </View>
+    </>
+  )
+};
+export const ServiceApplied = ({ serviceTitle, serviceName }: any) => {
+  console.log(serviceTitle, 'serviceTitle')
+  useEffect(() => {
+  }, [])
+  return (
+    <View style={{ marginVertical: 5 }}>
+      <ServiceHeaderTitle style={{ fontFamily: "SourceSansPro-SemiBold", fontSize: 18, marginBottom: 5 }}>{serviceName}</ServiceHeaderTitle>
+      <View style={{ flexDirection: "row", maxWidth: "100%", flexWrap: 'wrap' }}>
+        {serviceTitle && serviceTitle.map((value) => {
+          return (
+            <DescriptionText>{value.en_name} , </DescriptionText>
+          )
+        })}
+
+      </View>
+    </View >
+  )
+};
+export const ClientName = ({ name }: any) => {
+  return (
+    <>
+      <View style={{ marginBottom: 10 }}>
+        <DescriptionHeaderTitle>{name}</DescriptionHeaderTitle>
         <TouchableOpacity
-          onPress={() => _func()}
         >
-          <DescriptionHeaderTitle style={{ marginLeft: 30, color: '#947d5e' }}>Review</DescriptionHeaderTitle>
         </TouchableOpacity>
       </View>
-     {description&& <DescriptionText>{description}</DescriptionText>}
+    </>
+  )
+};
+export const DateOf = ({ date }: any) => {
+  return (
+    <>
+      <View style={{ marginBottom: 10 }}>
+        <DescriptionHeaderTitle>{moment(date).format('L')}</DescriptionHeaderTitle>
+        <TouchableOpacity
+        >
+        </TouchableOpacity>
+      </View>
     </>
   )
 };
@@ -57,15 +105,13 @@ const SizeHeaderTitle = styled.Text`
   `;
 
 
-// margin-bottom: 10px;
-// font-size: 12px;
 const SizeContainerTitles = styled.Text`
-font-family: 'SourceSansPro-Regular';
-margin-top: 5px;
-margin-bottom: 5px;
+font-family: 'SourceSansPro-SemiBold';
+margin-top:2px;
+font-size:16px;
+margin-bottom:2px;
 color: ${Colors.darkGray}
 `;
-// font-size: 12px;
 const TreatmentTitle = styled.Text`
 font-size: 16px;
 font-family: 'SourceSansPro-SemiBold';
@@ -81,13 +127,12 @@ margin-bottom: 5px;
 line-height:18px;
 color: ${Colors.darkGray}
 `;
-export const SizeArea = ({ size: { height, width, diameter } = {} }) => (
-  <>
-    <SizeHeaderTitle>Size</SizeHeaderTitle>
-    <SizeContainerTitles>Height: {height} cm</SizeContainerTitles>
-    <SizeContainerTitles>Width: {width} cm</SizeContainerTitles>
-    <SizeContainerTitles>Diameter: {diameter} cm</SizeContainerTitles>
-  </>
+export const SizeArea = ({ Brand, Modal, Year }: any) => (
+  <View style={{ marginVertical: 10 }}>
+    <SizeContainerTitles>Brand: {Brand}  </SizeContainerTitles>
+    <SizeContainerTitles>Modal: {Modal}  </SizeContainerTitles>
+    <SizeContainerTitles>Year: {Year}  </SizeContainerTitles>
+  </View>
 );
 export const TreatmentArea = ({ treatment }: any) => (
   <CenterView>
@@ -137,13 +182,13 @@ export const QuantityArea = ({ quantity, _func, _func2 }: any) => {
 export const ReserveNowArea = styled.View`
   background-color: ${Colors.black};
   width: 100%;
-  height: 13%;
-  border-top-left-radius: 50px;
+  height: 10%;
+  border-top-left-radius:55px;
   position: absolute;
   bottom:0;
   z-index:9000000;
   justify-content: space-between;
   align-items: center;
-  padding-horizontal:20px;
+  padding-horizontal:30px;
   flex-direction: row;
 `;

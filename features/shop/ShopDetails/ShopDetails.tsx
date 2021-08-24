@@ -204,7 +204,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
               <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
             </TouchableOpacity>
         }
-        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
+        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.pop() }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
         </TouchableOpacity>
         <MainSheet scroll sheetHeight={0.4}>

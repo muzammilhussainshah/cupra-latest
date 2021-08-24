@@ -19,7 +19,9 @@ import {VerificationScreen} from '../features/auth/VerificationScreen/Verificati
 import {AddNewPassword} from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
 
 import {GetReview} from '../features/shop/GetReviews/GetReview';
+
 import {HomeDetail} from '../features/home/HomeDetail/HomeDetail';
+import {HomeComments} from '../features/home/HomeComments/HomeComments';
 
 import {GetAndSubmitReview} from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
 
@@ -112,6 +114,11 @@ export const RootNavigator = () => {
       <AuthStack.Screen
         name="HomeDetail"
         component={HomeDetail}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="HomeComments"
+        component={HomeComments}
         options={MyTransition}
       />
       <AuthStack.Screen

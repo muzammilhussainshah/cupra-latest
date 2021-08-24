@@ -40,6 +40,8 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
   const [imageSlider, setimageSlider] = useState([])
 
+  const [videosSlider, setvideosSlider] = useState([])
+
   const [fullImageScreen, setFullImageScreen] = useState(false)
 
   const routes = route.params
@@ -65,27 +67,29 @@ export const HomeDetail = ({ route, navigation }: any) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log(item,"itemitemitem")
+    console.log(item, "itemitemitem")
     dispatch(_getNewsItemDetails(currentUser, item.newsId, navigation,))
   }, [])
 
   useEffect(() => {
     setcoverImage(icon)
     settotalLikes(likes_count)
-    console.log(imageSlider, ']]]]]]]]]]]]]]]]]]]]')
+    console.log(newsItemDetails, ']]]]]]]]]]]]]]]]]]]]')
     if (newsItemDetails.media && newsItemDetails.media.length > 0) {
       console.log(newsItemDetails.media, "newsItemDetails.media")
-      let result = newsItemDetails.media.map((obj: any) => obj.type === "IMAGE" && obj.url);
-      const filter = result.filter((uri: any) => uri !== false);
-      console.log(filter, '.filterfilterfilter')
-      setimageSlider(filter);
-
+      let images = newsItemDetails.media.map((obj: any) => obj.type === "IMAGE" && obj.url);
+      let videos = newsItemDetails.media.map((obj: any) => obj.type === "VIDEO" && obj.url);
+      const filterVideos = videos.filter((uri: any) => uri !== false);
+      const filterImages = images.filter((uri: any) => uri !== false);
+      console.log(filterImages, '.filterImagesfilterfilter', filterVideos)
+      setimageSlider(filterImages);
+      setvideosSlider(filterVideos);
     }
   }, [newsItemDetails])
 
 
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, item.newsId, navigation,filterdBy))
+    dispatch(_likeDisLike(currentUser, item.newsId, navigation, filterdBy))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -163,8 +167,14 @@ export const HomeDetail = ({ route, navigation }: any) => {
             /> :
 
             <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
-              <View style={{ width: "60%" }}>
-                <ItemName>{en_header}</ItemName>
+              <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ width: "60%", }}>
+                  <ItemName>{en_header}</ItemName>
+                </View>
+                {videosSlider.length>0 && <TouchableOpacity activeOpacity={0.9} style={{ width: "30%", backgroundColor: "white", elevation: 3, borderRadius: 5, justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontWeight: "bold" }}>Watch vedios</Text>
+                </TouchableOpacity>
+                }
               </View>
               <View style={{ flexDirection: "row", marginVertical: 5 }}>
               </View>

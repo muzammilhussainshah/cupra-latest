@@ -17,6 +17,7 @@ import { _getHexColor, } from "../../../store/action/action"
 import { _getNewsItemDetails, _likeDisLike, _getNewsComment } from "../../../store/action/newsAction"
 
 import { useDispatch, useSelector } from 'react-redux';
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT } from "../../../store/constant/constant";
 
 import { _getItemDetails, } from '../../../store/action/shopAction';
 import {
@@ -37,7 +38,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
   const [coverImage, setcoverImage] = useState()
 
-  const [imageSlider, setimageSlider] = useState(false)
+  const [imageSlider, setimageSlider] = useState([])
 
   const [fullImageScreen, setFullImageScreen] = useState(false)
 
@@ -47,31 +48,44 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState()
+
   const newsItemDetails = useSelector((state: any) => state.reducer.newsItemDetails)
 
   const item = routes;
 
   const { filterdBy } = item
 
-  const { icon, brand, en_desc, en_client_name, likes_count, comments_count, services, subservices, en_header, year, date, model, likedByMe, _id } = newsItemDetails;
+  const { icon, brand, en_desc, en_client_name, likes_count, comments_count, services, subservices, en_header, year, date, model, likedByMe, _id, media } = newsItemDetails;
 
-  const [totalLikes, settotalLikes] = useState(likes_count);
+  const [totalLikes, settotalLikes] = useState(item.noOfLikes);
 
-  const [sendLike, setsendLike] = useState(likedByMe);
+  const [sendLike, setsendLike] = useState(item.likedByMe);
 
   const dispatch = useDispatch()
 
   useEffect(() => {
+    console.log(item,"itemitemitem")
     dispatch(_getNewsItemDetails(currentUser, item.newsId, navigation,))
   }, [])
 
   useEffect(() => {
     setcoverImage(icon)
     settotalLikes(likes_count)
+    console.log(imageSlider, ']]]]]]]]]]]]]]]]]]]]')
+    if (newsItemDetails.media && newsItemDetails.media.length > 0) {
+      console.log(newsItemDetails.media, "newsItemDetails.media")
+      let result = newsItemDetails.media.map((obj: any) => obj.type === "IMAGE" && obj.url);
+      const filter = result.filter((uri: any) => uri !== false);
+      console.log(filter, '.filterfilterfilter')
+      setimageSlider(filter);
+
+    }
   }, [newsItemDetails])
 
+
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, item.newsId, navigation))
+    dispatch(_likeDisLike(currentUser, item.newsId, navigation,filterdBy))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -85,8 +99,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
     <>
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage
-            coverImage={coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
         </View>
       }
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
@@ -114,13 +127,14 @@ export const HomeDetail = ({ route, navigation }: any) => {
       </View>
 
       <ShopDetailsContainer>
-        {imageSlider ?
+        {imageSlider.length > 0 ?
           <SliderBox
-            images={coverImage}
+            images={imageSlider}
             sliderBoxHeight={Wheight - 390}
             resizeMode={'cover'}
             onCurrentImagePressed={(index: any) => {
               console.log(index, 'indexindexindex')
+              setSelectedImageIndex(index)
               setFullImageScreen(true)
             }}
           />
@@ -134,7 +148,10 @@ export const HomeDetail = ({ route, navigation }: any) => {
               <Backgroundimage source={{ uri: coverImage }} resizeMode={FastImage.resizeMode.cover} />
             </TouchableOpacity>
         }
-        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { navigation.goBack() }}>
+        <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => {
+          navigation.goBack()
+          dispatch({ type: NEWSITEMDETAILS, payload: {} })
+        }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>
         </TouchableOpacity>
         <MainSheet scroll sheetHeight={0.4}>
@@ -165,7 +182,11 @@ export const HomeDetail = ({ route, navigation }: any) => {
           }
         </MainSheet>
         <ReserveNowArea>
-          <Text style={{ color: 'white', fontSize: 20, }}>{comments_count} Comments</Text>
+          <TouchableOpacity
+            onPress={() => { dispatch(_getNewsComment(currentUser, _id, navigation, filterdBy)) }}
+          >
+            <Text style={{ color: 'white', fontSize: 20, }}>{comments_count} Comments</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => { dispatch(_getNewsComment(currentUser, _id, navigation, filterdBy)) }}
             style={{ borderRadius: 10, backgroundColor: Colors.primary, width: 150, height: "70%", justifyContent: 'center', alignItems: 'center' }}>

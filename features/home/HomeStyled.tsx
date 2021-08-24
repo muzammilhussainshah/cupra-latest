@@ -91,13 +91,25 @@ const CommentText = styled.Text`
   font-family: 'SourceSansPro-Regular';
 `;
 
-export const CardView = ({ _id, name, postTime, commentCount, filterdBy, disc, icon, navigation, likedByMe, likes_count, onPress }: any) => {
+export const CardView = ({ _id, name, postTime, commentCount, disc, icon, navigation, likedByMe, likes_count, onPress, filterdBy }: any) => {
   const [totalLikes, settotalLikes] = useState(likes_count);
   const [sendLike, setsendLike] = useState(likedByMe);
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const dispatch = useDispatch();
+
+  const removeTags = (str) => {
+    if ((str === null) || (str === ''))
+      return false;
+    else
+      str = str.toString();
+
+    // Regular expression to identify HTML tags in 
+    // the input string. Replacing the identified 
+    // HTML tag with a null string.
+    return str.replace(/(<([^>]+)>)/ig, '');
+  }
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, _id, navigation))
+    dispatch(_likeDisLike(currentUser, _id, navigation,filterdBy))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -203,8 +215,8 @@ export const CardView = ({ _id, name, postTime, commentCount, filterdBy, disc, i
                       marginBottom: 5,
                     }}
                   />
-                  <CommentText numberOfLines={2}>
-                    {disc}{' '}
+                  <CommentText style={{ maxWidth: "90%" }} numberOfLines={2}>
+                    {removeTags(disc).substring(0, 75)} {disc.length > 75 && '...'}
                   </CommentText>
                 </PromotionTileTitleContainer>
               </View>

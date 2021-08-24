@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, View,  } from 'react-native';
+import { Text, ScrollView, Dimensions, TextInput, FlatList,ActivityIndicator, TouchableOpacity, View, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -22,12 +22,15 @@ export const HomeComments = ({ route, navigation, }: any) => {
   const Wheight = Dimensions.get('window').height;
 
   const [text, setText] = useState('');
+  const [Err, setErr] = useState('');
 
   const flex1 = Wheight / 10
 
   const routes = route.params
 
   const { newsId, filterdBy } = routes
+
+  const isLoader = useSelector((state: any) => state.reducer.isLoader)
 
   const newsComment = useSelector((state: any) => state.reducer.newsComment)
 
@@ -56,44 +59,50 @@ export const HomeComments = ({ route, navigation, }: any) => {
             <Text style={{ color: Colors.white }}>Comments</Text>
           </View>
           <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-            <FlatList
-              data={newsComment}
-              renderItem={({ item }) => {
-                const { text, createdAt, createdBy, mine, news_id, _id } = item
-                return (
-                  <View style={{ paddingHorizontal: 10, marginVertical: 2 }}>
-                    <View style={{ height: 60, flexDirection: "row", }}>
-                      <View style={{ flex: 1.4, justifyContent: "center", alignItems: "center" }}>
-                        <FastImage
-                          resizeMode={'contain'}
-                          source={require('../../../assets/users/border.png')}
-                          style={{ height: "100%", width: "100%", }} />
-                        <View style={{ height: "100%", width: "100%", position: "absolute", zIndex: 3 }}>
-                        </View>
-                      </View>
-                      <View style={{ flex: mine ? 7.6 : 8.6, justifyContent: 'center' }}>
-                        <Text style={{ color: Colors.white, fontWeight: "bold" }}>{createdBy.full_name}</Text>
-                        <Text style={{ color: Colors.brownishGrey }}>{moment(createdAt).fromNow()}</Text>
-                      </View>
-                      {mine &&
-                        <TouchableOpacity
-                          onPress={() => dispatch(_dltCommentOnNews(currentUser, news_id, _id, navigation, filterdBy))}
-                          activeOpacity={0.8}
-                          style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+            {isLoader ?
+              <ActivityIndicator
+                style={{ marginTop: "40%" }}
+                size="small" color={Colors.white}
+              /> :
+              <FlatList
+                data={newsComment}
+                renderItem={({ item }) => {
+                  const { text, createdAt, createdBy, mine, news_id, _id } = item
+                  return (
+                    <View style={{ paddingHorizontal: 10, marginVertical: 2 }}>
+                      <View style={{ height: 60, flexDirection: "row", }}>
+                        <View style={{ flex: 1.4, justifyContent: "center", alignItems: "center" }}>
                           <FastImage
                             resizeMode={'contain'}
-                            source={require('../../../assets/images/dlticon2.png')}
-                            style={{ height: "70%", width: "70%", }} />
-                        </TouchableOpacity>
-                      }
+                            source={require('../../../assets/users/border.png')}
+                            style={{ height: "100%", width: "100%", }} />
+                          <View style={{ height: "100%", width: "100%", position: "absolute", zIndex: 3 }}>
+                          </View>
+                        </View>
+                        <View style={{ flex: mine ? 7.6 : 8.6, justifyContent: 'center' }}>
+                          <Text style={{ color: Colors.white, fontWeight: "bold" }}>{createdBy.full_name}</Text>
+                          <Text style={{ color: Colors.brownishGrey }}>{moment(createdAt).fromNow()}</Text>
+                        </View>
+                        {mine &&
+                          <TouchableOpacity
+                            onPress={() => dispatch(_dltCommentOnNews(currentUser, news_id, _id, navigation, filterdBy))}
+                            activeOpacity={0.8}
+                            style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                            <FastImage
+                              resizeMode={'contain'}
+                              source={require('../../../assets/images/dlticon2.png')}
+                              style={{ height: "70%", width: "70%", }} />
+                          </TouchableOpacity>
+                        }
+                      </View>
+                      <View style={{ flex: 4, marginVertical: 5, paddingHorizontal: 10, justifyContent: "center" }}>
+                        <Text style={{ color: Colors.titleGray, maxWidth: "80%" }}>{text}</Text>
+                      </View>
                     </View>
-                    <View style={{ flex: 4, marginVertical: 5, paddingHorizontal: 10, justifyContent: "center" }}>
-                      <Text style={{ color: Colors.titleGray, maxWidth: "80%" }}>{text}</Text>
-                    </View>
-                  </View>
-                )
-              }}
-            />
+                  )
+                }}
+                />
+          }
           </ScrollView>
           <View style={{ height: "15%", paddingHorizontal: 15, backgroundColor: Colors.black, flexDirection: 'row' }}>
             <View style={{ width: "90%", justifyContent: "center", }}>
@@ -108,8 +117,16 @@ export const HomeComments = ({ route, navigation, }: any) => {
             <View style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(_commentOnNews(currentUser, newsId, text, navigation, filterdBy))
-                  setText("")
+                  if(text){
+                    dispatch(_commentOnNews(currentUser, newsId, text, navigation, filterdBy))
+                    setText("")
+                  }
+                  else{
+                    setErr("Add your comment here")
+                    setTimeout(() => {
+                      setErr("")
+                    }, 1000);
+                  }
                 }
                 }
               >
@@ -120,6 +137,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
               </TouchableOpacity>
             </View>
           </View>
+              {Err?<Text style={{color:"red",textAlign:"center",backgroundColor:Colors.black,width:"100%"}}>{Err}</Text>:null}
         </View >
       </View >
     </ScrollView>

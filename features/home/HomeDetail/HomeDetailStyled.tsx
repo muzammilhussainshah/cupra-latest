@@ -33,13 +33,23 @@ const DescriptionText = styled.Text`
   line-height:18px;
   color: ${Colors.darkGray}
   `;
+const removeTags = (str) => {
+  if ((str === null) || (str === ''))
+    return false;
+  else
+    str = str.toString();
+
+  // Regular expression to identify HTML tags in 
+  // the input string. Replacing the identified 
+  // HTML tag with a null string.
+  return str.replace(/(<([^>]+)>)/ig, '');
+}
 export const DescriptionArea = ({ description, _func, _func2, navigation }: any) => {
   return (
     <>
       <View  >
         <DescriptionHeaderTitle style={{ fontFamily: "SourceSansPro-SemiBold", fontSize: 18 }}>Description</DescriptionHeaderTitle>
-
-        {description && <DescriptionText>{description}</DescriptionText>}
+        {description && <DescriptionText>{removeTags(description)}</DescriptionText>}
       </View>
     </>
   )

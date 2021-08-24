@@ -142,7 +142,7 @@ export const Select: React.FC<SelectProps> = props => {
                 let currentDateInNmbr = Date.now()
                 let selectedDateInNmbr = Date.parse(item.id)
                 let disableMonth;
-                console.log(currentDateInNmbr, selectedDateInNmbr, 'selectedDateInNmbrselectedDateInNmbrselectedDateInNmbr')
+                // console.log(currentDateInNmbr, selectedDateInNmbr, 'selectedDateInNmbrselectedDateInNmbrselectedDateInNmbr')
                 if (currentDateInNmbr > (selectedDateInNmbr + 2.628e+9)) {
                   disableMonth = true
                 } else {
@@ -150,7 +150,7 @@ export const Select: React.FC<SelectProps> = props => {
                 }
                 return (
                   <>
-                    {console.log(item, disableMonth, ' item item item item item item item item item item item item item item item item item item item item item item item')}
+                    {/* {console.log(item, disableMonth, ' item item item item item item item item item item item item item item item item item item item item item item item')} */}
                     <Item
                       getDisable={disableMonth}
                       onChange={() => {

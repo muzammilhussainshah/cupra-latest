@@ -1,9 +1,8 @@
 import React from 'react';
-import { FlatList } from 'react-native';
-import { StaticUsers } from '../../../data/StaticUsers';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { Container, Stories } from './UserStoryStyled';
+export const UserStory = ({ data, navigation, filterdBy }: any) => {
 
-export const UserStory = ({ data }: any) => {
   return (
     <Container>
       <FlatList
@@ -12,10 +11,13 @@ export const UserStory = ({ data }: any) => {
         keyExtractor={item => item.id}
         data={data}
         renderItem={({ item }) => {
-
           console.log(item, 'aaa///')
           return (
-            <Stories userImage={{ uri: item.icon }} />
+            <TouchableOpacity
+              onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy })}
+              activeOpacity={0.8}>
+              <Stories userImage={{ uri: item.icon }} />
+            </TouchableOpacity>
 
           )
 

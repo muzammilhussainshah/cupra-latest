@@ -52,7 +52,7 @@ interface IBookingProp {
 const Services = ['service2', 'Nano Ceramic', 'service3'];
 
 export const BookingScreen: React.FC = ({ route }: any) => {
-  const { serviceId,subserviceId } = route.params
+  const { serviceId, subserviceId } = route.params
   const [openModal, setopenModal] = useState(false);
 
   let dispatch = useDispatch()
@@ -73,7 +73,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
   const monthValue = bookingMethods.watch().month
   const getDaysOfMonthAsList = (n: number, monthValue) => { console.log(); return ([...Array(n)].map((_, i) => getDay(i, monthValue))) }
   const monthsWithYears = useMemo(
-    () => [...Array(11)].map((_, i) => getMonth(i + 1)),
+    () => [...Array(12)].map((_, i) => getMonth(i + 1)),
     [],
   );
   const currentMonth = moment().month();
@@ -126,24 +126,24 @@ export const BookingScreen: React.FC = ({ route }: any) => {
                 // setmonthSelection(false)
                 return (<>
                   {/* {!monthSelection ? */}
-                    <Select
-                      style={{
-                        width: 109,
-                        borderColor: 'transparent',
-                      }}
-                      placeholder="Book date"
-                      items={monthsWithYears}
-                      onChange={(val: any) => {
-                        onChange(val)
-                        setmonthSelection(val.fullDate)
-                      }}
-                      value={
-                        value !== undefined
-                          ? { id: value, name: value.toString() }
-                          : undefined
-                      }
-                    /> 
-                    {/* :
+                  <Select
+                    style={{
+                      width: 109,
+                      borderColor: 'transparent',
+                    }}
+                    placeholder="Book date"
+                    items={monthsWithYears}
+                    onChange={(val: any) => {
+                      onChange(val)
+                      setmonthSelection(val.fullDate)
+                    }}
+                    value={
+                      value !== undefined
+                        ? { id: value, name: value.toString() }
+                        : undefined
+                    }
+                  />
+                  {/* :
                     <View>
                       <Text style={{
                         color: "white", fontSize: 20
@@ -243,7 +243,6 @@ export const BookingScreen: React.FC = ({ route }: any) => {
               style={{ width: '100%', paddingHorizontal: 20, marginBottom: 15 }}
               keyboardType="number-pad"
               rules={{
-                // required: 'phone number is required.',
               }}
             />
             <Title>Additional Comments</Title>
@@ -256,9 +255,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
               radius={10}
               numberOfLines={10}
               style={{ width: '100%', paddingHorizontal: 20, marginBottom: 15 }}
-              keyboardType="number-pad"
               rules={{
-                // required: 'Notes is required.',
               }}
             />
             <ButtonsContainer style={{ paddingHorizontal: 20 }}>

@@ -26,7 +26,7 @@ export const WelcomeScreen: React.FC = () => {
   }, []);
 
   const getDataAsync = async () => {
-    let getEmail = await AsyncStorage.getItem('userEmail');
+    const getEmail = await AsyncStorage.getItem('userEmail');
     if (getEmail && getEmail !== 'null') {
       navigation.dispatch(
         CommonActions.reset({

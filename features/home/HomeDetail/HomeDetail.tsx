@@ -129,6 +129,30 @@ export const HomeDetail = ({ route, navigation }: any) => {
           <Text style={{}}>{totalLikes}</Text>
         </TouchableOpacity>
       </View>
+      {videosSlider.length > 0 &&
+        <View style={{ height: 55, width: 55, position: "absolute", right: 100, top: "35%", zIndex: 1, }}>
+          <TouchableOpacity onPress={() => {
+                navigation.navigate("VideosUri", { videosSlider })
+          }}
+            activeOpacity={0.8}
+            style={{
+              justifyContent: "center",
+              backgroundColor: "#fff",
+              elevation: 2,
+              borderRadius: 10,
+              height: 55,
+              width: 55,
+              alignItems: "center"
+            }}>
+            <FastImage
+              style={{ height: 25, width: 25, }}
+              source={require('../../../assets/images/video.png')}
+              resizeMode="contain"
+            />
+            <Text style={{}}>{videosSlider.length}</Text>
+          </TouchableOpacity>
+        </View>
+      }
 
       <ShopDetailsContainer>
         {imageSlider.length > 0 ?
@@ -171,10 +195,14 @@ export const HomeDetail = ({ route, navigation }: any) => {
                 <View style={{ width: "60%", }}>
                   <ItemName>{en_header}</ItemName>
                 </View>
-                {videosSlider.length>0 && <TouchableOpacity activeOpacity={0.9} style={{ width: "30%", backgroundColor: "white", elevation: 3, borderRadius: 5, justifyContent: "center", alignItems: "center" }}>
+                {/* {videosSlider.length > 0 && <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("VideosUri", { videosSlider })
+                  }
+                  activeOpacity={0.9} style={{ width: "30%", backgroundColor: "white", elevation: 3, borderRadius: 5, justifyContent: "center", alignItems: "center" }}>
                   <Text style={{ fontWeight: "bold" }}>Watch vedios</Text>
                 </TouchableOpacity>
-                }
+                } */}
               </View>
               <View style={{ flexDirection: "row", marginVertical: 5 }}>
               </View>

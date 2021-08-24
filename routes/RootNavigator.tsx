@@ -6,31 +6,36 @@ import {
   TransitionSpecs,
 } from '@react-navigation/stack';
 
-import {WelcomeScreen} from '../features/auth/WelcomeScreen';
+import { WelcomeScreen } from '../features/auth/WelcomeScreen';
 
-import {LoginScreen} from '../features/auth/LoginScreen/LoginScreen';
+import { LoginScreen } from '../features/auth/LoginScreen/LoginScreen';
 
-import {SignUpScreen} from '../features/auth/SignUpScreen/SignUpScreen';
+import { SignUpScreen } from '../features/auth/SignUpScreen/SignUpScreen';
 
-import {ResetPasswordScreen} from '../features/auth/ResetPasswordScreen/ResetPasswordScreen';
+import { ResetPasswordScreen } from '../features/auth/ResetPasswordScreen/ResetPasswordScreen';
 
-import {VerificationScreen} from '../features/auth/VerificationScreen/VerificationScreen';
+import { VerificationScreen } from '../features/auth/VerificationScreen/VerificationScreen';
 
-import {AddNewPassword} from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
+import { AddNewPassword } from '../features/auth/ResetPasswordScreen/AddNewPasswordScreen';
 
-import {GetReview} from '../features/shop/GetReviews/GetReview';
+import { GetReview } from '../features/shop/GetReviews/GetReview';
 
-import {HomeDetail} from '../features/home/HomeDetail/HomeDetail';
-import {HomeComments} from '../features/home/HomeComments/HomeComments';
+import { HomeDetail } from '../features/home/HomeDetail/HomeDetail';
 
-import {GetAndSubmitReview} from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
+import { VideoPlayScreenHome } from '../features/home//HomeDetail/VideosUri/VideoPlayScreen';
+
+import { HomeComments } from '../features/home/HomeComments/HomeComments';
+
+import { VideosUri } from '../features/home/HomeDetail/VideosUri/VideosUri';
+
+import { GetAndSubmitReview } from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
 
 import Routes from './Routes';
 
-import {NavigatorScreenParams} from '@react-navigation/native';
+import { NavigatorScreenParams } from '@react-navigation/native';
 
-import {BottomTabParamList} from './BottomTabNavigator';
-import {DrawerNavigator} from './DrawerNavigator';
+import { BottomTabParamList } from './BottomTabNavigator';
+import { DrawerNavigator } from './DrawerNavigator';
 
 type AuthStackParamList = {
   drawerStack: undefined;
@@ -39,9 +44,10 @@ type AuthStackParamList = {
   GetReview: undefined;
   GetAndSubmitReview: undefined;
   signup: undefined;
-  otp: {phone_number?: string; routName?: string};
+  otp: { phone_number?: string; routName?: string };
   resetPassword: undefined;
   requestPassword: undefined;
+  VideoPlayScreenHome: undefined;
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -60,7 +66,7 @@ export const RootNavigator = () => {
       close: TransitionSpecs.TransitionIOSSpec,
     },
     headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-    cardStyleInterpolator: ({current, layouts}: any) => ({
+    cardStyleInterpolator: ({ current, layouts }: any) => ({
       cardStyle: {
         transform: [
           {
@@ -112,6 +118,11 @@ export const RootNavigator = () => {
         options={MyTransition}
       />
       <AuthStack.Screen
+        name="VideoPlayScreenHome"
+        component={VideoPlayScreenHome}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
         name="HomeDetail"
         component={HomeDetail}
         options={MyTransition}
@@ -119,6 +130,11 @@ export const RootNavigator = () => {
       <AuthStack.Screen
         name="HomeComments"
         component={HomeComments}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="VideosUri"
+        component={VideosUri}
         options={MyTransition}
       />
       <AuthStack.Screen

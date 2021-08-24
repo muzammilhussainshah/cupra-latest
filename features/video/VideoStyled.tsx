@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import TouchableScale from 'react-native-touchable-scale';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
-import { Colors } from '../../constants/Colors';
+import {Colors} from '../../constants/Colors';
 
 export const VideoContainer = styled(SafeAreaView)`
   background-color: ${Colors.secondary};
@@ -13,11 +13,7 @@ export const VideoContainer = styled(SafeAreaView)`
 `;
 const VideoPlaceholder = styled.View`
   height: 220px;
-  margin-right: 20px;
   margin-left: 20px;
-  /* margin-bottom: 20px; */
-  /* justify-content: center;
-  align-items: center; */
 `;
 const VideoTileCover = styled(FastImage)`
   width: 160px;
@@ -57,15 +53,15 @@ const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top:10px
+  margin-top: 10px;
 `;
 const VideoLabel = styled.View`
   position: absolute;
-  background-color: rgba(0, 0, 0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
-  width:160px;
-  height:150px;
+  width: 160px;
+  height: 150px;
   border-radius: 10px;
 `;
 const BookingTitle = styled.View`
@@ -78,27 +74,26 @@ export type IVideoTypeProp = {
   numberOfRates?: number;
   onPress?: () => void;
 };
-export const VideoTile: React.FC<IVideoTypeProp> = ({
-  VideoImage,
-  onPress,
-}) => (
+export const VideoTile: React.FC<IVideoTypeProp> = ({VideoImage, onPress}) => (
   <TouchableScale
-    style={{ flex: 1 }}
+    style={{flex: 1}}
     activeScale={0.9}
     tension={50}
     friction={7}
     useNativeDriver
     onPress={onPress}>
     <VideoPlaceholder>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <VideoTileCover source={VideoImage} />
         <VideoLabel>
-          <BookingTitle><Ionicons name="play-circle-outline" size={50} color="white" /></BookingTitle>
+          <BookingTitle>
+            <Ionicons name="play-circle-outline" size={50} color="white" />
+          </BookingTitle>
         </VideoLabel>
       </View>
       <BottomContainer>
         <RowView>
-          <Text style={{ color: 'white', fontSize: 15 }}>29 min</Text>
+          <Text style={{color: 'white', fontSize: 15}}>29 min</Text>
         </RowView>
         <RowView>
           <SteeringImage
@@ -114,7 +109,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({
         </RowView>
       </BottomContainer>
     </VideoPlaceholder>
-  </TouchableScale >
+  </TouchableScale>
 );
 export const VideoTitleWrapper = styled.View`
   justify-content: space-between;

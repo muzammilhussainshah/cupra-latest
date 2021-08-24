@@ -1,33 +1,61 @@
-import React from 'react';
-import { Header } from '../../components/Header';
-import { VideoContainer, VideoTile, VideoTitle, VideoTitleWrapper } from './VideoStyled';
-import { View, Button, FlatList } from 'react-native';
-import { StaticVideos } from '../../data/StaticVideos';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {Header} from '../../components/Header';
+import {
+  VideoContainer,
+  VideoTile,
+  VideoTitle,
+  VideoTitleWrapper,
+} from './VideoStyled';
+import {View, Dimensions, FlatList} from 'react-native';
+import {StaticVideos} from '../../data/StaticVideos';
+import {useNavigation} from '@react-navigation/native';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import {useDispatch, useSelector} from 'react-redux';
+import {_getVideos} from '../../store/action/videoAction';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const VideoScreen: React.FC = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const currentUser = useSelector((state: any) => state.reducer.currentUser);
+  const videos = useSelector((state: any) => state.reducer.videos);
+  const dispatch = useDispatch();
+  const {width} = Dimensions.get('window');
+
+  useEffect(() => {
+    dispatch(_getVideos(currentUser, navigation));
+  }, []);
+
   return (
     <VideoContainer>
-      <Header onOpenDrawer={() => { }} />
+      <Header onOpenDrawer={() => {}} />
       <VideoTitleWrapper>
         <VideoTitle>Videos</VideoTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />
       </VideoTitleWrapper>
       <FlatList
-        contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id}
-        data={StaticVideos?.map(user => user)}
-        renderItem={({ item }) => (
-          <VideoTile
-            VideoImage={item.uri}
-            onPress={() => navigation.navigate('videoPlay', { videoURL: 'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4' })}
+        data={videos}
+        renderItem={item1 => (
+          <SwiperFlatList
+            keyExtractor={item => item.id}
+            style={{flex: 1}}
+            data={item1.item.media}
+            renderItem={item2 => (
+              <VideoTile
+                VideoImage={item2.item.url}
+                onPress={() =>
+                  navigation.navigate('videoPlay', {
+                    videoURL: item2.item.url,
+                  })
+                }
+              />
+            )}
           />
         )}
       />
     </VideoContainer>
-  )
-}
+  );
+};

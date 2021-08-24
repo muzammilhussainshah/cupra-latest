@@ -15,4 +15,5 @@ export const GETADDS = 'GETADDS'
 export const STORIESLIST = 'STORIESLIST'
 export const NEWSCOMMENT = 'NEWSCOMMENT'
 export const GETSTORIES = 'GETSTORIES'
+export const GETNEWSIMAGES = 'GETNEWSIMAGES'
 

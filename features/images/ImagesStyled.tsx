@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
+import { SliderBox } from "react-native-image-slider-box";
+
 import { Colors } from '../../constants/Colors';
 
 export const ImagesContainer = styled(SafeAreaView)`
@@ -38,9 +42,9 @@ const ImageNumber = styled.Text`
 `;
 const RowView = styled.View`
     flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
+    align-items: center;
+    `;
+// justify-content: space-between;
 const SteeringImage = styled(FastImage)`
   width: 20px;
   height: 20px;
@@ -49,8 +53,8 @@ const NumberOfRates = styled.Text`
   color: ${Colors.white};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
-  padding-right: 10px;
-`;
+  `;
+// padding-right: 10px;
 const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -62,42 +66,93 @@ const BottomContainer = styled.View`
 export type IImageTypeProp = {
   imageUri?: any;
   onPress?: () => void;
+  getnavigation?: () => void;
 };
 export const ImageTile: React.FC<IImageTypeProp> = ({
   imageUri,
   onPress,
-}) => (
-  <TouchableScale
-    style={{ flex: 1 }}
-    activeScale={0.9}
-    tension={50}
-    friction={7}
-    useNativeDriver
-    onPress={onPress}>
-    <ImagePlaceholder>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <ImageTileCover source={imageUri} />
-        <BottomContainer>
-          <RowView>
-            <Text style={{ color: 'white', fontSize: 15, paddingRight: 20 }}>29 min</Text>
-          </RowView>
-          <RowView>
-            <SteeringImage
-              resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/comment.png')}
+  getnavigation,
+}) => {
+  const [sliderArrSt, setsliderArrSt] = useState([])
+  const [imageData, setimageData] = useState([])
+  const [imageLikes, setimageLikes] = useState("")
+  const [imageTime, setimageTime] = useState('')
+  const [flag, setflag] = useState(false)
+  const navigation = useNavigation()
+  let imgSliderArr = []
+  let imgData = []
+
+  useEffect(() => {
+    if (imageUri) {
+      imageUri.map((mediaObj, index) => {
+        imgSliderArr.push(mediaObj.url)
+        imgData.push(mediaObj)
+      })
+    }
+    setimageData(imgData)
+    setimageLikes(imageUri[0].likesCount)
+    setimageTime(imageUri[0].createdAt)
+    setsliderArrSt(imgSliderArr)
+    setflag(!flag)
+  }, [])
+  return (
+    <TouchableScale
+      style={{ flex: 1 }}
+      activeScale={0.9}
+      tension={50}
+      friction={7}
+      useNativeDriver
+    >
+      <ImagePlaceholder>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          {/* <ImageTileCover source={{ uri: imageUri[0].url }} /> */}
+          <View
+            style={{
+              width: 160,
+              height: 150,
+              borderRadius: 10,
+              overflow: "hidden",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <SliderBox
+              resizeMode="contain"
+              ImageComponentStyle={{ width: '100%', height: "100%", borderRadius: 10 }}
+              dotColor="rgba(0,0,0,0)"
+              inactiveDotColor="rgba(0,0,0,0)"
+              images={sliderArrSt && sliderArrSt}
+              onCurrentImagePressed={index => {
+                navigation.navigate('showImage', { imageURL: { uri: sliderArrSt[index] } })
+              }
+              }
+              currentImageEmitter={index => {
+                setimageLikes(imageData && imageData[index] && imageData[index].likesCount && imageData[index].likesCount)
+                setimageTime(imageData && imageData[index] && imageData[index].createdAt && imageData[index].createdAt)
+                setflag(!flag)
+                console.log(index, imageData, '..;;;;;;;;;;;;;;;;;')
+              }
+              }
             />
-            <NumberOfRates>20</NumberOfRates>
-            <SteeringImage
-              resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/heart.png')}
-            />
-            <NumberOfRates>20</NumberOfRates>
-          </RowView>
-        </BottomContainer>
-      </View>
-    </ImagePlaceholder>
-  </TouchableScale>
-);
+          </View>
+
+          <BottomContainer>
+            <RowView>
+              <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(imageTime && imageTime).fromNow()}</Text>
+            </RowView>
+            <RowView>
+              <SteeringImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../../assets/images/heart.png')}
+              />
+              <NumberOfRates style={{ marginLeft: 5 }} >{imageLikes && imageLikes}</NumberOfRates>
+            </RowView>
+          </BottomContainer>
+        </View>
+      </ImagePlaceholder>
+    </TouchableScale >
+  )
+};
 export const ImageTitleWrapper = styled.View`
   justify-content: space-between;
   align-items: center;

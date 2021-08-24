@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, SERVICES, SUBSERVICES, NEWSCOMMENT, ISLOADER, ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS, NEWSITEMDETAILS, GETADDS, STORIESLIST } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER, ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS, NEWSITEMDETAILS, GETADDS, STORIESLIST } from "../constant/constant";
 
 const INITIAL_STATE = {
     signUpUser: false,
@@ -13,6 +13,7 @@ const INITIAL_STATE = {
     newsComment: {},
     getAdds: {},
     getStories: {},
+    getNewsImages: {},
     storiesList: {},
     getReviews: {},
     isLoader: false,
@@ -100,6 +101,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 getStories: action.payload
+            })
+        case GETNEWSIMAGES:
+            return ({
+                ...state,
+                getNewsImages: action.payload
             })
         default:
             return state;

@@ -53,13 +53,19 @@ const Services = ['service2', 'Nano Ceramic', 'service3'];
 
 export const BookingScreen: React.FC = ({ route }: any) => {
   const { serviceId, subserviceId } = route.params
+  
   const [openModal, setopenModal] = useState(false);
 
   let dispatch = useDispatch()
+
   const isError = useSelector((state: any) => state.reducer.isError);
+
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
   const navigation = useNavigation();
+
   const [dates1, setDates1] = useState([]);
+
   const bookingMethods = useForm<IBookingProp>({
     defaultValues: {
       name: currentUser && currentUser.full_name && currentUser.full_name.toString(),

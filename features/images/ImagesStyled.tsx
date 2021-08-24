@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
+import { useSelector, useDispatch } from 'react-redux';
 import { SliderBox } from "react-native-image-slider-box";
-
+import { _imageNewsLike } from '../../store/action/imageAction'
 import { Colors } from '../../constants/Colors';
 
 export const ImagesContainer = styled(SafeAreaView)`
@@ -73,14 +74,31 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
   onPress,
   getnavigation,
 }) => {
+
+  let dispatch = useDispatch()
+
   const [sliderArrSt, setsliderArrSt] = useState([])
+
   const [imageData, setimageData] = useState([])
+
   const [imageLikes, setimageLikes] = useState("")
+
   const [imageTime, setimageTime] = useState('')
+
+  const [imagemediaId, setimagemediaId] = useState('')
+
   const [flag, setflag] = useState(false)
+
+  const [likebyme, setlikebyme] = useState('')
+
   const navigation = useNavigation()
+
   let imgSliderArr = []
+
   let imgData = []
+
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
 
   useEffect(() => {
     if (imageUri) {
@@ -89,12 +107,25 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
         imgData.push(mediaObj)
       })
     }
+    console.log(imageUri, '[][][][][][]imageUri')
     setimageData(imgData)
     setimageLikes(imageUri[0].likesCount)
     setimageTime(imageUri[0].createdAt)
+    setimagemediaId(imageUri[0]._id)
+    setlikebyme(imageUri[0].likedByMe)
     setsliderArrSt(imgSliderArr)
     setflag(!flag)
   }, [])
+  const numberOfLikes = () => {
+    dispatch(_imageNewsLike(currentUser, imagemediaId, navigation))
+    if (!likebyme) {
+      setimageLikes(imageLikes + 1)
+    } else {
+      if (imageLikes > 0) {
+        setimageLikes(imageLikes - 1)
+      }
+    }
+  }
   return (
     <TouchableScale
       style={{ flex: 1 }}
@@ -129,8 +160,9 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               currentImageEmitter={index => {
                 setimageLikes(imageData && imageData[index] && imageData[index].likesCount && imageData[index].likesCount)
                 setimageTime(imageData && imageData[index] && imageData[index].createdAt && imageData[index].createdAt)
+                setimagemediaId(imageData && imageData[index] && imageData[index]._id && imageData[index]._id)
+                setlikebyme(imageData && imageData[index] && imageData[index].likedByMe && imageData[index].likedByMe)
                 setflag(!flag)
-                console.log(index, imageData, '..;;;;;;;;;;;;;;;;;')
               }
               }
             />
@@ -140,13 +172,22 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
             <RowView>
               <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(imageTime && imageTime).fromNow()}</Text>
             </RowView>
-            <RowView>
-              <SteeringImage
-                resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/images/heart.png')}
-              />
-              <NumberOfRates style={{ marginLeft: 5 }} >{imageLikes && imageLikes}</NumberOfRates>
-            </RowView>
+            <TouchableOpacity
+
+
+              onPress={() => {
+                setlikebyme(!likebyme)
+                numberOfLikes()
+              }}
+            >
+              <RowView>
+                <SteeringImage
+                  resizeMode={FastImage.resizeMode.contain}
+                  source={require('../../assets/images/heart.png')}
+                />
+                <NumberOfRates style={{ marginLeft: 5 }} >{imageLikes && imageLikes}</NumberOfRates>
+              </RowView>
+            </TouchableOpacity>
           </BottomContainer>
         </View>
       </ImagePlaceholder>

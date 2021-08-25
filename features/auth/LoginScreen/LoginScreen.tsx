@@ -47,11 +47,9 @@ export const LoginScreen: React.FC = () => {
     },
   });
   function onSubmit(model: LoginProp) {
-    console.warn('form submitted', model);
 
-    dispatch(_signIn({ emailOrPhone: model.country_number + model.phone_number, password: model.password }))
+    dispatch(_signIn({ emailOrPhone: model.country_number + model.phone_number, password: model.password },navigation))
 
-    console.log(model.country_number.concat(model.phone_number), 'co');
   }
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>

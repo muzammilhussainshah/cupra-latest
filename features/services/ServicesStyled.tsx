@@ -1,18 +1,19 @@
-import React from 'react';
-import { ActivityIndicator } from 'react-native';
+import React, { useRef } from 'react';
+import { ActivityIndicator, View, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { _getSubServiceRating } from '../../store/action/serviceAction'
 import { Colors } from '../../constants/Colors';
+import Video from 'react-native-video';
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${Colors.secondary};
-  justify-content: center;
-`;
+  `;
+// justify-content: center;
 const CardTileCoverContainer = styled.View`
   justify-content: center;
   align-items: center;
@@ -31,24 +32,51 @@ const CardPlaceholder = styled.View`
   margin-left: 20px;
 `;
 
-export const CardBannerSection = () => (
-  <TouchableScale
-    style={{}}
-    activeScale={0.9}
-    tension={50}
-    friction={7}
-    useNativeDriver
-    onPress={() => { }}>
-    <CardPlaceholder>
-      <CardTileCoverContainer>
-        <CardTileCover
-          resizeMode={FastImage.resizeMode.cover}
-          source={require('../../assets/images/car.png')}
-        />
-      </CardTileCoverContainer>
-    </CardPlaceholder>
-  </TouchableScale>
-);
+export const CardBannerSection = ({ bannerPath, banner_type }: any) => {
+  const videoPlayer = useRef(null);
+
+  return (
+    <TouchableScale
+      style={{}}
+      activeScale={0.9}
+      tension={50}
+      friction={7}
+      useNativeDriver
+      onPress={() => { }}>
+      <CardPlaceholder>
+        <CardTileCoverContainer>
+          {/* {alert(bannerPath)} */}
+          {
+            banner_type === "VIDEO" ?
+              <View style={{ width: 360, height: 160, borderRadius: 14 }}>
+                <Video source={{ uri: bannerPath }}   // Can be a URL or a local file.
+                  ref={videoPlayer}
+                  // Store reference
+                  // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                  // onError={this.videoError}               // Callback when video cannot be loaded
+                  resizeMode="cover"
+                  repeat={true}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                  }} />
+              </View>
+              :
+              <CardTileCover
+                resizeMode={FastImage.resizeMode.cover}
+                source={{ uri: bannerPath }}
+              />
+
+          }
+        </CardTileCoverContainer>
+      </CardPlaceholder>
+    </TouchableScale>
+  )
+}
+
 
 const UserName = styled.Text`
   color: ${Colors.titleGray};
@@ -76,7 +104,7 @@ export const ServicesGreeting: React.FC<IGreetingTypeProp> = ({
   return (
 
     <GreetingContainer>
-      <UserName>Hello {name} !</UserName>
+      <ServiceTitle>Hello {name} !</ServiceTitle>
       <ServiceTitle>{seriveTitle}</ServiceTitle>
       {isLoader &&
         <ActivityIndicator
@@ -152,49 +180,84 @@ export type IServiceTypeProp = {
   serviceImage?: any;
   serviceName: string | undefined;
   numberOfService?: number;
+  navigation?: any;
   numberOfRates?: number;
+  getserviceId?: string;
+  itemId?: string;
+
   onPress?: () => void;
   isBooking?: boolean;
 };
 export const ServicesTile: React.FC<IServiceTypeProp> = ({
   serviceImage,
   serviceName,
+  getserviceId,
   numberOfService,
   numberOfRates,
+  itemId,
+  navigation,
   onPress,
   isBooking,
-}) => (
-  <TouchableScale
-    style={{ flex: 1, maxWidth: "50%" }}
-    activeScale={0.9}
-    tension={50}
-    friction={7}
-    useNativeDriver
-    onPress={onPress}>
-    <SevicesPlaceholder>
-      <ServiceTileCover source={serviceImage} />
-      {isBooking && (
-        <BookingLabel>
-          <BookingTitle>Book Now</BookingTitle>
-        </BookingLabel>
-      )}
-      <ServiceName numberOfLines={1}>{serviceName}</ServiceName>
-      <BottomContainer>
-        <RowView>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/steering.png')}
-          />
-          <ServiceNumber>{numberOfService}+</ServiceNumber>
-        </RowView>
-        <RowView>
-          <NumberOfRates>{numberOfRates}</NumberOfRates>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/star.png')}
-          />
-        </RowView>
-      </BottomContainer>
-    </SevicesPlaceholder>
-  </TouchableScale>
-);
+}) => {
+  let dispatch = useDispatch()
+  const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  console.log(getserviceId, 'vvv')
+  return (
+    !isLoader ?
+      <TouchableScale
+        style={{ flex: 1, maxWidth: "50%" }}
+        activeScale={0.9}
+        tension={50}
+        friction={7}
+        useNativeDriver
+        onPress={onPress}>
+        <SevicesPlaceholder>
+          <ServiceTileCover source={serviceImage} />
+          {isBooking && (
+            <BookingLabel>
+              <BookingTitle>Book Now</BookingTitle>
+            </BookingLabel>
+          )}
+          <ServiceName numberOfLines={1}>{serviceName}</ServiceName>
+          <BottomContainer>
+            <RowView>
+              <SteeringImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../../assets/images/steering.png')}
+              />
+              <ServiceNumber>{numberOfService}+</ServiceNumber>
+            </RowView>
+            {isBooking ?
+              <TouchableOpacity
+
+                onPress={() =>
+                  dispatch(_getSubServiceRating(currentUser, itemId, serviceName, navigation, getserviceId))
+                  // navigation.navigate('GetAndSubmitReview', navigation,)
+
+                }
+              >
+
+                <RowView>
+                  <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>
+                  <SteeringImage
+                    resizeMode={FastImage.resizeMode.contain}
+                    source={require('../../assets/images/RealStar.png')}
+                  />
+                </RowView>
+              </TouchableOpacity>
+              :
+              <RowView>
+                <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>
+                <SteeringImage
+                  resizeMode={FastImage.resizeMode.contain}
+                  source={require('../../assets/images/RealStar.png')}
+                />
+              </RowView>
+            }
+          </BottomContainer>
+        </SevicesPlaceholder>
+      </TouchableScale > :
+      <View/>
+  )
+};

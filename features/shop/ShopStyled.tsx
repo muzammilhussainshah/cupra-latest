@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
+
 import { Text, TouchableOpacity, View } from "react-native";
+
+import GetReviewComponent from '../../components/GetReviewComponent';
+
 import FastImage from 'react-native-fast-image';
+
 import { SafeAreaView, } from 'react-native-safe-area-context';
+
 import TouchableScale from 'react-native-touchable-scale';
+
 import styled from 'styled-components/native';
+
 import { Colors } from '../../constants/Colors';
+
 import { height, width } from '../../constants/Layout';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { likeDislike, getReview } from '../../store/action/shopAction';
+
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 export const ShopContainer = styled(SafeAreaView)`
   flex: 1;
@@ -79,7 +94,14 @@ export type ISubCategoryTypeProp = {
   serviceName: string | undefined | any;
   numberOfService?: number;
   numberOfRates?: number;
+  navigation?: any;
   noOfLikes?: any;
+  item_id?: string;
+  rating?: number;
+  currentUser?: any;
+  likedByMe?: string;
+  _func?: Function;
+
   onPress?: () => void;
   price?: number;
 };
@@ -88,13 +110,22 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   serviceName,
   numberOfService,
   numberOfRates,
+  item_id,
   noOfLikes,
+  rating,
+  _func,
   onPress,
+  currentUser,
+  likedByMe,
+  navigation,
   price
-}) => {
+}: any) => {
   const [totalLikes, settotalLikes] = useState(noOfLikes);
-  const [sendLike, setsendLike] = useState(false);
+  const [sendLike, setsendLike] = useState(likedByMe);
+  const dispatch = useDispatch();
+
   const numberOfLikes = () => {
+    dispatch(likeDislike(item_id, currentUser, likedByMe, navigation))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -112,12 +143,14 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
       useNativeDriver
       onPress={onPress}>
       <SubCategoryPlaceholder>
-        <View style={{ height: "100%", width: "100%", marginLeft: 15, padding: 5, alignItems: "flex-end", position: "absolute", zIndex: 1 }}>
+        <View style={{ height: "90%", bottom: "15%", width: "100%", marginLeft: 15, padding: 5, alignItems: "flex-end", position: "absolute", zIndex: 1 }}>
           <TouchableOpacity
             onPress={() => {
               setsendLike(!sendLike)
               numberOfLikes()
+
             }}
+            activeOpacity={0.9}
             style={{
               justifyContent: "center",
               backgroundColor: "rgba( 85 , 83 , 85 , 0.9 )",
@@ -128,10 +161,10 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             }}>
             <FastImage
               style={{ height: 25, width: 25, }}
-              source={require('../../assets/images/heart.png')}
+              source={require('../../assets/images/RealHeart.png')}
               resizeMode="contain"
             />
-            <Text style={{ color: "#ffffff" }}>{totalLikes}</Text>
+            <Text style={{ color: "#ffffff", elevation: 2 }}>{totalLikes}</Text>
           </TouchableOpacity>
         </View>
         <SubCategoryTileCover source={serviceImage} />
@@ -150,15 +183,18 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             />
             <SubCategoryNumber>Remaining {numberOfService}+</SubCategoryNumber>
           </RowView>
-          <RowView>
-            <NumberOfRates>{numberOfRates}</NumberOfRates>
+          <TouchableOpacity
+            onPress={() => dispatch(getReview(item_id, currentUser, navigation, serviceName))}
+            style={{ flexDirection: "row" }}>
+            <NumberOfRates>{Math.floor(rating * 10) / 10}</NumberOfRates>
+            {/* <NumberOfRates>{rating}1</NumberOfRates> */}
             <SteeringImage
               resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/star.png')}
+              source={require('../../assets/images/RealStar.png')}
             />
-          </RowView>
+          </TouchableOpacity>
         </BottomContainer>
       </SubCategoryPlaceholder>
-    </TouchableScale>
+    </TouchableScale >
   )
 };

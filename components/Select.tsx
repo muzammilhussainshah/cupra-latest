@@ -71,6 +71,7 @@ export type SelectProps = {
  */
 export const Select: React.FC<SelectProps> = props => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [monthDisable, setmonthDisable] = useState(false);
   const [selectState, setSelectState] = useState<SelectItem | undefined>(
     props.value,
   );
@@ -137,12 +138,34 @@ export const Select: React.FC<SelectProps> = props => {
               maxToRenderPerBatch={10}
               data={props.items}
               // data={props.items.filter(item => item?.name) as SelectItem[]}
-              renderItem={({ item }) => (
-                <Item onChange={() => handleChange(item as SelectItem)}>
-                  {/* {item.name} */}
-                  {(item as SelectItem)?.name}
-                </Item>
-              )}
+              renderItem={({ item }: any) => {
+                let currentDateInNmbr = Date.now()
+                let selectedDateInNmbr = Date.parse(item.id)
+                let disableMonth;
+                // console.log(currentDateInNmbr, selectedDateInNmbr, 'selectedDateInNmbrselectedDateInNmbrselectedDateInNmbr')
+                if (currentDateInNmbr > (selectedDateInNmbr + 2.628e+9)) {
+                  disableMonth = true
+                } else {
+                  disableMonth = false
+                }
+                return (
+                  <>
+                    {/* {console.log(item, disableMonth, ' item item item item item item item item item item item item item item item item item item item item item item item')} */}
+                    <Item
+                      getDisable={disableMonth}
+                      onChange={() => {
+                        handleChange(item as SelectItem)
+                        // if (currentDateInNmbr > (selectedDateInNmbr + 2.628e+9)) {
+                        // } else {
+                        // }
+                      }}>
+                      {/* {item.name} */}
+                      {(item as SelectItem)?.name}
+                    </Item>
+                  </>
+                )
+              }
+              }
               // keyExtractor={item => item.dateId}
 
               keyExtractor={item => (item as SelectItem).id.toString()}

@@ -29,9 +29,10 @@ export const ServicesScreen: React.FC = () => {
   const getServices = useSelector((state: any) => state.reducer.services)
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(_getServices(currentUser))
+    dispatch(_getServices(currentUser, navigation))
   }, [])
 
   useEffect(() => {
@@ -39,34 +40,36 @@ export const ServicesScreen: React.FC = () => {
     setflag(!flag)
   }, [getServices])
 
-  const navigation = useNavigation();
   return (
     <Container>
       <Header
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
       />
-      <CardBannerSection />
+      {/* <CardBannerSection /> */}
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book a service ?'}
       />
-      <FlatList
+      
+      {services.length > 0 && <FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item: any) => item._id}
         data={services}
         renderItem={({ item }: any) => (
-
-          <ServicesTile
-            numberOfRates={item.total_rate}
-            numberOfService={item.total_bookings}
-            serviceName={item.en_name}
-            serviceImage={{ uri: item.image }}
-            onPress={() => navigation.navigate('subservice', { item, 'serviceId': item._id })}
-          />
+          <>
+            < ServicesTile
+              numberOfRates={item.rating}
+              numberOfService={item.total_bookings}
+              serviceName={item.en_name}
+              serviceImage={{ uri: item.image }}
+              onPress={() => navigation.navigate('subservice', { item, 'serviceId': item._id })}
+            />
+          </>
         )}
-      />
+      />}
+      
     </Container>
   );
 };

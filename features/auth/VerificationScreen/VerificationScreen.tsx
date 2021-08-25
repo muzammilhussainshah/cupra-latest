@@ -45,7 +45,7 @@ export const VerificationScreen: React.FC = () => {
 
 
 
-  console.log(getroutName, 'getroutName')
+  // console.log(getroutName, 'getroutName')
   return (
     <Container>
       <VerificationHeaderTitle />

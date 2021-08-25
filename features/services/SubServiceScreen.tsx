@@ -52,11 +52,11 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const routes = route.params
 
   const { serviceId } = routes;
-
+  console.log(routes, 'routerouterouterouterouterouteroute')
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(_getSubServices(currentUser, serviceId))
+    dispatch(_getSubServices(currentUser, serviceId, navigation))
   }, [])
 
 
@@ -67,31 +67,39 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   return (
     <Container>
       <Header isGoBack={true} navigateBack={() => navigation.goBack()} />
-      <CardBannerSection />
+      <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book this service ?'}
       />
 
-      <FlatList
+      {subservices.length > 0 && <FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item: any) => item.id}
         data={subservices}
         renderItem={({ item }: any) => (
-          <ServicesTile
-            isBooking={true}
-            numberOfRates={item.total_rate}
-            numberOfService={item.total_bookings}
-            serviceName={item.en_name}
-            serviceImage={{ uri: item.icon }}
-            onPress={() => {
-              navigation.push('booking');
-            }}
-          />
+          <>
+            {/* {console.log(item, '++++++++++++++')} */}
+
+            <ServicesTile
+              navigation={navigation}
+              isBooking={true}
+              numberOfRates={item.rating}
+              numberOfService={item.total_bookings}
+              serviceName={item.en_name}
+              itemId={item._id}
+              getserviceId={serviceId}
+              serviceImage={{ uri: item.icon }}
+              onPress={() => {
+                navigation.push('booking', { serviceId, subserviceId: item._id });
+              }}
+            />
+          </>
         )}
       />
+      }
     </Container>
   );
 };

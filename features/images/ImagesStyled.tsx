@@ -66,11 +66,13 @@ const BottomContainer = styled.View`
 
 export type IImageTypeProp = {
   imageUri?: any;
+  newsImagesIndex?: any;
   onPress?: () => void;
   getnavigation?: () => void;
 };
 export const ImageTile: React.FC<IImageTypeProp> = ({
   imageUri,
+  newsImagesIndex,
   onPress,
   getnavigation,
 }) => {
@@ -87,9 +89,11 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 
   const [imagemediaId, setimagemediaId] = useState('')
 
+  const [imageIndex, setimageIndex] = useState(0)
+
   const [flag, setflag] = useState(false)
 
-  const [likebyme, setlikebyme] = useState('')
+  const [likebyme, setlikebyme] = useState()
 
   const navigation = useNavigation()
 
@@ -97,8 +101,9 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 
   let imgData = []
 
-  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
 
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
   useEffect(() => {
     if (imageUri) {
@@ -107,6 +112,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
         imgData.push(mediaObj)
       })
     }
+    // console.log(getNewsImages, '111111111111111111111111')
     console.log(imageUri, '[][][][][][]imageUri')
     setimageData(imgData)
     setimageLikes(imageUri[0].likesCount)
@@ -116,8 +122,11 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
     setsliderArrSt(imgSliderArr)
     setflag(!flag)
   }, [])
+  useEffect(() => {
+
+  }, [getNewsImages])
   const numberOfLikes = () => {
-    dispatch(_imageNewsLike(currentUser, imagemediaId, navigation))
+    dispatch(_imageNewsLike(currentUser, imagemediaId, navigation, getNewsImages, likebyme, newsImagesIndex, imageIndex))
     if (!likebyme) {
       setimageLikes(imageLikes + 1)
     } else {
@@ -126,6 +135,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       }
     }
   }
+  // console.log(imageData, 'imageDataimageDataimageData')
   return (
     <TouchableScale
       style={{ flex: 1 }}
@@ -158,6 +168,8 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               }
               }
               currentImageEmitter={index => {
+                // console.log(index, 'indexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindex')
+                setimageIndex(index)
                 setimageLikes(imageData && imageData[index] && imageData[index].likesCount && imageData[index].likesCount)
                 setimageTime(imageData && imageData[index] && imageData[index].createdAt && imageData[index].createdAt)
                 setimagemediaId(imageData && imageData[index] && imageData[index]._id && imageData[index]._id)
@@ -173,8 +185,6 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(imageTime && imageTime).fromNow()}</Text>
             </RowView>
             <TouchableOpacity
-
-
               onPress={() => {
                 setlikebyme(!likebyme)
                 numberOfLikes()

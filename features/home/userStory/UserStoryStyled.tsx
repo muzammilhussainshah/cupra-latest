@@ -22,8 +22,8 @@ const RowView = styled.View`
   height: 80px;
 `;
 const UserImage = styled(FastImage)`
-  height: 100%;
-  width: 100%;
+  height: 90%;
+  width: 90%;
 `;
 type UserImageProps = {
   userImage: any;
@@ -31,13 +31,13 @@ type UserImageProps = {
 export const Stories: React.FC<UserImageProps> = ({ userImage }) => (
   <RowView>
     <StoryBorderView
-      style={{ overflow: "hidden",   justifyContent: "center", alignItems: "center" }}>
-      <View style={{ height: "68%", width: "68%", borderRadius: 50 , overflow: "hidden", position: "absolute", }}>
+      style={{ overflow: "hidden", justifyContent: "center", alignItems: "center" }}>
+      <View style={{ height: "85%", width: "85%", borderRadius: 50, overflow: "hidden", position: "absolute", }}>
         {/* <UserImage source={require("../../../assets/users/border.png")} /> */}
         <UserImage source={userImage} />
 
       </View>
-      
+
       <UserImage source={require("../../../assets/users/border.png")} />
     </StoryBorderView>
   </RowView>

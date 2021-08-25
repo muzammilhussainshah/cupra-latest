@@ -36,10 +36,11 @@ export const ImagesScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id}
         data={getNewsImages}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <>
-            {console.log(item, ';;;;;;;;;;;;;;;qqqqqqq')}
+            {/* {console.log(item, ';;;;;;;;;;;;;;;qqqqqqq')} */}
             < ImageTile
+              newsImagesIndex={index}
               imageUri={item.media && item.media}
             // onPress={() => navigation.navigate('showImage', { imageURL: item.uri })}
             />

@@ -1,11 +1,14 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchableScale from 'react-native-touchable-scale';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
+import { _imageNewsLike } from '../../store/action/imageAction'
 import { Colors } from '../../constants/Colors';
+import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const VideoContainer = styled(SafeAreaView)`
   background-color: ${Colors.secondary};
@@ -13,11 +16,7 @@ export const VideoContainer = styled(SafeAreaView)`
 `;
 const VideoPlaceholder = styled.View`
   height: 220px;
-  margin-right: 20px;
   margin-left: 20px;
-  /* margin-bottom: 20px; */
-  /* justify-content: center;
-  align-items: center; */
 `;
 const VideoTileCover = styled(FastImage)`
   width: 160px;
@@ -46,7 +45,8 @@ const RowView = styled.View`
 const SteeringImage = styled(FastImage)`
   width: 20px;
   height: 20px;
-`;
+  margin-right:10px;
+  `;
 const NumberOfRates = styled.Text`
   color: ${Colors.white};
   font-size: 18px;
@@ -57,15 +57,15 @@ const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top:10px
+  margin-top: 10px;
 `;
 const VideoLabel = styled.View`
   position: absolute;
-  background-color: rgba(0, 0, 0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
-  width:160px;
-  height:150px;
+  width: 160px;
+  height: 150px;
   border-radius: 10px;
 `;
 const BookingTitle = styled.View`
@@ -76,46 +76,73 @@ const BookingTitle = styled.View`
 export type IVideoTypeProp = {
   VideoImage?: any;
   numberOfRates?: number;
+  likes?: number;
+  navigation?: any;
+  mediaId?: any;
+  getDate?: any;
+  likedByMe?: boolean;
   onPress?: () => void;
 };
-export const VideoTile: React.FC<IVideoTypeProp> = ({
-  VideoImage,
-  onPress,
-}) => (
-  <TouchableScale
-    style={{ flex: 1 }}
-    activeScale={0.9}
-    tension={50}
-    friction={7}
-    useNativeDriver
-    onPress={onPress}>
-    <VideoPlaceholder>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <VideoTileCover source={VideoImage} />
-        <VideoLabel>
-          <BookingTitle><Ionicons name="play-circle-outline" size={50} color="white" /></BookingTitle>
-        </VideoLabel>
-      </View>
-      <BottomContainer>
-        <RowView>
-          <Text style={{ color: 'white', fontSize: 15 }}>29 min</Text>
-        </RowView>
-        <RowView>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/comment.png')}
-          />
-          <NumberOfRates>20</NumberOfRates>
-          <SteeringImage
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../../assets/images/RealHeart.png')}
-          />
-          <NumberOfRates>20</NumberOfRates>
-        </RowView>
-      </BottomContainer>
-    </VideoPlaceholder>
-  </TouchableScale >
-);
+export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate, mediaId, likedByMe, navigation, onPress }) => {
+
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+  const [imageLikes, setimageLikes] = useState(likes)
+
+  let dispatch = useDispatch()
+
+  const [likebyme, setlikebyme] = useState(likedByMe)
+
+  const numberOfLikes = () => {
+    dispatch(_imageNewsLike(currentUser, mediaId, navigation))
+    if (!likebyme) {
+      setimageLikes(imageLikes + 1)
+    } else {
+      if (imageLikes > 0) {
+        setimageLikes(imageLikes - 1)
+      }
+    }
+  }
+  return (
+    <TouchableScale
+      style={{ flex: 1 }}
+      activeScale={0.9}
+      tension={50}
+      friction={7}
+      useNativeDriver
+      onPress={onPress}>
+      <VideoPlaceholder>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <VideoTileCover source={VideoImage} />
+          <VideoLabel>
+            <BookingTitle>
+              <Ionicons name="play-circle-outline" size={50} color="white" />
+            </BookingTitle>
+          </VideoLabel>
+        </View>
+        <BottomContainer>
+          <RowView>
+            <Text style={{ color: 'white', fontSize: 15 }}> {moment(getDate).fromNow()}</Text>
+          </RowView>
+          <TouchableOpacity
+            onPress={() => {
+              setlikebyme(!likebyme)
+              numberOfLikes()
+            }}
+          >
+            <RowView>
+              <SteeringImage
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../../assets/images/heart.png')}
+              />
+              <NumberOfRates>{imageLikes}</NumberOfRates>
+            </RowView>
+          </TouchableOpacity>
+        </BottomContainer>
+      </VideoPlaceholder>
+    </TouchableScale>
+  )
+};
 export const VideoTitleWrapper = styled.View`
   justify-content: space-between;
   align-items: center;

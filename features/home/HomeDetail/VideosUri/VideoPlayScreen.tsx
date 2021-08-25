@@ -4,7 +4,7 @@ import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 
 // TODO:use TYPES HERE 
-export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
+export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
   const { videoURL } = route.params;
   const videoPlayer = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);

@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState } from 'react';
 
-import { View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Alert } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -16,6 +16,8 @@ import { _getAdds, _getNews, _storiesList, _stories } from '../../store/action/n
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import InfiniteScroll from 'react-native-infinite-scroll';
+
 export type HomeScreenTypeProp = {
   title: string;
 };
@@ -28,7 +30,11 @@ export const HomeScreen: React.FC = () => {
 
   const [currentUserSt, setcurrentUserSt] = useState('')
 
-  const isLoader = useSelector((state:any) => state.reducer.isLoader);
+  const [pagination, setpagination] = useState(2);
+
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
+
+  const paginationLoader = useSelector((state: any) => state.reducer.paginationLoader);
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
@@ -50,13 +56,25 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     setgetNewsSt(getNews)
   }, [getNews, currentUser])
-  
+
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       setgetStoriesSt(getStories)
     }
-    
+
   }, [getStories])
+
+
+  const loadMorePage = () => {
+    if (paginationLoader != true) {
+      // _getNews(currentUser, pagination, freePotatoes)
+      dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
+      // setpagination(pagination + 1)
+    }
+  }
+
+
+
   return (
     < Container >
       <Header
@@ -113,11 +131,42 @@ export const HomeScreen: React.FC = () => {
               }
             </TouchableOpacity>
           </View>
-          <Body>
-            <FlatList
-              data={getNewsSt}
-              renderItem={({ item,index }) => {
-                return (
+          <InfiniteScroll
+            style={{}}
+            contentContainerStyle={{ paddingBottom: 130 }}
+
+            showsHorizontalScrollIndicator={false}
+            horizontal={false}
+            onLoadMoreAsync={loadMorePage}
+          >
+            {/* <Body> */}
+            {getNewsSt.length > 0
+              // &&
+              //   <FlatList
+              //     data={getNewsSt}
+              //     renderItem={({ item, index }) => {
+              //       return (
+              //         <CardView
+              //           navigation={navigation}
+              //           icon={item.icon}
+              //           likedByMe={item.likedByMe}
+              //           likes_count={item.likes_count}
+              //           name={item.en_header}
+              //           disc={item.en_desc}
+              //           index={index}
+              //           commentCount={item.comments_count}
+              //           postTime={item.createdAt}
+              //           _id={item._id}
+              //           filterdBy={filterdBy}
+              //           onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy, likedByMe: item.likedByMe, index })}
+              //         />
+              //       )
+              //     }}
+              //   />
+              &&
+              <FlatList
+                data={getNewsSt}
+                renderItem={({ item, index }) => (
                   <CardView
                     navigation={navigation}
                     icon={item.icon}
@@ -130,12 +179,27 @@ export const HomeScreen: React.FC = () => {
                     postTime={item.createdAt}
                     _id={item._id}
                     filterdBy={filterdBy}
-                    onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy,likedByMe:item.likedByMe,index })}
+                    onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy, likedByMe: item.likedByMe, index })}
                   />
-                )
-              }}
-            />
-          </Body>
+                )}
+                keyExtractor={(item, index) => String(index)}
+              />
+            }
+            {
+              (paginationLoader === true) ? (
+                <View style={{
+                  justifyContent: 'center',
+                  alignItems: "center",
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}>
+                  <ActivityIndicator size="large" color="#ffff" />
+                </View>
+              ) : null
+            }
+          </InfiniteScroll>
+          {/* </Body> */}
+
         </>
       }
     </Container >

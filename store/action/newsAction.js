@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT, PAGINATIONLOADER } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -199,15 +199,12 @@ export const _stories = (currentUser, filterd_by, navigation) => {
         }
     }
 }
-export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable) => {
-    console.log(currentUser, page_size, page_index, filterd_by, 'uniqueId')
+export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable, getNews, setpagination) => {
     return async (dispatch) => {
+        dispatch({ type: PAGINATIONLOADER, payload: true, });
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
-        // console.log(deviceToken, 'deviceToken', model)
-        // console.log(deviceToken, 'uniqueId')
-        dispatch({ type: GETNEWS, payload: {} })
-        // LoaderDisable &&
+        !getNews && dispatch({ type: GETNEWS, payload: {} })
         if (!LoaderDisable) dispatch(_loading(true));
         try {
             const option = {
@@ -223,9 +220,17 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                dispatch({ type: GETNEWS, payload: resp.data.data })
-                // console.log(resp, 'resp _getAdds')
+                if (getNews) {
+                    let getNewsClone = getNews;
+                    getNewsClone = getNewsClone.concat(resp.data.data);
+                    dispatch({ type: GETNEWS, payload: getNewsClone });
+                    setpagination(page_index + 1)
+                }
+                else {
+                    dispatch({ type: GETNEWS, payload: resp.data.data })
+                }
                 dispatch(_loading(false));
+                dispatch({ type: PAGINATIONLOADER, payload: false, });
 
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
@@ -241,18 +246,16 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
                 dispatch(_error(resp.data.error.messageEn));
                 dispatch(_loading(false));
             }
-
-            console.log(resp, 'resp _getNews')
+            console.log(resp, 'resp _getNews', getNews)
             dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));
-
             console.log(err.response, "error from _getNews", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }
-export const _likeDisLike = (currentUser, news_id, navigation, filterd_by, getNews, likedByMe,index) => {
+export const _likeDisLike = (currentUser, news_id, navigation, filterd_by, getNews, likedByMe, index) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -278,13 +281,13 @@ export const _likeDisLike = (currentUser, news_id, navigation, filterd_by, getNe
             if (resp.data.status === 200) {
                 if (likedByMe) {
                     itemNews.likedByMe = false;
-                    itemNews.likes_count=(itemNews.likes_count)-1;
+                    itemNews.likes_count = (itemNews.likes_count) - 1;
                 }
                 else {
                     itemNews.likedByMe = true;
-                    itemNews.likes_count=(itemNews.likes_count)+1;
+                    itemNews.likes_count = (itemNews.likes_count) + 1;
                 }
-                console.log(getNewsClone,"555555555555555555555")
+                console.log(getNewsClone, "555555555555555555555")
                 dispatch({ type: GETNEWS, payload: getNewsClone })
 
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {

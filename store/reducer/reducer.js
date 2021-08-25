@@ -1,22 +1,4 @@
-import {
-  SIGNUPUSER,
-  CURRENTUSER,
-  SERVICES,
-  SUBSERVICES,
-  NEWSCOMMENT,
-  ISLOADER,
-  ISERROR,
-  GETSTORIES,
-  SHOPCATOGERY,
-  SHOPSUBCATOGERY,
-  ITEMDETAILS,
-  GETREVIEWS,
-  GETNEWS,
-  NEWSITEMDETAILS,
-  GETADDS,
-  STORIESLIST,
-  VIDEOS,
-} from '../constant/constant';
+import { SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER, ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS, NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS } from "../constant/constant";
 
 const INITIAL_STATE = {
   signUpUser: false,
@@ -31,95 +13,102 @@ const INITIAL_STATE = {
   newsComment: {},
   getAdds: {},
   getStories: {},
+  getNewsImages: {},
   storiesList: {},
   getReviews: {},
   isLoader: false,
   isError: false,
   videos: [],
-};
+
+}
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SIGNUPUSER:
-      return {
+      return ({
         ...state,
-        signUpUser: action.payload,
-      };
+        signUpUser: action.payload
+      })
     case ISLOADER:
-      return {
+      return ({
         ...state,
-        isLoader: action.payload,
-      };
+        isLoader: action.payload
+      })
     case ISERROR:
-      return {
+      return ({
         ...state,
-        isError: action.payload,
-      };
+        isError: action.payload
+      })
     case CURRENTUSER:
-      return {
+      return ({
         ...state,
-        currentUser: action.payload,
-      };
+        currentUser: action.payload
+      })
     case SHOPCATOGERY:
-      return {
+      return ({
         ...state,
-        shopCatogery: action.payload,
-      };
+        shopCatogery: action.payload
+      })
     case SHOPSUBCATOGERY:
-      return {
+      return ({
         ...state,
-        shopSubCatogery: action.payload,
-      };
+        shopSubCatogery: action.payload
+      })
     case ITEMDETAILS:
-      return {
+      return ({
         ...state,
-        shopItemDetails: action.payload,
-      };
+        shopItemDetails: action.payload
+      })
     case SERVICES:
-      return {
+      return ({
         ...state,
-        services: action.payload,
-      };
+        services: action.payload
+      })
     case SUBSERVICES:
-      return {
+      return ({
         ...state,
-        subservices: action.payload,
-      };
+        subservices: action.payload
+      })
     case GETREVIEWS:
-      return {
+      return ({
         ...state,
-        getReviews: action.payload,
-      };
+        getReviews: action.payload
+      })
     case GETNEWS:
-      return {
+      return ({
         ...state,
-        getNews: action.payload,
-      };
+        getNews: action.payload
+      })
     case NEWSITEMDETAILS:
-      return {
+      return ({
         ...state,
-        newsItemDetails: action.payload,
-      };
+        newsItemDetails: action.payload
+      })
     case GETADDS:
-      return {
+      return ({
         ...state,
-        getAdds: action.payload,
-      };
+        getAdds: action.payload
+      })
     case STORIESLIST:
-      return {
+      return ({
         ...state,
-        storiesList: action.payload,
-      };
+        storiesList: action.payload
+      })
     case NEWSCOMMENT:
-      return {
+      return ({
         ...state,
-        newsComment: action.payload,
-      };
+        newsComment: action.payload
+      })
     case GETSTORIES:
-      return {
+      return ({
         ...state,
-        getStories: action.payload,
-      };
+        getStories: action.payload
+      })
+    case GETNEWSIMAGES:
+      return ({
+        ...state,
+        getNewsImages: action.payload
+      })
     case VIDEOS:
       return {
         ...state,
@@ -128,4 +117,5 @@ export default (state = INITIAL_STATE, action) => {
     default:
       return state;
   }
-};
+
+}

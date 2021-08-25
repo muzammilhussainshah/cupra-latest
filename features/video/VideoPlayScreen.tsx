@@ -69,6 +69,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 20, top: 20 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
+      <View style={{ width: "95%", height: 160, borderRadius: 14 }}>
       <Video
         onEnd={onEnd}
         onLoad={onLoad}
@@ -76,7 +77,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
         onProgress={onProgress}
         paused={paused}
         ref={videoPlayer}
-        resizeMode={screenType}
+        resizeMode={"cover"}
         onFullScreen={isFullScreen}
         source={{
           uri:
@@ -85,11 +86,13 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
         style={styles.mediaPlayer}
         volume={10}
       />
+      </View>
+
       <MediaControls
         duration={duration}
         isLoading={isLoading}
         mainColor="#333"
-        onFullScreen={onFullScreen}
+        // onFullScreen={onFullScreen}
         onPaused={onPaused}
         onReplay={onReplay}
         onSeek={onSeek}
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
   mediaPlayer: {
     position: 'absolute',
     top: 0,
-    left: 25,
+    left: 0,
     bottom: 0,
     right: 0,
     backgroundColor: 'black',

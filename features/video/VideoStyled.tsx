@@ -113,7 +113,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
       onPress={onPress}>
       <VideoPlaceholder>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <VideoTileCover source={VideoImage} />
+          <VideoTileCover source={{uri:VideoImage}} />
           <VideoLabel>
             <BookingTitle>
               <Ionicons name="play-circle-outline" size={50} color="white" />

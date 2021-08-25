@@ -9,6 +9,8 @@ import {
   VideoTitleWrapper,
 } from '../../../video/VideoStyled';
 import { Header } from '../../../../components/Header';
+import FastImage from 'react-native-fast-image';
+import styled from 'styled-components/native';
 
 import { Colors } from '../../../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,6 +18,12 @@ import { ImagesContainer, ImageTile, ImageTitle, ImageTitleWrapper } from '../..
 import { useDispatch, useSelector } from 'react-redux';
 
 // import { _getItemDetails, getReview } from '../../../store/action/shopAction';
+const VideoTileCover = styled(FastImage)`
+  width: 160px;
+  height: 150px;
+  border-radius: 10px;
+`;
+
 export const VideosUri = ({ route, navigation, }: any) => {
 
   const Wheight = Dimensions.get('window').height;
@@ -53,7 +61,7 @@ export const VideosUri = ({ route, navigation, }: any) => {
             <ImageTitle>Videos</ImageTitle>
             <Ionicons name="filter-outline" size={30} color="#fff" />
           </ImageTitleWrapper>
-          <View style={{ alignItems: videosSlider.length>1?"center":"flex-start",padding: videosSlider.length>1?0:30 }}>
+          <View style={{ alignItems: videosSlider.length > 1 ? "center" : "flex-start", padding: videosSlider.length > 1 ? 0 : 30 }}>
             <FlatList
               numColumns={2}
               showsVerticalScrollIndicator={false}
@@ -70,7 +78,13 @@ export const VideosUri = ({ route, navigation, }: any) => {
                     }
                     activeOpacity={0.7}
                     style={{ height: 160, width: 150, margin: 10, backgroundColor: "rgba(0,0,0,0.5)", borderRadius: 25, justifyContent: "center", alignItems: "center" }}>
-                    <Ionicons name="play-circle-outline" size={50} color="white" />
+                    <VideoTileCover source={{ uri: item }} />
+                    <View style={{
+                      position: "absolute", zIndex: 1
+                    }}>
+
+                      <Ionicons name="play-circle-outline" size={50} color="white" />
+                    </View>
                   </TouchableOpacity>
                 </>
               )}

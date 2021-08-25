@@ -40,6 +40,8 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
   const [imageSlider, setimageSlider] = useState([])
 
+  const [flag, setflag] = useState(false)
+
   const [videosSlider, setvideosSlider] = useState([])
 
   const [fullImageScreen, setFullImageScreen] = useState(false)
@@ -49,6 +51,8 @@ export const HomeDetail = ({ route, navigation }: any) => {
   const isLoader = useSelector((state: any) => state.reducer.isLoader)
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+  const getNews = useSelector((state: any) => state.reducer.getNews)
 
   const [selectedImageIndex, setSelectedImageIndex] = useState()
 
@@ -89,7 +93,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
 
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, item.newsId, navigation, filterdBy))
+    dispatch(_likeDisLike(currentUser, item.newsId, navigation, filterdBy, getNews, item.likedByMe, item.index))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -97,6 +101,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
         settotalLikes(totalLikes - 1)
       }
     }
+    setflag(true)
   }
 
   return (
@@ -132,7 +137,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
       {videosSlider.length > 0 &&
         <View style={{ height: 55, width: 55, position: "absolute", right: 100, top: "35%", zIndex: 1, }}>
           <TouchableOpacity onPress={() => {
-                navigation.navigate("VideosUri", { videosSlider })
+            navigation.navigate("VideosUri", { videosSlider })
           }}
             activeOpacity={0.8}
             style={{
@@ -177,7 +182,9 @@ export const HomeDetail = ({ route, navigation }: any) => {
             </TouchableOpacity>
         }
         <TouchableOpacity style={{ position: 'absolute', top: 50, left: 10, backgroundColor: Colors.primary, height: 50, width: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => {
-          navigation.goBack()
+          // navigation.goBack()
+          if (flag) { navigation.push("drawerStack") }
+          else { navigation.goBack() }
           dispatch({ type: NEWSITEMDETAILS, payload: {} })
         }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}> {'<'} </Text>

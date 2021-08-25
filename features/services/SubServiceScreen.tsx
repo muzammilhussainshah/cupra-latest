@@ -67,7 +67,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   return (
     <Container>
       <Header isGoBack={true} navigateBack={() => navigation.goBack()} />
-      <CardBannerSection bannerPath={routes.item.banner} />
+      <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book this service ?'}

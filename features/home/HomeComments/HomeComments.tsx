@@ -108,6 +108,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
             <View style={{ width: "90%", justifyContent: "center", }}>
               <TextInput
                 placeholder="Type your Comment here"
+                multiline
                 placeholderTextColor={Colors.brownishGrey}
                 value={text}
                 style={{ color: Colors.white }}

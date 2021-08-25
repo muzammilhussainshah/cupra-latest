@@ -252,12 +252,13 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
         }
     }
 }
-export const _likeDisLike = (currentUser, news_id, navigation, filterd_by) => {
+export const _likeDisLike = (currentUser, news_id, navigation, filterd_by, getNews, likedByMe,index) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
-        console.log(uniqueId, 'uniqueId')
-        console.log(deviceToken, 'uniqueId')
+        let getNewsClone = [...getNews];
+        let itemNews = getNewsClone[index];
+
         try {
             const option = {
                 method: 'POST',
@@ -275,7 +276,16 @@ export const _likeDisLike = (currentUser, news_id, navigation, filterd_by) => {
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation, true));
+                if (likedByMe) {
+                    itemNews.likedByMe = false;
+                    itemNews.likes_count=(itemNews.likes_count)-1;
+                }
+                else {
+                    itemNews.likedByMe = true;
+                    itemNews.likes_count=(itemNews.likes_count)+1;
+                }
+                console.log(getNewsClone,"555555555555555555555")
+                dispatch({ type: GETNEWS, payload: getNewsClone })
 
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(

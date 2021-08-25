@@ -11,7 +11,6 @@ export const UserStory = ({ data, navigation, filterdBy }: any) => {
         keyExtractor={item => item.id}
         data={data}
         renderItem={({ item }) => {
-          console.log(item, 'aaa///')
           return (
             <TouchableOpacity
               onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy })}

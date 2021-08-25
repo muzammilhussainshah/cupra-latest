@@ -91,10 +91,11 @@ const CommentText = styled.Text`
   font-family: 'SourceSansPro-Regular';
 `;
 
-export const CardView = ({ _id, name, postTime, commentCount, disc, icon, navigation, likedByMe, likes_count, onPress, filterdBy }: any) => {
+export const CardView = ({ _id, name, postTime, commentCount, disc, icon, navigation, likedByMe, likes_count, onPress, filterdBy,index }: any) => {
   const [totalLikes, settotalLikes] = useState(likes_count);
   const [sendLike, setsendLike] = useState(likedByMe);
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const getNews = useSelector((state: any) => state.reducer.getNews)
   const dispatch = useDispatch();
 
   const removeTags = (str) => {
@@ -109,7 +110,7 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
     return str.replace(/(<([^>]+)>)/ig, '');
   }
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, _id, navigation,filterdBy))
+    dispatch(_likeDisLike(currentUser, _id, navigation,filterdBy,getNews,likedByMe,index))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {

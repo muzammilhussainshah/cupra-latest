@@ -28,7 +28,7 @@ export const HomeScreen: React.FC = () => {
 
   const [currentUserSt, setcurrentUserSt] = useState('')
 
-  const isLoader = useSelector((state: any) => state.reducer.isLoader);
+  const isLoader = useSelector((state:any) => state.reducer.isLoader);
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
@@ -116,7 +116,7 @@ export const HomeScreen: React.FC = () => {
           <Body>
             <FlatList
               data={getNewsSt}
-              renderItem={({ item }) => {
+              renderItem={({ item,index }) => {
                 return (
                   <CardView
                     navigation={navigation}
@@ -125,11 +125,12 @@ export const HomeScreen: React.FC = () => {
                     likes_count={item.likes_count}
                     name={item.en_header}
                     disc={item.en_desc}
+                    index={index}
                     commentCount={item.comments_count}
                     postTime={item.createdAt}
                     _id={item._id}
                     filterdBy={filterdBy}
-                    onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy,likedByMe:item.likedByMe })}
+                    onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy,likedByMe:item.likedByMe,index })}
                   />
                 )
               }}

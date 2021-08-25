@@ -167,7 +167,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                 navigation.navigate('showImage', { imageURL: { uri: sliderArrSt[index] } })
               }
               }
-              currentImageEmitter={index => {
+              currentImageEmitter={index=> {
                 // console.log(index, 'indexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindex')
                 setimageIndex(index)
                 setimageLikes(imageData && imageData[index] && imageData[index].likesCount && imageData[index].likesCount)

@@ -91,7 +91,7 @@ const CommentText = styled.Text`
   font-family: 'SourceSansPro-Regular';
 `;
 
-export const CardView = ({ _id, name, postTime, commentCount, disc, icon, navigation, likedByMe, likes_count, onPress, filterdBy,index }: any) => {
+export const CardView = ({ _id, name, postTime, commentCount, disc, icon, navigation, likedByMe, likes_count, onPress, filterdBy, index }: any) => {
   const [totalLikes, settotalLikes] = useState(likes_count);
   const [sendLike, setsendLike] = useState(likedByMe);
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
@@ -110,7 +110,7 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
     return str.replace(/(<([^>]+)>)/ig, '');
   }
   const numberOfLikes = () => {
-    dispatch(_likeDisLike(currentUser, _id, navigation,filterdBy,getNews,likedByMe,index))
+    dispatch(_likeDisLike(currentUser, _id, navigation, filterdBy, getNews, likedByMe, index))
     if (!sendLike) {
       settotalLikes(totalLikes + 1)
     } else {
@@ -149,7 +149,7 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                 useNativeDriver
               >
                 <CardTileCover
-                  source={require('../../assets/images/car.png')}
+                  source={{ uri: icon }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
               </TouchableScale>

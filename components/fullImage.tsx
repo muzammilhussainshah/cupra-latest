@@ -1,4 +1,5 @@
 import React from 'react';
+import { SliderBox } from "react-native-image-slider-box";
 
 import { PressableProps, TouchableOpacity } from 'react-native';
 
@@ -12,6 +13,7 @@ export type FullImage = PressableProps & {
   _func?: Function;
   coverImage?: any;
   selectedImageIndex?: number;
+  sliderBoxEnabled?: boolean;
 };
 
 /**
@@ -19,8 +21,8 @@ export type FullImage = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex }: any) => {
-    let type = typeof (coverImage)
+export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex, sliderBoxEnabled }: any) => {
+  let type = typeof (coverImage)
   return (
 
     <View
@@ -35,11 +37,19 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
         </TouchableOpacity>
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
-        <FastImage style={{ width: "100%", height: "100%" }} source={
+        {sliderBoxEnabled ?
 
-          { uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }
+          <SliderBox
+            images={coverImage}
+            resizeMode={'cover'}
+            dotColor="rgba(0,0,0,0)"
+            inactiveDotColor="rgba(0,0,0,0)"
+            firstItem={selectedImageIndex}
+            onCurrentImagePressed={(index: any) => { }}
+          /> :
+          <FastImage style={{ width: "100%", height: "100%" }} source={{ uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }}
+            resizeMode={FastImage.resizeMode.contain} />
         }
-          resizeMode={FastImage.resizeMode.contain} />
       </View>
     </View >
   );

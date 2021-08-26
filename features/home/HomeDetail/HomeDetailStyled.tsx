@@ -55,7 +55,7 @@ export const DescriptionArea = ({ description, _func, _func2, navigation }: any)
   )
 };
 export const ServiceApplied = ({ serviceTitle, serviceName }: any) => {
-  console.log(serviceTitle, 'serviceTitle')
+  // console.log(serviceTitle, 'serviceTitle')
   useEffect(() => {
   }, [])
   return (

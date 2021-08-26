@@ -75,13 +75,13 @@ export const HomeComments = ({ route, navigation, }: any) => {
                           <FastImage
                             resizeMode={'contain'}
                             source={require('../../../assets/users/border.png')}
-                            style={{ height: "100%", width: "100%", }} />
+                            style={{ height: "90%", width: "90%", }} />
                           <View style={{ height: "100%", width: "100%", position: "absolute", zIndex: 3 }}>
                           </View>
                         </View>
                         <View style={{ flex: mine ? 7.6 : 8.6, justifyContent: 'center' }}>
-                          <Text style={{ color: Colors.white, fontWeight: "bold" }}>{createdBy.full_name}</Text>
-                          <Text style={{ color: Colors.brownishGrey }}>{moment(createdAt).fromNow()}</Text>
+                          <Text style={{ color: Colors.white, fontWeight: "bold",marginHorizontal:10 }}>{createdBy.full_name}</Text>
+                          <Text style={{ color: Colors.brownishGrey ,marginHorizontal:10}}>{moment(createdAt).fromNow()}</Text>
                         </View>
                         {mine &&
                           <TouchableOpacity

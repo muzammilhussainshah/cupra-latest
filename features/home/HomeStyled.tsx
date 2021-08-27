@@ -201,7 +201,10 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                         />
                       </View>
                       <View style={{ paddingLeft: 10 }}>
-                        <UserNameText>{name}</UserNameText>
+                        <UserNameText>
+                          {name.substring(0, 25)} {disc.length > 25 && '...'}
+                        </UserNameText>
+
                         <LastTimeText>{moment(postTime).fromNow()}</LastTimeText>
                       </View>
                     </View>

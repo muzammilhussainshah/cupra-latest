@@ -2,6 +2,7 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
 import {ProfileScreen} from '../drawerFeature/profile/ProfileScreen';
+import {EditProfile} from '../drawerFeature/editProfile/EditProfile';
 import Routes from './Routes';
 import {DrawerContent} from './DrawerContent';
 import {
@@ -12,6 +13,7 @@ import {
 export type IDrawerParamList = {
   HomeDrawer: [Routes.HomeDrawer];
   profile: undefined;
+  editProfile: undefined;
 };
 
 const MyTransition = {
@@ -49,6 +51,7 @@ export const DrawerNavigator: React.FC = () => {
       drawerContent={(props: any) => <DrawerContent {...props} />}>
       <Drawer.Screen name={Routes.HomeDrawer} component={BottomTabNavigator} />
       <Drawer.Screen name={"profile"} component={ProfileScreen} />
+      <Drawer.Screen name={"editProfile"} component={EditProfile} />
       {/* Add the screens that its not shown in the bottomtabs */}
     </Drawer.Navigator>
   );

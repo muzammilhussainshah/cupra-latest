@@ -18,3 +18,5 @@ export const NEWSCOMMENT = 'NEWSCOMMENT'
 export const GETSTORIES = 'GETSTORIES'
 export const GETNEWSIMAGES = 'GETNEWSIMAGES'
 export const VIDEOS = 'VIDEOS';
+export const GETCITY = 'GETCITY';
+export const MYPROFILE = 'MYPROFILE';

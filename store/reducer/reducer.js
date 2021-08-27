@@ -1,7 +1,7 @@
 import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
-  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER
+  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER,GETCITY,MYPROFILE
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -24,6 +24,8 @@ const INITIAL_STATE = {
   paginationLoader: false,
   isError: false,
   videos: [],
+  getCity: {},
+  myProfile: [],
 
 }
 
@@ -123,6 +125,16 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         videos: action.payload,
+      };
+    case GETCITY:
+      return {
+        ...state,
+        getCity: action.payload,
+      };
+    case MYPROFILE:
+      return {
+        ...state,
+        myProfile: action.payload,
       };
     default:
       return state;

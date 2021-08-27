@@ -140,30 +140,7 @@ export const HomeScreen: React.FC = () => {
             onLoadMoreAsync={loadMorePage}
           >
             {/* <Body> */}
-            {getNewsSt.length > 0
-              // &&
-              //   <FlatList
-              //     data={getNewsSt}
-              //     renderItem={({ item, index }) => {
-              //       return (
-              //         <CardView
-              //           navigation={navigation}
-              //           icon={item.icon}
-              //           likedByMe={item.likedByMe}
-              //           likes_count={item.likes_count}
-              //           name={item.en_header}
-              //           disc={item.en_desc}
-              //           index={index}
-              //           commentCount={item.comments_count}
-              //           postTime={item.createdAt}
-              //           _id={item._id}
-              //           filterdBy={filterdBy}
-              //           onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy, likedByMe: item.likedByMe, index })}
-              //         />
-              //       )
-              //     }}
-              //   />
-              &&
+            {getNewsSt.length > 0 &&
               <FlatList
                 data={getNewsSt}
                 renderItem={({ item, index }) => (

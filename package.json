@@ -62,6 +62,7 @@
     "react-native-paper": "^4.9.2",
     "react-native-radial-gradient": "^1.0.8",
     "react-native-reanimated": "^2.2.0",
+    "react-native-render-html": "^6.0.5",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
     "react-native-shared-element": "^0.7.0",

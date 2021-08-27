@@ -120,7 +120,9 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       tension={50}
       friction={7}
       useNativeDriver
-      onPress={onPress}>
+      onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
+    // onPress={onPress}
+    >
       <ImagePlaceholder>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           {imgSliderEnabled ?
@@ -141,7 +143,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                 inactiveDotColor="rgba(0,0,0,0)"
                 images={arrOfSliderImagesPath && arrOfSliderImagesPath}
                 onCurrentImagePressed={(index: number) => {
-                  navigation.navigate('showImage', { imageURL: { uri: arrOfSliderImagesPath[index] } })
+                  navigation.navigate('showImage', { imageURL: { uri: arrOfSliderImagesPath[index] }, renderImgIndex, arrOfSliderImagesPath })
 
                 }
                 }
@@ -181,7 +183,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
           </BottomContainer>
         </View>
       </ImagePlaceholder>
-    </TouchableScale>
+    </TouchableScale >
   )
 };
 export const ImageTitleWrapper = styled.View`

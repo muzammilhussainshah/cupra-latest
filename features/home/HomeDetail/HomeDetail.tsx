@@ -108,7 +108,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
     <>
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage sliderBoxEnabled={true} selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage sliderBoxEnabled={imageSlider.length > 0 ? true : false} selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
         </View>
       }
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>

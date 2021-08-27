@@ -20,10 +20,7 @@ export const ImagesScreen: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    // dispatch(_getNewsImages(currentUser, 10, 1,navigation))
-    // console.log(getNewsImages, 'getNewsImages')
     setImagesArr(getNewsImages)
-    // console.log(imagesArr, 'getNewsImagesgetNewsImagesgetNewsImages')
   }, [getNewsImages])
   return (
     <ImagesContainer>
@@ -41,13 +38,11 @@ export const ImagesScreen: React.FC = () => {
           data={imagesArr && imagesArr}
           renderItem={({ item, index }: any) => (
             <>
-              {/* {console.log(item, 'aaaaaaaaaaaaa')} */}
               < ImageTile
                 allData={item}
                 getNewsImages={imagesArr}
                 indexOfNewsMainImages={index}
                 imageUri={item.media && item.media[0].url}
-                onPress={() => navigation.navigate('showImage', { imageURL: { uri: item.media && item.media[0].url } })}
               />
             </>
           )}

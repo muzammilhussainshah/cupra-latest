@@ -1,4 +1,5 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR } from "../constant/constant";
+import { ISLOADER, ISERROR, GETCITY } from "../constant/constant";
+import { _logOut } from './authAction';
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -72,5 +73,51 @@ export const _getHexColor = (colour) => {
             return colours[colour.toLowerCase()];
 
         return false;
+    }
+}
+
+
+export const _getCity = (currentUser, navigation) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/city?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: GETCITY, payload: resp.data.data })
+                dispatch(_loading(false));
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+            console.log(resp, 'resp _getCity',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _getCity", JSON.parse(JSON.stringify(err.message)));
+        }
     }
 }

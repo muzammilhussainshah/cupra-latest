@@ -6987,6 +6987,13 @@ react-native-device-info@^8.3.0:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.3.0.tgz#705d68b8d6112a6e46e74717606c77ed93a674e5"
   integrity sha512-UkqK47w5r9rgjFpNMgXoMXj5D9GVQO8QxaTAbtJ/66XXt23WSHDroIzn+MVtTLl6SPKBw5/qakPKivLG44IPtw==
 
+react-native-document-picker@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-6.0.4.tgz#21cbe2b3e8a1aff4aafcb81e06f09494b45e62f8"
+  integrity sha512-qFKf76M1VyiVqZscqND8wDcALfHG0BI77mJ4CzEdANqLiJUbwie7XOKtQlw5oRSAjLPgg9NjXnjbOFY3OmkIXQ==
+  dependencies:
+    invariant "^2.2.4"
+
 react-native-fast-image@^8.3.6:
   version "8.3.7"
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.7.tgz#c4877de17903101f6d94b6736a4f7e5d7b019224"
@@ -7007,6 +7014,11 @@ react-native-gesture-handler@^1.10.3:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-image-picker@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.0.6.tgz#0dfa5bb83bcf6ff58635ebb9201a185c2271e8cc"
+  integrity sha512-Pp3UWKUADuMG1mz12m6dSO/R2KnvXVEd77bldrfTMFpz4PFc4iVKo+bHeS79It0mUBezfzDMgfesg/OPLSugvQ==
 
 react-native-image-slider-box@^1.1.5:
   version "1.1.5"

@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR } from "../constant/constant";
+import { CURRENTUSER, ISLOADER, ISERROR,MYPROFILE } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -12,6 +12,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from "@react-native-firebase/auth";
 
 import { Alert, AsyncStorage } from 'react-native';
+import React from 'react';
+
 import { useNavigation, CommonActions } from '@react-navigation/native';
 
 
@@ -106,7 +108,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                console.log(resp.data.status ,'resp.data.status resp.data.status ')
+                console.log(resp.data.status, 'resp.data.status resp.data.status ')
                 dispatch({ type: CURRENTUSER, payload: resp.data.data.data })
                 navigation.navigate("drawerStack")
                 try {
@@ -609,6 +611,7 @@ export const _completeSignUp = (getPhonneNumber, navigation, getfullName, getEma
                     'cache-control': 'no-cache',
                     "Allow-Cross-Origin": '*',
                     'Content-Type': 'application/json',
+
                 },
                 data: {
                     "full_name": getfullName,
@@ -638,6 +641,103 @@ export const _completeSignUp = (getPhonneNumber, navigation, getfullName, getEma
             // dispatch(_error(resp.data.error.messageEn));
 
             console.log(err, "error from _resetNewPassword", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const _updateProfile = (currentUser, navigation, fileURL, mobile, fullName, gender, cityName) => {
+    let data = new FormData()
+    if (fileURL) {
+        data.append('icon', { uri: fileURL.uri, name: 'image.jpg', type: fileURL.type })
+        data.append('full_name', fullName)
+        data.append('email', mobile)
+        data.append('gender', gender)
+        data.append('city', cityName)
+    }
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'PUT',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/profile?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'multipart/form-data; boundary=6ff46e0b6b5148d984f148b6542e5a5d',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: data
+            };
+            var resp = await axios(option);
+            if (resp.data.status == 200) {
+                dispatch(_getProfile(currentUser, navigation, ))
+                dispatch(_loading(false));
+                navigation.navigate('profile')
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_loading(false));
+                dispatch(_error(resp.data.error.messageEn));
+            }
+            console.log(resp, '_updateProfile', data)
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err, "error from _updateProfile", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const _getProfile = (currentUser, navigation, ) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/profile?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status == 200) {
+                dispatch(_loading(false));
+                dispatch({ type: MYPROFILE, payload: resp.data.data })
+                // navigation.navigate('profile')
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_loading(false));
+                dispatch(_error(resp.data.error.messageEn));
+            }
+            console.log(resp, '_getProfile', resp.data.data)
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err, "error from _getProfile", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

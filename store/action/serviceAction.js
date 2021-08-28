@@ -201,8 +201,11 @@ export const _cancelSubsurvices = (currentUser, subserviceId, navigation, myProf
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
-
                 dispatch(_getProfile(currentUser, navigation,));
+                Alert.alert(
+                    "Survices!",
+                    "Service has been successfully cancled",
+                );
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));

@@ -40,10 +40,10 @@ export const ProfileScreen: React.FC = () => {
     console.log(myProfile, 'myProfilemyProfile')
     if (myProfile && myProfile.bookedServices && myProfile.bookedServices.length > 0) {
       let bkService = myProfile.bookedServices
-      const filterdPendingData = bkService.filter((bkService: any) => bkService.subService_id);
-      const filterdData = filterdPendingData.filter((filterdPendingData: any) => filterdPendingData.status == "PENDING");
+      const filterdData = bkService.filter((bkService: any) => bkService.subService_id);
+      // const filterdData = filterdPendingData.filter((filterdPendingData: any) => filterdPendingData.status == "PENDING");
       console.log(filterdData, 'filterdData')
-      console.log(filterdPendingData, 'filterdPendingData')
+      // console.log(filterdPendingData, 'filterdPendingData')
       setgetMyProfilefilterdData(filterdData)
     }
   }, [myProfile])
@@ -177,20 +177,20 @@ export const ProfileScreen: React.FC = () => {
 
                             </View>
                             <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
-                              {/* {!isLoader ?
-                                <ActivityIndicator
-                                  style={{ marginTop: "2%" }}
-                                  size="small" color={'#f52d56'}
-                                /> : */}
-                              <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={() => {
-                                  dispatch(_cancelSubsurvices(currentUser, item._id, navigation, getMyProfilefilterdData))
-                                }}
-                                style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
-                                <Text style={{ color: Colors.white }}>Cancel</Text>
-                              </TouchableOpacity>
-                              {/* } */}
+                              {item.status !== "PENDING" ?
+                                <View
+                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
+                                  <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                </View> :
+                                <TouchableOpacity
+                                  activeOpacity={0.6}
+                                  onPress={() => {
+                                    dispatch(_cancelSubsurvices(currentUser, item._id, navigation, getMyProfilefilterdData))
+                                  }}
+                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
+                                  <Text style={{ color: Colors.white }}>{"Cancel"}</Text>
+                                </TouchableOpacity>
+                              }
                             </View>
 
                           </View>
@@ -205,6 +205,7 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
                     renderItem={({ item }: any) => {
+                      console.log(item,'::::::::::::::::::::::::')
                       const { item_id, date_time, _id } = item
                       const { en_name } = item_id
                       return (
@@ -220,8 +221,23 @@ export const ProfileScreen: React.FC = () => {
                               <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text>
                             </View>
                             <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
-
-                              <TouchableOpacity
+                              {item.status !== "PENDING" ?
+                                <View
+                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
+                                  <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                </View> :
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    setCancelReservationEnabled(true)
+                                    setreservationId(_id)
+                                  }
+                                  }
+                                  activeOpacity={0.6}
+                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
+                                  <Text style={{ color: Colors.white }}>Cancel</Text>
+                                </TouchableOpacity>
+                              }
+                              {/* <TouchableOpacity
                                 onPress={() => {
                                   setCancelReservationEnabled(true)
                                   setreservationId(_id)
@@ -230,8 +246,7 @@ export const ProfileScreen: React.FC = () => {
                                 activeOpacity={0.6}
                                 style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
                                 <Text style={{ color: Colors.white }}>Cancel</Text>
-                              </TouchableOpacity>
-
+                              </TouchableOpacity> */}
                             </View>
                           </View>
                         </View>

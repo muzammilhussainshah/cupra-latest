@@ -49,7 +49,7 @@ export const EditProfile: React.FC = () => {
 
   const [cityName, setcityName] = useState(currentUser.country.en_name);
 
-  const [gender, setgender] = useState('');
+  const [gender, setgender] = useState(myProfile.gender);
 
   const [fullName, setfullName] = useState(currentUser.full_name);
 

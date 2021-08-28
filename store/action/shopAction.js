@@ -252,7 +252,10 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 dispatch(_getProfile(currentUser, navigation,));
-
+                Alert.alert(
+                    "Reservation!",
+                    "Reservation has been successfully cancled ",
+                );
 
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {

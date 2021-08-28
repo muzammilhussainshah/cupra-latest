@@ -113,27 +113,28 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
       onPress={onPress}>
       <VideoPlaceholder>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <VideoTileCover source={{uri:VideoImage}} />
+          <VideoTileCover source={{ uri: VideoImage }} />
           <VideoLabel>
             <BookingTitle>
               <Ionicons name="play-circle-outline" size={50} color="white" />
             </BookingTitle>
           </VideoLabel>
         </View>
-        <BottomContainer>
+        <BottomContainer   >
           <RowView>
-            <Text style={{ color: 'white', fontSize: 15 }}> {moment(getDate).fromNow()}</Text>
+            <Text style={{ color: 'white', fontSize: 15, marginVertical: 10 }}> {moment(getDate).fromNow()}</Text>
           </RowView>
           <TouchableOpacity
+            style={{ height: "100%", }}
             onPress={() => {
               setlikebyme(!likebyme)
               numberOfLikes()
             }}
           >
-            <RowView>
+            <RowView style={{ marginVertical: 10 }}>
               <SteeringImage
                 resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/images/heart.png')}
+                source={require('../../assets/images/RealHeart.png')}
               />
               <NumberOfRates>{imageLikes}</NumberOfRates>
             </RowView>

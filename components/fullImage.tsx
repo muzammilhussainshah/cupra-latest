@@ -38,7 +38,6 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
         {sliderBoxEnabled ?
-
           <SliderBox
             images={coverImage}
             resizeMode={'cover'}

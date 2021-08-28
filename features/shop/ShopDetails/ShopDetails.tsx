@@ -142,7 +142,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage sliderBoxEnabled={typeof (coverImage) == "string" ? false : true} selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
         </View>
       }
       {confirmModal &&
@@ -151,7 +151,6 @@ export const ShopDetails = ({ route, navigation }: any) => {
           _func={() => setConfirmModal(false)}
           _func2={() => {
             dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser, setConfirmModal, navigation))
-            // setConfirmModal(false)
           }
           }
         />

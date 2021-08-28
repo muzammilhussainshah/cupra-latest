@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { Colors } from '../../../constants/Colors';
 import { width, height } from '../../../constants/Layout';
+import RenderHTML from "react-native-render-html";
+
 export const ShopDetailsContainer = styled.View`
   flex: 1;
   background-color: ${Colors.white};
@@ -44,18 +46,28 @@ const removeTags = (str) => {
   // HTML tag with a null string.
   return str.replace(/(<([^>]+)>)/ig, '');
 }
+
 export const DescriptionArea = ({ description, _func, _func2, navigation }: any) => {
+  const html = `
+  ${description}
+  `;
+  const { width } = useWindowDimensions();
+  console.log(description, "descriptiondescriptiondescriptiondescription")
   return (
     <>
       <View  >
         <DescriptionHeaderTitle style={{ fontFamily: "SourceSansPro-SemiBold", fontSize: 18 }}>Description</DescriptionHeaderTitle>
-        {description && <DescriptionText>{removeTags(description)}</DescriptionText>}
+        {description &&
+          <RenderHTML contentWidth={width} source={{ html }} />
+        // <DescriptionText>{description}</DescriptionText>
+        }
+        {/* {description && <DescriptionText>{removeTags(description)}</DescriptionText>} */}
       </View>
     </>
   )
 };
 export const ServiceApplied = ({ serviceTitle, serviceName }: any) => {
-  console.log(serviceTitle, 'serviceTitle')
+  // console.log(serviceTitle, 'serviceTitle')
   useEffect(() => {
   }, [])
   return (

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { SliderBox } from "react-native-image-slider-box";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
 import TouchableScale from 'react-native-touchable-scale';
 import styled from 'styled-components/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { SliderBox } from "react-native-image-slider-box";
-import { _imageNewsLike } from '../../store/action/imageAction'
 import { Colors } from '../../constants/Colors';
+import moment from 'moment';
+import { _imageNewsLike } from '../../store/action/imageAction'
 
 export const ImagesContainer = styled(SafeAreaView)`
   flex: 1;
@@ -43,9 +43,9 @@ const ImageNumber = styled.Text`
 `;
 const RowView = styled.View`
     flex-direction: row;
-    align-items: center;
-    `;
-// justify-content: space-between;
+  justify-content: space-between;
+  align-items: center;
+`;
 const SteeringImage = styled(FastImage)`
   width: 20px;
   height: 20px;
@@ -54,8 +54,8 @@ const NumberOfRates = styled.Text`
   color: ${Colors.white};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
-  `;
-// padding-right: 10px;
+  padding-right: 10px;
+`;
 const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -66,76 +66,53 @@ const BottomContainer = styled.View`
 
 export type IImageTypeProp = {
   imageUri?: any;
-  newsImagesIndex?: any;
+  allData?: any;
+  getNewsImages?: any;
+  indexOfNewsMainImages?: number;
   onPress?: () => void;
-  getnavigation?: () => void;
 };
 export const ImageTile: React.FC<IImageTypeProp> = ({
   imageUri,
-  newsImagesIndex,
+  getNewsImages,
+  allData,
+  indexOfNewsMainImages,
   onPress,
-  getnavigation,
 }) => {
-
-  let dispatch = useDispatch()
-
-  const [sliderArrSt, setsliderArrSt] = useState([])
-
-  const [imageData, setimageData] = useState([])
-
-  const [imageLikes, setimageLikes] = useState("")
-
-  const [imageTime, setimageTime] = useState('')
-
-  const [imagemediaId, setimagemediaId] = useState('')
-
-  const [imageIndex, setimageIndex] = useState(0)
-
-  const [flag, setflag] = useState(false)
-
-  const [likebyme, setlikebyme] = useState()
+  const [arrOfSliderImagesPath, setarrOfSliderImagesPath] = useState([])
+  const [arrOfSliderImagesData, setArrOfSliderImagesData] = useState([])
+  const [imgSliderEnabled, setimgSliderEnabled] = useState(false)
+  // const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
+  const [renderImgIndex, setrenderImgIndex] = useState(0)
 
   const navigation = useNavigation()
-
-  let imgSliderArr = []
-
-  let imgData = []
-
-  const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
-
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  let dispatch = useDispatch()
 
+  let sliderImagesPathClone: any = []
+  let sliderImagesData: any = []
   useEffect(() => {
-    if (imageUri) {
-      imageUri.map((mediaObj, index) => {
-        imgSliderArr.push(mediaObj.url)
-        imgData.push(mediaObj)
+    if (allData && allData.media && allData.media.length > 1) {
+      allData.media.map((item: any,) => {
+        sliderImagesPathClone.push(item.url)
+        sliderImagesData.push(item)
       })
+      setimgSliderEnabled(true)
     }
-    // console.log(getNewsImages, '111111111111111111111111')
-    console.log(imageUri, '[][][][][][]imageUri')
-    setimageData(imgData)
-    setimageLikes(imageUri[0].likesCount)
-    setimageTime(imageUri[0].createdAt)
-    setimagemediaId(imageUri[0]._id)
-    setlikebyme(imageUri[0].likedByMe)
-    setsliderArrSt(imgSliderArr)
-    setflag(!flag)
-  }, [])
-  useEffect(() => {
 
-  }, [getNewsImages])
-  const numberOfLikes = () => {
-    dispatch(_imageNewsLike(currentUser, imagemediaId, navigation, getNewsImages, likebyme, newsImagesIndex, imageIndex))
-    if (!likebyme) {
-      setimageLikes(imageLikes + 1)
-    } else {
-      if (imageLikes > 0) {
-        setimageLikes(imageLikes - 1)
-      }
-    }
-  }
-  // console.log(imageData, 'imageDataimageDataimageData')
+    setarrOfSliderImagesPath(sliderImagesPathClone)
+    setArrOfSliderImagesData(sliderImagesData)
+    console.log(allData, '[;-=9]')
+  }, [])
+  // const numberOfLikes = () => {
+  // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
+  //   // if (!likebyme) {
+  //   //   setimageLikes(imageLikes + 1)
+  //   // } else {
+  //   //   if (imageLikes > 0) {
+  //   //     setimageLikes(imageLikes - 1)
+  //   //   }
+  //   // }
+  // }
   return (
     <TouchableScale
       style={{ flex: 1 }}
@@ -143,59 +120,64 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       tension={50}
       friction={7}
       useNativeDriver
+      onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
+    // onPress={onPress}
     >
       <ImagePlaceholder>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          {/* <ImageTileCover source={{ uri: imageUri[0].url }} /> */}
-          <View
-            style={{
-              width: 160,
-              height: 150,
-              borderRadius: 10,
-              overflow: "hidden",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <SliderBox
-              resizeMode="contain"
-              ImageComponentStyle={{ width: '100%', height: "100%", borderRadius: 10 }}
-              dotColor="rgba(0,0,0,0)"
-              inactiveDotColor="rgba(0,0,0,0)"
-              images={sliderArrSt && sliderArrSt}
-              onCurrentImagePressed={index => {
-                navigation.navigate('showImage', { imageURL: { uri: sliderArrSt[index] } })
-              }
-              }
-              currentImageEmitter={index => {
-                // console.log(index, 'indexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindexindex')
-                setimageIndex(index)
-                setimageLikes(imageData && imageData[index] && imageData[index].likesCount && imageData[index].likesCount)
-                setimageTime(imageData && imageData[index] && imageData[index].createdAt && imageData[index].createdAt)
-                setimagemediaId(imageData && imageData[index] && imageData[index]._id && imageData[index]._id)
-                setlikebyme(imageData && imageData[index] && imageData[index].likedByMe && imageData[index].likedByMe)
-                setflag(!flag)
-              }
-              }
-            />
-          </View>
+          {imgSliderEnabled ?
+            <View
+              style={{
+                width: 160,
+                height: 150,
+                borderRadius: 10,
+                overflow: "hidden",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <SliderBox
+                resizeMode="contain"
+                ImageComponentStyle={{ width: '100%', height: "100%", borderRadius: 10 }}
+                dotColor="rgba(0,0,0,0)"
+                inactiveDotColor="rgba(0,0,0,0)"
+                images={arrOfSliderImagesPath && arrOfSliderImagesPath}
+                onCurrentImagePressed={(index: number) => {
+                  navigation.navigate('showImage', { imageURL: { uri: arrOfSliderImagesPath[index] }, renderImgIndex, arrOfSliderImagesPath })
 
+                }
+                }
+                currentImageEmitter={(index: number) => {
+                  setrenderImgIndex(index)
+                }
+                }
+              />
+            </View>
+            :
+            <ImageTileCover source={{ uri: imageUri }} />
+          }
           <BottomContainer>
-            <RowView>
-              <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(imageTime && imageTime).fromNow()}</Text>
-            </RowView>
+            {arrOfSliderImagesData[renderImgIndex] &&
+              <RowView>
+                <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(arrOfSliderImagesData[renderImgIndex].createdAt).fromNow()}</Text>
+              </RowView>
+            }
             <TouchableOpacity
               onPress={() => {
-                setlikebyme(!likebyme)
-                numberOfLikes()
+                if (arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]) {
+                  dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, arrOfSliderImagesData[renderImgIndex].likedByMe, indexOfNewsMainImages, renderImgIndex))
+                }
               }}
             >
               <RowView>
                 <SteeringImage
                   resizeMode={FastImage.resizeMode.contain}
-                  source={require('../../assets/images/heart.png')}
+                  source={require('../../assets/images/RealHeart.png')}
                 />
-                <NumberOfRates style={{ marginLeft: 5 }} >{imageLikes && imageLikes}</NumberOfRates>
+                {arrOfSliderImagesData[renderImgIndex] &&
+                  <NumberOfRates style={{ marginLeft: "5%" }}>{arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount}</NumberOfRates>
+                }
+
               </RowView>
             </TouchableOpacity>
           </BottomContainer>

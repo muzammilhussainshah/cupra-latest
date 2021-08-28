@@ -16,6 +16,7 @@ export type CancelReservationprops = PressableProps & {
   _func2?: Function;
   Title?: string;
   cancelReservation?: boolean;
+  year?: any;
 };
 
 /**
@@ -23,7 +24,7 @@ export type CancelReservationprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const CancelReservation: React.FunctionComponent<CancelReservationprops> = ({ _func, Title, _func2 }: any) => {
+export const CancelReservation: React.FunctionComponent<CancelReservationprops> = ({ _func, Title, _func2, year }: any) => {
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
   const isError = useSelector((state: any) => state.reducer.isError);
   const [reason, setreason] = useState('');
@@ -54,7 +55,8 @@ export const CancelReservation: React.FunctionComponent<CancelReservationprops> 
                 onChangeText={text => setreason(text)}
                 defaultValue={reason}
                 multiline={true}
-                placeholder="Enter Reason"
+                keyboardType={year ? "numeric" : 'default'}
+                placeholder={year ? year : "Enter Reason"}
                 placeholderTextColor={Colors.titleGray}
               />
               <View style={{ flexDirection: "row", justifyContent: 'space-evenly', width: "100%" }}>

@@ -101,8 +101,8 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { }}
-              icon={({ size }) => (
+              onPress={() => { props.navigation.navigate("favorites")}}
+               icon={({ size }) => (
                 <Ionicons
                   name="heart-outline"
                   size={size}

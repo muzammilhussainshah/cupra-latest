@@ -14,6 +14,9 @@ export type CityModelprops = PressableProps & {
   _func?: Function;
   _func2?: Function;
   Title?: string;
+  yearModal?: any;
+  brandModal?: any;
+  modalModel?: any;
 };
 
 /**
@@ -21,16 +24,32 @@ export type CityModelprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2 }: any) => {
-  const [cities, setCities] = useState('')
+export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2, brandModal, modalModel }: any) => {
+  const [cities, setCities] = useState([])
+  const [models, setModels] = useState([])
+  const [brands, setbrands] = useState([])
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-  const getCity = useSelector((state: any) => state.reducer.getCity);
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
-  useEffect(() => {
-    setCities(getCity)
-    console.log(getCity, '555555555555')
-  }, [getCity])
+  if (brandModal) {
+    const getBrands = useSelector((state: any) => state.reducer.getBrands);
+    useEffect(() => {
+      setbrands(getBrands)
+      console.log(getBrands, 'getBrands')
+    }, [getBrands])
 
+  } else if (modalModel) {
+    const getModels = useSelector((state: any) => state.reducer.getModels);
+    useEffect(() => {
+      setModels(getModels)
+      console.log(getModels, 'getModels')
+    }, [getModels])
+  } else {
+    const getCity = useSelector((state: any) => state.reducer.getCity);
+    useEffect(() => {
+      setCities(getCity)
+      console.log(getCity, '555555555555')
+    }, [getCity])
+  }
   return (
     <View
       style={{ height: "100%", width: "100%", justifyContent: "center", backgroundColor: 'rgba(0,0,0,0.9)', alignItems: "center", position: "absolute", zIndex: 2 }}>
@@ -38,7 +57,7 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
         style={{ height: "80%", marginTop: 20, borderWidth: 2, borderColor: Colors.primary, backgroundColor: Colors.black, width: "80%", borderRadius: 20 }}>
         <View style={{ flex: 1.5, flexDirection: "row", justifyContent: "center", alignItems: "center", }}>
           <TouchableOpacity
-            onPress={() => _func()}
+            onPress={() => _func({ "brands": '', "modalName": '' })}
             activeOpacity={0.7}>
             <FastImage
               style={{ height: 25, width: 25 }}
@@ -55,15 +74,31 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
               size="small" color={'#ffffff'}
             /> :
             <>
-              <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
-                {cities.length > 1 &&
+              {cities && cities.length > 1 &&
+                <FlatList
+                  data={cities && cities}
+                  renderItem={({ item }) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          _func(item.en_name)
+                        }}
+                        style={{ flexDirection: "row", padding: 20 }}>
+                        <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
+                      </TouchableOpacity>
+                    )
+                  }}
+                />
+              }
+              {models && models.length > 1 &&
+                <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
                   <FlatList
-                    data={cities}
+                    data={models && models}
                     renderItem={({ item }) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
-                            _func(item.en_name)
+                            _func({ "modalName": item.en_name })
                           }}
                           style={{ flexDirection: "row", padding: 20 }}>
                           <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
@@ -71,8 +106,26 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                       )
                     }}
                   />
-                }
-              </ScrollView>
+                </ScrollView>
+              }
+              {brands && brands.length > 1 &&
+                <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
+                  <FlatList
+                    data={brands && brands}
+                    renderItem={({ item }) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            _func({ "brands": item.en_name })
+                          }}
+                          style={{ flexDirection: "row", padding: 20 }}>
+                          <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
+                        </TouchableOpacity>
+                      )
+                    }}
+                  />
+                </ScrollView>
+              }
             </>
 
           }

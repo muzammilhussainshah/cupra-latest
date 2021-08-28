@@ -1,7 +1,8 @@
 import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
-  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER,GETCITY,MYPROFILE
+  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER,GETCITY,MYPROFILE,
+  GETFAVCARS,GETMODELS,GETBRANDS
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -26,7 +27,9 @@ const INITIAL_STATE = {
   videos: [],
   getCity: {},
   myProfile: [],
-
+  getFavCars:{},
+  getModels:{},
+  getBrands:{}
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -135,6 +138,21 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         myProfile: action.payload,
+      };
+    case GETFAVCARS:
+      return {
+        ...state,
+        getFavCars: action.payload,
+      };
+    case GETMODELS:
+      return {
+        ...state,
+        getModels: action.payload,
+      };
+    case GETBRANDS:
+      return {
+        ...state,
+        getBrands: action.payload,
       };
     default:
       return state;

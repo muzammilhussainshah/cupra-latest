@@ -20,3 +20,6 @@ export const GETNEWSIMAGES = 'GETNEWSIMAGES'
 export const VIDEOS = 'VIDEOS';
 export const GETCITY = 'GETCITY';
 export const MYPROFILE = 'MYPROFILE';
+export const GETFAVCARS = 'GETFAVCARS';
+export const GETMODELS = 'GETMODELS';
+export const GETBRANDS = 'GETBRANDS';

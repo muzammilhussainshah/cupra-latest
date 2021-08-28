@@ -39,22 +39,30 @@ export const EditProfile: React.FC = () => {
   const dispatch = useDispatch()
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-
+  const myProfile = useSelector((state: any) => state.reducer.myProfile)
+  console.log(myProfile, 'myProfile')
   const [cityModalEnabled, setcityModalEnabled] = useState(false);
 
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
+
   const navigation = useNavigation();
 
-  const [cityName, setcityName] = useState('');
+  const [cityName, setcityName] = useState(currentUser.country.en_name);
 
   const [gender, setgender] = useState('');
 
-  const [fullName, setfullName] = useState('');
+  const [fullName, setfullName] = useState(currentUser.full_name);
+
   const [isModalActive, setIsModalActive] = useState(false);
+
   const [flag, setflag] = useState(false);
+
   const [imageUriLocal, setimageUriLocal] = useState("");
+
   const [imgFile, setimgFile] = useState("");
-  const [mobile, setmobile] = useState('');
+
+  const [mobile, setmobile] = useState(currentUser.mobile.toString());
+
   const takePhoto = async () => {
     try {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA,)
@@ -262,9 +270,9 @@ export const EditProfile: React.FC = () => {
 
                         < FastImage
                           resizeMode={imageUriLocal ? 'cover' : 'contain'}
-                          style={{ height: imageUriLocal ? '100%' : "70%", width: imageUriLocal ? '100%' : "70%", borderRadius: 60 }}
+                          style={{ height: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", width: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", borderRadius: 60 }}
                           // style={{ height: 120, width: 120, borderRadius: 60 }}
-                          source={imageUriLocal ? { uri: imageUriLocal } : require('../../assets/aa.png')}
+                          source={imageUriLocal ? { uri: imageUriLocal } : myProfile.icon ? { uri: myProfile.icon } : require('../../assets/aa.png')}
                         />
                         {/* } */}
                       </View>
@@ -286,7 +294,7 @@ export const EditProfile: React.FC = () => {
                 </View>
                 <View style={{ height: "55%", }}>
                   <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
-                    <Text style={{ fontSize: 16 }}>Muhammad Ayyad</Text>
+                    <Text style={{ fontSize: 16 }}>{currentUser.full_name}</Text>
                   </View>
                   <View style={{ flex: 9, alignItems: "center" }}>
                     <Text style={{ color: Colors.primary }}>Personal info</Text>
@@ -295,21 +303,16 @@ export const EditProfile: React.FC = () => {
                       <Text style={{ color: Colors.darkGray }}>you can change this info later</Text>
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>Full Name</Text>
+                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Full Name</Text>
                       <TextInput
-                        style={{ height: 40, marginLeft: 10, width: "100%" }}
+                        style={{ height: 40, width: "75%" }}
                         onChangeText={text => setfullName(text)}
                         defaultValue={fullName}
                       />
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>Mobile</Text>
-                      <TextInput
-                        style={{ height: 40, marginLeft: 10, width: "100%" }}
-                        onChangeText={text => setmobile(text)}
-                        defaultValue={mobile}
-                        keyboardType={'numeric'}
-                      />
+                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Mobile</Text>
+                      <Text style={{ width: "75%", }}>{currentUser.mobile}</Text>
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                       <View style={{ justifyContent: "center", flex: 1 }}>
@@ -328,7 +331,7 @@ export const EditProfile: React.FC = () => {
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', borderRadius: 20, height: 45, width: "80%", flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, marginVertical: 5 }}>
                       <View style={{ height: "100%", width: "90%" }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.darkGray }}>City</Text>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.darkGray }}>{cityName}</Text>
                       </View>
                       <TouchableOpacity
                         onPress={() => {

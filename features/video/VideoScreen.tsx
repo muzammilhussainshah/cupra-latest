@@ -8,12 +8,12 @@ import {
 } from './VideoStyled';
 import { View, Dimensions, FlatList } from 'react-native';
 import { StaticVideos } from '../../data/StaticVideos';
-import { useNavigation } from '@react-navigation/native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getVideos } from '../../store/action/videoAction';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 export const VideoScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -28,7 +28,8 @@ export const VideoScreen: React.FC = () => {
   console.log(videos, 'videosvideosvideosvideos')
   return (
     <VideoContainer>
-      <Header onOpenDrawer={() => { }} />
+      <Header        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}      />
+
       <VideoTitleWrapper>
         <VideoTitle>Videos</VideoTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />

@@ -1,4 +1,4 @@
-import { useNavigation, } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FlatList } from 'react-native';
@@ -24,7 +24,8 @@ export const ImagesScreen: React.FC = () => {
   }, [getNewsImages])
   return (
     <ImagesContainer>
-      <Header onOpenDrawer={() => { }} />
+      <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+
       <ImageTitleWrapper>
         <ImageTitle>Images</ImageTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { Header } from '../../components/Header';
+import { DrawerActions } from '@react-navigation/native';
 
 import GetReviewComponent from '../../components/GetReviewComponent';
 
@@ -36,7 +37,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
   // console.log(Subcatogery, 'Subcatogery')
   useEffect(() => {
-    dispatch(_getCatogery(currentUser,navigation))
+    dispatch(_getCatogery(currentUser, navigation))
   }, [])
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
         <GetReviewComponent _func={() => setgetReview(false)} />
       } */}
       <ShopContainer>
-        <Header />
+        <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
         <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>

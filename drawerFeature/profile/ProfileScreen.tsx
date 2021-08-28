@@ -145,7 +145,7 @@ export const ProfileScreen: React.FC = () => {
               <TouchableOpacity
                 onPress={() => setselectedTab(true)}
                 activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between' }}>
-                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserver Parts</Text>
+                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserve Parts</Text>
                 {selectedTab &&
                   <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
                 }

@@ -47,7 +47,6 @@ export const ProfileScreen: React.FC = () => {
       setgetMyProfilefilterdData(filterdData)
     }
   }, [myProfile])
-  console.log(reservedParts, '))))))))))')
   return (
     <View style={{ flex: 1, paddingTop: 24 }}>
 

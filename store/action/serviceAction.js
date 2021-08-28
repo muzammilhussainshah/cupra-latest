@@ -1,7 +1,7 @@
-import { ISLOADER, ISERROR, SERVICES, SUBSERVICES, GETREVIEWS } from "../constant/constant";
+import { ISLOADER, ISERROR, SERVICES, SUBSERVICES, GETREVIEWS, MYPROFILE } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
-import { _logOut } from './authAction';
+import { _logOut, _getProfile } from './authAction';
 
 
 export const _loading = (bol) => {
@@ -154,7 +154,7 @@ export const _bookService = (currentUser, model, date, serviceId, setopenModal, 
             if (resp.data.status === 200) {
                 setopenModal(true)
                 dispatch(_loading(false));
-                
+
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(
                     "Authentication!",
@@ -177,8 +177,60 @@ export const _bookService = (currentUser, model, date, serviceId, setopenModal, 
         }
     }
 }
+
+export const _cancelSubsurvices = (currentUser, subserviceId, navigation, myProfile, _id) => {
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/cancel-subservice-booking?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "booking_id": subserviceId.toString()
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch(_loading(false));
+
+                dispatch(_getProfile(currentUser, navigation,));
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            } else {
+                dispatch(_getProfile(currentUser, navigation,));
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+
+            }
+            console.log(resp, 'resp _cancelSubsurvices')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from _cancelSubsurvices", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
 export const _getSubServiceRating = (currentUser, itemId, serviceName, navigation, serviceId) => {
-// console.log(serviceId,'serviceIdserviceIdserviceId')
+    // console.log(serviceId,'serviceIdserviceIdserviceId')
     return async (dispatch) => {
         dispatch(_loading(true));
         try {

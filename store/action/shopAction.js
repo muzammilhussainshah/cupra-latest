@@ -1,7 +1,7 @@
 import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS } from "../constant/constant";
 import axios from 'axios';
 import { Alert, AsyncStorage } from 'react-native';
-import { _logOut } from './authAction';
+import { _logOut, _getProfile } from './authAction';
 
 
 export const _loading = (bol) => {
@@ -223,6 +223,60 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
             dispatch(_loading(false));
 
             console.log(err, "error from _makeItemReservation", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => {
+    console.log(reservationId, reason, 'reservationId, reason')
+    return async (dispatch) => {
+        dispatch(_loading(true));
+        try {
+            const deviceToken = await AsyncStorage.getItem('deviceToken');
+            const uniqueId = await AsyncStorage.getItem('uniqueId');
+            let url = `https://cupranationapp.herokuapp.com/apis/mobile/cancel-item-reservation?deviceToken=${deviceToken}&deviceKey=${uniqueId}`
+            const option = {
+                method: 'POST',
+                url,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "reservation_id": reservationId.toString(),
+                    "reason": reason
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch(_loading(false));
+                dispatch(_getProfile(currentUser, navigation,));
+
+
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            } else {
+                dispatch(_getProfile(currentUser, navigation,));
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+
+            }
+            console.log(resp, 'resp _cancelResetvation')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err, "error from _cancelResetvation", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

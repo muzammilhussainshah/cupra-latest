@@ -3,11 +3,14 @@ import { useNavigation, DrawerActions, CommonActions } from '@react-navigation/n
 import styled from 'styled-components/native';
 import { _getProfile } from '../../store/action/authAction';
 import moment from 'moment';
-import { ImageBackground, TouchableOpacity, ScrollView, FlatList } from "react-native"
+import { ImageBackground, TouchableOpacity, ScrollView, FlatList, } from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { Colors } from '../../constants/Colors';
+import CancelReservation from '../../components/cancelReservation'
 import { height } from '../../constants/Layout';
+import { _cancelResetvation } from "../../store/action/shopAction"
+import { _cancelSubsurvices } from "../../store/action/serviceAction"
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -20,11 +23,14 @@ const SteeringIcon = styled(FastImage)`
 // a different height and width
 export const ProfileScreen: React.FC = () => {
   const [selectedTab, setselectedTab] = useState(false);
+  const [CancelReservationEnabled, setCancelReservationEnabled] = useState(false);
+  const [reservationId, setreservationId] = useState('');
   const [getMyProfilefilterdData, setgetMyProfilefilterdData] = useState([]);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = useSelector(({ reducer }: any) => reducer.currentUser);
   const myProfile = useSelector(({ reducer }: any) => reducer.myProfile);
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
   useEffect(() => {
     dispatch(_getProfile(currentUser, navigation))
@@ -34,13 +40,17 @@ export const ProfileScreen: React.FC = () => {
     console.log(myProfile, 'myProfilemyProfile')
     if (myProfile && myProfile.bookedServices && myProfile.bookedServices.length > 0) {
       let bkService = myProfile.bookedServices
-      const filterdData = bkService.filter((bkService: any) => bkService.subService_id);
+      const filterdPendingData = bkService.filter((bkService: any) => bkService.subService_id);
+      const filterdData = filterdPendingData.filter((filterdPendingData: any) => filterdPendingData.status == "PENDING");
       console.log(filterdData, 'filterdData')
+      console.log(filterdPendingData, 'filterdPendingData')
       setgetMyProfilefilterdData(filterdData)
     }
   }, [myProfile])
+  console.log(reservedParts, '))))))))))')
   return (
     <View style={{ flex: 1, paddingTop: 24 }}>
+
       <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
         <FastImage source={require('../../assets/profileBg.png')}
           resizeMode='cover'
@@ -58,6 +68,17 @@ export const ProfileScreen: React.FC = () => {
       </View>
       {/*Absolute for Work */}
       <View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
+        {CancelReservationEnabled &&
+          //  <View style={{height:'100%',width:"100%"}}>
+
+          < CancelReservation
+            _func2={(reason: any) => {
+              dispatch(_cancelResetvation(currentUser, reservationId, reason, navigation))
+              setCancelReservationEnabled(false)
+            }}
+            cancelReservation={true} _func={() => setCancelReservationEnabled(false)} Title={'Are you sure you want to cancel reservation!'} />
+          //  </View>
+        }
         <View style={{ height: "10%", marginHorizontal: 10, alignItems: "center", flexDirection: "row" }}>
           <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())
           }>
@@ -93,7 +114,7 @@ export const ProfileScreen: React.FC = () => {
           </TouchableOpacity>
 
         </View>
-        <View style={{ height: "55%" }}>
+        <View style={{ height: "55%", backgroundColor: "rgba(0,0,0,0)" }}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
             <Text style={{ fontSize: 16 }}>{full_name && full_name}</Text>
           </View>
@@ -115,7 +136,7 @@ export const ProfileScreen: React.FC = () => {
           <View style={{ flex: 6.5 }}>
             <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.5, borderColor: Colors.darkGray }}>
               <TouchableOpacity
-                onPress={() => setselectedTab(!selectedTab)}
+                onPress={() => setselectedTab(false)}
                 activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between', }}>
                 <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Booked Services</Text>
                 {!selectedTab &&
@@ -123,7 +144,7 @@ export const ProfileScreen: React.FC = () => {
                 }
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setselectedTab(!selectedTab)}
+                onPress={() => setselectedTab(true)}
                 activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between' }}>
                 <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserver Parts</Text>
                 {selectedTab &&
@@ -141,7 +162,7 @@ export const ProfileScreen: React.FC = () => {
                     data={getMyProfilefilterdData}
                     renderItem={({ item }: any) => {
                       const { subService_id, date_time } = item
-                      const { en_name } = subService_id
+                      const { en_name, _id } = subService_id
                       return (
                         <View
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
@@ -157,11 +178,20 @@ export const ProfileScreen: React.FC = () => {
 
                             </View>
                             <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
+                              {/* {!isLoader ?
+                                <ActivityIndicator
+                                  style={{ marginTop: "2%" }}
+                                  size="small" color={'#f52d56'}
+                                /> : */}
                               <TouchableOpacity
                                 activeOpacity={0.6}
+                                onPress={() => {
+                                  dispatch(_cancelSubsurvices(currentUser, item._id, navigation, getMyProfilefilterdData))
+                                }}
                                 style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
                                 <Text style={{ color: Colors.white }}>Cancel</Text>
                               </TouchableOpacity>
+                              {/* } */}
                             </View>
 
                           </View>
@@ -176,7 +206,7 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
                     renderItem={({ item }: any) => {
-                      const { item_id, date_time } = item
+                      const { item_id, date_time, _id } = item
                       const { en_name } = item_id
                       return (
                         <View
@@ -191,11 +221,18 @@ export const ProfileScreen: React.FC = () => {
                               <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text>
                             </View>
                             <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
+
                               <TouchableOpacity
+                                onPress={() => {
+                                  setCancelReservationEnabled(true)
+                                  setreservationId(_id)
+                                }
+                                }
                                 activeOpacity={0.6}
                                 style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
                                 <Text style={{ color: Colors.white }}>Cancel</Text>
                               </TouchableOpacity>
+
                             </View>
                           </View>
                         </View>
@@ -208,6 +245,6 @@ export const ProfileScreen: React.FC = () => {
           </View>
         </View>
       </View>
-    </View>
+    </View >
   )
 };

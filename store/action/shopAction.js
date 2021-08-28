@@ -254,7 +254,7 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
                 dispatch(_getProfile(currentUser, navigation,));
                 Alert.alert(
                     "Reservation!",
-                    "Reservation has been successfully cancled ",
+                    "Reservation has been successfully canceled ",
                 );
 
             }

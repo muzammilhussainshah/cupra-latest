@@ -13,7 +13,7 @@ import { _imageNewsLike } from '../../store/action/imageAction'
 
 export const ImagesContainer = styled(SafeAreaView)`
   flex: 1;
-  background-color:${Colors.secondary};
+  background-color:${Colors.white};
 `;
 const ImagePlaceholder = styled.View`
   height: 220px;
@@ -51,7 +51,7 @@ const SteeringImage = styled(FastImage)`
   height: 20px;
 `;
 const NumberOfRates = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   padding-right: 10px;
@@ -159,7 +159,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
           <BottomContainer>
             {arrOfSliderImagesData[renderImgIndex] &&
               <RowView>
-                <Text style={{ color: 'white', fontSize: 15, marginRight: "20%" }}>{moment(arrOfSliderImagesData[renderImgIndex].createdAt).fromNow()}</Text>
+                <Text style={{ color: Colors.black, fontSize: 15, marginRight: "20%" }}>{moment(arrOfSliderImagesData[renderImgIndex].createdAt).fromNow()}</Text>
               </RowView>
             }
             <TouchableOpacity
@@ -195,7 +195,7 @@ export const ImageTitleWrapper = styled.View`
   margin-top: 20px;
 `;
 export const ImageTitle = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 20px;
   font-family: 'SourceSansPro-Regular';
 `;

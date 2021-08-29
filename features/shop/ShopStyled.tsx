@@ -24,7 +24,7 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 
 export const ShopContainer = styled(SafeAreaView)`
   flex: 1;
-  background-color:${Colors.secondary}
+  background-color:${Colors.white}
 `;
 export const HeaderTitle = styled.Text`
   color: ${Colors.primary};

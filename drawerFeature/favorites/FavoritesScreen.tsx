@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigation, DrawerActions, CommonActions } from '@react-navigation/native';
+import { useNavigation, DrawerActions, } from '@react-navigation/native';
 import styled from 'styled-components/native';
-import { _getFavCars, _addFavCars, _getModal, _getBrand } from '../../store/action/favoritesCars';
+import { _getFavCars, _addFavCars, _dltFavCars, _getModal, _getBrand } from '../../store/action/favoritesCars';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import moment from 'moment';
-import { ImageBackground, TouchableOpacity, ScrollView, FlatList, } from "react-native"
+import { TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { CityModel } from '../../components/cityModel'
 import { Colors } from '../../constants/Colors';
 import CancelReservation from '../../components/cancelReservation'
-import { height } from '../../constants/Layout';
 import { _cancelResetvation } from "../../store/action/shopAction"
 import { _cancelSubsurvices } from "../../store/action/serviceAction"
 import { useDispatch, useSelector } from 'react-redux';
-
 
 const SteeringIcon = styled(FastImage)`
   height: 40px;
@@ -23,15 +20,14 @@ const SteeringIcon = styled(FastImage)`
 `;
 export const FavoritesScreen: React.FC = () => {
   const [addFavoritesCarsModal, setaddFavoritesCarsModal] = useState(false);
-  const [CancelReservationEnabled, setCancelReservationEnabled] = useState(false);
   const [modalModal, setmodalModal] = useState(false);
   const [modalName, setmodalName] = useState('');
+  const [modalId, setmodalId] = useState('');
   const [brandModal, setbrandModal] = useState(false);
   const [brandName, setbrandName] = useState('');
+  const [brandId, setbrandId] = useState('');
   const [yearModal, setyearModal] = useState(false);
   const [yearName, setyearName] = useState('');
-  const [reservationId, setreservationId] = useState('');
-  const [getMyProfilefilterdData, setgetMyProfilefilterdData] = useState([]);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = useSelector(({ reducer }: any) => reducer.currentUser);
@@ -42,7 +38,6 @@ export const FavoritesScreen: React.FC = () => {
     dispatch(_getFavCars(currentUser, navigation))
   }, [])
   useEffect(() => {
-    console.log(getFavCars, 'getFavCars')
   }, [getFavCars])
   return (
     <>
@@ -50,7 +45,6 @@ export const FavoritesScreen: React.FC = () => {
         <View style={{ height: '100%', width: '100%', }}>
           {yearModal ?
             <CancelReservation
-
               _func={() => {
                 setaddFavoritesCarsModal(false)
               }}
@@ -69,25 +63,28 @@ export const FavoritesScreen: React.FC = () => {
                 setaddFavoritesCarsModal(false)
                 if (data.brands) {
                   setbrandName(data.brands)
+                  setbrandId(data.brandId)
                 } else if (data.modalName) {
                   setmodalName(data.modalName)
+                  setmodalId(data.modalId)
                 }
               }}
             />
           }
         </View>
-
       }
-
       <View style={{ flex: 1, marginTop: 20, backgroundColor: Colors.black }}>
         <View style={{ flex: 1.8, borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey }}>
           <View style={{ flex: 7, flexDirection: "row" }}>
-            <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+              style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}
+            >
               <SteeringIcon
                 resizeMode={FastImage.resizeMode.contain}
                 source={require('../../assets/images/steering.png')}
               />
-            </View>
+            </TouchableOpacity>
             <View style={{ flex: 8 }}>
               <FastImage style={{ width: '55%', marginTop: 10, height: "100%" }} source={require('../../assets/logo.png')} resizeMode={FastImage.resizeMode.contain} />
             </View>
@@ -124,7 +121,7 @@ export const FavoritesScreen: React.FC = () => {
                     setmodalModal(true)
                     setbrandModal(false)
                     setyearModal(false)
-                    dispatch(_getModal(currentUser, navigation))
+                    dispatch(_getModal(currentUser, brandId, navigation))
                     setaddFavoritesCarsModal(true)
                   }}
                 >
@@ -150,7 +147,7 @@ export const FavoritesScreen: React.FC = () => {
                 <TouchableOpacity
 
                   onPress={() => {
-                    dispatch(_addFavCars(currentUser, navigation, brandName, modalName, yearName))
+                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName))
                   }}
                   activeOpacity={0.7}
                   style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>
@@ -159,58 +156,63 @@ export const FavoritesScreen: React.FC = () => {
               </View>
             </View>
           </View>
+          {isLoader &&
+            <ActivityIndicator
+              style={{ marginTop: "0%" }}
+              size="small" color={Colors.white}
+            />}
           <View style={{ flex: 6.3, }}>
             <ScrollView contentContainerStyle={{ padding: 30 }}>
-              {/* {isLoader ?
-              <ActivityIndicator
-                style={{ marginTop: "40%" }}
-                size="small" color={Colors.white}
-              /> : */}
-              <FlatList
-                data={[0, 1, 1, 1, 1, 1, 1]}
-                renderItem={({ item }) => {
-                  return (
-                    <View style={{ height: 100, width: "100%", borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey, padding: 10, flexDirection: "row" }}>
-                      <View style={{ flex: 2.5, justifyContent: 'center', alignItems: "center" }}>
-                        <FastImage
-                          resizeMode={'contain'}
-                          source={require('../../assets/users/border.png')}
-                          style={{ height: "90%", width: "90%", }} />
-                        <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
-                          <View style={{ height: "80%", width: "80%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
-                            <FastImage
-                              resizeMode={'contain'}
-                              source={require('../../assets/aa.png')}
-                              style={{ height: "70%", width: "70%", }} />
-                          </View>
-                        </View>
-                      </View>
-                      <View style={{ flex: 5.5, justifyContent: 'space-evenly' }}>
-                        <Text style={{ color: Colors.white, fontWeight: "bold" }}>
-                          Brand
-                        </Text>
-                        <Text style={{ color: Colors.brownishGrey, }}>
-                          Modal
-                        </Text>
-                        <Text style={{ color: Colors.brownishGrey, }}>
-                          Year
-                        </Text>
-                      </View>
-                      <View style={{ flex: 2, }}>
-                        <TouchableOpacity
-                          activeOpacity={0.8}
-                          style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
+              {getFavCars && getFavCars.length > 0 &&
+                < FlatList
+                  data={getFavCars}
+                  renderItem={({ item }: any) => {
+                    const { brand, model, year, _id }: any = item
+                    return (
+                      <View style={{ height: 100, width: "100%", borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey, padding: 10, flexDirection: "row" }}>
+                        <View style={{ flex: 2.5, justifyContent: 'center', alignItems: "center" }}>
                           <FastImage
                             resizeMode={'contain'}
-                            source={require('../../assets/images/dlticon2.png')}
-                            style={{ height: "65%", width: "65%", }} />
-                        </TouchableOpacity>
+                            source={require('../../assets/users/border.png')}
+                            style={{ height: "90%", width: "90%", }} />
+                          <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
+                            <View style={{ height: "80%", width: "80%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
+                              <FastImage
+                                resizeMode={'contain'}
+                                source={require('../../assets/aa.png')}
+                                style={{ height: "70%", width: "70%", }} />
+                            </View>
+                          </View>
+                        </View>
+                        <View style={{ flex: 5.5, justifyContent: 'space-evenly' }}>
+                          <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+                            {brand && brand.en_name}
+                          </Text>
+                          <Text style={{ color: Colors.brownishGrey, }}>
+                            {model && model.en_name}
+                          </Text>
+                          <Text style={{ color: Colors.brownishGrey, }}>
+                            {year && year}
+                          </Text>
+                        </View>
+                        <View style={{ flex: 2, }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              dispatch(_dltFavCars(currentUser, navigation, _id))
+                            }}
+                            activeOpacity={0.8}
+                            style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
+                            <FastImage
+                              resizeMode={'contain'}
+                              source={require('../../assets/images/dlticon2.png')}
+                              style={{ height: "65%", width: "65%", }} />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                    </View>
-                  )
-                }}
-              />
-              {/* } */}
+                    )
+                  }}
+                />
+              }
             </ScrollView>
           </View>
         </View>

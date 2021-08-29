@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigation, DrawerActions, CommonActions } from '@react-navigation/native';
+import { useNavigation, DrawerActions, CommonActions, useIsFocused } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { _getProfile } from '../../store/action/authAction';
 import moment from 'moment';
-import { ImageBackground, TouchableOpacity, ScrollView, FlatList, } from "react-native"
+import { ActivityIndicator, TouchableOpacity, ScrollView, FlatList, } from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { Colors } from '../../constants/Colors';
@@ -25,13 +25,14 @@ export const ProfileScreen: React.FC = () => {
   const [selectedTab, setselectedTab] = useState(false);
   const [CancelReservationEnabled, setCancelReservationEnabled] = useState(false);
   const [reservationId, setreservationId] = useState('');
+  const [servicesId, setservicesId] = useState('');
   const [getMyProfilefilterdData, setgetMyProfilefilterdData] = useState([]);
   const navigation = useNavigation();
+  const isFocused = useIsFocused()
   const dispatch = useDispatch();
   const currentUser = useSelector(({ reducer }: any) => reducer.currentUser);
   const myProfile = useSelector(({ reducer }: any) => reducer.myProfile);
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
-
   useEffect(() => {
     dispatch(_getProfile(currentUser, navigation))
   }, [])
@@ -42,11 +43,20 @@ export const ProfileScreen: React.FC = () => {
       let bkService = myProfile.bookedServices
       const filterdData = bkService.filter((bkService: any) => bkService.subService_id);
       // const filterdData = filterdPendingData.filter((filterdPendingData: any) => filterdPendingData.status == "PENDING");
-      console.log(filterdData, 'filterdData')
       // console.log(filterdPendingData, 'filterdPendingData')
       setgetMyProfilefilterdData(filterdData)
     }
   }, [myProfile])
+
+
+
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(_getProfile(currentUser, navigation))
+    }
+  }, [isFocused]);
+
+
   return (
     <View style={{ flex: 1, paddingTop: 24 }}>
 
@@ -68,15 +78,21 @@ export const ProfileScreen: React.FC = () => {
       {/*Absolute for Work */}
       <View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
         {CancelReservationEnabled &&
-          //  <View style={{height:'100%',width:"100%"}}>
-
           < CancelReservation
+            selectedTab={selectedTab}
             _func2={(reason: any) => {
-              dispatch(_cancelResetvation(currentUser, reservationId, reason, navigation))
-              setCancelReservationEnabled(false)
+              if (!selectedTab) {
+                dispatch(_cancelSubsurvices(currentUser, servicesId, navigation, getMyProfilefilterdData))
+                setCancelReservationEnabled(false)
+
+              } else {
+
+                dispatch(_cancelResetvation(currentUser, reservationId, reason, navigation))
+                setCancelReservationEnabled(false)
+              }
             }}
-            cancelReservation={true} _func={() => setCancelReservationEnabled(false)} Title={'Are you sure you want to cancel reservation!'} />
-          //  </View>
+            cancelReservation={true}
+            _func={() => setCancelReservationEnabled(false)} Title={`Are you sure you want to cancel ${selectedTab ? "reservation" : "service"} !`} />
         }
         <View style={{ height: "10%", marginHorizontal: 10, alignItems: "center", flexDirection: "row" }}>
           <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())
@@ -132,6 +148,11 @@ export const ProfileScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
           </View>
+          {isLoader &&
+            <ActivityIndicator
+              style={{ marginTop: "0%" }}
+              size="small" color={Colors.black}
+            />}
           <View style={{ flex: 6.5 }}>
             <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.5, borderColor: Colors.darkGray }}>
               <TouchableOpacity
@@ -165,34 +186,38 @@ export const ProfileScreen: React.FC = () => {
                       return (
                         <View
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
-                          <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10, flexDirection: "row" }}>
-                            <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
-                              <FastImage source={require('../../assets/images/mask.png')}
-                                style={{ height: '100%', width: '100%' }}
-                              />
-                            </View>
-                            <View style={{ flex: 3.8, justifyContent: 'center', alignItems: "center" }}>
-                              <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text>
-                              <Text style={{ color: '#cccaca' }}>{moment(date_time).format('L')}</Text>
+                          <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10 }}>
+                            <View style={{ flexDirection: "row", height: "70%" }}>
+                              <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
+                                <FastImage source={require('../../assets/images/mask.png')}
+                                  style={{ height: '100%', width: '100%' }}
+                                />
+                              </View>
+                              <View style={{ flex: 3.8, justifyContent: 'center', alignItems: "center" }}>
+                                <Text  >{moment(date_time).format('L')}</Text>
+                              </View>
+                              <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
+                                {item.status !== "PENDING" ?
+                                  <View
+                                    style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
+                                    <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                  </View> :
+                                  <TouchableOpacity
+                                    activeOpacity={0.6}
+                                    onPress={() => {
+                                      setCancelReservationEnabled(true)
+                                      setservicesId(item._id)
+                                    }}
+                                    style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
+                                    <Text style={{ color: Colors.white }}>{"Cancel"}</Text>
+                                  </TouchableOpacity>
+                                }
+                              </View>
 
                             </View>
-                            <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
-                              {item.status !== "PENDING" ?
-                                <View
-                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
-                                  <Text style={{ color: '#f52d56' }}>{item.status}</Text>
-                                </View> :
-                                <TouchableOpacity
-                                  activeOpacity={0.6}
-                                  onPress={() => {
-                                    dispatch(_cancelSubsurvices(currentUser, item._id, navigation, getMyProfilefilterdData))
-                                  }}
-                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
-                                  <Text style={{ color: Colors.white }}>{"Cancel"}</Text>
-                                </TouchableOpacity>
-                              }
+                            <View style={{ height: "30%", justifyContent: "flex-end" }}>
+                              <Text style={{ fontSize: 13 }}>{en_name}</Text>
                             </View>
-
                           </View>
                         </View>
                       )
@@ -205,48 +230,45 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
                     renderItem={({ item }: any) => {
-                      console.log(item,'::::::::::::::::::::::::')
                       const { item_id, date_time, _id } = item
+                      console.log(item, 'itemitemitemitemitemitemitem')
                       const { en_name } = item_id
                       return (
                         <View
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
-                          <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10, flexDirection: "row" }}>
-                            <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
-                              <FastImage source={require('../../assets/images/mask.png')}
-                                style={{ height: '100%', width: '100%' }}
-                              />
-                            </View>
-                            <View style={{ flex: 3.8, justifyContent: 'center', alignItems: "center" }}>
-                              <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text>
-                            </View>
-                            <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
-                              {item.status !== "PENDING" ?
-                                <View
-                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
-                                  <Text style={{ color: '#f52d56' }}>{item.status}</Text>
-                                </View> :
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    setCancelReservationEnabled(true)
-                                    setreservationId(_id)
-                                  }
-                                  }
-                                  activeOpacity={0.6}
-                                  style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
-                                  <Text style={{ color: Colors.white }}>Cancel</Text>
-                                </TouchableOpacity>
-                              }
-                              {/* <TouchableOpacity
-                                onPress={() => {
-                                  setCancelReservationEnabled(true)
-                                  setreservationId(_id)
+                          <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10, }}>
+                            <View style={{ flexDirection: "row", height: "70%" }}>
+                              <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
+                                <FastImage source={require('../../assets/images/mask.png')}
+                                  style={{ height: '100%', width: '100%' }}
+                                />
+                              </View>
+                              <View style={{ flex: 3.8, justifyContent: 'center', alignItems: "center" }}>
+                                {/* <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text> */}
+
+                                <Text  >{moment(date_time).format('L')}</Text>
+                              </View>
+                              <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>
+                                {item.status !== "PENDING" ?
+                                  <View
+                                    style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
+                                    <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                  </View> :
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      setCancelReservationEnabled(true)
+                                      setreservationId(_id)
+                                    }
+                                    }
+                                    activeOpacity={0.6}
+                                    style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
+                                    <Text style={{ color: Colors.white }}>Cancel</Text>
+                                  </TouchableOpacity>
                                 }
-                                }
-                                activeOpacity={0.6}
-                                style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", backgroundColor: '#f52d56', borderRadius: 20 }}>
-                                <Text style={{ color: Colors.white }}>Cancel</Text>
-                              </TouchableOpacity> */}
+                              </View>
+                            </View>
+                            <View style={{ height: "30%", justifyContent: 'flex-end' }}>
+                              <Text>{en_name}</Text>
                             </View>
                           </View>
                         </View>

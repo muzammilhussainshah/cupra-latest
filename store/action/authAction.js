@@ -1,4 +1,4 @@
-import { CURRENTUSER, ISLOADER, ISERROR,MYPROFILE } from "../constant/constant";
+import { CURRENTUSER, ISLOADER, ISERROR, MYPROFILE } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -646,12 +646,21 @@ export const _completeSignUp = (getPhonneNumber, navigation, getfullName, getEma
 }
 
 export const _updateProfile = (currentUser, navigation, fileURL, mobile, fullName, gender, cityName) => {
+    console.log(currentUser, navigation, fileURL, mobile, fullName, gender, cityName, 'fileURL')
     let data = new FormData()
     if (fileURL) {
         data.append('icon', { uri: fileURL.uri, name: 'image.jpg', type: fileURL.type })
+    }
+    if (fullName) {
         data.append('full_name', fullName)
+    }
+    if (mobile) {
         data.append('email', mobile)
-        data.append('gender', gender)
+    }
+    if (gender) {
+        data.append('gender', gender == 'male' ? "1" : "2")
+    }
+    if (cityName) {
         data.append('city', cityName)
     }
     return async (dispatch) => {
@@ -672,7 +681,7 @@ export const _updateProfile = (currentUser, navigation, fileURL, mobile, fullNam
             };
             var resp = await axios(option);
             if (resp.data.status == 200) {
-                dispatch(_getProfile(currentUser, navigation, ))
+                dispatch(_getProfile(currentUser, navigation,))
                 dispatch(_loading(false));
                 navigation.navigate('profile')
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
@@ -698,7 +707,7 @@ export const _updateProfile = (currentUser, navigation, fileURL, mobile, fullNam
     }
 }
 
-export const _getProfile = (currentUser, navigation, ) => {
+export const _getProfile = (currentUser, navigation,) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');

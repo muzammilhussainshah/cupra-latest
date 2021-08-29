@@ -11,7 +11,7 @@ import Video from 'react-native-video';
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${Colors.secondary};
+  background-color: ${Colors.white};
   `;
 // justify-content: center;
 const CardTileCoverContainer = styled.View`
@@ -86,7 +86,7 @@ const UserName = styled.Text`
 const ServiceTitle = styled.Text`
   font-size: 18px;
   font-family: 'SourceSansPro-Bold';
-  color: ${Colors.white};
+  color: ${Colors.black};
 `;
 const GreetingContainer = styled.View`
   padding-left: 20px;
@@ -109,7 +109,7 @@ export const ServicesGreeting: React.FC<IGreetingTypeProp> = ({
       {isLoader &&
         <ActivityIndicator
           style={{ marginTop: "15%" }}
-          size="small" color={'#ffffff'}
+          size="small" color={Colors.black}
         />}
     </GreetingContainer>
   )
@@ -129,7 +129,7 @@ const ServiceTileCover = styled(FastImage)`
   border-radius: 10px;
 `;
 const ServiceName = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   justify-content: center;
@@ -137,7 +137,7 @@ const ServiceName = styled.Text`
   margin: 5px;
 `;
 const ServiceNumber = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   padding-left: 5px;
@@ -230,14 +230,11 @@ export const ServicesTile: React.FC<IServiceTypeProp> = ({
             </RowView>
             {isBooking ?
               <TouchableOpacity
-
                 onPress={() =>
                   dispatch(_getSubServiceRating(currentUser, itemId, serviceName, navigation, getserviceId))
                   // navigation.navigate('GetAndSubmitReview', navigation,)
-
                 }
               >
-
                 <RowView>
                   <NumberOfRates>{Math.floor(numberOfRates * 10) / 10}</NumberOfRates>
                   <SteeringImage

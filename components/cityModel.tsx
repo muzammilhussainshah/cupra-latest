@@ -77,11 +77,11 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
               {cities && cities.length > 1 &&
                 <FlatList
                   data={cities && cities}
-                  renderItem={({ item }) => {
+                  renderItem={({ item }: any) => {
                     return (
                       <TouchableOpacity
                         onPress={() => {
-                          _func(item.en_name)
+                          _func({ "cityName": item.en_name, 'cityId': item._id })
                         }}
                         style={{ flexDirection: "row", padding: 20 }}>
                         <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
@@ -94,11 +94,11 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                 <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
                   <FlatList
                     data={models && models}
-                    renderItem={({ item }) => {
+                    renderItem={({ item }: any) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
-                            _func({ "modalName": item.en_name })
+                            _func({ "modalName": item.en_name, 'modalId': item._id })
                           }}
                           style={{ flexDirection: "row", padding: 20 }}>
                           <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
@@ -112,11 +112,11 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                 <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
                   <FlatList
                     data={brands && brands}
-                    renderItem={({ item }) => {
+                    renderItem={({ item }: any) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
-                            _func({ "brands": item.en_name })
+                            _func({ "brands": item.en_name, 'brandId': item._id })
                           }}
                           style={{ flexDirection: "row", padding: 20 }}>
                           <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>

@@ -11,7 +11,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 
 export const VideoContainer = styled(SafeAreaView)`
-  background-color: ${Colors.secondary};
+  background-color: ${Colors.white};
   flex: 1;
 `;
 const VideoPlaceholder = styled.View`
@@ -48,7 +48,7 @@ const SteeringImage = styled(FastImage)`
   margin-right:10px;
   `;
 const NumberOfRates = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   padding-right: 10px;
@@ -122,7 +122,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
         </View>
         <BottomContainer   >
           <RowView>
-            <Text style={{ color: 'white', fontSize: 15, marginVertical: 10 }}> {moment(getDate).fromNow()}</Text>
+            <Text style={{ color: Colors.black, fontSize: 15, marginVertical: 10 }}> {moment(getDate).fromNow()}</Text>
           </RowView>
           <TouchableOpacity
             style={{ height: "100%", }}
@@ -153,7 +153,7 @@ export const VideoTitleWrapper = styled.View`
   margin-top: 20px;
 `;
 export const VideoTitle = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 20px;
   font-family: 'SourceSansPro-Regular';
 `;

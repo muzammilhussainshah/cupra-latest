@@ -40,7 +40,7 @@ export const EditProfile: React.FC = () => {
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const myProfile = useSelector((state: any) => state.reducer.myProfile)
-  console.log(myProfile, 'myProfile')
+  console.log(currentUser, 'currenUser')
   const [cityModalEnabled, setcityModalEnabled] = useState(false);
 
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
@@ -49,7 +49,9 @@ export const EditProfile: React.FC = () => {
 
   const [cityName, setcityName] = useState(currentUser.country.en_name);
 
-  const [gender, setgender] = useState(myProfile.gender);
+  const [cityId, setcityId] = useState('');
+
+  const [gender, setgender] = useState(myProfile.gender.toLowerCase());
 
   const [fullName, setfullName] = useState(currentUser.full_name);
 
@@ -61,7 +63,7 @@ export const EditProfile: React.FC = () => {
 
   const [imgFile, setimgFile] = useState("");
 
-  const [mobile, setmobile] = useState(currentUser.mobile.toString());
+  const [mobile, setmobile] = useState(currentUser.email.toString());
 
   const takePhoto = async () => {
     try {
@@ -212,8 +214,9 @@ export const EditProfile: React.FC = () => {
     <>
 
       {cityModalEnabled ?
-        <CityModel _func={(value: string) => {
-          setcityName(value)
+        <CityModel _func={(value: any) => {
+          setcityName(value.cityName)
+          setcityId(value.cityId)
           setcityModalEnabled(false)
         }} /> :
         <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
@@ -311,22 +314,26 @@ export const EditProfile: React.FC = () => {
                       />
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Mobile</Text>
-                      <Text style={{ width: "75%", }}>{currentUser.mobile}</Text>
+                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>
+                      <TextInput
+                        style={{ height: 40, width: "75%" }}
+                        onChangeText={text => setmobile(text)}
+                        defaultValue={mobile}/>
+                      {/* <Text style={{ width: "75%", }}>{currentUser.mobile}</Text> */}
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                       <View style={{ justifyContent: "center", flex: 1 }}>
                         <Text style={{ fontSize: 16, fontWeight: "bold" }}>Gender</Text>
                       </View>
                       <TouchableOpacity
-                        onPress={() => setgender("Male")}
+                        onPress={() => setgender("male")}
                         style={{ justifyContent: "center", flex: 1 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", color: gender == 'Male' ? Colors.primary : Colors.darkGray }}>Male</Text>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", color: gender == 'male' ? Colors.primary : Colors.darkGray }}>Male</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={() => setgender("Female")}
+                        onPress={() => setgender("female")}
                         style={{ justifyContent: "center", flex: 1 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", color: gender == 'Female' ? Colors.primary : Colors.darkGray }}>Female</Text>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", color: gender == 'female' ? Colors.primary : Colors.darkGray }}>Female</Text>
                       </TouchableOpacity>
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', borderRadius: 20, height: 45, width: "80%", flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, marginVertical: 5 }}>
@@ -349,13 +356,12 @@ export const EditProfile: React.FC = () => {
                       /> :
                       <TouchableOpacity
                         onPress={() =>
-                          dispatch(_updateProfile(currentUser, navigation, imgFile, mobile, fullName, gender, cityName))
+                          dispatch(_updateProfile(currentUser, navigation, imgFile, mobile, fullName, gender, cityId))
                         }
                         activeOpacity={0.8}
                         style={{ backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 15 }}>
                         <Text style={{ fontSize: 17, fontWeight: "bold", color: Colors.white }}>Save</Text>
                       </TouchableOpacity>
-
                     }
 
                   </View>

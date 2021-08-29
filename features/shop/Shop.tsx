@@ -16,6 +16,7 @@ import { _getCatogery, _getSubCatogery, _getItemDetails } from '../../store/acti
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Value } from 'react-native-reanimated';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const Shop: React.FC = ({ navigation }: any) => {
   const [catogery, setcatogery] = useState([]);
@@ -97,7 +98,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                 return (
                   <>
                     <View>
-                      <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>‎{v.en_name}</Text>
+                      <Text style={{ color: Colors.black, fontSize: 15, padding: 10 }}>‎{v.en_name}</Text>
                     </View>
                     <FlatList
                       contentContainerStyle={{}}

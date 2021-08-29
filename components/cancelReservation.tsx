@@ -17,6 +17,7 @@ export type CancelReservationprops = PressableProps & {
   Title?: string;
   cancelReservation?: boolean;
   year?: any;
+  selectedTab?: boolean;
 };
 
 /**
@@ -24,7 +25,7 @@ export type CancelReservationprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const CancelReservation: React.FunctionComponent<CancelReservationprops> = ({ _func, Title, _func2, year }: any) => {
+export const CancelReservation: React.FunctionComponent<CancelReservationprops> = ({ _func, Title, _func2, year, selectedTab }: any) => {
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
   const isError = useSelector((state: any) => state.reducer.isError);
   const [reason, setreason] = useState('');
@@ -49,16 +50,18 @@ export const CancelReservation: React.FunctionComponent<CancelReservationprops> 
               </Text>
             </View>
             <View style={{ flex: 6, justifyContent: "space-evenly", alignItems: "center" }}>
-              <TextInput
+              {selectedTab == false ? <></> :
+                <TextInput
 
-                style={{ width: "80%", paddingHorizontal: 10, maxHeight: "50%", borderWidth: 1, color: Colors.titleGray, borderColor: Colors.primary }}
-                onChangeText={text => setreason(text)}
-                defaultValue={reason}
-                multiline={true}
-                keyboardType={year ? "numeric" : 'default'}
-                placeholder={year ? year : "Enter Reason"}
-                placeholderTextColor={Colors.titleGray}
-              />
+                  style={{ width: "80%", paddingHorizontal: 10, maxHeight: "50%", borderWidth: 1, color: Colors.titleGray, borderColor: Colors.primary }}
+                  onChangeText={text => setreason(text)}
+                  defaultValue={reason}
+                  multiline={true}
+                  keyboardType={year ? "numeric" : 'default'}
+                  placeholder={year ? year : "Enter Reason"}
+                  placeholderTextColor={Colors.titleGray}
+                />
+              }
               <View style={{ flexDirection: "row", justifyContent: 'space-evenly', width: "100%" }}>
 
                 <TouchableOpacity

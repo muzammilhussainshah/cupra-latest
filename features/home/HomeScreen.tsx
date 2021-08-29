@@ -84,7 +84,7 @@ export const HomeScreen: React.FC = () => {
       {isLoader ?
         <ActivityIndicator
           style={{ marginTop: "50%" }}
-          size="small" color={'#ffffff'}
+          size="small" color={'black'}
         /> :
         <>
           <UserStory data={getStories} navigation={navigation} filterdBy={filterdBy} />
@@ -98,36 +98,36 @@ export const HomeScreen: React.FC = () => {
               setfilterdBy("MINE")
               dispatch(_getNews(currentUser, 10, 1, 'MINE'));
             }}  >
-              <Text style={{ color: 'white', fontSize: 15 }}>For you</Text>
+              <Text style={{ color: 'black', fontSize: 15 }}>For you</Text>
               {filterdBy == "MINE" &&
-                <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
+                <View style={{ height: 3, backgroundColor: 'black', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               setfilterdBy("LATEST")
               dispatch(_getNews(currentUser, 10, 1, "LATEST"));
             }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Latest</Text>
+              <Text style={{ color: 'black', fontSize: 15 }}>Latest</Text>
               {filterdBy == "LATEST" &&
-                <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
+                <View style={{ height: 3, backgroundColor: 'black', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               setfilterdBy("POPULAR")
               dispatch(_getNews(currentUser, 10, 1, 'POPULAR'));
             }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Popular</Text>
+              <Text style={{ color: 'black', fontSize: 15 }}>Popular</Text>
               {filterdBy == "POPULAR" &&
-                <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
+                <View style={{ height: 3, backgroundColor: 'black', width: 20 }} />
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               setfilterdBy("FEATURED")
               dispatch(_getNews(currentUser, 10, 1, 'FEATURED'));
             }}>
-              <Text style={{ color: 'white', fontSize: 15 }}>Featured</Text>
+              <Text style={{ color: 'black', fontSize: 15 }}>Featured</Text>
               {filterdBy == "FEATURED" &&
-                <View style={{ height: 3, backgroundColor: 'white', width: 20 }} />
+                <View style={{ height: 3, backgroundColor: 'black', width: 20 }} />
               }
             </TouchableOpacity>
           </View>

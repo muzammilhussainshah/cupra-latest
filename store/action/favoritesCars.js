@@ -88,7 +88,6 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
-        dispatch(_loading(true));
         try {
             const option = {
                 method: 'POST',
@@ -109,7 +108,9 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
-                dispatch({ type: GETFAVCARS, payload: resp.data.data })
+                // dispatch(_loading(false));
+                dispatch(_getFavCars(currentUser, navigation))
+                // dispatch({ type: GETFAVCARS, payload: resp.data.data })
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(
@@ -122,10 +123,14 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
             }
             else {
                 dispatch(_error(resp.data.error.messageEn));
+                Alert.alert(
+                    "You can not add to favorite!",
+                    resp.data.error.messageEn,
+
+                );
                 dispatch(_loading(false));
             }
             console.log(resp, 'resp _addFavCars',)
-            dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));
@@ -133,7 +138,61 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
         }
     }
 }
-export const _getModal = (currentUser, navigation) => {
+export const _dltFavCars = (currentUser, navigation, carId) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        // dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'DELETE',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/faverate-car?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+                data: {
+                    "car_id": carId.toString()
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch(_loading(false));
+                // dispatch(_loading(false));
+                dispatch(_getFavCars(currentUser, navigation))
+                // dispatch({ type: GETFAVCARS, payload: resp.data.data })
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                Alert.alert(
+                    "You can not DELETE!",
+                    resp.data.error.messageEn,
+
+                );
+                dispatch(_loading(false));
+            }
+            console.log(resp, 'resp _dltFavCars',)
+            // dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _dltFavCars", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _getModal = (currentUser, brandId, navigation) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -141,7 +200,7 @@ export const _getModal = (currentUser, navigation) => {
         try {
             const option = {
                 method: 'GET',
-                url: `https://cupranationapp.herokuapp.com/apis/mobile/models?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/models?deviceToken=${deviceToken}&deviceKey=${uniqueId}&brandId=${brandId}`,
                 headers: {
                     'cache-control': 'no-cache',
                     "Allow-Cross-Origin": '*',

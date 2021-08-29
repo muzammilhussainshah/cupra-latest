@@ -254,8 +254,6 @@ export const EditProfile: React.FC = () => {
                 </View>
                 <View style={{ height: "35%", flexDirection: "row", paddingHorizontal: 5, alignItems: 'flex-end', justifyContent: "center" }}>
                   <View style={{ height: '50%', width: '30%', }}>
-
-                    {/* <FastImage source={{uri:'http://res.cloudinary.com/dcr3oyb57/raw/upload/v1630029564/innbq5p5y3ftkkhptedj'}} */}
                     <FastImage source={require('../../assets/users/border.png')}
                       resizeMode='contain'
                       style={{ height: '100%', width: '100%' }}
@@ -263,27 +261,16 @@ export const EditProfile: React.FC = () => {
                     {/* Absolute for image insert inside border */}
                     <View style={{ height: "100%", width: "100%", overflow: "hidden", position: 'absolute', justifyContent: "center", alignItems: "center", zIndex: -2 }}>
                       <View style={{ height: "86%", width: "86%", borderRadius: 100, backgroundColor: imageUriLocal == "" ? Colors.darkGray : null, justifyContent: "center", alignItems: "center" }}>
-                        {/* {imageUriLocal == "" ? */}
-                        {/* <FastImage source={require('../../assets/aa.png')}
-                            resizeMode='contain'
-                            tintColor={Colors.titleGray}
-                            style={{ height: '70%', width: '70%' }}
-                          />  */}
-                        {/* // : */}
-
                         < FastImage
                           resizeMode={imageUriLocal ? 'cover' : 'contain'}
                           style={{ height: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", width: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", borderRadius: 60 }}
-                          // style={{ height: 120, width: 120, borderRadius: 60 }}
                           source={imageUriLocal ? { uri: imageUriLocal } : myProfile.icon ? { uri: myProfile.icon } : require('../../assets/aa.png')}
                         />
-                        {/* } */}
                       </View>
                     </View>
                   </View>
                   <TouchableOpacity
                     onPress={() =>
-                      // setIsModalActive(!isModalActive)
                       getImg()
                     }
                     style={{ height: 35, width: 35, }}>
@@ -319,7 +306,6 @@ export const EditProfile: React.FC = () => {
                         style={{ height: 40, width: "75%" }}
                         onChangeText={text => setmobile(text)}
                         defaultValue={mobile}/>
-                      {/* <Text style={{ width: "75%", }}>{currentUser.mobile}</Text> */}
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                       <View style={{ justifyContent: "center", flex: 1 }}>
@@ -363,7 +349,6 @@ export const EditProfile: React.FC = () => {
                         <Text style={{ fontSize: 17, fontWeight: "bold", color: Colors.white }}>Save</Text>
                       </TouchableOpacity>
                     }
-
                   </View>
                 </View>
               </View>

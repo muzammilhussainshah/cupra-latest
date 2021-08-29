@@ -117,7 +117,8 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { }}
+              // onPress={() => { }}
+              onPress={() => { props.navigation.navigate("claims")}}
               icon={({ size }) => (
                 <Ionicons
                   name="browsers-outline"

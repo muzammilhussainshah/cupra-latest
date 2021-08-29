@@ -231,7 +231,6 @@ export const ProfileScreen: React.FC = () => {
                     data={reservedParts}
                     renderItem={({ item }: any) => {
                       const { item_id, date_time, _id } = item
-                      console.log(item, 'itemitemitemitemitemitemitem')
                       const { en_name } = item_id
                       return (
                         <View

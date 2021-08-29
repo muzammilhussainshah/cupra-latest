@@ -4,6 +4,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import {ProfileScreen} from '../drawerFeature/profile/ProfileScreen';
 import {EditProfile} from '../drawerFeature/editProfile/EditProfile';
 import {FavoritesScreen} from '../drawerFeature/favorites/FavoritesScreen';
+import {ClaimsScreen} from '../drawerFeature/claims/ClaimsScreen';
 import Routes from './Routes';
 import {DrawerContent} from './DrawerContent';
 import {
@@ -55,6 +56,7 @@ export const DrawerNavigator: React.FC = () => {
       <Drawer.Screen name={"profile"} component={ProfileScreen} />
       <Drawer.Screen name={"editProfile"} component={EditProfile} />
       <Drawer.Screen name={"favorites"} component={FavoritesScreen} />
+      <Drawer.Screen name={"claims"} component={ClaimsScreen} />
       {/* Add the screens that its not shown in the bottomtabs */}
     </Drawer.Navigator>
   );

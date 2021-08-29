@@ -20,7 +20,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${Colors.secondary};
+  background-color: ${Colors.white};
   `;
 
 const CardContainer = styled.View`

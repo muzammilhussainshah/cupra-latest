@@ -646,7 +646,6 @@ export const _completeSignUp = (getPhonneNumber, navigation, getfullName, getEma
 }
 
 export const _updateProfile = (currentUser, navigation, fileURL, mobile, fullName, gender, cityName) => {
-    console.log(currentUser, navigation, fileURL, mobile, fullName, gender, cityName, 'fileURL')
     let data = new FormData()
     if (fileURL) {
         data.append('icon', { uri: fileURL.uri, name: 'image.jpg', type: fileURL.type })

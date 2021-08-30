@@ -204,7 +204,7 @@ export const _cancelSubsurvices = (currentUser, subserviceId, navigation, myProf
                 dispatch(_getProfile(currentUser, navigation,));
                 Alert.alert(
                     "Survices!",
-                    "Service has been successfully canceled",
+                    "Service has been successfully cancelled",
                 );
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {

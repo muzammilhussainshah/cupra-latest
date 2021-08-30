@@ -28,6 +28,9 @@ export const FavoritesScreen: React.FC = () => {
   const [brandId, setbrandId] = useState('');
   const [yearModal, setyearModal] = useState(false);
   const [yearName, setyearName] = useState('');
+  const [favCarId, setFavCarId] = useState('');
+  const [dltModalEnabled, setdltModalEnabled] = useState(false);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = useSelector(({ reducer }: any) => reducer.currentUser);
@@ -43,34 +46,37 @@ export const FavoritesScreen: React.FC = () => {
     <>
       {addFavoritesCarsModal &&
         <View style={{ height: '100%', width: '100%', }}>
-          {yearModal ?
-            <CancelReservation
-              _func={() => {
-                setaddFavoritesCarsModal(false)
-              }}
-              year={'Enter Year'}
-              _func2={(data: any) => {
-                console.log(data, 'data')
-                setyearName(data)
-                setaddFavoritesCarsModal(false)
-              }} />
-            :
-            <CityModel
-              brandModal={brandModal}
-              modalModel={modalModal}
-              _func={(data: any) => {
-                console.log(data, 'data')
-                setaddFavoritesCarsModal(false)
-                if (data.brands) {
-                  setbrandName(data.brands)
-                  setbrandId(data.brandId)
-                } else if (data.modalName) {
-                  setmodalName(data.modalName)
-                  setmodalId(data.modalId)
-                }
-              }}
-            />
-          }
+          <CityModel
+            brandModal={brandModal}
+            modalModel={modalModal}
+            yearModal={yearModal}
+            _func={(data: any) => {
+              console.log(data, 'data')
+              setaddFavoritesCarsModal(false)
+              if (data.brands) {
+                setbrandName(data.brands)
+                setbrandId(data.brandId)
+              } else if (data.modalName) {
+                setmodalName(data.modalName)
+                setmodalId(data.modalId)
+              } else if (data.year) {
+                setyearName(data.year)
+              }
+            }}
+          />
+        </View>
+      }
+      {dltModalEnabled &&
+        <View style={{ height: "100%", width: "100%" }}>
+          < CancelReservation
+            selectedTab={false}
+            _func2={(reason: any) => {
+              dispatch(_dltFavCars(currentUser, navigation, favCarId))
+              setdltModalEnabled(false)
+            }}
+            cancelReservation={true}
+            _func={() => setdltModalEnabled(false)}
+            Title={`Are you sure you want to delete!`} />
         </View>
       }
       <View style={{ flex: 1, marginTop: 20, backgroundColor: Colors.black }}>
@@ -96,7 +102,16 @@ export const FavoritesScreen: React.FC = () => {
         <View style={{ flex: 8.2, }}>
           <View style={{ flex: 3.7, justifyContent: "center", alignItems: "center" }}>
             <View style={{ height: "80%", width: "90%", justifyContent: 'center', alignItems: "center", borderRadius: 15, backgroundColor: Colors.white }}>
-              <View style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setbrandModal(true)
+                  setyearModal(false)
+                  setmodalModal(false)
+                  dispatch(_getBrand(currentUser, navigation))
+                  setaddFavoritesCarsModal(true)
+                }}
+                style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
                   {brandName == "" ? "Brand" : brandName}
                 </Text>
@@ -111,10 +126,19 @@ export const FavoritesScreen: React.FC = () => {
                 >
                   <AntDesign name="caretdown" size={10} color={Colors.primary} />
                 </TouchableOpacity>
-              </View>
-              <View style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setmodalModal(true)
+                  setbrandModal(false)
+                  setyearModal(false)
+                  dispatch(_getModal(currentUser, brandId, navigation))
+                  setaddFavoritesCarsModal(true)
+                }}
+                style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
-                  {modalName == "" ? "Modal" : modalName}
+                  {modalName == "" ? "Model" : modalName}
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -127,9 +151,17 @@ export const FavoritesScreen: React.FC = () => {
                 >
                   <AntDesign name="caretdown" size={10} color={Colors.primary} />
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
               <View style={{ height: "27%", width: "90%", marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
-                <View style={{ height: "100%", width: "55%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    setyearModal(true)
+                    setbrandModal(false)
+                    setmodalModal(false)
+                    setaddFavoritesCarsModal(true)
+                  }}
+                  style={{ height: "100%", width: "55%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
                   <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
                     {yearName == "" ? "Year" : yearName}
                   </Text>
@@ -143,7 +175,7 @@ export const FavoritesScreen: React.FC = () => {
                   >
                     <AntDesign name="caretdown" size={10} color={Colors.primary} />
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity
 
                   onPress={() => {
@@ -168,6 +200,7 @@ export const FavoritesScreen: React.FC = () => {
                   data={getFavCars}
                   renderItem={({ item }: any) => {
                     const { brand, model, year, _id }: any = item
+                    setFavCarId(_id)
                     return (
                       <View style={{ height: 100, width: "100%", borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey, padding: 10, flexDirection: "row" }}>
                         <View style={{ flex: 2.5, justifyContent: 'center', alignItems: "center" }}>
@@ -198,17 +231,18 @@ export const FavoritesScreen: React.FC = () => {
                         <View style={{ flex: 2, }}>
                           <TouchableOpacity
                             onPress={() => {
-                              dispatch(_dltFavCars(currentUser, navigation, _id))
+                              setdltModalEnabled(true)
                             }}
                             activeOpacity={0.8}
                             style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
                             <FastImage
                               resizeMode={'contain'}
                               source={require('../../assets/images/dlticon2.png')}
-                              style={{ height: "65%", width: "65%", }} />
+                              style={{ height: "60%", width: "60%", }} />
                           </TouchableOpacity>
                         </View>
                       </View>
+                      
                     )
                   }}
                 />

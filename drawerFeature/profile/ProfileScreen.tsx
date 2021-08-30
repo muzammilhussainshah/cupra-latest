@@ -8,6 +8,8 @@ import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { Colors } from '../../constants/Colors';
 import CancelReservation from '../../components/cancelReservation'
+import * as Animatable from 'react-native-animatable';
+
 import { height } from '../../constants/Layout';
 import { _cancelResetvation } from "../../store/action/shopAction"
 import { _cancelSubsurvices } from "../../store/action/serviceAction"
@@ -38,7 +40,6 @@ export const ProfileScreen: React.FC = () => {
   }, [])
   const { icon, numberOfLikes, numberOfReviews, full_name, _id, bookedServices, reservedParts } = myProfile
   useEffect(() => {
-    console.log(myProfile, 'myProfilemyProfile')
     if (myProfile && myProfile.bookedServices && myProfile.bookedServices.length > 0) {
       let bkService = myProfile.bookedServices
       const filterdData = bkService.filter((bkService: any) => bkService.subService_id);
@@ -58,7 +59,12 @@ export const ProfileScreen: React.FC = () => {
 
 
   return (
-    <View style={{ flex: 1, paddingTop: 24 }}>
+    // <Animatable.Text 
+    // >Up and down you go</Animatable.Text>
+
+    <Animatable.View
+      animation="slideInRight" iterationCount={1} direction="alternate"
+      style={{ flex: 1, paddingTop: 24 }}>
 
       <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
         <FastImage source={require('../../assets/profileBg.png')}
@@ -76,7 +82,7 @@ export const ProfileScreen: React.FC = () => {
         </View>
       </View>
       {/*Absolute for Work */}
-      <View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
+      < View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
         {CancelReservationEnabled &&
           < CancelReservation
             selectedTab={selectedTab}
@@ -200,7 +206,10 @@ export const ProfileScreen: React.FC = () => {
                                 {item.status !== "PENDING" ?
                                   <View
                                     style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
-                                    <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                    {item.status == "CANCELED" ?
+                                      <Text style={{ color: '#f52d56' }}>CANCELLED</Text> :
+                                      <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                    }
                                   </View> :
                                   <TouchableOpacity
                                     activeOpacity={0.6}
@@ -251,7 +260,10 @@ export const ProfileScreen: React.FC = () => {
                                 {item.status !== "PENDING" ?
                                   <View
                                     style={{ height: 35, width: "90%", justifyContent: "center", alignItems: "center", }}>
-                                    <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                    {item.status == "CANCELED" ?
+                                      <Text style={{ color: '#f52d56' }}>CANCELLED</Text> :
+                                      <Text style={{ color: '#f52d56' }}>{item.status}</Text>
+                                    }
                                   </View> :
                                   <TouchableOpacity
                                     onPress={() => {
@@ -279,7 +291,7 @@ export const ProfileScreen: React.FC = () => {
             </View>
           </View>
         </View>
-      </View>
-    </View >
+      </ View >
+    </Animatable.View >
   )
 };

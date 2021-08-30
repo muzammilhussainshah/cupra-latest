@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigation, } from '@react-navigation/native';
 
 import { useDispatch, useSelector } from 'react-redux';
+import * as Animatable from 'react-native-animatable';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
@@ -39,21 +40,24 @@ export const EditProfile: React.FC = () => {
   const dispatch = useDispatch()
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
   const myProfile = useSelector((state: any) => state.reducer.myProfile)
-  console.log(currentUser, 'currenUser')
-  const [cityModalEnabled, setcityModalEnabled] = useState(false);
+
+  const isError = useSelector((state: any) => state.reducer.isError);
 
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
+  const [cityModalEnabled, setcityModalEnabled] = useState(false);
+
   const navigation = useNavigation();
 
-  const [cityName, setcityName] = useState(currentUser.country.en_name);
+  const [cityName, setcityName] = useState(currentUser && currentUser.country.en_name);
 
   const [cityId, setcityId] = useState('');
 
-  const [gender, setgender] = useState(myProfile.gender.toLowerCase());
+  const [gender, setgender] = useState(myProfile && myProfile.gender.toLowerCase());
 
-  const [fullName, setfullName] = useState(currentUser.full_name);
+  const [fullName, setfullName] = useState(currentUser && currentUser.full_name);
 
   const [isModalActive, setIsModalActive] = useState(false);
 
@@ -63,7 +67,7 @@ export const EditProfile: React.FC = () => {
 
   const [imgFile, setimgFile] = useState("");
 
-  const [mobile, setmobile] = useState(currentUser.email.toString());
+  const [mobile, setmobile] = useState(currentUser && currentUser.email.toString());
 
   const takePhoto = async () => {
     try {
@@ -219,11 +223,14 @@ export const EditProfile: React.FC = () => {
           setcityId(value.cityId)
           setcityModalEnabled(false)
         }} /> :
-        <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 30, backgroundColor: Colors.white }}>
           {/* {isModalActive &&
             <Modal _func={getImg} _func2={Platform.OS === "ios" ? takePhotoIphone : takePhoto} _modalActive={() => setIsModalActive(!isModalActive)} />
           } */}
-          <View style={{ height: height }}>
+          <Animatable.View
+
+            animation="slideInRight" iterationCount={1} direction="alternate"
+            style={{ height: height }}>
             <View style={{ flex: 1, paddingTop: 24 }}>
               <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
                 <FastImage source={require('../../assets/profileBg.png')}
@@ -305,7 +312,7 @@ export const EditProfile: React.FC = () => {
                       <TextInput
                         style={{ height: 40, width: "75%" }}
                         onChangeText={text => setmobile(text)}
-                        defaultValue={mobile}/>
+                        defaultValue={mobile} />
                     </View>
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                       <View style={{ justifyContent: "center", flex: 1 }}>
@@ -345,15 +352,20 @@ export const EditProfile: React.FC = () => {
                           dispatch(_updateProfile(currentUser, navigation, imgFile, mobile, fullName, gender, cityId))
                         }
                         activeOpacity={0.8}
-                        style={{ backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 15 }}>
+                        style={{ backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 20, width: "80%", padding: 10, marginTop: 15 }}>
                         <Text style={{ fontSize: 17, fontWeight: "bold", color: Colors.white }}>Save</Text>
                       </TouchableOpacity>
                     }
+                    {isError !== "" &&
+                      <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
+                      </Text>
+                    }
+
                   </View>
                 </View>
               </View>
             </View >
-          </View>
+          </Animatable.View>
         </ScrollView>
       }
 

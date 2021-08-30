@@ -24,17 +24,20 @@ export type CityModelprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2, brandModal, modalModel }: any) => {
+export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2, brandModal, modalModel, yearModal }: any) => {
   const [cities, setCities] = useState([])
   const [models, setModels] = useState([])
   const [brands, setbrands] = useState([])
+  const [year, setyear] = useState([])
+  const yearClone: any = []
+
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
   if (brandModal) {
     const getBrands = useSelector((state: any) => state.reducer.getBrands);
     useEffect(() => {
       setbrands(getBrands)
-      console.log(getBrands, 'getBrands')
+      // console.log(getBrands, 'getBrands')
     }, [getBrands])
 
   } else if (modalModel) {
@@ -43,6 +46,10 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
       setModels(getModels)
       console.log(getModels, 'getModels')
     }, [getModels])
+  } else if (yearModal) {
+    for (let index = 1980; index <= 2050; index++) {
+      yearClone.push(index)
+    }
   } else {
     const getCity = useSelector((state: any) => state.reducer.getCity);
     useEffect(() => {
@@ -120,6 +127,24 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                           }}
                           style={{ flexDirection: "row", padding: 20 }}>
                           <Text style={{ color: Colors.white, fontSize: 20, }}>{item.en_name}</Text>
+                        </TouchableOpacity>
+                      )
+                    }}
+                  />
+                </ScrollView>
+              }
+              {yearClone && yearClone.length > 1 &&
+                <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
+                  <FlatList
+                    data={yearClone}
+                    renderItem={({ item }: any) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            _func({ "year": item })
+                          }}
+                          style={{ flexDirection: "row", padding: 20 }}>
+                          <Text style={{ color: Colors.white, fontSize: 20, }}>{item}</Text>
                         </TouchableOpacity>
                       )
                     }}

@@ -83,7 +83,7 @@ export const _getFavCars = (currentUser, navigation) => {
         }
     }
 }
-export const _addFavCars = (currentUser, navigation, brandName, modalName, yearName) => {
+export const _addFavCars = (currentUser, navigation, brandName, modalName, yearName, setyearName, setmodalName, setbrandName) => {
     console.log(brandName, modalName, yearName, 'brandName, modalName, yearName')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -110,6 +110,9 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
                 dispatch(_loading(false));
                 // dispatch(_loading(false));
                 dispatch(_getFavCars(currentUser, navigation))
+                setyearName('')
+                setmodalName('')
+                setbrandName('')
                 // dispatch({ type: GETFAVCARS, payload: resp.data.data })
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
@@ -197,6 +200,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         dispatch(_loading(true));
+        dispatch({ type: GETMODELS, payload: {} })
         try {
             const option = {
                 method: 'GET',
@@ -248,7 +252,8 @@ export const _getModal = (currentUser, brandId, navigation) => {
         }
     }
 }
-export const _getBrand = (currentUser, navigation) => {
+export const _getBrand = (currentUser, navigation, brandName, setmodalName, setmodalId) => {
+    console.log(brandName, 'aaskjljkjasdads')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -269,6 +274,11 @@ export const _getBrand = (currentUser, navigation) => {
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 dispatch({ type: GETBRANDS, payload: resp.data.data })
+                // let BrandArr = resp.data.data
+                // const getObjinArr = BrandArr.filter(BrandArr => BrandArr.en_name == brandName);
+                // let index = BrandArr.indexOf(getObjinArr)
+                setmodalName("Model")
+                setmodalId('')
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(

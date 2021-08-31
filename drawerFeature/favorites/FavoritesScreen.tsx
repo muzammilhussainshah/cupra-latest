@@ -271,7 +271,7 @@ export const FavoritesScreen: React.FC = () => {
             </View>
           </View>
           <View style={{ flex: 3, paddingHorizontal: 80 }}>
-            <Text style={{ fontSize: 20, color: Colors.white, }}>My Favorites Cars</Text>
+            <Text style={{ fontSize: 20, color: Colors.white, }}>My Favorite Cars</Text>
           </View>
         </View>
         <View style={{ flex: 8.2, backgroundColor: Colors.white }}>
@@ -284,7 +284,7 @@ export const FavoritesScreen: React.FC = () => {
                   setModalVisible(true)
                   setyearModal(false)
                   setmodalModal(false)
-                  dispatch(_getBrand(currentUser, navigation))
+                  dispatch(_getBrand(currentUser, navigation,brandName,setmodalName))
                   setaddFavoritesCarsModal(true)
                 }}
                 style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
@@ -334,10 +334,7 @@ export const FavoritesScreen: React.FC = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName))
-                    setyearName('')
-                    setmodalName('')
-                    setbrandName('')
+                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName, setyearName, setmodalName, setbrandName))
                   }}
                   activeOpacity={0.7}
                   style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>

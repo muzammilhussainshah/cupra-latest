@@ -151,7 +151,7 @@ const SteeringImage = styled(FastImage)`
   height: 20px;
 `;
 const NumberOfRates = styled.Text`
-  color: ${Colors.lightGold};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   padding-right: 10px;

@@ -86,28 +86,6 @@ export const FavoritesScreen: React.FC = () => {
   }, [getFavCars])
   return (
     <>
-      {/* {addFavoritesCarsModal &&
-        <View style={{ height: '100%', width: '100%', }}>
-          <CityModel
-            brandModal={brandModal}
-            modalModel={modalModal}
-            yearModal={yearModal}
-            _func={(data: any) => {
-              console.log(data, 'data')
-              setaddFavoritesCarsModal(false)
-              if (data.brands) {
-                setbrandName(data.brands)
-                setbrandId(data.brandId)
-              } else if (data.modalName) {
-                setmodalName(data.modalName)
-                setmodalId(data.modalId)
-              } else if (data.year) {
-                setyearName(data.year)
-              }
-            }}
-          />
-        </View>
-      } */}
       {dltModalEnabled &&
         <View style={{ height: "100%", width: "100%" }}>
           < CancelReservation
@@ -159,6 +137,9 @@ export const FavoritesScreen: React.FC = () => {
                           setModalVisible(false)
                           setbrandName(item.en_name)
                           setbrandId(item._id)
+                          setmodalName("Model")
+                          dispatch(_getModal(currentUser, item._id, navigation))
+                          setmodalId('')
                         }}
                         style={{ flexDirection: "row", paddingVertical: 10 }}>
                         <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
@@ -225,7 +206,7 @@ export const FavoritesScreen: React.FC = () => {
           </KeyboardView>
         </Modal>
       }
-      {yearModal && yearClone && yearClone.length > 1 &&
+      {modalVisible && yearModal && yearClone && yearClone.length > 1 &&
         <Modal
           isVisible={modalVisible}
           hideModalContentWhileAnimating
@@ -293,12 +274,12 @@ export const FavoritesScreen: React.FC = () => {
             </View>
           </View>
           <View style={{ flex: 3, paddingHorizontal: 80 }}>
-            <Text style={{ fontSize: 20, color: Colors.white, }}>My Favorites Cars</Text>
+            <Text style={{ fontSize: 20, color: Colors.white, }}>My Favorite Cars</Text>
           </View>
         </View>
-        <View style={{ flex: 8.2, }}>
+        <View style={{ flex: 8.2, backgroundColor: Colors.white }}>
           <View style={{ flex: 3.7, justifyContent: "center", alignItems: "center" }}>
-            <View style={{ height: "80%", width: "90%", justifyContent: 'center', alignItems: "center", borderRadius: 15, backgroundColor: Colors.white }}>
+            <View style={{ height: "80%", width: "90%", justifyContent: 'center', alignItems: "center", borderRadius: 15, backgroundColor: Colors.black }}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
@@ -306,7 +287,7 @@ export const FavoritesScreen: React.FC = () => {
                   setModalVisible(true)
                   setyearModal(false)
                   setmodalModal(false)
-                  dispatch(_getBrand(currentUser, navigation))
+                  dispatch(_getBrand(currentUser, navigation, brandName, setmodalName, setmodalId))
                   setaddFavoritesCarsModal(true)
                 }}
                 style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
@@ -355,12 +336,8 @@ export const FavoritesScreen: React.FC = () => {
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-
                   onPress={() => {
-                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName))
-                    setyearName('')
-                    setmodalName('')
-                    setbrandName('')
+                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName, setyearName, setmodalName, setbrandName, setmodalId, setbrandId))
                   }}
                   activeOpacity={0.7}
                   style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>
@@ -372,7 +349,7 @@ export const FavoritesScreen: React.FC = () => {
           {isLoader &&
             <ActivityIndicator
               style={{ marginTop: "0%" }}
-              size="small" color={Colors.white}
+              size="small" color={Colors.black}
             />}
           <View style={{ flex: 6.3, }}>
             <ScrollView contentContainerStyle={{ padding: 30 }}>
@@ -383,14 +360,14 @@ export const FavoritesScreen: React.FC = () => {
                     const { brand, model, year, _id }: any = item
                     setFavCarId(_id)
                     return (
-                      <View style={{ height: 100, width: "100%", borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey, padding: 10, flexDirection: "row" }}>
+                      <View style={{ height: 100, width: "100%", borderBottomWidth: 0.7, borderBottomColor: Colors.black, padding: 10, flexDirection: "row" }}>
                         <View style={{ flex: 2.5, justifyContent: 'center', alignItems: "center" }}>
                           <FastImage
                             resizeMode={'contain'}
                             source={require('../../assets/users/border.png')}
                             style={{ height: "90%", width: "90%", }} />
                           <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
-                            <View style={{ height: "80%", width: "80%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
+                            <View style={{ height: "77%", width: "80%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
                               <FastImage
                                 resizeMode={'contain'}
                                 source={require('../../assets/aa.png')}
@@ -399,13 +376,13 @@ export const FavoritesScreen: React.FC = () => {
                           </View>
                         </View>
                         <View style={{ flex: 5.5, justifyContent: 'space-evenly' }}>
-                          <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+                          <Text style={{ color: Colors.black, fontWeight: "bold" }}>
                             {brand && brand.en_name}
                           </Text>
-                          <Text style={{ color: Colors.brownishGrey, }}>
+                          <Text style={{ color: Colors.black, }}>
                             {model && model.en_name}
                           </Text>
-                          <Text style={{ color: Colors.brownishGrey, }}>
+                          <Text style={{ color: Colors.black, }}>
                             {year && year}
                           </Text>
                         </View>
@@ -423,7 +400,6 @@ export const FavoritesScreen: React.FC = () => {
                           </TouchableOpacity>
                         </View>
                       </View>
-
                     )
                   }}
                 />

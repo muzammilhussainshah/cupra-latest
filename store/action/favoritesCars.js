@@ -83,7 +83,7 @@ export const _getFavCars = (currentUser, navigation) => {
         }
     }
 }
-export const _addFavCars = (currentUser, navigation, brandName, modalName, yearName) => {
+export const _addFavCars = (currentUser, navigation, brandName, modalName, yearName, setyearName, setmodalName, setbrandName, setmodalId, setbrandId) => {
     console.log(brandName, modalName, yearName, 'brandName, modalName, yearName')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -110,6 +110,11 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
                 dispatch(_loading(false));
                 // dispatch(_loading(false));
                 dispatch(_getFavCars(currentUser, navigation))
+                setyearName('')
+                setmodalName('')
+                setbrandName('')
+                setmodalId('')
+                setbrandId('')
                 // dispatch({ type: GETFAVCARS, payload: resp.data.data })
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
@@ -197,6 +202,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         dispatch(_loading(true));
+        dispatch({ type: GETMODELS, payload: {} })
         try {
             const option = {
                 method: 'GET',
@@ -215,7 +221,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
                 if (resp.data.data.length == 0) {
                     Alert.alert(
                         "Models!",
-                        "No models available",
+                        "No models available of this brand",
                     )
                 } else {
                     dispatch({ type: GETMODELS, payload: resp.data.data })
@@ -234,7 +240,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
                 dispatch(_error(resp.data.error.messageEn));
                 Alert.alert(
                     "Models!",
-                    "No models available",
+                    "No models available of this brand",
 
                 )
                 dispatch(_loading(false));
@@ -248,10 +254,12 @@ export const _getModal = (currentUser, brandId, navigation) => {
         }
     }
 }
-export const _getBrand = (currentUser, navigation) => {
+export const _getBrand = (currentUser, navigation, brandName, setmodalName, setmodalId) => {
+    // console.log(brandName, 'aaskjljkjasdads')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch({ type: GETMODELS, payload: {} })
         dispatch(_loading(true));
         try {
             const option = {
@@ -269,6 +277,13 @@ export const _getBrand = (currentUser, navigation) => {
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 dispatch({ type: GETBRANDS, payload: resp.data.data })
+                // dispatch(_getModal(currentUser, resp.data.data[0]._id, navigation))
+
+                // let BrandArr = resp.data.data
+                // const getObjinArr = BrandArr.filter(BrandArr => BrandArr.en_name == brandName);
+                // let index = BrandArr.indexOf(getObjinArr)
+                // setmodalName("Model")
+                // setmodalId('')
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(

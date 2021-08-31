@@ -32,9 +32,8 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
         <TouchableOpacity
           onPress={() => _func()}
         >
-          <FastImage style={{ width: 50, height: 50 }} source={require('../assets/images/close.png')}
-            resizeMode={FastImage.resizeMode.contain} />
-        </TouchableOpacity>
+          <Text style={{ color: 'white', fontSize: 30 ,marginRight:20}}>X</Text>
+         </TouchableOpacity>
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
         {sliderBoxEnabled ?

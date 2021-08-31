@@ -172,7 +172,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               /> */}
 
               <View style={{
-                width: 160, backgroundColor: "red", zIndex: 1,
+                width: 160,  zIndex: 1,
                 height: 150,
               }}>
                 <ImageViewer

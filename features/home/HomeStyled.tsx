@@ -176,7 +176,6 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: "red",
                   marginHorizontal: 10,
                 }}>
                 <PromotionTileTitleContainer>

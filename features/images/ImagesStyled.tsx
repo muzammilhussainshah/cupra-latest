@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SliderBox } from "react-native-image-slider-box";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import styled from 'styled-components/native';
 import { Colors } from '../../constants/Colors';
 import moment from 'moment';
 import { _imageNewsLike } from '../../store/action/imageAction'
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 export const ImagesContainer = styled(SafeAreaView)`
   flex: 1;
@@ -93,7 +94,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
   useEffect(() => {
     if (allData && allData.media && allData.media.length > 1) {
       allData.media.map((item: any,) => {
-        sliderImagesPathClone.push(item.url)
+        sliderImagesPathClone.push({ url: item.url })
         sliderImagesData.push(item)
       })
       setimgSliderEnabled(true)
@@ -113,6 +114,23 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
   //   //   }
   //   // }
   // }
+
+  const images = [{
+    // Simplest usage.
+    url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+
+    // width: number
+    // height: number
+    // Optional, if you know the image size, you can set the optimization performance
+
+    // You can pass props to <Image />.
+    // props: {
+    //     // headers: ...
+    // }
+  }, {
+    url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+
+  }]
   return (
     <TouchableScale
       style={{ flex: 1 }}
@@ -120,7 +138,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       tension={50}
       friction={7}
       useNativeDriver
-      onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
+      // onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
     // onPress={onPress}
     >
       <ImagePlaceholder>
@@ -136,7 +154,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                 alignItems: "center"
               }}
             >
-              <SliderBox
+              {/* <SliderBox
                 resizeMode="contain"
                 ImageComponentStyle={{ width: '100%', height: "100%", borderRadius: 10 }}
                 dotColor="rgba(0,0,0,0)"
@@ -151,7 +169,16 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                   setrenderImgIndex(index)
                 }
                 }
-              />
+              /> */}
+
+              <View style={{
+                width: 160,backgroundColor:"red",zIndex:1,
+                height: 150, 
+              }}>
+                <ImageViewer enableImageZoom={false}	 onClick={()=>navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })} imageUrls={arrOfSliderImagesPath} />
+              </View>
+
+
             </View>
             :
             <ImageTileCover source={{ uri: imageUri }} />

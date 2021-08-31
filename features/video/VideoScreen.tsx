@@ -28,7 +28,7 @@ export const VideoScreen: React.FC = () => {
   console.log(videos, 'videosvideosvideosvideos')
   return (
     <VideoContainer>
-      <Header        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}      />
+      <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       <VideoTitleWrapper>
         <VideoTitle>Videos</VideoTitle>

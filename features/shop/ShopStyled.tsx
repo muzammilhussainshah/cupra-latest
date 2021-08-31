@@ -27,7 +27,7 @@ export const ShopContainer = styled(SafeAreaView)`
   background-color:${Colors.white}
 `;
 export const HeaderTitle = styled.Text`
-  color: ${Colors.primary};
+  color: ${Colors.black};
   font-size: 20px;
   font-family: 'SourceSansPro-Bold';
   margin: 10px;

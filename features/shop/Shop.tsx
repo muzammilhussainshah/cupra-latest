@@ -102,8 +102,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
                     setcatogery(cloneCatogery);
                     setflag(!flag);
                   }}>
-                    <Text style={{ marginHorizontal: 20, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
-                    {item.isSelected && <View style={{ marginHorizontal: 20, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
+                    <Text style={{ marginHorizontal: 20, color: Colors.black, fontSize: 15 }}>{item.en_name}</Text>
+                    {item.isSelected && <View style={{ marginHorizontal: 20, height: 3, backgroundColor: Colors.black, width: 10 }} />}
                   </TouchableOpacity>
                 )
               })}

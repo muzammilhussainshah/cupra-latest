@@ -138,7 +138,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       tension={50}
       friction={7}
       useNativeDriver
-      // onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
+    // onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
     // onPress={onPress}
     >
       <ImagePlaceholder>
@@ -172,10 +172,14 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               /> */}
 
               <View style={{
-                width: 160,backgroundColor:"red",zIndex:1,
-                height: 150, 
+                width: 160, backgroundColor: "red", zIndex: 1,
+                height: 150,
               }}>
-                <ImageViewer enableImageZoom={false}	 onClick={()=>navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })} imageUrls={arrOfSliderImagesPath} />
+                <ImageViewer
+                  onChange={(index: any) => {
+                    setrenderImgIndex(index)
+                  }}
+                  enableImageZoom={false} onClick={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })} imageUrls={arrOfSliderImagesPath} />
               </View>
 
 

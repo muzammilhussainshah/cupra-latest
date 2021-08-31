@@ -24,39 +24,32 @@ export type CityModelprops = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2, brandModal, modalModel, yearModal }: any) => {
+export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Title, _func2, brandModal, modalModel }: any) => {
   const [cities, setCities] = useState([])
   const [models, setModels] = useState([])
   const [brands, setbrands] = useState([])
-  const [year, setyear] = useState([])
-  const yearClone: any = []
-
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
-  if (brandModal) {
-    const getBrands = useSelector((state: any) => state.reducer.getBrands);
-    useEffect(() => {
-      setbrands(getBrands)
-      // console.log(getBrands, 'getBrands')
-    }, [getBrands])
+  const getCity = useSelector((state: any) => state.reducer.getCity);
+  useEffect(() => {
+    setCities(getCity)
+    console.log(getCity, '555555555555')
+  }, [getCity])
+  // if (brandModal) {
+  //   const getBrands = useSelector((state: any) => state.reducer.getBrands);
+  //   useEffect(() => {
+  //     setbrands(getBrands)
+  //     console.log(getBrands, 'getBrands')
+  //   }, [getBrands])
 
-  } else if (modalModel) {
-    const getModels = useSelector((state: any) => state.reducer.getModels);
-    useEffect(() => {
-      setModels(getModels)
-      console.log(getModels, 'getModels')
-    }, [getModels])
-  } else if (yearModal) {
-    for (let index = 1980; index <= 2050; index++) {
-      yearClone.push(index)
-    }
-  } else {
-    const getCity = useSelector((state: any) => state.reducer.getCity);
-    useEffect(() => {
-      setCities(getCity)
-      console.log(getCity, '555555555555')
-    }, [getCity])
-  }
+  // } else if (modalModel) {
+  //   const getModels = useSelector((state: any) => state.reducer.getModels);
+  //   useEffect(() => {
+  //     setModels(getModels)
+  //     console.log(getModels, 'getModels')
+  //   }, [getModels])
+  // } else {
+  // }
   return (
     <View
       style={{ height: "100%", width: "100%", justifyContent: "center", backgroundColor: 'rgba(0,0,0,0.9)', alignItems: "center", position: "absolute", zIndex: 2 }}>
@@ -97,7 +90,7 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                   }}
                 />
               }
-              {models && models.length > 1 &&
+              {/* {models && models.length > 1 &&
                 <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
                   <FlatList
                     data={models && models}
@@ -132,25 +125,7 @@ export const CityModel: React.FunctionComponent<CityModelprops> = ({ _func, Titl
                     }}
                   />
                 </ScrollView>
-              }
-              {yearClone && yearClone.length > 1 &&
-                <ScrollView contentContainerStyle={{ paddingVertical: 30 }}>
-                  <FlatList
-                    data={yearClone}
-                    renderItem={({ item }: any) => {
-                      return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            _func({ "year": item })
-                          }}
-                          style={{ flexDirection: "row", padding: 20 }}>
-                          <Text style={{ color: Colors.white, fontSize: 20, }}>{item}</Text>
-                        </TouchableOpacity>
-                      )
-                    }}
-                  />
-                </ScrollView>
-              }
+              } */}
             </>
 
           }

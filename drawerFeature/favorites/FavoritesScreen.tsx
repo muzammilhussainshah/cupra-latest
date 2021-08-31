@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation, DrawerActions, } from '@react-navigation/native';
+import { BlurView } from '@react-native-community/blur';
 import styled from 'styled-components/native';
 import { _getFavCars, _addFavCars, _dltFavCars, _getModal, _getBrand } from '../../store/action/favoritesCars';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from "react-native"
+import {
+  TouchableOpacity, ScrollView, FlatList, ActivityIndicator,
+  Platform,
+  TouchableWithoutFeedback,
+  Alert
+} from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
+import { Container, Item, KeyboardView, List, Title } from '../../components/SelectStyle';
+import Modal from 'react-native-modal';
 import { CityModel } from '../../components/cityModel'
 import { Colors } from '../../constants/Colors';
 import CancelReservation from '../../components/cancelReservation'
@@ -21,6 +29,7 @@ const SteeringIcon = styled(FastImage)`
 export const FavoritesScreen: React.FC = () => {
   const [addFavoritesCarsModal, setaddFavoritesCarsModal] = useState(false);
   const [modalModal, setmodalModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [modalName, setmodalName] = useState('');
   const [modalId, setmodalId] = useState('');
   const [brandModal, setbrandModal] = useState(false);
@@ -30,6 +39,11 @@ export const FavoritesScreen: React.FC = () => {
   const [yearName, setyearName] = useState('');
   const [favCarId, setFavCarId] = useState('');
   const [dltModalEnabled, setdltModalEnabled] = useState(false);
+  const [cities, setCities] = useState([])
+  const [models, setModels] = useState([])
+  const [brands, setbrands] = useState([])
+  const [year, setyear] = useState([])
+  const yearClone: any = []
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -37,14 +51,42 @@ export const FavoritesScreen: React.FC = () => {
   const getFavCars = useSelector(({ reducer }: any) => reducer.getFavCars);
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+
+
+  // if (brandModal) {
+  const getBrands = useSelector((state: any) => state.reducer.getBrands);
   useEffect(() => {
+    setbrands(getBrands)
+    console.log(getBrands, 'getBrands')
+  }, [getBrands])
+
+  // } else if (modalModal) {
+  const getModels = useSelector((state: any) => state.reducer.getModels);
+  if (yearModal) {
+    for (let index = 1980; index <= 2050; index++) {
+      yearClone.push(index)
+    }
+  }
+
+
+
+  useEffect(() => {
+    setModels(getModels)
+    console.log(getModels, 'getModels')
+  }, [getModels])
+  useEffect(() => {
+
     dispatch(_getFavCars(currentUser, navigation))
   }, [])
   useEffect(() => {
   }, [getFavCars])
   return (
     <>
-      {addFavoritesCarsModal &&
+      {/* {addFavoritesCarsModal &&
         <View style={{ height: '100%', width: '100%', }}>
           <CityModel
             brandModal={brandModal}
@@ -65,7 +107,7 @@ export const FavoritesScreen: React.FC = () => {
             }}
           />
         </View>
-      }
+      } */}
       {dltModalEnabled &&
         <View style={{ height: "100%", width: "100%" }}>
           < CancelReservation
@@ -78,6 +120,161 @@ export const FavoritesScreen: React.FC = () => {
             _func={() => setdltModalEnabled(false)}
             Title={`Are you sure you want to delete!`} />
         </View>
+      }
+      {modalVisible && brandModal && brands && brands.length > 1 &&
+        <Modal
+          isVisible={modalVisible}
+          hideModalContentWhileAnimating
+          useNativeDriver
+          onBackdropPress={toggleModal}
+          onBackButtonPress={toggleModal}
+          style={{ margin: 0 }}
+          customBackdrop={Platform.select({
+            ios: (
+              <BlurView
+                style={{ flex: 1 }}
+                blurType={'dark'}
+                blurAmount={100}
+                blurRadius={100}>
+                <TouchableWithoutFeedback style={{ flex: 1 }} onPress={toggleModal}>
+                  <View style={{ flex: 1 }} />
+                </TouchableWithoutFeedback>
+              </BlurView>
+            ),
+            android: null,
+          })}>
+          <KeyboardView>
+            <Container>
+              < List
+                contentContainerStyle={{}}
+                removeClippedSubviews
+                maxToRenderPerBatch={10}
+                data={brands}
+                renderItem={({ item }: any) => {
+                  return (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setaddFavoritesCarsModal(false)
+                          setModalVisible(false)
+                          setbrandName(item.en_name)
+                          setbrandId(item._id)
+                        }}
+                        style={{ flexDirection: "row", paddingVertical: 10 }}>
+                        <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
+                      </TouchableOpacity>
+                    </>
+                  )
+                }
+                }
+                keyboardDismissMode={'on-drag'}
+              />
+            </Container>
+          </KeyboardView>
+        </Modal>
+      }
+      {modalVisible && modalModal && models && models.length > 1 &&
+        <Modal
+          isVisible={modalVisible}
+          hideModalContentWhileAnimating
+          useNativeDriver
+          onBackdropPress={toggleModal}
+          onBackButtonPress={toggleModal}
+          style={{ margin: 0 }}
+          customBackdrop={Platform.select({
+            ios: (
+              <BlurView
+                style={{ flex: 1 }}
+                blurType={'dark'}
+                blurAmount={100}
+                blurRadius={100}>
+                <TouchableWithoutFeedback style={{ flex: 1 }} onPress={toggleModal}>
+                  <View style={{ flex: 1 }} />
+                </TouchableWithoutFeedback>
+              </BlurView>
+            ),
+            android: null,
+          })}>
+          <KeyboardView>
+            <Container>
+              < List
+                contentContainerStyle={{}}
+                removeClippedSubviews
+                maxToRenderPerBatch={10}
+                data={models}
+                renderItem={({ item }: any) => {
+                  return (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setaddFavoritesCarsModal(false)
+                          setModalVisible(false)
+                          setmodalName(item.en_name)
+                          setmodalId(item._id)
+                        }}
+                        style={{ flexDirection: "row", paddingVertical: 10 }}>
+                        <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
+                      </TouchableOpacity>
+                    </>
+                  )
+                }
+                }
+                keyboardDismissMode={'on-drag'}
+              />
+            </Container>
+          </KeyboardView>
+        </Modal>
+      }
+      {yearModal && yearClone && yearClone.length > 1 &&
+        <Modal
+          isVisible={modalVisible}
+          hideModalContentWhileAnimating
+          useNativeDriver
+          onBackdropPress={toggleModal}
+          onBackButtonPress={toggleModal}
+          style={{ margin: 0 }}
+          customBackdrop={Platform.select({
+            ios: (
+              <BlurView
+                style={{ flex: 1 }}
+                blurType={'dark'}
+                blurAmount={100}
+                blurRadius={100}>
+                <TouchableWithoutFeedback style={{ flex: 1 }} onPress={toggleModal}>
+                  <View style={{ flex: 1 }} />
+                </TouchableWithoutFeedback>
+              </BlurView>
+            ),
+            android: null,
+          })}>
+          <KeyboardView>
+            <Container>
+              < List
+                contentContainerStyle={{}}
+                removeClippedSubviews
+                maxToRenderPerBatch={10}
+                data={yearClone}
+                renderItem={({ item }: any) => {
+                  return (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setaddFavoritesCarsModal(false)
+                          setModalVisible(false)
+                          setyearName(item)
+                        }}
+                        style={{ flexDirection: "row", paddingVertical: 10 }}>
+                        <Text style={{ color: Colors.black, fontSize: 20, }}>{item}</Text>
+                      </TouchableOpacity>
+                    </>
+                  )
+                }
+                }
+                keyboardDismissMode={'on-drag'}
+              />
+            </Container>
+          </KeyboardView>
+        </Modal>
       }
       <View style={{ flex: 1, marginTop: 20, backgroundColor: Colors.black }}>
         <View style={{ flex: 1.8, borderBottomWidth: 0.5, borderBottomColor: Colors.brownishGrey }}>
@@ -106,6 +303,7 @@ export const FavoritesScreen: React.FC = () => {
                 activeOpacity={0.7}
                 onPress={() => {
                   setbrandModal(true)
+                  setModalVisible(true)
                   setyearModal(false)
                   setmodalModal(false)
                   dispatch(_getBrand(currentUser, navigation))
@@ -115,21 +313,14 @@ export const FavoritesScreen: React.FC = () => {
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
                   {brandName == "" ? "Brand" : brandName}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setbrandModal(true)
-                    setyearModal(false)
-                    setmodalModal(false)
-                    dispatch(_getBrand(currentUser, navigation))
-                    setaddFavoritesCarsModal(true)
-                  }}
-                >
+                <View>
                   <AntDesign name="caretdown" size={10} color={Colors.primary} />
-                </TouchableOpacity>
+                </View>
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
+                  setModalVisible(true)
                   setmodalModal(true)
                   setbrandModal(false)
                   setyearModal(false)
@@ -140,22 +331,15 @@ export const FavoritesScreen: React.FC = () => {
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
                   {modalName == "" ? "Model" : modalName}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setmodalModal(true)
-                    setbrandModal(false)
-                    setyearModal(false)
-                    dispatch(_getModal(currentUser, brandId, navigation))
-                    setaddFavoritesCarsModal(true)
-                  }}
-                >
+                <View                >
                   <AntDesign name="caretdown" size={10} color={Colors.primary} />
-                </TouchableOpacity>
+                </View>
               </TouchableOpacity>
               <View style={{ height: "27%", width: "90%", marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
+                    setModalVisible(true)
                     setyearModal(true)
                     setbrandModal(false)
                     setmodalModal(false)
@@ -165,21 +349,18 @@ export const FavoritesScreen: React.FC = () => {
                   <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
                     {yearName == "" ? "Year" : yearName}
                   </Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setyearModal(true)
-                      setbrandModal(false)
-                      setmodalModal(false)
-                      setaddFavoritesCarsModal(true)
-                    }}
+                  <View
                   >
                     <AntDesign name="caretdown" size={10} color={Colors.primary} />
-                  </TouchableOpacity>
+                  </View>
                 </TouchableOpacity>
                 <TouchableOpacity
 
                   onPress={() => {
                     dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName))
+                    setyearName('')
+                    setmodalName('')
+                    setbrandName('')
                   }}
                   activeOpacity={0.7}
                   style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>
@@ -242,7 +423,7 @@ export const FavoritesScreen: React.FC = () => {
                           </TouchableOpacity>
                         </View>
                       </View>
-                      
+
                     )
                   }}
                 />

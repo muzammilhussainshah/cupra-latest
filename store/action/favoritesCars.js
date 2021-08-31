@@ -212,7 +212,14 @@ export const _getModal = (currentUser, brandId, navigation) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
-                dispatch({ type: GETMODELS, payload: resp.data.data })
+                if (resp.data.data.length == 0) {
+                    Alert.alert(
+                        "Models!",
+                        "No models available",
+                    )
+                } else {
+                    dispatch({ type: GETMODELS, payload: resp.data.data })
+                }
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(
@@ -225,6 +232,11 @@ export const _getModal = (currentUser, brandId, navigation) => {
             }
             else {
                 dispatch(_error(resp.data.error.messageEn));
+                Alert.alert(
+                    "Models!",
+                    "No models available",
+
+                )
                 dispatch(_loading(false));
             }
             console.log(resp, 'resp getModal',)

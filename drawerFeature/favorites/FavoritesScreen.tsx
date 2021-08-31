@@ -137,6 +137,9 @@ export const FavoritesScreen: React.FC = () => {
                           setModalVisible(false)
                           setbrandName(item.en_name)
                           setbrandId(item._id)
+                          setmodalName("Model")
+                          dispatch(_getModal(currentUser, item._id, navigation))
+                          setmodalId('')
                         }}
                         style={{ flexDirection: "row", paddingVertical: 10 }}>
                         <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
@@ -203,7 +206,7 @@ export const FavoritesScreen: React.FC = () => {
           </KeyboardView>
         </Modal>
       }
-      {yearModal && yearClone && yearClone.length > 1 &&
+      {modalVisible && yearModal && yearClone && yearClone.length > 1 &&
         <Modal
           isVisible={modalVisible}
           hideModalContentWhileAnimating
@@ -284,7 +287,7 @@ export const FavoritesScreen: React.FC = () => {
                   setModalVisible(true)
                   setyearModal(false)
                   setmodalModal(false)
-                  dispatch(_getBrand(currentUser, navigation,brandName,setmodalName))
+                  dispatch(_getBrand(currentUser, navigation, brandName, setmodalName, setmodalId))
                   setaddFavoritesCarsModal(true)
                 }}
                 style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
@@ -334,7 +337,7 @@ export const FavoritesScreen: React.FC = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName, setyearName, setmodalName, setbrandName))
+                    dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName, setyearName, setmodalName, setbrandName, setmodalId, setbrandId))
                   }}
                   activeOpacity={0.7}
                   style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { SliderBox } from "react-native-image-slider-box";
 
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 import { PressableProps, TouchableOpacity } from 'react-native';
 
 import { Text, View } from 'react-native-animatable';
@@ -32,19 +34,21 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
         <TouchableOpacity
           onPress={() => _func()}
         >
-          <Text style={{ color: 'white', fontSize: 30 ,marginRight:20}}>X</Text>
-         </TouchableOpacity>
+          <Text style={{ color: 'white', fontSize: 30, marginRight: 20 }}>X</Text>
+        </TouchableOpacity>
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
         {sliderBoxEnabled ?
-          <SliderBox
-            images={coverImage}
-            resizeMode={'cover'}
-            dotColor="rgba(0,0,0,0)"
-            inactiveDotColor="rgba(0,0,0,0)"
-            firstItem={selectedImageIndex}
-            onCurrentImagePressed={(index: any) => { }}
-          /> :
+          <ImageViewer index={selectedImageIndex} imageUrls={coverImage} />
+          // <SliderBox
+          //   images={coverImage}
+          //   resizeMode={'cover'}
+          //   dotColor="rgba(0,0,0,0)"
+          //   inactiveDotColor="rgba(0,0,0,0)"
+          //   firstItem={selectedImageIndex}
+          //   onCurrentImagePressed={(index: any) => { }}
+          // />
+          :
           <FastImage style={{ width: "100%", height: "100%" }} source={{ uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }}
             resizeMode={FastImage.resizeMode.contain} />
         }

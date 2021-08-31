@@ -138,8 +138,8 @@ export const FavoritesScreen: React.FC = () => {
                           setbrandName(item.en_name)
                           setbrandId(item._id)
                           setmodalName("Model")
-                          dispatch(_getModal(currentUser, item._id, navigation))
                           setmodalId('')
+                          dispatch(_getModal(currentUser, item._id, navigation))
                         }}
                         style={{ flexDirection: "row", paddingVertical: 10 }}>
                         <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
@@ -283,11 +283,10 @@ export const FavoritesScreen: React.FC = () => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
+                  dispatch(_getBrand(currentUser, navigation, setModalVisible ))
                   setbrandModal(true)
-                  setModalVisible(true)
                   setyearModal(false)
                   setmodalModal(false)
-                  dispatch(_getBrand(currentUser, navigation, brandName, setmodalName, setmodalId))
                   setaddFavoritesCarsModal(true)
                 }}
                 style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
@@ -301,12 +300,14 @@ export const FavoritesScreen: React.FC = () => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
-                  setModalVisible(true)
+                  setmodalName("Model")
+                  setmodalId('')
+                  dispatch(_getModal(currentUser, brandId, navigation,setModalVisible))
                   setmodalModal(true)
                   setbrandModal(false)
                   setyearModal(false)
-                  dispatch(_getModal(currentUser, brandId, navigation))
                   setaddFavoritesCarsModal(true)
+                  
                 }}
                 style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>

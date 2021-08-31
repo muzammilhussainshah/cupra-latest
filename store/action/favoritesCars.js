@@ -197,12 +197,12 @@ export const _dltFavCars = (currentUser, navigation, carId) => {
         }
     }
 }
-export const _getModal = (currentUser, brandId, navigation) => {
+export const _getModal = (currentUser, brandId, navigation, setModalVisible) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
-        dispatch(_loading(true));
         dispatch({ type: GETMODELS, payload: {} })
+        dispatch(_loading(true));
         try {
             const option = {
                 method: 'GET',
@@ -218,6 +218,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
+                setModalVisible(true)
                 if (resp.data.data.length == 0) {
                     Alert.alert(
                         "Models!",
@@ -254,7 +255,7 @@ export const _getModal = (currentUser, brandId, navigation) => {
         }
     }
 }
-export const _getBrand = (currentUser, navigation, brandName, setmodalName, setmodalId) => {
+export const _getBrand = (currentUser, navigation, setModalVisible) => {
     // console.log(brandName, 'aaskjljkjasdads')
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -277,6 +278,7 @@ export const _getBrand = (currentUser, navigation, brandName, setmodalName, setm
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
                 dispatch({ type: GETBRANDS, payload: resp.data.data })
+                setModalVisible(true)
                 // dispatch(_getModal(currentUser, resp.data.data[0]._id, navigation))
 
                 // let BrandArr = resp.data.data

@@ -23,6 +23,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
 
   const [Subcatogery, setSubcatogery] = useState([]);
 
+  const [search, setsearch] = useState([]);
+
   const [getReview, setgetReview] = useState(false);
 
   const [flag, setflag] = useState(false);
@@ -36,7 +38,25 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const shopSubCatogery = useSelector((state: any) => state.reducer.shopSubCatogery)
 
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
-  // console.log(Subcatogery, 'Subcatogery')
+
+
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setSubcatogery(shopSubCatogery)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < shopSubCatogery.length; index++) {
+        filterChat = shopSubCatogery.filter((data: any) => { return data.en_name.match(searchPattern) });
+      }
+      setSubcatogery(filterChat)
+    }
+  }
+
   useEffect(() => {
     dispatch(_getCatogery(currentUser, navigation))
   }, [])
@@ -57,7 +77,10 @@ export const Shop: React.FC = ({ navigation }: any) => {
         <GetReviewComponent _func={() => setgetReview(false)} />
       } */}
       <ShopContainer>
-        <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        <Header
+          _func={(e: any) => searchUser(e)}
+          searchBarInput={true}
+          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
         <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>

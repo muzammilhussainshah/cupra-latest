@@ -62,9 +62,7 @@ export const ProfileScreen: React.FC = () => {
     // <Animatable.Text 
     // >Up and down you go</Animatable.Text>
 
-    <Animatable.View
-      animation="slideInRight" iterationCount={1} direction="alternate"
-      style={{ flex: 1, paddingTop: 24 }}>
+    < View style={{ flex: 1, paddingTop: 24 }}>
 
       <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
         <FastImage source={require('../../assets/profileBg.png')}
@@ -194,7 +192,7 @@ export const ProfileScreen: React.FC = () => {
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
                           <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10 }}>
                             <View style={{ flexDirection: "row", height: "70%" }}>
-                              <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
+                              <View style={{ flex: 2.4,   overflow: "hidden", borderRadius: 10 }}>
                                 <FastImage source={require('../../assets/images/mask.png')}
                                   style={{ height: '100%', width: '100%' }}
                                 />
@@ -246,7 +244,7 @@ export const ProfileScreen: React.FC = () => {
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
                           <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10, }}>
                             <View style={{ flexDirection: "row", height: "70%" }}>
-                              <View style={{ flex: 2.4, backgroundColor: 'green', overflow: "hidden", borderRadius: 10 }}>
+                              <View style={{ flex: 2.4, overflow: "hidden", borderRadius: 10 }}>
                                 <FastImage source={require('../../assets/images/mask.png')}
                                   style={{ height: '100%', width: '100%' }}
                                 />
@@ -292,6 +290,6 @@ export const ProfileScreen: React.FC = () => {
           </View>
         </View>
       </ View >
-    </Animatable.View >
+    </View >
   )
 };

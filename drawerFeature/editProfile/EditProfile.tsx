@@ -9,7 +9,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
 
 import styled from 'styled-components/native';
-import Modal from "../../components/modal"
 
 import { TouchableOpacity, ScrollView, TextInput, Alert, Platform, PermissionsAndroid, ActivityIndicator } from "react-native"
 
@@ -18,9 +17,11 @@ import { CityModel } from '../../components/cityModel'
 import { Text, View } from 'react-native-animatable';
 
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+
 import FastImage from 'react-native-fast-image';
 
 import { _getCity } from '../../store/action/action'
+
 import { _updateProfile } from '../../store/action/authAction'
 
 import { Colors } from '../../constants/Colors';
@@ -227,9 +228,7 @@ export const EditProfile: React.FC = () => {
           {/* {isModalActive &&
             <Modal _func={getImg} _func2={Platform.OS === "ios" ? takePhotoIphone : takePhoto} _modalActive={() => setIsModalActive(!isModalActive)} />
           } */}
-          <Animatable.View
-
-            animation="slideInRight" iterationCount={1} direction="alternate"
+          < View
             style={{ height: height }}>
             <View style={{ flex: 1, paddingTop: 24 }}>
               <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
@@ -365,7 +364,7 @@ export const EditProfile: React.FC = () => {
                 </View>
               </View>
             </View >
-          </Animatable.View>
+          </ View>
         </ScrollView>
       }
 

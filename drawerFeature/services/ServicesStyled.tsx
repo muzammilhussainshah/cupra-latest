@@ -202,7 +202,7 @@ export const ServicesTile: React.FC<IServiceTypeProp> = ({
   let dispatch = useDispatch()
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-  console.log(getserviceId, 'vvv')
+  // console.log(getserviceId, 'vvv')
   return (
     !isLoader ?
       <TouchableScale

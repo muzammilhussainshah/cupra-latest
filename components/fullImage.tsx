@@ -39,7 +39,10 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
         {sliderBoxEnabled ?
-          <ImageViewer index={selectedImageIndex} imageUrls={coverImage} />
+          <ImageViewer 
+          saveToLocalByLongPress={false}
+          
+          index={selectedImageIndex} imageUrls={coverImage} />
           // <SliderBox
           //   images={coverImage}
           //   resizeMode={'cover'}

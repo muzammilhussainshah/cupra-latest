@@ -81,7 +81,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 }) => {
   const [arrOfSliderImagesPath, setarrOfSliderImagesPath] = useState([])
   const [arrOfSliderImagesData, setArrOfSliderImagesData] = useState([])
-  const [imgLikes, setimageLikes] = useState('');
+  const [imgLikes, setimageLikes] = useState(0);
   const [imgSliderEnabled, setimgSliderEnabled] = useState(false)
   const [likeByMe, setlikeByMe] = useState(false)
   // const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
@@ -107,7 +107,6 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 
     setimageLikes(sliderImagesData && sliderImagesData[renderImgIndex] && sliderImagesData[renderImgIndex].likesCount)
     setlikeByMe(sliderImagesData && sliderImagesData[renderImgIndex] && sliderImagesData[renderImgIndex].likedByMe)
-    console.log(sliderImagesData, '[;-=9]')
   }, [])
   const numberOfLikes = () => {
     // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
@@ -122,17 +121,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
   }
 
   const images = [{
-    // Simplest usage.
     url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
-
-    // width: number
-    // height: number
-    // Optional, if you know the image size, you can set the optimization performance
-
-    // You can pass props to <Image />.
-    // props: {
-    //     // headers: ...
-    // }
   }, {
     url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
 
@@ -144,8 +133,6 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       tension={50}
       friction={7}
       useNativeDriver
-    // onPress={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })}
-    // onPress={onPress}
     >
       <ImagePlaceholder>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -160,50 +147,29 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                 alignItems: "center"
               }}
             >
-              {/* <SliderBox
-                resizeMode="contain"
-                ImageComponentStyle={{ width: '100%', height: "100%", borderRadius: 10 }}
-                dotColor="rgba(0,0,0,0)"
-                inactiveDotColor="rgba(0,0,0,0)"
-                images={arrOfSliderImagesPath && arrOfSliderImagesPath}
-                onCurrentImagePressed={(index: number) => {
-                  navigation.navigate('showImage', { imageURL: { uri: arrOfSliderImagesPath[index] }, renderImgIndex, arrOfSliderImagesPath })
-
-                }
-                }
-                currentImageEmitter={(index: number) => {
-                  setrenderImgIndex(index)
-                }
-                }
-              /> */}
-
               <View style={{
                 width: 160, zIndex: 1,
                 height: 150,
               }}>
                 <ImageViewer
+                  saveToLocalByLongPress={false}
                   onChange={(index: any) => {
                     setimageLikes(arrOfSliderImagesData && arrOfSliderImagesData[index] && arrOfSliderImagesData[index].likesCount)
                     setlikeByMe(arrOfSliderImagesData && arrOfSliderImagesData[index] && arrOfSliderImagesData[index].likedByMe)
                     setrenderImgIndex(index)
                   }}
                   enableImageZoom={false} onClick={() =>
-                    navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, likes: arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount })
+                    navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, allData: arrOfSliderImagesData, likes: arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount, getNewsImages, indexOfNewsMainImages })
 
                   } imageUrls={arrOfSliderImagesPath} />
               </View>
-
-
             </View>
             :
             <ImageTileCover source={{ uri: imageUri }} />
           }
           <Text style={{ color: Colors.black, fontSize: 15, }}>
-            {/* {allData.en_header} */}
             {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
           </Text>
-          {/* <Text style={{ color: Colors.black, fontSize: 15, }}>{'asdasddasasasasaas'}</Text> */}
-
           <BottomContainer style={{}}>
             {arrOfSliderImagesData[renderImgIndex] &&
               <RowView>
@@ -214,9 +180,6 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               onPress={() => {
                 setlikeByMe(!likeByMe)
                 numberOfLikes()
-                // if (arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]) {
-                // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, arrOfSliderImagesData[renderImgIndex].likedByMe, indexOfNewsMainImages, renderImgIndex))
-                // }
               }}
             >
               <RowView>
@@ -225,10 +188,6 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                   source={require('../../assets/images/RealHeart.png')}
                 />
                 <NumberOfRates style={{ marginLeft: "5%" }}>{imgLikes}</NumberOfRates>
-                {/* {arrOfSliderImagesData[renderImgIndex] &&
-                  <NumberOfRates style={{ marginLeft: "5%" }}>{arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount}</NumberOfRates>
-                } */}
-
               </RowView>
             </TouchableOpacity>
           </BottomContainer>

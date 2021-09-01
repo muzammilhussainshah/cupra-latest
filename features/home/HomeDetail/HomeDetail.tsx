@@ -169,6 +169,8 @@ export const HomeDetail = ({ route, navigation }: any) => {
           }}>
 
             <ImageViewer
+                  saveToLocalByLongPress={false}
+
               onChange={(index: any) => {
                 setSelectedImageIndex(index)
               }}

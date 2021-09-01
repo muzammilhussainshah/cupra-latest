@@ -190,6 +190,8 @@ export const ShopDetails = ({ route, navigation }: any) => {
                 setSelectedImageIndex(index)
                 // setrenderImgIndex(index)
               }}
+              saveToLocalByLongPress={false}
+
               enableImageZoom={false}
               onClick={() =>
                 setFullImageScreen(true)

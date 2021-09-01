@@ -36,14 +36,14 @@ export const Stories: React.FC<UserImageProps> = ({ userImage }) => (
   <RowView>
     <StoryBorderView
       style={{ overflow: "hidden", justifyContent: "center", alignItems: "center" }}>
-      <View style={{ height: "80%", width: "80%", borderRadius: 50, overflow: "hidden", position: "absolute", }}>
+      <View style={{ height: "80%", width: "80%", borderRadius: 50, overflow: "hidden", position: "absolute", zIndex:2}}>
         {/* <UserImage source={require("../../../assets/users/border.png")} /> */}
         <UserImage source={userImage} />
       </View>
-      <View style={{height:"90%",width:"90%"  }}>
-        <Borderimg
+      <View style={{height:"90%",width:"90%"  ,backgroundColor:Colors.primary,borderRadius: 50 }}>
+        {/* <Borderimg
           resizeMode="contain"
-          source={require("../../../assets/users/border.png")} />
+          source={require("../../../assets/users/border.png")} /> */}
       </View>
     </StoryBorderView>
   </RowView>

@@ -81,7 +81,9 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 }) => {
   const [arrOfSliderImagesPath, setarrOfSliderImagesPath] = useState([])
   const [arrOfSliderImagesData, setArrOfSliderImagesData] = useState([])
+  const [imgLikes, setimageLikes] = useState('');
   const [imgSliderEnabled, setimgSliderEnabled] = useState(false)
+  const [likeByMe, setlikeByMe] = useState(false)
   // const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
   const [renderImgIndex, setrenderImgIndex] = useState(0)
 
@@ -102,18 +104,22 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 
     setarrOfSliderImagesPath(sliderImagesPathClone)
     setArrOfSliderImagesData(sliderImagesData)
-    // console.log(allData, '[;-=9]')
+
+    setimageLikes(sliderImagesData && sliderImagesData[renderImgIndex] && sliderImagesData[renderImgIndex].likesCount)
+    setlikeByMe(sliderImagesData && sliderImagesData[renderImgIndex] && sliderImagesData[renderImgIndex].likedByMe)
+    console.log(sliderImagesData, '[;-=9]')
   }, [])
-  // const numberOfLikes = () => {
-  // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
-  //   // if (!likebyme) {
-  //   //   setimageLikes(imageLikes + 1)
-  //   // } else {
-  //   //   if (imageLikes > 0) {
-  //   //     setimageLikes(imageLikes - 1)
-  //   //   }
-  //   // }
-  // }
+  const numberOfLikes = () => {
+    // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
+    dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, likeByMe, indexOfNewsMainImages, renderImgIndex))
+    if (!likeByMe) {
+      setimageLikes(imgLikes + 1)
+    } else {
+      if (imgLikes > 0) {
+        setimageLikes(imgLikes - 1)
+      }
+    }
+  }
 
   const images = [{
     // Simplest usage.
@@ -177,12 +183,14 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               }}>
                 <ImageViewer
                   onChange={(index: any) => {
+                    setimageLikes(arrOfSliderImagesData && arrOfSliderImagesData[index] && arrOfSliderImagesData[index].likesCount)
+                    setlikeByMe(arrOfSliderImagesData && arrOfSliderImagesData[index] && arrOfSliderImagesData[index].likedByMe)
                     setrenderImgIndex(index)
                   }}
                   enableImageZoom={false} onClick={() =>
-                   navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true,likes:arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount })
-                                      
-                   } imageUrls={arrOfSliderImagesPath} />
+                    navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, likes: arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount })
+
+                  } imageUrls={arrOfSliderImagesPath} />
               </View>
 
 
@@ -204,9 +212,11 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
             }
             <TouchableOpacity
               onPress={() => {
-                if (arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]) {
-                  dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, arrOfSliderImagesData[renderImgIndex].likedByMe, indexOfNewsMainImages, renderImgIndex))
-                }
+                setlikeByMe(!likeByMe)
+                numberOfLikes()
+                // if (arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]) {
+                // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, arrOfSliderImagesData[renderImgIndex].likedByMe, indexOfNewsMainImages, renderImgIndex))
+                // }
               }}
             >
               <RowView>
@@ -214,9 +224,10 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                   resizeMode={FastImage.resizeMode.contain}
                   source={require('../../assets/images/RealHeart.png')}
                 />
-                {arrOfSliderImagesData[renderImgIndex] &&
+                <NumberOfRates style={{ marginLeft: "5%" }}>{imgLikes}</NumberOfRates>
+                {/* {arrOfSliderImagesData[renderImgIndex] &&
                   <NumberOfRates style={{ marginLeft: "5%" }}>{arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount}</NumberOfRates>
-                }
+                } */}
 
               </RowView>
             </TouchableOpacity>

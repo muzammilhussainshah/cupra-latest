@@ -15,6 +15,7 @@ import FastImage from 'react-native-fast-image';
 import { Container, Item, KeyboardView, List, Title } from '../../components/SelectStyle';
 import Modal from 'react-native-modal';
 import { CityModel } from '../../components/cityModel'
+import { height, width } from '../../constants/Layout';
 import { Colors } from '../../constants/Colors';
 import CancelReservation from '../../components/cancelReservation'
 import { _cancelResetvation } from "../../store/action/shopAction"
@@ -139,7 +140,7 @@ export const FavoritesScreen: React.FC = () => {
                           setbrandId(item._id)
                           setmodalName("Model")
                           setmodalId('')
-                          dispatch(_getModal(currentUser, item._id, navigation))
+                          // dispatch(_getModal(currentUser, item._id, navigation))
                         }}
                         style={{ flexDirection: "row", paddingVertical: 10 }}>
                         <Text style={{ color: Colors.black, fontSize: 20, }}>{item.en_name}</Text>
@@ -278,23 +279,23 @@ export const FavoritesScreen: React.FC = () => {
           </View>
         </View>
         <View style={{ flex: 8.2, backgroundColor: Colors.white }}>
-          <View style={{ flex: 3.7, justifyContent: "center", alignItems: "center" }}>
-            <View style={{ height: "80%", width: "90%", justifyContent: 'center', alignItems: "center", borderRadius: 15, backgroundColor: Colors.black }}>
+          <View style={{ flex: 3.4, justifyContent: "center", alignItems: "center", }}>
+            <View style={{ height: "100%", width: "90%", justifyContent: 'center', alignItems: "center", borderRadius: 15, }}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
-                  dispatch(_getBrand(currentUser, navigation, setModalVisible ))
+                  dispatch(_getBrand(currentUser, navigation, setModalVisible))
                   setbrandModal(true)
                   setyearModal(false)
                   setmodalModal(false)
                   setaddFavoritesCarsModal(true)
                 }}
-                style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
+                style={{ height: "22%", width: "95%", backgroundColor: "#f8f5f5", marginVertical: 4, borderRadius: 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+                <Text style={{ fontSize: 16, marginLeft: 10, color: Colors.brownishGrey }}>
                   {brandName == "" ? "Brand" : brandName}
                 </Text>
                 <View>
-                  <AntDesign name="caretdown" size={10} color={Colors.primary} />
+                  <AntDesign name="caretdown" size={13} color={Colors.primary} />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -302,22 +303,22 @@ export const FavoritesScreen: React.FC = () => {
                 onPress={() => {
                   setmodalName("Model")
                   setmodalId('')
-                  dispatch(_getModal(currentUser, brandId, navigation,setModalVisible))
+                  dispatch(_getModal(currentUser, brandId, navigation, setModalVisible))
                   setmodalModal(true)
                   setbrandModal(false)
                   setyearModal(false)
                   setaddFavoritesCarsModal(true)
-                  
+
                 }}
-                style={{ height: "27%", width: "90%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
+                style={{ height: "22%", width: "95%", backgroundColor: "#f8f5f5", marginVertical: 4, borderRadius: 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+                <Text style={{ fontSize: 16, marginLeft: 10, color: Colors.brownishGrey }}>
                   {modalName == "" ? "Model" : modalName}
                 </Text>
                 <View                >
-                  <AntDesign name="caretdown" size={10} color={Colors.primary} />
+                  <AntDesign name="caretdown" size={13} color={Colors.primary} />
                 </View>
               </TouchableOpacity>
-              <View style={{ height: "27%", width: "90%", marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
+              <View style={{ height: "22%", width: "95%", marginVertical: 4, borderRadius: 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", }}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
@@ -327,13 +328,13 @@ export const FavoritesScreen: React.FC = () => {
                     setmodalModal(false)
                     setaddFavoritesCarsModal(true)
                   }}
-                  style={{ height: "100%", width: "55%", backgroundColor: Colors.titleGray, marginVertical: 2, borderRadius: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10, color: Colors.brownishGrey }}>
+                  style={{ height: "100%", width: "55%", backgroundColor: "#f8f5f5", marginVertical: 4, borderRadius: 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
+                  <Text style={{ fontSize: 16, marginLeft: 10, color: Colors.brownishGrey }}>
                     {yearName == "" ? "Year" : yearName}
                   </Text>
                   <View
                   >
-                    <AntDesign name="caretdown" size={10} color={Colors.primary} />
+                    <AntDesign name="caretdown" size={13} color={Colors.primary} />
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -341,64 +342,73 @@ export const FavoritesScreen: React.FC = () => {
                     dispatch(_addFavCars(currentUser, navigation, brandId, modalId, yearName, setyearName, setmodalName, setbrandName, setmodalId, setbrandId))
                   }}
                   activeOpacity={0.7}
-                  style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "35%", borderRadius: 20, backgroundColor: Colors.primary }}>
+                  style={{ height: "100%", justifyContent: "center", alignItems: "center", width: "37%", borderRadius: 25, backgroundColor: Colors.primary }}>
                   <Text style={{ color: Colors.white }}>Add</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
+          <View style={{ flex: 0.8, backgroundColor: '#ededee', justifyContent: "center", alignItems: 'center' }}>
+            {/* font-family: 'SourceSansPro-Regular'; */}
+            <Text style={{ fontSize: 19, fontFamily: "SourceSansPro-SemiBold" }}>My Favorite Cars</Text>
+          </View>
           {isLoader &&
-            <ActivityIndicator
-              style={{ marginTop: "0%" }}
-              size="small" color={Colors.black}
-            />}
-          <View style={{ flex: 6.3, }}>
-            <ScrollView contentContainerStyle={{ padding: 30 }}>
+              <ActivityIndicator
+                style={{ backgroundColor: '#ededee' }}
+                size="small" color={Colors.black}
+              />
+          }
+          <View style={{ flex: 5.8, backgroundColor: 'white', }}>
+            <ScrollView contentContainerStyle={{ alignItems: 'center', paddingVertical: 5 }}>
               {getFavCars && getFavCars.length > 0 &&
                 < FlatList
                   data={getFavCars}
+                  numColumns={3}
                   renderItem={({ item }: any) => {
                     const { brand, model, year, _id }: any = item
                     setFavCarId(_id)
                     return (
-                      <View style={{ height: 100, width: "100%", borderBottomWidth: 0.7, borderBottomColor: Colors.black, padding: 10, flexDirection: "row" }}>
-                        <View style={{ flex: 2.5, justifyContent: 'center', alignItems: "center" }}>
-                          <FastImage
-                            resizeMode={'contain'}
-                            source={require('../../assets/users/border.png')}
-                            style={{ height: "90%", width: "90%", }} />
-                          <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
-                            <View style={{ height: "77%", width: "80%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
-                              <FastImage
-                                resizeMode={'contain'}
-                                source={require('../../assets/aa.png')}
-                                style={{ height: "70%", width: "70%", }} />
-                            </View>
-                          </View>
-                        </View>
-                        <View style={{ flex: 5.5, justifyContent: 'space-evenly' }}>
-                          <Text style={{ color: Colors.black, fontWeight: "bold" }}>
-                            {brand && brand.en_name}
-                          </Text>
-                          <Text style={{ color: Colors.black, }}>
-                            {model && model.en_name}
-                          </Text>
-                          <Text style={{ color: Colors.black, }}>
-                            {year && year}
-                          </Text>
-                        </View>
-                        <View style={{ flex: 2, }}>
+                      <View style={{ height: height / 10 * 2.3, width: width / 10 * 2.8, marginHorizontal: 10, marginTop: 20, borderRadius: 15, }}>
+                        <View style={{ position: "absolute", zIndex: 2, height: "100%", width: "100%" }}>
                           <TouchableOpacity
                             onPress={() => {
                               setdltModalEnabled(true)
                             }}
-                            activeOpacity={0.8}
-                            style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
+                            activeOpacity={0.7}
+                            style={{ height: "30%", top: "72%", left: "70%" }}
+                          >
                             <FastImage
                               resizeMode={'contain'}
                               source={require('../../assets/images/dlticon2.png')}
-                              style={{ height: "60%", width: "60%", }} />
+                              style={{ height: "100%", width: "30%", }} />
                           </TouchableOpacity>
+                        </View>
+                        <View style={{ height: (height / 10 * 2.3) - 10, width: width / 10 * 2.8, borderRadius: 15, backgroundColor: "#f8f5f5", padding: 10, }}>
+                          <View style={{ flex: 4.5, backgroundColor: "blue  ", justifyContent: "center", alignItems: "center" }}>
+                            <FastImage
+                              resizeMode={'contain'}
+                              source={require('../../assets/users/border.png')}
+                              style={{ height: "90%", width: "90%", }} />
+                            <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
+                              <View style={{ height: "78%", width: "45%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
+                                <FastImage
+                                  resizeMode={'contain'}
+                                  source={require('../../assets/aa.png')}
+                                  style={{ height: "60%", width: "60%", }} />
+                              </View>
+                            </View>
+                          </View>
+                          <View style={{ flex: 5.5, justifyContent: 'space-between', alignItems: "center" }}>
+                            <Text style={{ color: Colors.black, fontWeight: "bold" }}>
+                              {brand && brand.en_name}
+                            </Text>
+                            <Text style={{ color: Colors.black, }}>
+                              {model && model.en_name}
+                            </Text>
+                            <Text style={{ color: Colors.black, }}>
+                              {year && year}
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     )

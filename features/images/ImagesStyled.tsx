@@ -61,9 +61,9 @@ const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top:10px
-
-`;
+  
+  `;
+// margin-top:10px
 
 export type IImageTypeProp = {
   imageUri?: any;
@@ -102,7 +102,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
 
     setarrOfSliderImagesPath(sliderImagesPathClone)
     setArrOfSliderImagesData(sliderImagesData)
-    console.log(allData, '[;-=9]')
+    // console.log(allData, '[;-=9]')
   }, [])
   // const numberOfLikes = () => {
   // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
@@ -172,7 +172,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
               /> */}
 
               <View style={{
-                width: 160,  zIndex: 1,
+                width: 160, zIndex: 1,
                 height: 150,
               }}>
                 <ImageViewer
@@ -187,7 +187,13 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
             :
             <ImageTileCover source={{ uri: imageUri }} />
           }
-          <BottomContainer>
+          <Text style={{ color: Colors.black, fontSize: 15, }}>
+            {/* {allData.en_header} */}
+          {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
+            </Text>
+          {/* <Text style={{ color: Colors.black, fontSize: 15, }}>{'asdasddasasasasaas'}</Text> */}
+
+          <BottomContainer style={{}}>
             {arrOfSliderImagesData[renderImgIndex] &&
               <RowView>
                 <Text style={{ color: Colors.black, fontSize: 15, marginRight: "20%" }}>{moment(arrOfSliderImagesData[renderImgIndex].createdAt).fromNow()}</Text>

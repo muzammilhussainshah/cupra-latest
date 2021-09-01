@@ -179,7 +179,10 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                   onChange={(index: any) => {
                     setrenderImgIndex(index)
                   }}
-                  enableImageZoom={false} onClick={() => navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath })} imageUrls={arrOfSliderImagesPath} />
+                  enableImageZoom={false} onClick={() =>
+                   navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true,likes:arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount })
+                                      
+                   } imageUrls={arrOfSliderImagesPath} />
               </View>
 
 
@@ -189,8 +192,8 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
           }
           <Text style={{ color: Colors.black, fontSize: 15, }}>
             {/* {allData.en_header} */}
-          {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
-            </Text>
+            {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
+          </Text>
           {/* <Text style={{ color: Colors.black, fontSize: 15, }}>{'asdasddasasasasaas'}</Text> */}
 
           <BottomContainer style={{}}>

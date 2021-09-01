@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { Header } from '../../components/Header';
+import { DrawerActions } from '@react-navigation/native';
 
 import GetReviewComponent from '../../components/GetReviewComponent';
 
@@ -15,11 +16,14 @@ import { _getCatogery, _getSubCatogery, _getItemDetails } from '../../store/acti
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Value } from 'react-native-reanimated';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const Shop: React.FC = ({ navigation }: any) => {
   const [catogery, setcatogery] = useState([]);
 
   const [Subcatogery, setSubcatogery] = useState([]);
+
+  const [search, setsearch] = useState([]);
 
   const [getReview, setgetReview] = useState(false);
 
@@ -34,9 +38,27 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const shopSubCatogery = useSelector((state: any) => state.reducer.shopSubCatogery)
 
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
-  // console.log(Subcatogery, 'Subcatogery')
+
+
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setSubcatogery(shopSubCatogery)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < shopSubCatogery.length; index++) {
+        filterChat = shopSubCatogery.filter((data: any) => { return data.en_name.match(searchPattern) });
+      }
+      setSubcatogery(filterChat)
+    }
+  }
+
   useEffect(() => {
-    dispatch(_getCatogery(currentUser,navigation))
+    dispatch(_getCatogery(currentUser, navigation))
   }, [])
 
   useEffect(() => {
@@ -55,7 +77,10 @@ export const Shop: React.FC = ({ navigation }: any) => {
         <GetReviewComponent _func={() => setgetReview(false)} />
       } */}
       <ShopContainer>
-        <Header />
+        <Header
+          _func={(e: any) => searchUser(e)}
+          searchBarInput={true}
+          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
         <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>
@@ -77,8 +102,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
                     setcatogery(cloneCatogery);
                     setflag(!flag);
                   }}>
-                    <Text style={{ marginHorizontal: 20, color: '#fb9315', fontSize: 15 }}>{item.en_name}</Text>
-                    {item.isSelected && <View style={{ marginHorizontal: 20, height: 3, backgroundColor: '#fb9315', width: 10 }} />}
+                    <Text style={{ marginHorizontal: 20, color: Colors.black, fontSize: 15 }}>{item.en_name}</Text>
+                    {item.isSelected && <View style={{ marginHorizontal: 20, height: 3, backgroundColor: Colors.black, width: 10 }} />}
                   </TouchableOpacity>
                 )
               })}
@@ -96,7 +121,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                 return (
                   <>
                     <View>
-                      <Text style={{ color: '#fff', fontSize: 15, padding: 10 }}>‎{v.en_name}</Text>
+                      <Text style={{ color: Colors.black, fontSize: 15, padding: 10 }}>‎{v.en_name}</Text>
                     </View>
                     <FlatList
                       contentContainerStyle={{}}

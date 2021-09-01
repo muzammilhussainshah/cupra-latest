@@ -21,6 +21,7 @@ import {
 
 export const ServicesScreen: React.FC = () => {
   const [services, setservices] = useState([]);
+  const [search, setsearch] = useState([]);
 
   const [flag, setflag] = useState(false);
 
@@ -37,20 +38,40 @@ export const ServicesScreen: React.FC = () => {
 
   useEffect(() => {
     setservices(getServices)
+    console.log(getServices, 'getServicesgetServicesgetServices')
     setflag(!flag)
   }, [getServices])
+
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setservices(getServices)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < getServices.length; index++) {
+        filterChat = getServices.filter((data: any) => { return data.en_name.match(searchPattern) });
+      }
+      setservices(filterChat)
+    }
+  }
 
   return (
     <Container>
       <Header
+        _func={(e: any) => searchUser(e)}
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
+        searchBarInput={true}
       />
       {/* <CardBannerSection /> */}
       <ServicesGreeting
         name={currentUser.full_name}
         seriveTitle={'You want to book a service ?'}
       />
-      
+
       {services.length > 0 && <FlatList
         contentContainerStyle={{ paddingBottom: 90 }}
         numColumns={2}
@@ -69,7 +90,7 @@ export const ServicesScreen: React.FC = () => {
           </>
         )}
       />}
-      
+
     </Container>
   );
 };

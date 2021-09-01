@@ -37,7 +37,7 @@ export const _getNewsImages = (currentUser, page_size, page_index, navigation,) 
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         // console.log(deviceToken, 'deviceToken', model)
         // console.log(deviceToken, 'uniqueId')
-        dispatch({ type: GETNEWSIMAGES, payload: {} })
+        // dispatch({ type: GETNEWSIMAGES, payload: {} })
         try {
             const option = {
                 method: 'GET',
@@ -81,8 +81,13 @@ export const _getNewsImages = (currentUser, page_size, page_index, navigation,) 
         }
     }
 }
-export const _imageNewsLike = (currentUser, mediaId, navigation, getNewsImages, likedByMe, newsImagesIndex, imageIndex) => {
-    console.log(likedByMe, 'likedByMelikedByMelikedByMelikedByMelikedByMe')
+export const _imageNewsLike = (currentUser, mediaId, navigation, getNewsImages, likedByMe, indexOfNewsMainImages, renderImgIndex) => {
+    // console.log(currentUser, '1111111111111111')
+    // console.log(mediaId, '222222222222')
+    console.log(getNewsImages, '111111111111')
+    // console.log(likedByMe, '444444444')
+    // console.log(indexOfNewsMainImages, '55555555555')
+    // console.log(renderImgIndex, '6666666')
     let getNewsImagesClone
     let itemNewsImage
     let itemNewsSelectedImage
@@ -91,10 +96,10 @@ export const _imageNewsLike = (currentUser, mediaId, navigation, getNewsImages, 
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         if (getNewsImages) {
             getNewsImagesClone = [...getNewsImages];
-            itemNewsImage = getNewsImagesClone[newsImagesIndex];
-            itemNewsSelectedImage = itemNewsImage.media[imageIndex];
-            console.log(itemNewsImage,'itemNewsImage1111111111111')
-            console.log(itemNewsSelectedImage,'itemNewsSelectedImage111111111111')
+            itemNewsImage = getNewsImagesClone[indexOfNewsMainImages];
+            console.log(getNewsImagesClone, '2222222222')
+            itemNewsSelectedImage = itemNewsImage.media[renderImgIndex];
+            // console.log(itemNewsSelectedImage, '88888888888888')
         }
         try {
             const option = {
@@ -124,10 +129,11 @@ export const _imageNewsLike = (currentUser, mediaId, navigation, getNewsImages, 
                         itemNewsSelectedImage.likedByMe = true;
                         itemNewsSelectedImage.likesCount = (itemNewsSelectedImage.likesCount) + 1;
                     }
-                    itemNewsImage.media.splice(imageIndex, 0, itemNewsSelectedImage)
-                    getNewsImagesClone.splice(newsImagesIndex, 0, itemNewsImage)
-                    console.log(itemNewsImage,'itemNewsImage222222222222222222')
-                    console.log(itemNewsSelectedImage,'itemNewsSelectedImage22222222222222222')
+                    itemNewsImage.media.splice(renderImgIndex, 1, itemNewsSelectedImage)
+                    console.log(itemNewsImage, '33333333333333')
+                    getNewsImagesClone.splice(indexOfNewsMainImages, 1, itemNewsImage)
+                    // console.log(itemNewsImage, '99999999999999')
+                    console.log(getNewsImagesClone, '444444444')
                     dispatch({ type: GETNEWSIMAGES, payload: getNewsImagesClone })
                 }
                 dispatch(_loading(false));

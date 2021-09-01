@@ -1,12 +1,12 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, TextInput } from 'react-native';
+import { View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors } from '../constants/Colors';
 
 const BackgroundContiner = styled.View`
   background-color: ${Colors.black};
-  height: 80px;
   padding-left: 16px;
   padding-right: 16px;
 `;
@@ -41,6 +41,8 @@ export type IHeaderTypeProp = {
   onPress?: () => void;
   isGoBack?: boolean;
   RatingScreen?: boolean;
+  searchBarInput?: boolean;
+  _func?: any;
 
   navigateBack?: () => void;
 };
@@ -49,11 +51,16 @@ export const Header: React.FC<IHeaderTypeProp> = ({
   onOpenDrawer,
   isGoBack,
   RatingScreen,
+  searchBarInput,
+  _func,
   navigateBack,
 }) => {
+  const [mobile, setmobile] = useState('');
+
+
   return (
-    <BackgroundContiner>
-      <LogoContainer>
+    <BackgroundContiner style={{ height: searchBarInput ? 130 : 80 }}>
+      <LogoContainer >
         {isGoBack ? (
           <IconPlaceholder onPress={navigateBack} activeOpacity={0.6}>
             <SteeringIcon
@@ -79,7 +86,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
             source={require('../assets/images/bell.png')}
           />
         </IconPlaceholder>
-        {!RatingScreen &&
+        {!RatingScreen && !searchBarInput &&
           <IconPlaceholder onPress={onPress} activeOpacity={0.6}>
             <HeaderIcons
               resizeMode={FastImage.resizeMode.contain}
@@ -89,6 +96,34 @@ export const Header: React.FC<IHeaderTypeProp> = ({
           </IconPlaceholder>
         }
       </LogoContainer>
+      {searchBarInput &&
+        <View style={{ height: "100%", width: "100%", left: 16, position: 'absolute' }}>
+          <View style={{ height: "50%", top: "50%", justifyContent: "center" }}>
+            <IconPlaceholder
+              style={{ justifyContent: "center", flexDirection: 'row', overflow: "hidden" }}
+              onPress={onPress} activeOpacity={0.6}>
+              <View style={{ height: 40, width: "85%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
+                <TextInput
+                  style={{ height: '100%', paddingHorizontal: 15, width: "100%", color: Colors.titleGray }} 
+                  onChangeText={text => _func(text)} 
+                  placeholder='Search'
+                  placeholderTextColor={Colors.titleGray}
+                  defaultValue={mobile}
+                />
+              </View>
+              <View style={{ height: 40, width: "10%", justifyContent: "center", backgroundColor: Colors.darkGray, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>
+                <HeaderIcons
+                  style={{ height: 17, width: 17 }}
+                  resizeMode={FastImage.resizeMode.contain}
+                  tintColor={'#FFF'}
+                  source={require('../assets/images/search.png')}
+                />
+              </View>
+            </IconPlaceholder>
+
+          </View>
+        </View>
+      }
     </BackgroundContiner>
   );
 };

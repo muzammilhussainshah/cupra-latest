@@ -14,6 +14,8 @@ import { FlatList } from 'react-native';
 
 import { Header } from '../../components/Header';
 
+import { height } from '../../constants/Layout';
+
 import { BottomTabParamList } from '../../routes/BottomTabNavigator';
 
 import { ServicesStackParamList } from '../../routes/ServicesTab';
@@ -26,6 +28,7 @@ import {
 } from './ServicesStyled';
 
 import { SubServices } from '../../data/StaticSubServices';
+import { ScrollView } from 'react-native-gesture-handler';
 export interface SubServiceScreenProps { }
 
 type NavigationProps = CompositeNavigationProp<
@@ -42,6 +45,7 @@ type Props = {
 
 export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) => {
   const [subservices, setsubservices] = useState([]);
+  const [search, setsearch] = useState([]);
 
   const [flag, setflag] = useState(false);
 
@@ -54,7 +58,6 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const { serviceId } = routes;
   console.log(routes, 'routerouterouterouterouterouteroute')
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(_getSubServices(currentUser, serviceId, navigation))
   }, [])
@@ -64,42 +67,66 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
     setsubservices(getsubServices)
     setflag(!flag)
   }, [getsubServices])
-  return (
-    <Container>
-      <Header isGoBack={true} navigateBack={() => navigation.goBack()} />
-      <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
-      <ServicesGreeting
-        name={currentUser.full_name}
-        seriveTitle={'You want to book this service ?'}
-      />
 
-      {subservices.length > 0 && <FlatList
-        contentContainerStyle={{ paddingBottom: 90 }}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item: any) => item.id}
-        data={subservices}
-        renderItem={({ item }: any) => (
-          <>
-            {/* {console.log(item, '++++++++++++++')} */}
 
-            <ServicesTile
-              navigation={navigation}
-              isBooking={true}
-              numberOfRates={item.rating}
-              numberOfService={item.total_bookings}
-              serviceName={item.en_name}
-              itemId={item._id}
-              getserviceId={serviceId}
-              serviceImage={{ uri: item.icon }}
-              onPress={() => {
-                navigation.push('booking', { serviceId, subserviceId: item._id });
-              }}
-            />
-          </>
-        )}
-      />
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setsubservices(getsubServices)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < getsubServices.length; index++) {
+        filterChat = getsubServices.filter((data: any) => { return data.en_name.match(searchPattern) });
       }
-    </Container>
+      setsubservices(filterChat)
+    }
+  }
+
+  return (
+    <ScrollView>
+
+      <Container style={{ height: height  }}>
+
+        <Header isGoBack={true} navigateBack={() => navigation.goBack()}
+          _func={(e: any) => searchUser(e)}
+          searchBarInput={true}
+        />
+        <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
+        <ServicesGreeting
+          name={currentUser.full_name}
+          seriveTitle={'You want to book this service ?'}
+        />
+
+        {subservices.length > 0 && <FlatList
+          contentContainerStyle={{ paddingBottom: 90 }}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item: any) => item.id}
+          data={subservices}
+          renderItem={({ item }: any) => (
+            <>
+              <ServicesTile
+                navigation={navigation}
+                isBooking={true}
+                numberOfRates={item.rating}
+                numberOfService={item.total_bookings}
+                serviceName={item.en_name}
+                itemId={item._id}
+                getserviceId={serviceId}
+                serviceImage={{ uri: item.icon }}
+                onPress={() => {
+                  navigation.push('booking', { serviceId, subserviceId: item._id });
+                }}
+              />
+            </>
+          )}
+        />
+        }
+      </Container>
+    </ScrollView>
   );
 };

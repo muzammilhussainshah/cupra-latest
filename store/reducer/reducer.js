@@ -1,4 +1,9 @@
-import { SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER, ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS, NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS } from "../constant/constant";
+import {
+  SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
+  ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
+  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER,GETCITY,MYPROFILE,
+  GETFAVCARS,GETMODELS,GETBRANDS
+} from "../constant/constant";
 
 const INITIAL_STATE = {
   signUpUser: false,
@@ -17,9 +22,14 @@ const INITIAL_STATE = {
   storiesList: {},
   getReviews: {},
   isLoader: false,
+  paginationLoader: false,
   isError: false,
   videos: [],
-
+  getCity: {},
+  myProfile: [],
+  getFavCars:{},
+  getModels:{},
+  getBrands:{}
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -33,6 +43,11 @@ export default (state = INITIAL_STATE, action) => {
       return ({
         ...state,
         isLoader: action.payload
+      })
+    case PAGINATIONLOADER:
+      return ({
+        ...state,
+        paginationLoader: action.payload
       })
     case ISERROR:
       return ({
@@ -113,6 +128,31 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         videos: action.payload,
+      };
+    case GETCITY:
+      return {
+        ...state,
+        getCity: action.payload,
+      };
+    case MYPROFILE:
+      return {
+        ...state,
+        myProfile: action.payload,
+      };
+    case GETFAVCARS:
+      return {
+        ...state,
+        getFavCars: action.payload,
+      };
+    case GETMODELS:
+      return {
+        ...state,
+        getModels: action.payload,
+      };
+    case GETBRANDS:
+      return {
+        ...state,
+        getBrands: action.payload,
       };
     default:
       return state;

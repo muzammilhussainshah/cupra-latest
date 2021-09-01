@@ -11,7 +11,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 
 export const VideoContainer = styled(SafeAreaView)`
-  background-color: ${Colors.secondary};
+  background-color: ${Colors.white};
   flex: 1;
 `;
 const VideoPlaceholder = styled.View`
@@ -48,7 +48,7 @@ const SteeringImage = styled(FastImage)`
   margin-right:10px;
   `;
 const NumberOfRates = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 18px;
   font-family: 'SourceSansPro-Regular';
   padding-right: 10px;
@@ -57,8 +57,8 @@ const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-`;
+  `;
+  // margin-top: 10px;
 const VideoLabel = styled.View`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.3);
@@ -113,27 +113,29 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
       onPress={onPress}>
       <VideoPlaceholder>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <VideoTileCover source={{uri:VideoImage}} />
+          <VideoTileCover source={{ uri: VideoImage }} />
           <VideoLabel>
             <BookingTitle>
               <Ionicons name="play-circle-outline" size={50} color="white" />
             </BookingTitle>
           </VideoLabel>
         </View>
-        <BottomContainer>
+        {/* <Text>aaa</Text> */}
+        <BottomContainer   >
           <RowView>
-            <Text style={{ color: 'white', fontSize: 15 }}> {moment(getDate).fromNow()}</Text>
+            <Text style={{ color: Colors.black, fontSize: 15,  }}> {moment(getDate).fromNow()}</Text>
           </RowView>
           <TouchableOpacity
+            style={{ height: "100%", }}
             onPress={() => {
               setlikebyme(!likebyme)
               numberOfLikes()
             }}
           >
-            <RowView>
+            <RowView style={{  }}>
               <SteeringImage
                 resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/images/heart.png')}
+                source={require('../../assets/images/RealHeart.png')}
               />
               <NumberOfRates>{imageLikes}</NumberOfRates>
             </RowView>
@@ -152,7 +154,7 @@ export const VideoTitleWrapper = styled.View`
   margin-top: 20px;
 `;
 export const VideoTitle = styled.Text`
-  color: ${Colors.white};
+  color: ${Colors.black};
   font-size: 20px;
   font-family: 'SourceSansPro-Regular';
 `;

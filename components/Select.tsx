@@ -89,7 +89,6 @@ export const Select: React.FC<SelectProps> = props => {
     setSelectState(item);
     toggleModal();
   };
-
   // todo check effect of removing style={{ flex: 1 }} from container view
   return (
     <View style={props.style}>

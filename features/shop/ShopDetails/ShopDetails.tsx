@@ -4,6 +4,8 @@ import { Text, ScrollView, Dimensions, FlatList, TouchableOpacity, View, Activit
 
 import FastImage from 'react-native-fast-image';
 
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 import ReviewComponent from "../../../components/ReviewComponent";
 
 import { MainSheet } from '../../../components/MainSheet';
@@ -142,7 +144,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage sliderBoxEnabled={typeof (coverImage) == "string" ? false : true} selectedImageIndex={selectedImageIndex} coverImage={coverImage} _func={() => setFullImageScreen(false)} />
         </View>
       }
       {confirmModal &&
@@ -151,7 +153,6 @@ export const ShopDetails = ({ route, navigation }: any) => {
           _func={() => setConfirmModal(false)}
           _func2={() => {
             dispatch(_makeItemReservation(_id, quantity, selectedClr, currentUser, setConfirmModal, navigation))
-            // setConfirmModal(false)
           }
           }
         />
@@ -181,19 +182,32 @@ export const ShopDetails = ({ route, navigation }: any) => {
           <Text style={{}}>{totalLikes}</Text>
         </TouchableOpacity>
       </View>
-
       <ShopDetailsContainer>
         {imageSlider ?
-          <SliderBox
-            images={coverImage}
-            sliderBoxHeight={Wheight - 390}
-            resizeMode={'cover'}
-            onCurrentImagePressed={(index: any) => {
-              console.log(index, 'indexindexindex')
-              setSelectedImageIndex(index)
-              setFullImageScreen(true)
-            }}
-          />
+          <View style={{ height:Wheight - 390}}>
+            <ImageViewer
+              onChange={(index: any) => {
+                setSelectedImageIndex(index)
+                // setrenderImgIndex(index)
+              }}
+              saveToLocalByLongPress={false}
+
+              enableImageZoom={false}
+              onClick={() =>
+                setFullImageScreen(true)
+              }
+              imageUrls={coverImage} />
+          </View>
+          // <SliderBox
+          //   images={coverImage}
+          //   sliderBoxHeight={Wheight - 390}
+          //   resizeMode={'cover'}
+          //   onCurrentImagePressed={(index: any) => {
+          //     console.log(index, 'indexindexindex')
+          // setSelectedImageIndex(index)
+          //     setFullImageScreen(true)
+          //   }}
+          // />
           :
           isLoader ?
             <ActivityIndicator
@@ -268,14 +282,21 @@ export const ShopDetails = ({ route, navigation }: any) => {
                   <View style={{ flexDirection: 'row' }}>
                     {colors && colors.map((v: string, i: number) => {
                       let colorHex = dispatch(_getHexColor(v))
+                      let clrArrClone: any = []
                       return (
                         <View style={{ flexDirection: 'row', margin: 2, }}>
                           <ColorContianer color={colorHex} _func={() => {
                             setCelectedClr(v)
                             if (images && !(Object.keys(images).length === 0 && images.constructor === Object)) {
-                              setcoverImage(images[v])
+                              images[v].map((value: any) => {
+                                clrArrClone.push({ url: value })
+                              })
+
+
+                              setcoverImage(clrArrClone)
+
                               setimageSlider(true)
-                              console.log(images[v], 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
+                              console.log(clrArrClone, 'routes.images[v][0]routes.images[v][0]routes.images[v][0]routes.images[v][0]')
                             }
                           }} />
                         </View>

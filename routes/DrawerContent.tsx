@@ -1,14 +1,15 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import { TouchableOpacity } from 'react-native';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import styled from 'styled-components/native';
-import {Colors} from '../constants/Colors';
+import { Colors } from '../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Button, ButtonsContainer, ButtonText} from '../components/Button';
+import { Button, ButtonsContainer, ButtonText } from '../components/Button';
 import FastImage from 'react-native-fast-image';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import {_logOut} from '../store/action/authAction';
+import { _logOut } from '../store/action/authAction';
+import { Navigation } from '.';
 
 const DrawerContaienr = styled.View`
   background-color: ${Colors.tangerine};
@@ -43,7 +44,7 @@ const CloseImage = styled(FastImage)`
   height: 30px;
   width: 30px;
 `;
-export const DrawerContent: React.FC = (props:any) => {
+export const DrawerContent: React.FC = (props: any) => {
   const dispatch = useDispatch();
 
   // console.log(props,"title={title}title={title}title={title}")
@@ -54,22 +55,22 @@ export const DrawerContent: React.FC = (props:any) => {
           <RowView>
             <ButtonsContainer containerWidth={150}>
               <Button
-                style={{borderRadius: 10}}
+                style={{ borderRadius: 10 }}
                 backgroundColor={'transparent'}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <ButtonText>Arabic</ButtonText>
               </Button>
             </ButtonsContainer>
-            <TouchableOpacity 
-           onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
+            <TouchableOpacity
+              onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
             >
               <CloseImage source={require('../assets/images/close.png')} />
             </TouchableOpacity>
           </RowView>
           <SectionView>
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              onPress={() => { props.navigation.navigate("HomeTab") }}
+              icon={({ size }) => (
                 <Ionicons
                   name="home-outline"
                   size={size}
@@ -84,8 +85,8 @@ export const DrawerContent: React.FC = (props:any) => {
               }}
             />
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              onPress={() => { props.navigation.navigate("profile")}}
+              icon={({ size }) => (
                 <Ionicons
                   name="person-outline"
                   size={size}
@@ -100,8 +101,8 @@ export const DrawerContent: React.FC = (props:any) => {
               }}
             />
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              onPress={() => { props.navigation.navigate("favorites")}}
+               icon={({ size }) => (
                 <Ionicons
                   name="heart-outline"
                   size={size}
@@ -116,8 +117,9 @@ export const DrawerContent: React.FC = (props:any) => {
               }}
             />
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              // onPress={() => { }}
+              onPress={() => { props.navigation.navigate("claims")}}
+              icon={({ size }) => (
                 <Ionicons
                   name="browsers-outline"
                   size={size}
@@ -132,8 +134,8 @@ export const DrawerContent: React.FC = (props:any) => {
               }}
             />
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              onPress={() => { }}
+              icon={({ size }) => (
                 <Ionicons
                   name="help-outline"
                   size={size}
@@ -148,8 +150,8 @@ export const DrawerContent: React.FC = (props:any) => {
               }}
             />
             <DrawerItem
-              onPress={() => {}}
-              icon={({size}) => (
+              onPress={() => { }}
+              icon={({ size }) => (
                 <Ionicons
                   name="help-outline"
                   size={size}
@@ -168,12 +170,12 @@ export const DrawerContent: React.FC = (props:any) => {
       </DrawerContentScrollView>
       <BottomSection>
         <LogoutButton
-          onPress={() => {dispatch(_logOut(props.navigation))}}
+          onPress={() => { dispatch(_logOut(props.navigation)) }}
           icon={() => (
             <Ionicons name="power-outline" size={30} color={Colors.primary} />
           )}
           label="Logout"
-          labelStyle={{color: Colors.primary}}
+          labelStyle={{ color: Colors.primary }}
         />
       </BottomSection>
     </DrawerContaienr>

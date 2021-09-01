@@ -6,6 +6,8 @@ import FastImage from 'react-native-fast-image';
 
 import { MainSheet } from '../../../components/MainSheet';
 
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 import FullImage from '../../../components/fullImage';
 
 import { Colors } from '../../../constants/Colors';
@@ -81,11 +83,11 @@ export const HomeDetail = ({ route, navigation }: any) => {
     console.log(newsItemDetails, ']]]]]]]]]]]]]]]]]]]]')
     if (newsItemDetails.media && newsItemDetails.media.length > 0) {
       console.log(newsItemDetails.media, "newsItemDetails.media")
-      let images = newsItemDetails.media.map((obj: any) => obj.type === "IMAGE" && obj.url);
+      let images = newsItemDetails.media.map((obj: any) => obj.type === "IMAGE" && { url: obj.url });
       let videos = newsItemDetails.media.map((obj: any) => obj.type === "VIDEO" && obj.url);
       const filterVideos = videos.filter((uri: any) => uri !== false);
       const filterImages = images.filter((uri: any) => uri !== false);
-      console.log(filterImages, '.filterImagesfilterfilter', filterVideos)
+      console.log(filterImages, '.filterImagesfilterfilter', images)
       setimageSlider(filterImages);
       setvideosSlider(filterVideos);
     }
@@ -108,7 +110,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
     <>
       {fullImageScreen &&
         <View style={{ height: "100%", width: "100%" }}>
-          <FullImage selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
+          <FullImage sliderBoxEnabled={imageSlider.length > 0 ? true : false} selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
         </View>
       }
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
@@ -161,16 +163,39 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
       <ShopDetailsContainer>
         {imageSlider.length > 0 ?
-          <SliderBox
-            images={imageSlider}
-            sliderBoxHeight={Wheight - 390}
-            resizeMode={'cover'}
-            onCurrentImagePressed={(index: any) => {
-              console.log(index, 'indexindexindex')
-              setSelectedImageIndex(index)
-              setFullImageScreen(true)
-            }}
-          />
+          <View style={{
+            backgroundColor: "red",
+            height: Wheight - 390,
+          }}>
+
+            <ImageViewer
+                  saveToLocalByLongPress={false}
+
+              onChange={(index: any) => {
+                setSelectedImageIndex(index)
+              }}
+              enableImageZoom={false} onClick={
+                () => {
+
+                  // setSelectedImageIndex(index)
+                  setFullImageScreen(true)
+                }
+
+                // () => navigation.navigate('showImage', { imageURL: { uri: coverImage }, selectedImageIndex, imageSlider })
+              }
+              imageUrls={imageSlider} />
+
+          </View>
+          // <SliderBox
+          //   images={imageSlider}
+          //   sliderBoxHeight={Wheight - 390}
+          //   resizeMode={'cover'}
+          //   onCurrentImagePressed={(index: any) => {
+          //     console.log(index, 'indexindexindex')
+          // setSelectedImageIndex(index)
+          // setFullImageScreen(true)
+          //   }}
+          // />
           :
           isLoader ?
             <ActivityIndicator

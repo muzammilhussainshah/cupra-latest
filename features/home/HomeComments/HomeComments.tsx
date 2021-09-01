@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TextInput, FlatList,ActivityIndicator, TouchableOpacity, View, } from 'react-native';
+import { Text, ScrollView, Dimensions, TextInput, FlatList, ActivityIndicator, TouchableOpacity, View, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -22,6 +22,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
   const Wheight = Dimensions.get('window').height;
 
   const [text, setText] = useState('');
+
   const [Err, setErr] = useState('');
 
   const flex1 = Wheight / 10
@@ -35,7 +36,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
   const newsComment = useSelector((state: any) => state.reducer.newsComment)
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-
+  // console.log(currentUser, 'currentUsercurrentUsercurrentUser')
   const dispatch = useDispatch()
 
   return (
@@ -68,6 +69,8 @@ export const HomeComments = ({ route, navigation, }: any) => {
                 data={newsComment}
                 renderItem={({ item }) => {
                   const { text, createdAt, createdBy, mine, news_id, _id } = item
+                  const { icon } = createdBy
+                  console.log(item, '[[[[[[[[[[[[[[[[[[[[[')
                   return (
                     <View style={{ paddingHorizontal: 10, marginVertical: 2 }}>
                       <View style={{ height: 60, flexDirection: "row", }}>
@@ -75,13 +78,21 @@ export const HomeComments = ({ route, navigation, }: any) => {
                           <FastImage
                             resizeMode={'contain'}
                             source={require('../../../assets/users/border.png')}
-                            style={{ height: "100%", width: "100%", }} />
-                          <View style={{ height: "100%", width: "100%", position: "absolute", zIndex: 3 }}>
-                          </View>
+                            style={{ height: "90%", width: "90%", }} />
+                          {icon &&
+                            <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
+                              <View style={{ borderRadius: 50, overflow: "hidden", height: "75%", width: "90%" }}>
+                                <FastImage
+                                  resizeMode={'cover'}
+                                  source={{ uri: icon }}
+                                  style={{ height: "100%", width: "100%", }} />
+                              </View>
+                            </View>
+                          }
                         </View>
                         <View style={{ flex: mine ? 7.6 : 8.6, justifyContent: 'center' }}>
-                          <Text style={{ color: Colors.white, fontWeight: "bold" }}>{createdBy.full_name}</Text>
-                          <Text style={{ color: Colors.brownishGrey }}>{moment(createdAt).fromNow()}</Text>
+                          <Text style={{ color: Colors.white, fontWeight: "bold", marginHorizontal: 10 }}>{createdBy.full_name}</Text>
+                          <Text style={{ color: Colors.brownishGrey, marginHorizontal: 10 }}>{moment(createdAt).fromNow()}</Text>
                         </View>
                         {mine &&
                           <TouchableOpacity
@@ -101,8 +112,8 @@ export const HomeComments = ({ route, navigation, }: any) => {
                     </View>
                   )
                 }}
-                />
-          }
+              />
+            }
           </ScrollView>
           <View style={{ height: "15%", paddingHorizontal: 15, backgroundColor: Colors.black, flexDirection: 'row' }}>
             <View style={{ width: "90%", justifyContent: "center", }}>
@@ -118,11 +129,11 @@ export const HomeComments = ({ route, navigation, }: any) => {
             <View style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
               <TouchableOpacity
                 onPress={() => {
-                  if(text){
+                  if (text) {
                     dispatch(_commentOnNews(currentUser, newsId, text, navigation, filterdBy))
                     setText("")
                   }
-                  else{
+                  else {
                     setErr("Add your comment here")
                     setTimeout(() => {
                       setErr("")
@@ -138,7 +149,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
               </TouchableOpacity>
             </View>
           </View>
-              {Err?<Text style={{color:"red",textAlign:"center",backgroundColor:Colors.black,width:"100%"}}>{Err}</Text>:null}
+          {Err ? <Text style={{ color: "red", textAlign: "center", backgroundColor: Colors.black, width: "100%" }}>{Err}</Text> : null}
         </View >
       </View >
     </ScrollView>

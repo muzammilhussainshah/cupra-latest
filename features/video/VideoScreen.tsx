@@ -45,6 +45,7 @@ export const VideoScreen: React.FC = () => {
             style={{ flex: 1 }}
             data={item1.item.media}
             renderItem={item2 => {
+              console.log(item1,  'item2item2item2item2item2item2item2item2item2item2item2item2')
               return (
                 <VideoTile
                   VideoImage={item2.item.url}

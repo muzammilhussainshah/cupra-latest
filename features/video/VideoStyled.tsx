@@ -57,8 +57,8 @@ const BottomContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-`;
+  `;
+  // margin-top: 10px;
 const VideoLabel = styled.View`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.3);
@@ -120,9 +120,10 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
             </BookingTitle>
           </VideoLabel>
         </View>
+        {/* <Text>aaa</Text> */}
         <BottomContainer   >
           <RowView>
-            <Text style={{ color: Colors.black, fontSize: 15, marginVertical: 10 }}> {moment(getDate).fromNow()}</Text>
+            <Text style={{ color: Colors.black, fontSize: 15,  }}> {moment(getDate).fromNow()}</Text>
           </RowView>
           <TouchableOpacity
             style={{ height: "100%", }}
@@ -131,7 +132,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
               numberOfLikes()
             }}
           >
-            <RowView style={{ marginVertical: 10 }}>
+            <RowView style={{  }}>
               <SteeringImage
                 resizeMode={FastImage.resizeMode.contain}
                 source={require('../../assets/images/RealHeart.png')}

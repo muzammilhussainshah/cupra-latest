@@ -1,16 +1,19 @@
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import { _getNewsImages } from '../../store/action/imageAction'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Header } from '../../components/Header';
 import { StaticImages } from '../../data/StaticImages';
 import { ImagesContainer, ImageTile, ImageTitle, ImageTitleWrapper } from './ImagesStyled';
+import {  CommonActions, useIsFocused } from '@react-navigation/native';
 
 export const ImagesScreen: React.FC = () => {
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const dispatch = useDispatch();
+  const isFocused = useIsFocused()
+
   const [imagesArr, setImagesArr] = useState([])
 
   const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
@@ -18,6 +21,13 @@ export const ImagesScreen: React.FC = () => {
   useEffect(() => {
     dispatch(_getNewsImages(currentUser, 10, 1, navigation))
   }, [])
+  
+  useEffect(() => {
+    if (isFocused) {
+      alert()
+      dispatch(_getNewsImages(currentUser, 10, 1, navigation))
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     setImagesArr(getNewsImages)

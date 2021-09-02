@@ -1,7 +1,20 @@
-import { ISLOADER, ISERROR, GETCITY } from "../constant/constant";
+import { ISLOADER, ISERROR, CONTACTUSINFO } from "../constant/constant";
 import { _logOut } from './authAction';
 import axios from 'axios';
+// import DeviceInfo from 'react-native-device-info';
+// import BaseUrl from '../../common/BaseUrl';
+// import { Actions } from 'react-native-router-flux'; 
+// import AsyncStorage from '@react-native-community/async-storage';
+// import firestore from '@react-native-firebase/firestore'; 
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+import auth from "@react-native-firebase/auth";
+
 import { Alert, AsyncStorage } from 'react-native';
+
+
 export const _loading = (bol) => {
     return dispatch => {
         dispatch({ type: ISLOADER, payload: bol });
@@ -26,15 +39,15 @@ export const _checkIsEmptyObj = (obj) => {
         }
     }
 }
-export const _claim = (currentUser, navigation, title, body, settitle, setBody) => {
+export const _getcomponyInfo = (currentUser, navigation,) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         dispatch(_loading(true));
         try {
             const option = {
-                method: 'POST',
-                url: `https://cupranationapp.herokuapp.com/apis/mobile/claim?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/company-info?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
                 headers: {
                     'cache-control': 'no-cache',
                     "Allow-Cross-Origin": '*',
@@ -42,23 +55,12 @@ export const _claim = (currentUser, navigation, title, body, settitle, setBody) 
                     'Authorization': `${currentUser.token}`
 
                 },
-                data: {
-                    "title": title,
-                    "body": body
-                }
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
+                dispatch({ type: CONTACTUSINFO, payload: resp.data.data })
                 dispatch(_loading(false));
-                settitle('')
-                setBody('')
-                Alert.alert(
-                    "Your Claim Succesfully Sent!",
-                    "Cupra will contact you soon!",
-                    [
-                        { text: "OK" }
-                    ]
-                );
+
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(
@@ -73,12 +75,12 @@ export const _claim = (currentUser, navigation, title, body, settitle, setBody) 
                 dispatch(_error(resp.data.error.messageEn));
                 dispatch(_loading(false));
             }
-            console.log(resp, 'resp _claim',)
+            console.log(resp, 'resp _getcomponyInfo',)
             dispatch(_loading(false));
         }
         catch (err) {
             dispatch(_loading(false));
-            console.log(err.response, "error from _claim", JSON.parse(JSON.stringify(err.message)));
+            console.log(err.response, "error from _getcomponyInfo", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

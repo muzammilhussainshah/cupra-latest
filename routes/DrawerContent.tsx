@@ -134,7 +134,7 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { }}
+              onPress={() => { props.navigation.navigate("contactUs")}}
               icon={({ size }) => (
                 <Ionicons
                   name="help-outline"

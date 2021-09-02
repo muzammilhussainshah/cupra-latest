@@ -8,10 +8,11 @@ import {
 
 import BottomTabNavigator from './BottomTabNavigator';
 
-import {ProfileScreen} from '../drawerFeature/profile/ProfileScreen';
-import {EditProfile} from '../drawerFeature/editProfile/EditProfile';
-import {FavoritesScreen} from '../drawerFeature/favorites/FavoritesScreen';
-import {ClaimsScreen} from '../drawerFeature/claims/ClaimsScreen';
+import { ProfileScreen } from '../drawerFeature/profile/ProfileScreen';
+import { EditProfile } from '../drawerFeature/editProfile/EditProfile';
+import { FavoritesScreen } from '../drawerFeature/favorites/FavoritesScreen';
+import { ClaimsScreen } from '../drawerFeature/claims/ClaimsScreen';
+import { ContactUs } from '../drawerFeature/contactUs/ContactUs';
 
 import Routes from './Routes';
 
@@ -34,7 +35,7 @@ export const DashBoardStackScreens = () => {
       close: TransitionSpecs.TransitionIOSSpec,
     },
     headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-    cardStyleInterpolator: ({current, layouts}: any) => ({
+    cardStyleInterpolator: ({ current, layouts }: any) => ({
       cardStyle: {
         transform: [
           {
@@ -87,6 +88,11 @@ export const DashBoardStackScreens = () => {
       <DashBoardStack.Screen
         name={'claims'}
         component={ClaimsScreen}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'contactUs'}
+        component={ContactUs}
         options={MyTransition}
       />
     </DashBoardStack.Navigator>

@@ -2,17 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation, DrawerActions, } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { _getProfile } from '../../store/action/authAction';
-import { TouchableOpacity, ScrollView, TextInput, ActivityIndicator, ImageBackground } from "react-native"
+import { TouchableOpacity, ScrollView, TextInput, ActivityIndicator,   } from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { Colors } from '../../constants/Colors';
 import { _claim } from "../../store/action/claimsAction"
 import { useDispatch, useSelector } from 'react-redux';
-import { height, width } from '../../constants/Layout';
-const SteeringIcon = styled(FastImage)`
-  height: 30px;
-  width: 30px;
-`;
+import { height, width } from '../../constants/Layout'; 
 export const ClaimsScreen: React.FC = () => {
   const [body, setBody] = useState('')
   const [title, settitle] = useState('')
@@ -23,8 +19,6 @@ export const ClaimsScreen: React.FC = () => {
   const isError = useSelector((state: any) => state.reducer.isError);
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
   useEffect(() => {
-    // _getProfile = (currentUser, navigation,) 
-    // dispatch(_getFavCars(currentUser, navigation))
     dispatch(_getProfile(currentUser, navigation))
   }, [])
   useEffect(() => {
@@ -35,14 +29,10 @@ export const ClaimsScreen: React.FC = () => {
         <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.8, borderBottomColor: Colors.brownishGrey }}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            style={{ flex: 2, justifyContent: "center",   alignItems: "center" }}>
+            style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
             <View style={{ height: "45%", width: "50%", borderRadius: 10, justifyContent: "center", alignItems: "center", backgroundColor: Colors.primary }}>
               < Text style={{ color: Colors.white }}>{"<"}</Text>
             </View>
-            {/* <SteeringIcon
-              resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/back.png')}
-            /> */}
           </TouchableOpacity>
           <View style={{ flex: 8, justifyContent: "center" }}>
             <FastImage style={{ width: '85%', marginTop: 10, height: "60%" }} source={require('../../assets/logo.png')} resizeMode={FastImage.resizeMode.contain} />
@@ -91,7 +81,9 @@ export const ClaimsScreen: React.FC = () => {
                     <TextInput
                       style={{
                         width: "100%",
-                        paddingVertical: 5,
+                        height: "100%",
+                        textAlignVertical: 'top',
+                        paddingVertical: 10,
                         paddingHorizontal: 15,
                         color: Colors.darkGray
                       }}

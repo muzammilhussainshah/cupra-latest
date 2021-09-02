@@ -23,3 +23,4 @@ export const MYPROFILE = 'MYPROFILE';
 export const GETFAVCARS = 'GETFAVCARS';
 export const GETMODELS = 'GETMODELS';
 export const GETBRANDS = 'GETBRANDS';
+export const CONTACTUSINFO = 'CONTACTUSINFO';

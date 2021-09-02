@@ -150,7 +150,7 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { }}
+              onPress={() => { props.navigation.navigate("PrivacyPolicy")}}
               icon={({ size }) => (
                 <Ionicons
                   name="help-outline"

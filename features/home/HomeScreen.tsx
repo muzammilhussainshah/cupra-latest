@@ -93,7 +93,7 @@ export const HomeScreen: React.FC = () => {
       let filterChat = [];
       for (let index = 0; index < getNews.length; index++) {
         filterChat = getNews.filter((data: any) => {
-          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern) || data.en_desc.match(searchPattern) || data.ar_desc.match(searchPattern)
         });
       }
       setgetNewsSt(filterChat)
@@ -109,8 +109,8 @@ export const HomeScreen: React.FC = () => {
           setsearchTxt(e)
         }}
         searchBarInput={true}
+        notiScreen={() => navigation.navigate('notification')}
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
-        onPress={() => { }}
       />
       {isLoader ?
         <ActivityIndicator

@@ -44,6 +44,7 @@ export type IHeaderTypeProp = {
   searchBarInput?: boolean;
   _func?: any;
   isEmptyserch?: any;
+  notiScreen?: any;
 
   navigateBack?: () => void;
 };
@@ -54,6 +55,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
   RatingScreen,
   searchBarInput,
   _func,
+  notiScreen,
   isEmptyserch,
   navigateBack,
 }) => {
@@ -68,7 +70,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
       <LogoContainer >
         {isGoBack ? (
           <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
-            <Text style={{ color: Colors.white ,fontSize:20}}>{"<"}</Text>
+            <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
             {/* <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/images/back.png')}
@@ -86,7 +88,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
           source={require('../assets/logo.png')}
           resizeMode={FastImage.resizeMode.contain}
         />
-        <IconPlaceholder onPress={onPress} activeOpacity={0.6}>
+        <IconPlaceholder onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
           <HeaderIcons
             resizeMode={FastImage.resizeMode.contain}
             source={require('../assets/images/bell.png')}

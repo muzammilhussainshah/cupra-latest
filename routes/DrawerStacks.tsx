@@ -13,6 +13,9 @@ import { EditProfile } from '../drawerFeature/editProfile/EditProfile';
 import { FavoritesScreen } from '../drawerFeature/favorites/FavoritesScreen';
 import { ClaimsScreen } from '../drawerFeature/claims/ClaimsScreen';
 import { ContactUs } from '../drawerFeature/contactUs/ContactUs';
+import { WebViewScreen } from '../drawerFeature/webView/webView';
+import { NotificationScreen } from '../features/notification/notificationScreen';
+import { privacyScreen } from '../drawerFeature/PrivacyPolicy/privacyScreen';
 
 import Routes from './Routes';
 
@@ -22,6 +25,10 @@ type DashBoardStackParamList = {
   editProfile: undefined;
   favorites: undefined;
   claims: undefined;
+  contactUs: undefined;
+  webView: undefined;
+  PrivacyPolicy: undefined;
+  notification: undefined;
 };
 
 const DashBoardStack = createStackNavigator<DashBoardStackParamList>();
@@ -93,6 +100,21 @@ export const DashBoardStackScreens = () => {
       <DashBoardStack.Screen
         name={'contactUs'}
         component={ContactUs}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'webView'}
+        component={WebViewScreen}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'PrivacyPolicy'}
+        component={privacyScreen}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'notification'}
+        component={NotificationScreen}
         options={MyTransition}
       />
     </DashBoardStack.Navigator>

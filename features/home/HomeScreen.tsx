@@ -104,7 +104,6 @@ export const HomeScreen: React.FC = () => {
     < Container >
       <Header
         isEmptyserch={isEmptyserch}
-        // _func={(e: any) => console.log()}
         _func={(e: any) => {
           searchUser(e)
           setsearchTxt(e)

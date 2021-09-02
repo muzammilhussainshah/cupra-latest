@@ -21,14 +21,53 @@ export const VideoScreen: React.FC = () => {
   const videos = useSelector((state: any) => state.reducer.videos);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
+  const [search, setsearch] = useState([]);
+  const [videosST, setvideosST] = useState([]);
 
   useEffect(() => {
     dispatch(_getVideos(currentUser, navigation));
   }, []);
+
+  useEffect(() => {
+    setvideosST(videos)
+  }, [videos]);
   console.log(videos, 'videosvideosvideosvideos')
+
+
+
+
+  
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setvideosST(videos)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < videos.length; index++) {
+        filterChat = videos.filter((data: any) => {
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+        });
+      }
+      setvideosST(filterChat)
+    }
+  }
+
+
+  
   return (
     <VideoContainer>
-      <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+      <Header 
+      
+      // isEmptyserch={isEmptyserch}
+      _func={(e: any) => {
+        searchUser(e)
+      }}
+      searchBarInput={true}
+      onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       <VideoTitleWrapper>
         <VideoTitle>Videos</VideoTitle>
@@ -37,8 +76,8 @@ export const VideoScreen: React.FC = () => {
       <FlatList
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        keyExtractor={item => item.id}
-        data={videos}
+        keyExtractor={(item:any) => item.id}
+        data={videosST}
         renderItem={item1 => (
           <SwiperFlatList
             keyExtractor={item => item.id}

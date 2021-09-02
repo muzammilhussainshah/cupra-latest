@@ -111,13 +111,13 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
   const numberOfLikes = () => {
     // dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex]._id, navigation,))
     dispatch(_imageNewsLike(currentUser, arrOfSliderImagesData[renderImgIndex]._id, navigation, getNewsImages, likeByMe, indexOfNewsMainImages, renderImgIndex))
-    if (!likeByMe) {
-      setimageLikes(imgLikes + 1)
-    } else {
-      if (imgLikes > 0) {
-        setimageLikes(imgLikes - 1)
-      }
-    }
+    // if (!likeByMe) {
+    //   setimageLikes(imgLikes + 1)
+    // } else {
+    //   if (imgLikes > 0) {
+    //     setimageLikes(imgLikes - 1)
+    //   }
+    // }
   }
 
   const images = [{
@@ -159,7 +159,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                     setrenderImgIndex(index)
                   }}
                   enableImageZoom={false} onClick={() =>
-                    navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, allData: arrOfSliderImagesData, likes: arrOfSliderImagesData && arrOfSliderImagesData[renderImgIndex] && arrOfSliderImagesData[renderImgIndex].likesCount, getNewsImages, indexOfNewsMainImages })
+                    navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, allData: arrOfSliderImagesData, likes: allData.media[renderImgIndex].likesCount, getNewsImages, indexOfNewsMainImages })
 
                   } imageUrls={arrOfSliderImagesPath} />
               </View>
@@ -187,7 +187,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                   resizeMode={FastImage.resizeMode.contain}
                   source={require('../../assets/images/RealHeart.png')}
                 />
-                <NumberOfRates style={{ marginLeft: "5%" }}>{imgLikes}</NumberOfRates>
+                <NumberOfRates style={{ marginLeft: "5%" }}>{allData.media[renderImgIndex].likesCount}</NumberOfRates>
               </RowView>
             </TouchableOpacity>
           </BottomContainer>

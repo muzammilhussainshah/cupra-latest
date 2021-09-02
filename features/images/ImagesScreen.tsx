@@ -22,14 +22,9 @@ export const ImagesScreen: React.FC = () => {
     dispatch(_getNewsImages(currentUser, 10, 1, navigation))
   }, [])
   
-  useEffect(() => {
-    if (isFocused) {
-      alert()
-      dispatch(_getNewsImages(currentUser, 10, 1, navigation))
-    }
-  }, [isFocused]);
 
   useEffect(() => {
+    console.log(getNewsImages,"getNewsImagesgetNewsImagesgetNewsImages")
     setImagesArr(getNewsImages)
   }, [getNewsImages])
   return (

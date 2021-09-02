@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, TextInput, Alert } from 'react-native';
-import { View } from 'react-native-animatable';
+import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors } from '../constants/Colors';
@@ -67,11 +67,12 @@ export const Header: React.FC<IHeaderTypeProp> = ({
     <BackgroundContiner style={{ height: searchBarInput ? 130 : 80 }}>
       <LogoContainer >
         {isGoBack ? (
-          <IconPlaceholder onPress={navigateBack} activeOpacity={0.6}>
-            <SteeringIcon
+          <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
+            <Text style={{ color: Colors.white ,fontSize:20}}>{"<"}</Text>
+            {/* <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
               source={require('../assets/images/back.png')}
-            />
+            /> */}
           </IconPlaceholder>
         ) : (
           <IconPlaceholder onPress={onOpenDrawer} activeOpacity={0.6}>

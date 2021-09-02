@@ -318,15 +318,17 @@ export const EditProfile: React.FC = () => {
             </View>
             {/*Absolute for Work */}
             <View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
-              <View style={{ height: "10%", marginHorizontal: 10, alignItems: "center", flexDirection: "row" }}>
-                <TouchableOpacity onPress={() => navigation.goBack()
-                }>
-                  <SteeringIcon
+              <View style={{ height: "10%", marginHorizontal: 20, alignItems: "center", flexDirection: "row" }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}
+                  style={{ height: '65%', width: '12%', backgroundColor: Colors.primary, borderRadius: 10, justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text style={{ color: Colors.white }}>{'<'}</Text>
+                  {/* <SteeringIcon
                     resizeMode={FastImage.resizeMode.contain}
                     source={require('../../assets/images/back.png')}
-                  />
+                  /> */}
                 </TouchableOpacity>
-                <Text style={{ fontSize: 16, color: Colors.white, marginLeft: 10 }}>My Profile</Text>
+                <Text style={{ fontSize: 16, color: Colors.white, marginLeft: 20 }}>My Profile</Text>
               </View>
               <View style={{ height: "35%", flexDirection: "row", paddingHorizontal: 5, alignItems: 'flex-end', justifyContent: "center" }}>
                 <View style={{ height: '50%', width: '30%', }}>

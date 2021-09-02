@@ -77,7 +77,7 @@ export const _getHexColor = (colour) => {
 }
 
 
-export const _getCity = (currentUser, navigation) => {
+export const _getCity = (currentUser, navigation, setModalVisible) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -97,7 +97,9 @@ export const _getCity = (currentUser, navigation) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch({ type: GETCITY, payload: resp.data.data })
+
                 dispatch(_loading(false));
+                setModalVisible(true)
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(

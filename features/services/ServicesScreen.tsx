@@ -45,7 +45,7 @@ export const ServicesScreen: React.FC = () => {
   const searchUser: any = (e: any) => {
     let keywords = e.split(' ')
     setsearch(keywords)
-    console.log('working fine')
+    // console.log('working fine')
     if (keywords[0] === "") {
       setservices(getServices)
     }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, TextInput, Alert } from 'react-native';
 import { View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
@@ -43,6 +43,7 @@ export type IHeaderTypeProp = {
   RatingScreen?: boolean;
   searchBarInput?: boolean;
   _func?: any;
+  isEmptyserch?: any;
 
   navigateBack?: () => void;
 };
@@ -53,10 +54,14 @@ export const Header: React.FC<IHeaderTypeProp> = ({
   RatingScreen,
   searchBarInput,
   _func,
+  isEmptyserch,
   navigateBack,
 }) => {
-  const [mobile, setmobile] = useState('');
+  const [text, settext] = useState('');
 
+  useEffect(() => {
+    settext("")
+  }, [isEmptyserch])
 
   return (
     <BackgroundContiner style={{ height: searchBarInput ? 130 : 80 }}>
@@ -104,11 +109,16 @@ export const Header: React.FC<IHeaderTypeProp> = ({
               onPress={onPress} activeOpacity={0.6}>
               <View style={{ height: 40, width: "85%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
                 <TextInput
-                  style={{ height: '100%', paddingHorizontal: 15, width: "100%", color: Colors.titleGray }} 
-                  onChangeText={text => _func(text)} 
+                  style={{ height: '100%', paddingHorizontal: 15, width: "100%", color: Colors.titleGray }}
+                  onChangeText={text => {
+
+                    settext(text)
+                    _func(text)
+                  }
+                  }
                   placeholder='Search'
                   placeholderTextColor={Colors.titleGray}
-                  defaultValue={mobile}
+                  value={text}
                 />
               </View>
               <View style={{ height: 40, width: "10%", justifyContent: "center", backgroundColor: Colors.darkGray, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>

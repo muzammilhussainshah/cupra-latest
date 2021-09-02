@@ -28,6 +28,8 @@ export const Shop: React.FC = ({ navigation }: any) => {
   const [getReview, setgetReview] = useState(false);
 
   const [flag, setflag] = useState(false);
+  
+  const [isEmptyserch, setisEmptyserch] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -77,10 +79,18 @@ export const Shop: React.FC = ({ navigation }: any) => {
         <GetReviewComponent _func={() => setgetReview(false)} />
       } */}
       <ShopContainer>
-        <Header
-          _func={(e: any) => searchUser(e)}
-          searchBarInput={true}
-          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        {flag ?
+          <Header
+          isEmptyserch={isEmptyserch}
+            _func={(e: any) => searchUser(e)}
+            searchBarInput={true}
+            onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+          :
+          <Header
+            _func={(e: any) => searchUser(e)}
+            searchBarInput={true}
+            onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        }
         <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>
@@ -93,6 +103,7 @@ export const Shop: React.FC = ({ navigation }: any) => {
                 // index === 1 && console.log(item, "sssssssssssss")
                 return (
                   <TouchableOpacity key={index} onPress={() => {
+                    setisEmptyserch(!isEmptyserch)
                     dispatch(_getSubCatogery(currentUser, item._id))
                     var cloneCatogery: any = catogery;
                     cloneCatogery.map((x: any) => {

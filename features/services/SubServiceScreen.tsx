@@ -72,7 +72,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const searchUser: any = (e: any) => {
     let keywords = e.split(' ')
     setsearch(keywords)
-    console.log('working fine')
+    // console.log('working fine')
     if (keywords[0] === "") {
       setsubservices(getsubServices)
     }

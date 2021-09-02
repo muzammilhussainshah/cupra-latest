@@ -15,6 +15,7 @@ export const ImagesScreen: React.FC = () => {
   const isFocused = useIsFocused()
 
   const [imagesArr, setImagesArr] = useState([])
+  const [search, setsearch] = useState([]);
 
   const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
   const navigation = useNavigation()
@@ -27,9 +28,36 @@ export const ImagesScreen: React.FC = () => {
     console.log(getNewsImages,"getNewsImagesgetNewsImagesgetNewsImages")
     setImagesArr(getNewsImages)
   }, [getNewsImages])
+
+
+
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setImagesArr(getNewsImages)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < getNewsImages.length; index++) {
+        filterChat = getNewsImages.filter((data: any) => {
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+        });
+      }
+      setImagesArr(filterChat)
+    }
+  }
+
   return (
     <ImagesContainer>
-      <Header onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+      <Header 
+        _func={(e: any) => {
+          searchUser(e)
+        }}
+        searchBarInput={true}
+      onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       <ImageTitleWrapper>
         <ImageTitle>Images</ImageTitle>
@@ -39,6 +67,8 @@ export const ImagesScreen: React.FC = () => {
         <FlatList
           contentContainerStyle={{ paddingBottom: 90 }}
           numColumns={2}
+          style={{ flex: 1 }}
+
           showsVerticalScrollIndicator={false}
           // keyExtractor={item => item.id}
           data={imagesArr && imagesArr}

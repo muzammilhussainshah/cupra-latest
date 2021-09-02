@@ -135,7 +135,10 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
       useNativeDriver
     >
       <ImagePlaceholder>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{
+          justifyContent: 'center', width: 160,
+        }}>
+          {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
           {imgSliderEnabled ?
             <View
               style={{
@@ -167,7 +170,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
             :
             <ImageTileCover source={{ uri: imageUri }} />
           }
-          <Text style={{ color: Colors.black, fontSize: 15,width:"95%" }}>
+          <Text style={{ color: Colors.black, fontSize: 15, }}>
             {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
           </Text>
           <BottomContainer style={{}}>

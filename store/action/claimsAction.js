@@ -26,7 +26,7 @@ export const _checkIsEmptyObj = (obj) => {
         }
     }
 }
-export const _claim = (currentUser, navigation, body, title) => {
+export const _claim = (currentUser, navigation, title, body, settitle, setBody) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -43,13 +43,22 @@ export const _claim = (currentUser, navigation, body, title) => {
 
                 },
                 data: {
-                    "title": body,
+                    "title": title,
                     "body": body
                 }
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 dispatch(_loading(false));
+                settitle('')
+                setBody('')
+                Alert.alert(
+                    "Your Claim Succesfully Sent!",
+                    "Cupra will contact you!",
+                    [
+                        { text: "OK" }
+                    ]
+                );
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(

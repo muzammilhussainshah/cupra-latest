@@ -167,7 +167,7 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
             :
             <ImageTileCover source={{ uri: imageUri }} />
           }
-          <Text style={{ color: Colors.black, fontSize: 15, }}>
+          <Text style={{ color: Colors.black, fontSize: 15,width:"95%" }}>
             {allData.en_header.substring(0, 20)} {allData.en_header.length > 20 && '...'}
           </Text>
           <BottomContainer style={{}}>

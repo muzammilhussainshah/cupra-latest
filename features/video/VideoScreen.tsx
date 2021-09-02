@@ -45,13 +45,14 @@ export const VideoScreen: React.FC = () => {
             style={{ flex: 1 }}
             data={item1.item.media}
             renderItem={item2 => {
-              console.log(item1,  'item2item2item2item2item2item2item2item2item2item2item2item2')
+              console.log(item1.item.en_desc,  'item2item2item2item2item2item2item2item2item2item2item2item2')
               return (
                 <VideoTile
                   VideoImage={item2.item.url}
                   likes={item2.item.likesCount}
                   getDate={item2.item.createdAt}
                   mediaId={item2.item._id}
+                  en_header={item1.item.en_header}
                   navigation={navigation}
                   likedByMe={item2.item.likedByMe}
                   onPress={() =>

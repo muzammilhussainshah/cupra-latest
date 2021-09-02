@@ -41,8 +41,8 @@ export const LoginScreen: React.FC = () => {
 
   const loginMethods = useForm<LoginProp>({
     defaultValues: {
-      phone_number: '',
-      password: '',
+      phone_number: '797251640',
+      password: '000000',
       country_number: '00962',
     },
   });

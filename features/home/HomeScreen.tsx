@@ -26,11 +26,17 @@ export const HomeScreen: React.FC = () => {
 
   const [getNewsSt, setgetNewsSt] = useState('')
 
+  const [searchTxt, setsearchTxt] = useState('')
+
   const [getStoriesSt, setgetStoriesSt] = useState('')
+
+  const [isEmptyserch, setisEmptyserch] = useState(false)
 
   const [currentUserSt, setcurrentUserSt] = useState('')
 
   const [pagination, setpagination] = useState(2);
+
+  const [search, setsearch] = useState([]);
 
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
@@ -66,7 +72,7 @@ export const HomeScreen: React.FC = () => {
 
 
   const loadMorePage = () => {
-    if (paginationLoader != true) {
+    if (paginationLoader != true && searchTxt === "") {
       // _getNews(currentUser, pagination, freePotatoes)
       dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
       // setpagination(pagination + 1)
@@ -75,9 +81,35 @@ export const HomeScreen: React.FC = () => {
 
 
 
+  const searchUser: any = (e: any) => {
+    let keywords = e.split(' ')
+    setsearch(keywords)
+    console.log('working fine')
+    if (keywords[0] === "") {
+      setgetNewsSt(getNews)
+    }
+    if (keywords[0] !== "") {
+      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+      let filterChat = [];
+      for (let index = 0; index < getNews.length; index++) {
+        filterChat = getNews.filter((data: any) => {
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+        });
+      }
+      setgetNewsSt(filterChat)
+    }
+  }
+
   return (
     < Container >
       <Header
+        isEmptyserch={isEmptyserch}
+        // _func={(e: any) => console.log()}
+        _func={(e: any) => {
+          searchUser(e)
+          setsearchTxt(e)
+        }}
+        searchBarInput={true}
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
         onPress={() => { }}
       />
@@ -95,6 +127,7 @@ export const HomeScreen: React.FC = () => {
               paddingVertical: 20,
             }}>
             <TouchableOpacity onPress={() => {
+              setisEmptyserch(!isEmptyserch)
               setfilterdBy("MINE")
               dispatch(_getNews(currentUser, 10, 1, 'MINE'));
             }}  >
@@ -104,6 +137,8 @@ export const HomeScreen: React.FC = () => {
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
+              setisEmptyserch(!isEmptyserch)
+
               setfilterdBy("LATEST")
               dispatch(_getNews(currentUser, 10, 1, "LATEST"));
             }}>
@@ -113,6 +148,8 @@ export const HomeScreen: React.FC = () => {
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
+              setisEmptyserch(!isEmptyserch)
+
               setfilterdBy("POPULAR")
               dispatch(_getNews(currentUser, 10, 1, 'POPULAR'));
             }}>
@@ -122,6 +159,8 @@ export const HomeScreen: React.FC = () => {
               }
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
+              setisEmptyserch(!isEmptyserch)
+
               setfilterdBy("FEATURED")
               dispatch(_getNews(currentUser, 10, 1, 'FEATURED'));
             }}>
@@ -140,7 +179,7 @@ export const HomeScreen: React.FC = () => {
             onLoadMoreAsync={loadMorePage}
           >
             {/* <Body> */}
-            {getNewsSt.length > 0     &&
+            {getNewsSt.length > 0 &&
               <FlatList
                 data={getNewsSt}
                 renderItem={({ item, index }) => (
@@ -167,10 +206,10 @@ export const HomeScreen: React.FC = () => {
                 <View style={{
                   justifyContent: 'center',
                   alignItems: "center",
-                  marginBottom: 20,
-                  marginTop: 20,
+                  // marginBottom: 20,
+                  // marginTop: 20,
                 }}>
-                  <ActivityIndicator size="large" color="#ffff" />
+                  <ActivityIndicator size="small" color={'black'} />
                 </View>
               ) : null
             }

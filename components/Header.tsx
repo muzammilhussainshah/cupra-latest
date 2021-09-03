@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, TextInput, Alert } from 'react-native';
+import { TouchableOpacity, TextInput, Linking,Platform } from 'react-native';
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
@@ -65,6 +65,22 @@ export const Header: React.FC<IHeaderTypeProp> = ({
     settext("")
   }, [isEmptyserch])
 
+
+  const dialCall = () => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${+1234567890}';
+    }
+    else {
+      phoneNumber = 'telprompt:${+1234567890}';
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+
+
   return (
     <BackgroundContiner style={{ height: searchBarInput ? 130 : 80 }}>
       <LogoContainer >
@@ -89,7 +105,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
           resizeMode={FastImage.resizeMode.contain}
         />
         {searchBarInput ?
-          <IconPlaceholder activeOpacity={0.6}>
+          <IconPlaceholder activeOpacity={0.6} onPress={() => dialCall()}>
             <View style={{ width: 70, borderRadius: 10, marginBottom: 5, height: 30, justifyContent: "center", alignItems: 'center' }}>
               <HeaderIcons
                 style={{ height: '100%', width: "100%" }}

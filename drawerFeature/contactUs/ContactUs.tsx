@@ -61,6 +61,22 @@ export const ContactUs: React.FC = () => {
     Linking.openURL(url);
   }
 
+
+  const dialCall = (tel:any) => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${tel}`;
+    }
+    else {
+      phoneNumber = `telprompt:${tel}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+
+
   return (
     <View style={{ flex: 1, marginTop: 24 }}>
       <View style={{ flex: 1.5, backgroundColor: Colors.black, justifyContent: "center" }}>
@@ -87,9 +103,15 @@ export const ContactUs: React.FC = () => {
             <View style={{ flex: 3.5, alignItems: "center", justifyContent: "space-around" }}>
               <Text>{getcontactUsInfo && getcontactUsInfo.email}</Text>
               <View>
-                <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
-                <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile1}</Text>
-                <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile2}</Text>
+                <TouchableOpacity onPress={()=>{dialCall(getcontactUsInfo.tel)}}>
+                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{dialCall(getcontactUsInfo.mobile1)}}>
+                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile1}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{dialCall(getcontactUsInfo.mobile2)}}>
+                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile2}</Text>
+                </TouchableOpacity>
               </View>
               <Text>{getcontactUsInfo && getcontactUsInfo.address}</Text>
             </View>

@@ -7143,6 +7143,11 @@ react-native-gesture-handler@^1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-google-static-map@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/react-native-google-static-map/-/react-native-google-static-map-0.1.13.tgz#de2188938e0308acb4893580a63dc7b00f4d2b78"
+  integrity sha512-k/0rZrMriciHPgBer/H20KjnR1IVmYXRsH0rOVeO9NvbowKnDhUtVa4JKdezEmdzRcw/2rwMHiY5AnAMprCiPA==
+
 react-native-image-pan-zoom@^2.1.12:
   version "2.1.12"
   resolved "https://registry.yarnpkg.com/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.12.tgz#eb98bf56fb5610379bdbfdb63219cc1baca98fd2"

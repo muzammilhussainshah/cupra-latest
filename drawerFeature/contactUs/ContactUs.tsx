@@ -4,7 +4,7 @@ import { useNavigation, DrawerActions, } from '@react-navigation/native';
 
 import { _getcomponyInfo } from '../../store/action/companyAction';
 
-import { TouchableOpacity, ImageBackground } from "react-native"
+import { Dimensions, ImageBackground ,TouchableOpacity} from "react-native"
 
 import { Text, View } from 'react-native-animatable';
 
@@ -18,7 +18,15 @@ import { _claim } from "../../store/action/claimsAction"
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import GoogleStaticMap from 'react-native-google-static-map';
+
+import GoogleMapKey from '../../constants/GoogleApiKey';
+
 export const ContactUs: React.FC = () => {
+
+  const screenHeight = Dimensions.get('window').height;
+
+  const screenwidth = Dimensions.get('window').width;
 
   const [getcontactUsInfo, setgetcontactUsInfo] = useState('')
 
@@ -44,9 +52,16 @@ export const ContactUs: React.FC = () => {
         <Header RatingScreen={true} onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
       </View>
       <View style={{ flex: 8.5, backgroundColor: Colors.titleGray, justifyContent: "center", alignItems: "center" }}>
-        <View style={{ height: "75%", width: "90%", }}>
+        <GoogleStaticMap
+          latitude={"31.655693099810417"}
+          longitude={"36.86100769042969"}
+          zoom={8}
+          size={{ width: 450, height: 550 }}
+          apiKey={GoogleMapKey}
+        />
+        <View style={{ height: "75%", width: "90%",  position: "absolute" }}>
           <ImageBackground source={require('../../assets/ContactUs/card.png')} resizeMode="stretch" style={{ height: "100%", width: "100%" }}>
-            <View style={{ flex: 2,justifyContent:"center",alignItems:"center" }}>
+            <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
               <FastImage style={{ width: '100%', height: "100%" }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
             </View>
             <View style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>

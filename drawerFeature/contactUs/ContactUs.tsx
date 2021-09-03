@@ -4,7 +4,7 @@ import { useNavigation, DrawerActions, } from '@react-navigation/native';
 
 import { _getcomponyInfo } from '../../store/action/companyAction';
 
-import { Dimensions, ImageBackground ,TouchableOpacity} from "react-native"
+import { Dimensions, ImageBackground, TouchableOpacity, Linking, Platform } from "react-native"
 
 import { Text, View } from 'react-native-animatable';
 
@@ -28,7 +28,7 @@ export const ContactUs: React.FC = () => {
 
   const screenwidth = Dimensions.get('window').width;
 
-  const [getcontactUsInfo, setgetcontactUsInfo] = useState('')
+  const [getcontactUsInfo, setgetcontactUsInfo]: any = useState('')
 
   const navigation = useNavigation();
 
@@ -40,26 +40,43 @@ export const ContactUs: React.FC = () => {
 
   useEffect(() => {
     dispatch(_getcomponyInfo(currentUser, navigation))
+
+
+
   }, [])
 
   useEffect(() => {
     setgetcontactUsInfo(contactUsInfo)
     console.log(contactUsInfo, 'contactUsInfocontactUsInfo')
   }, [contactUsInfo])
+
+  const openGoogleMapDirection = () => {
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${getcontactUsInfo.lat},${getcontactUsInfo.lng}`;
+    const label = 'Custom Label';
+    const url: any = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+    Linking.openURL(url);
+  }
+
   return (
     <View style={{ flex: 1, marginTop: 24 }}>
       <View style={{ flex: 1.5, backgroundColor: Colors.black, justifyContent: "center" }}>
         <Header RatingScreen={true} onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
       </View>
       <View style={{ flex: 8.5, backgroundColor: Colors.titleGray, justifyContent: "center", alignItems: "center" }}>
-        <GoogleStaticMap
-          latitude={"31.655693099810417"}
-          longitude={"36.86100769042969"}
-          zoom={8}
-          size={{ width: 450, height: 550 }}
-          apiKey={GoogleMapKey}
-        />
-        <View style={{ height: "75%", width: "90%",  position: "absolute" }}>
+        {getcontactUsInfo?.lat &&
+          <GoogleStaticMap
+            latitude={getcontactUsInfo.lat}
+            longitude={getcontactUsInfo.lng}
+            zoom={8}
+            size={{ width: 450, height: 550 }}
+            apiKey={GoogleMapKey}
+          />
+        }
+        <View style={{ height: "75%", width: "90%", position: "absolute" }}>
           <ImageBackground source={require('../../assets/ContactUs/card.png')} resizeMode="stretch" style={{ height: "100%", width: "100%" }}>
             <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
               <FastImage style={{ width: '100%', height: "100%" }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
@@ -112,7 +129,7 @@ export const ContactUs: React.FC = () => {
                 <FastImage style={{ width: 40, height: "60%" }} source={require('../../assets/ContactUs/tiktok.png')} resizeMode={FastImage.resizeMode.contain} />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() => { openGoogleMapDirection() }}
               activeOpacity={0.7}
               style={{ flex: 2.2, alignItems: "center" }}>
               <View style={{ height: "40%", width: 170, justifyContent: "center", alignItems: "center", borderRadius: 5, backgroundColor: Colors.primary }}>

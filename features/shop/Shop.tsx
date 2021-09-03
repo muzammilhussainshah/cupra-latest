@@ -70,7 +70,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
 
   const searchUser: any = async (e: any) => {
-  dispatch(_loading(true))
+    dispatch(_loading(true))
     let keywords = e.split(' ')
     setsearch(keywords)
     if (keywords[0] === "") {
@@ -84,7 +84,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
       for (let index = 0; index < shopSubCatogery.length; index++) {
         for (let j = 0; j < shopSubCatogery[index].items.length; j++) {
-          if (shopSubCatogery[index].items[j].en_name.match(searchPattern)||shopSubCatogery[index].items[j].ar_name.match(searchPattern)) {
+          if (shopSubCatogery[index].items[j].en_name.match(searchPattern) || shopSubCatogery[index].items[j].ar_name.match(searchPattern)) {
             filterChat.push(shopSubCatogery[index])
           }
 
@@ -105,6 +105,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
           isEmptyserch={isEmptyserch}
           _func={(e: any) => searchUser(e)}
           searchBarInput={true}
+          notiScreen={() => navigation.navigate('notification')}
           onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
         <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>

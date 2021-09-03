@@ -92,7 +92,8 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
       <Container style={{ height: height  }}>
 
         <Header isGoBack={true} navigateBack={() => navigation.goBack()}
-          _func={(e: any) => searchUser(e)}
+        notiScreen={() => navigation.navigate('notification')}
+        _func={(e: any) => searchUser(e)}
           searchBarInput={true}
         />
         <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />

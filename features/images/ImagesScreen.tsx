@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Header } from '../../components/Header';
 import { StaticImages } from '../../data/StaticImages';
 import { ImagesContainer, ImageTile, ImageTitle, ImageTitleWrapper } from './ImagesStyled';
-import {  CommonActions, useIsFocused } from '@react-navigation/native';
+import { CommonActions, useIsFocused } from '@react-navigation/native';
 
 export const ImagesScreen: React.FC = () => {
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
@@ -22,10 +22,10 @@ export const ImagesScreen: React.FC = () => {
   useEffect(() => {
     dispatch(_getNewsImages(currentUser, 10, 1, navigation))
   }, [])
-  
+
 
   useEffect(() => {
-    console.log(getNewsImages,"getNewsImagesgetNewsImagesgetNewsImages")
+    console.log(getNewsImages, "getNewsImagesgetNewsImagesgetNewsImages")
     setImagesArr(getNewsImages)
   }, [getNewsImages])
 
@@ -43,7 +43,7 @@ export const ImagesScreen: React.FC = () => {
       let filterChat = [];
       for (let index = 0; index < getNewsImages.length; index++) {
         filterChat = getNewsImages.filter((data: any) => {
-          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern) || data.en_desc.match(searchPattern) || data.ar_desc.match(searchPattern)
         });
       }
       setImagesArr(filterChat)
@@ -52,12 +52,13 @@ export const ImagesScreen: React.FC = () => {
 
   return (
     <ImagesContainer>
-      <Header 
+      <Header
         _func={(e: any) => {
           searchUser(e)
         }}
         searchBarInput={true}
-      onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        notiScreen={() => navigation.navigate('notification')}
+        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       <ImageTitleWrapper>
         <ImageTitle>Images</ImageTitle>

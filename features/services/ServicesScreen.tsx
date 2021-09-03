@@ -64,6 +64,7 @@ export const ServicesScreen: React.FC = () => {
       <Header
         _func={(e: any) => searchUser(e)}
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
+        notiScreen={() => navigation.navigate('notification')}
         searchBarInput={true}
       />
       {/* <CardBannerSection /> */}

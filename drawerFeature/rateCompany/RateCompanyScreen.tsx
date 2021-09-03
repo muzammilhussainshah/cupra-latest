@@ -23,6 +23,9 @@ import { useDispatch, useSelector } from 'react-redux';
 export const RateCompanyScreen: React.FC = () => {
 
   const [getReviews, setgetReviews] = useState('')
+  const [rating, setrating] = useState(0)
+  const [sumOfRating, setsumOfRating] = useState('')
+  const [noOfRating, setnoOfRating] = useState('')
 
   const [getcompanyInfo, setgetcompanyInfo] = useState('')
 
@@ -50,6 +53,22 @@ export const RateCompanyScreen: React.FC = () => {
   }, [])
   useEffect(() => {
     setgetReviews(companyReviews)
+    console.log(companyReviews, 'companyReviewscompanyReviewscompanyReviews')
+    if (companyReviews && companyReviews.length > 0) {
+      let sumOfRatelocal: any = 0
+      companyReviews.map((value: any) => {
+        sumOfRatelocal = sumOfRatelocal + value.rate
+        console.log(value, 'valuevaluevaluevaluevaluevaluevaluevalue')
+      })
+      console.log(sumOfRatelocal, 'sumOfRatelocal')
+      console.log(companyReviews.length, 'companyReviews.length')
+      setsumOfRating(sumOfRatelocal)
+      setnoOfRating(companyReviews.length)
+      setrating(sumOfRatelocal / companyReviews.length)
+    }
+
+
+
   }, [companyReviews])
   useEffect(() => {
     setgetcompanyInfo(contactUsInfo)
@@ -82,7 +101,7 @@ export const RateCompanyScreen: React.FC = () => {
                     renderItem={({ item, i }: any) => {
                       return (
                         <View>
-                          {item < 0 ?
+                          {item < Math.floor(rating) ?
                             <FastImage
                               tintColor={"#f3c93d"}
                               source={require('../../assets/images/RealStar.png')}
@@ -102,7 +121,7 @@ export const RateCompanyScreen: React.FC = () => {
                 activeOpacity={0.7}
                 onPress={() => navigation.navigate("getCompanyReviews")}
                 style={{ flex: 1.2, justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ fontSize: 17 }}>4.2 ( {getReviews && getReviews.length > 0 && getReviews.length} )</Text>
+                <Text style={{ fontSize: 17 }}> {rating && Math.floor(rating * 10) / 10} ( {getReviews && getReviews.length > 0 && getReviews.length} )</Text>
               </TouchableOpacity>
               <View style={{ flex: 0.8, alignItems: "center" }}>
                 <Text style={{ fontSize: 19 }}>{getcompanyInfo && getcompanyInfo.en_name && getcompanyInfo.en_name}</Text>

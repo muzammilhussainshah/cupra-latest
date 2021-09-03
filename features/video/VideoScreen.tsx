@@ -66,6 +66,7 @@ export const VideoScreen: React.FC = () => {
       _func={(e: any) => {
         searchUser(e)
       }}
+        notiScreen={() => navigation.navigate('notification')}
       searchBarInput={true}
       onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 

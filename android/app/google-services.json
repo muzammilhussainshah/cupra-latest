@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "193382017598",
-    "project_id": "cupra-6161f",
-    "storage_bucket": "cupra-6161f.appspot.com"
+    "project_number": "901870504657",
+    "project_id": "cupraapp",
+    "storage_bucket": "cupraapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:193382017598:android:3e9f6d70908a3692d1ff6f",
+        "mobilesdk_app_id": "1:901870504657:android:d18a6c277c3f0c58ac13f0",
         "android_client_info": {
           "package_name": "com.cupra"
         }
       },
       "oauth_client": [
         {
-          "client_id": "193382017598-jplb65g6tc6ov2hkag80nnd59c87sa0h.apps.googleusercontent.com",
+          "client_id": "901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDl5qAUhdCY0vBUCdyvwqWA0-O55AktGy4"
+          "current_key": "AIzaSyDAwU0ictdG8Z9qZYuAgT05P5j1nvnTDd4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "193382017598-jplb65g6tc6ov2hkag80nnd59c87sa0h.apps.googleusercontent.com",
+              "client_id": "901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

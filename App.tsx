@@ -61,6 +61,7 @@ export default function App() {
   // return deviceToken
 
     try {
+      console.log(deviceToken,"deviceTokendeviceTokendeviceToken")
       await AsyncStorage.setItem("deviceToken", deviceToken);
       await AsyncStorage.setItem("uniqueId", uniqueId);
     } catch (error) {

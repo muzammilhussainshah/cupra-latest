@@ -46,7 +46,7 @@ export const ContactUs: React.FC = () => {
       <View style={{ flex: 8.5, backgroundColor: Colors.titleGray, justifyContent: "center", alignItems: "center" }}>
         <View style={{ height: "75%", width: "90%", }}>
           <ImageBackground source={require('../../assets/ContactUs/card.png')} resizeMode="stretch" style={{ height: "100%", width: "100%" }}>
-            <View style={{ flex: 2 }}>
+            <View style={{ flex: 2,justifyContent:"center",alignItems:"center" }}>
               <FastImage style={{ width: '100%', height: "100%" }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
             </View>
             <View style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
@@ -55,9 +55,9 @@ export const ContactUs: React.FC = () => {
             <View style={{ flex: 3.5, alignItems: "center", justifyContent: "space-around" }}>
               <Text>{getcontactUsInfo && getcontactUsInfo.email}</Text>
               <View>
+                <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
                 <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile1}</Text>
                 <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile2}</Text>
-                <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
               </View>
               <Text>{getcontactUsInfo && getcontactUsInfo.address}</Text>
             </View>

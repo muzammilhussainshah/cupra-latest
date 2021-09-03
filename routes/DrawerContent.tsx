@@ -165,6 +165,23 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
+            <DrawerItem
+              onPress={() => { props.navigation.navigate("rateCompany")}}
+              icon={({ size }) => (
+                <Ionicons
+                  name="help-outline"
+                  size={size}
+                  color={Colors.white}
+                />
+              )}
+              // label="Privacy Policy"
+              label="Rate company"
+              labelStyle={{
+                color: 'white',
+                fontSize: 16,
+                fontFamily: 'SourceSansPro-Bold',
+              }}
+            />
           </SectionView>
         </MenuWrapper>
       </DrawerContentScrollView>

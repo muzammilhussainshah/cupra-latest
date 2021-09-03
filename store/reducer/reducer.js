@@ -2,7 +2,7 @@ import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
   NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,
-  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO,COMPANYPOLICY,NOTIFICATION
+  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -32,7 +32,8 @@ const INITIAL_STATE = {
   getBrands: {},
   contactUsInfo: {},
   companyPolicy: {},
-  notification:{}
+  notification: {},
+  companyReviews: {}
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -171,6 +172,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         notification: action.payload,
+      };
+    case COMPANYREVIEWS:
+      return {
+        ...state,
+        companyReviews: action.payload,
       };
     default:
       return state;

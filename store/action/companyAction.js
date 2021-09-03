@@ -1,4 +1,4 @@
-import { ISLOADER, ISERROR, CONTACTUSINFO,COMPANYPOLICY ,NOTIFICATION} from "../constant/constant";
+import { ISLOADER, ISERROR, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS } from "../constant/constant";
 import { _logOut } from './authAction';
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
@@ -171,6 +171,105 @@ export const _getNotification = (currentUser, navigation,) => {
         catch (err) {
             dispatch(_loading(false));
             console.log(err.response, "error from _getNotification", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _getCompanyReviews = (currentUser, page_size, page_index, navigation) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/company-review?deviceToken=${deviceToken}&deviceKey=${uniqueId}&page_size=${page_size}&page_index=${page_index}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: COMPANYREVIEWS, payload: resp.data.data })
+                dispatch(_loading(false));
+
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+
+            console.log(resp, 'resp _getCompanyReviews')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err.response, "error from _getCompanyReviews", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _addCompanyReviews = (currentUser, navigation, noOfReviews, reviewText,setnoOfReviews,setreviewText) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'POST',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/company-review?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+
+                },
+                data: {
+                    "rate": noOfReviews.toString(),
+                    "review": reviewText.toString()
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                // dispatch({ type: COMPANYREVIEWS, payload: resp.data.data })
+                dispatch(_loading(false));
+                setnoOfReviews('')
+                setreviewText('')
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+
+            console.log(resp, 'resp _addCompanyReviews')
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+
+            console.log(err.response, "error from _addCompanyReviews", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

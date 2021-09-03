@@ -16,6 +16,8 @@ import { ContactUs } from '../drawerFeature/contactUs/ContactUs';
 import { WebViewScreen } from '../drawerFeature/webView/webView';
 import { NotificationScreen } from '../features/notification/notificationScreen';
 import { privacyScreen } from '../drawerFeature/PrivacyPolicy/privacyScreen';
+import { RateCompanyScreen } from '../drawerFeature/rateCompany/RateCompanyScreen';
+import { GetCompanyReview } from '../drawerFeature/rateCompany/getCompanyReviews/getCompanyReviewsScreen';
 
 import Routes from './Routes';
 
@@ -29,6 +31,8 @@ type DashBoardStackParamList = {
   webView: undefined;
   PrivacyPolicy: undefined;
   notification: undefined;
+  rateCompany: undefined;
+  getCompanyReviews: undefined;
 };
 
 const DashBoardStack = createStackNavigator<DashBoardStackParamList>();
@@ -115,6 +119,16 @@ export const DashBoardStackScreens = () => {
       <DashBoardStack.Screen
         name={'notification'}
         component={NotificationScreen}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'rateCompany'}
+        component={RateCompanyScreen}
+        options={MyTransition}
+      />
+      <DashBoardStack.Screen
+        name={'getCompanyReviews'}
+        component={GetCompanyReview}
         options={MyTransition}
       />
     </DashBoardStack.Navigator>

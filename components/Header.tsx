@@ -88,12 +88,19 @@ export const Header: React.FC<IHeaderTypeProp> = ({
           source={require('../assets/logo.png')}
           resizeMode={FastImage.resizeMode.contain}
         />
-        <IconPlaceholder onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
-          <HeaderIcons
-            resizeMode={FastImage.resizeMode.contain}
-            source={require('../assets/images/bell.png')}
-          />
-        </IconPlaceholder>
+        {searchBarInput ?
+          <IconPlaceholder activeOpacity={0.6}>
+            <View style={{ width: 70, borderRadius: 10, marginBottom: 5, height: 30, justifyContent: "center", alignItems: 'center' }}>
+              <HeaderIcons
+                style={{ height: '100%', width: "100%" }}
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../assets/phoneCall.png')}
+              />
+            </View>
+          </IconPlaceholder> :
+          <View style={{ width: 70, borderRadius: 10, marginBottom: 5, height: 30, justifyContent: "center", alignItems: 'center' }}>
+          </View>
+        }
         {!RatingScreen && !searchBarInput &&
           <IconPlaceholder onPress={onPress} activeOpacity={0.6}>
             <HeaderIcons
@@ -106,9 +113,9 @@ export const Header: React.FC<IHeaderTypeProp> = ({
       </LogoContainer>
       {searchBarInput &&
         <View style={{ height: "100%", width: "100%", left: 16, position: 'absolute' }}>
-          <View style={{ height: "50%", top: "50%", justifyContent: "center" }}>
+          <View style={{ height: "50%", top: "18%", alignItems: "center", flexDirection: "row" }}>
             <IconPlaceholder
-              style={{ justifyContent: "center", flexDirection: 'row', overflow: "hidden" }}
+              style={{ justifyContent: "center", width: "90%", flexDirection: 'row', overflow: "hidden" }}
               onPress={onPress} activeOpacity={0.6}>
               <View style={{ height: 40, width: "85%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
                 <TextInput
@@ -133,7 +140,12 @@ export const Header: React.FC<IHeaderTypeProp> = ({
                 />
               </View>
             </IconPlaceholder>
-
+            <IconPlaceholder onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
+              <HeaderIcons
+                resizeMode={FastImage.resizeMode.contain}
+                source={require('../assets/images/bell.png')}
+              />
+            </IconPlaceholder>
           </View>
         </View>
       }

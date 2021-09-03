@@ -221,7 +221,7 @@ export const _getCompanyReviews = (currentUser, page_size, page_index, navigatio
         }
     }
 }
-export const _addCompanyReviews = (currentUser, navigation, noOfReviews, reviewText,setnoOfReviews,setreviewText) => {
+export const _addCompanyReviews = (currentUser, navigation, noOfReviews, reviewText, setnoOfReviews, setreviewText) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -248,6 +248,10 @@ export const _addCompanyReviews = (currentUser, navigation, noOfReviews, reviewT
                 dispatch(_loading(false));
                 setnoOfReviews('')
                 setreviewText('')
+                Alert.alert(
+                    "Review sent!",
+                    "Your Review successfully sent.",
+                );
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(

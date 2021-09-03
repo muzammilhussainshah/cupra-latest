@@ -53,7 +53,7 @@ export const NotificationScreen: React.FC = () => {
                     <View style={{ height: "40%", borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: "14%" }}>
                         <Switch
                             trackColor={{ false: "black", true: "black" }}
-                            thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
+                            thumbColor={isEnabled ? '#f4f3f4' : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={toggleSwitch}
                             value={isEnabled}

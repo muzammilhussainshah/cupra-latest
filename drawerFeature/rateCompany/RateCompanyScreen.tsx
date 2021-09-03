@@ -69,29 +69,37 @@ export const RateCompanyScreen: React.FC = () => {
               </View>
             </View>
             <View style={{ height: "80%", width: "80%", backgroundColor: Colors.titleGray, borderRadius: 15 }}>
-              <View style={{ flex: 2, }}>
-                <FlatList
-                  data={[0, 1, 2, 3, 4]}
-                  contentContainerStyle={{ flexDirection: "row", height: "100%", width: "100%", alignItems: 'flex-end', justifyContent: "center" }}
-                  renderItem={({ item, i }: any) => {
-                    return (
-                      <TouchableOpacity>
-                        {item < 0 ?
-                          <FastImage
-                            tintColor={Colors.primary}
-                            source={require('../../assets/images/RealStar.png')}
-                            style={{ height: 25, width: 25, marginHorizontal: 5 }} /> :
-                          <FastImage
-                            tintColor={"#ffffff"}
-                            source={require('../../assets/images/RealStar.png')}
-                            style={{ height: 25, width: 25, marginHorizontal: 5 }} />
-                        }
-                      </TouchableOpacity>
-                    )
-                  }}
-                />
+              <View style={{ flex: 1, }}></View>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate("getCompanyReviews")}
+                  style={{ width: "60%", alignItems: "center" }}>
+
+                  <FlatList
+                    data={[0, 1, 2, 3, 4]}
+                    contentContainerStyle={{ flexDirection: "row", height: "100%", alignItems: 'flex-end', }}
+                    renderItem={({ item, i }: any) => {
+                      return (
+                        <View>
+                          {item < 0 ?
+                            <FastImage
+                              tintColor={"#f3c93d"}
+                              source={require('../../assets/images/RealStar.png')}
+                              style={{ height: 25, width: 25, marginHorizontal: 5 }} /> :
+                            <FastImage
+                              tintColor={"#ffffff"}
+                              source={require('../../assets/images/RealStar.png')}
+                              style={{ height: 25, width: 25, marginHorizontal: 5 }} />
+                          }
+                        </View>
+                      )
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
               <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => navigation.navigate("getCompanyReviews")}
                 style={{ flex: 1.2, justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ fontSize: 17 }}>4.2 ( {getReviews && getReviews.length > 0 && getReviews.length} )</Text>
@@ -111,7 +119,7 @@ export const RateCompanyScreen: React.FC = () => {
                       <TouchableOpacity onPress={() => { setnoOfReviews(item) }}>
                         {item <= noOfReviews ?
                           <FastImage
-                            tintColor={Colors.primary}
+                            tintColor={"#f3c93d"}
                             source={require('../../assets/images/RealStar.png')}
                             style={{ height: 25, width: 25, marginHorizontal: 5 }} /> :
                           <FastImage

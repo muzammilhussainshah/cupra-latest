@@ -47,7 +47,7 @@ export const GetCompanyReview = ({ navigation }) => {
                     <FastImage
                       resizeMode={'contain'}
                       source={
-                        // items.customer_id.icon ? { uri: items.customer_id.icon } :
+                        items.customer.icon ? { uri: items.customer.icon } :
                         require('../../../assets/users/avatars-material-man-1.png')
                       }
                       style={{ height: "90%", width: "100%", }} />
@@ -61,8 +61,7 @@ export const GetCompanyReview = ({ navigation }) => {
                       <FlatList
                         data={[1, 2, 3, 4, 5]}
                         horizontal={true}
-                        renderItem={({ item }) => {
-                          console.log(items,item,'itemitems,')
+                        renderItem={({ item }) => { 
                           return (
                             <FastImage
                               resizeMode={'contain'}

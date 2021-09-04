@@ -754,11 +754,16 @@ export const _updateProfile = (
   };
 };
 
-export const _getProfile = (currentUser, navigation) => {
+export const _getProfile = (currentUser, navigation, name) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
-    dispatch(_loading(true));
+    if (name == 'claims') {
+      dispatch(_loading(false));
+    } else {
+
+      dispatch(_loading(true));
+    }
     try {
       const option = {
         method: 'GET',

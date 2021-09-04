@@ -702,7 +702,8 @@ export const _updateProfile = (
     data.append('full_name', fullName);
   }
   if (mobile) {
-    data.append('email', mobile);
+    console.log('email', mobile.replace(/ /g, ''))
+    // data.append('email', mobile);
   }
   if (gender) {
     data.append('gender', gender == 'male' ? '1' : '2');

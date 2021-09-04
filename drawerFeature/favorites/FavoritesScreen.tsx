@@ -353,10 +353,10 @@ export const FavoritesScreen: React.FC = () => {
             <Text style={{ fontSize: 19, fontFamily: "SourceSansPro-SemiBold" }}>My Favorite Cars</Text>
           </View>
           {isLoader &&
-              <ActivityIndicator
-                style={{ backgroundColor: '#ededee' }}
-                size="small" color={Colors.black}
-              />
+            <ActivityIndicator
+              style={{ backgroundColor: '#ededee' }}
+              size="small" color={Colors.black}
+            />
           }
           <View style={{ flex: 5.8, backgroundColor: 'white', }}>
             <ScrollView contentContainerStyle={{ alignItems: 'center', paddingVertical: 5 }}>
@@ -384,19 +384,31 @@ export const FavoritesScreen: React.FC = () => {
                           </TouchableOpacity>
                         </View>
                         <View style={{ height: (height / 10 * 2.3) - 10, width: width / 10 * 2.8, borderRadius: 15, backgroundColor: "#f8f5f5", padding: 10, }}>
-                          <View style={{ flex: 4.5, backgroundColor: "blue  ", justifyContent: "center", alignItems: "center" }}>
-                            <FastImage
-                              resizeMode={'contain'}
-                              source={require('../../assets/users/border.png')}
-                              style={{ height: "90%", width: "90%", }} />
-                            <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
-                              <View style={{ height: "78%", width: "45%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor: Colors.darkGray, }}>
-                                <FastImage
-                                  resizeMode={'contain'}
-                                  source={require('../../assets/aa.png')}
-                                  style={{ height: "60%", width: "60%", }} />
+                          <View style={{ flex: 4.5, justifyContent: "center", alignItems: "center" }}>
+                            {brand.icon ?
+                              <FastImage
+                                resizeMode="contain"
+                                source={{ uri: brand.icon }}
+                                style={{ height: "100%", width: "100%", }} /> :
+                              <FastImage
+                                resizeMode={'contain'}
+                                source={require('../../assets/users/border.png')}
+                                style={{ height: "90%", width: "90%", }} />
+                            }
+
+
+
+
+                            {!brand.icon &&
+                              <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center", position: "absolute", zIndex: -1 }}>
+                                <View style={{ height: "78%", width: "45%", justifyContent: "center", alignItems: "center", borderRadius: 70, backgroundColor:  Colors.darkGray, }}>
+                                  <FastImage
+                                    resizeMode={'contain'}
+                                    source={require('../../assets/aa.png')}
+                                    style={{ height: "60%", width: "60%", }} />
+                                </View>
                               </View>
-                            </View>
+                            }
                           </View>
                           <View style={{ flex: 5.5, justifyContent: 'space-between', alignItems: "center" }}>
                             <Text style={{ color: Colors.black, fontWeight: "bold" }}>

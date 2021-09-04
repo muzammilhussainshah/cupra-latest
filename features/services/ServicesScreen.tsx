@@ -45,7 +45,7 @@ export const ServicesScreen: React.FC = () => {
   const searchUser: any = (e: any) => {
     let keywords = e.split(' ')
     setsearch(keywords)
-    console.log('working fine')
+    // console.log('working fine')
     if (keywords[0] === "") {
       setservices(getServices)
     }
@@ -64,6 +64,7 @@ export const ServicesScreen: React.FC = () => {
       <Header
         _func={(e: any) => searchUser(e)}
         onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
+        notiScreen={() => navigation.navigate('notification')}
         searchBarInput={true}
       />
       {/* <CardBannerSection /> */}

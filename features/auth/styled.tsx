@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import {TouchableOpacity, Text, ActivityIndicator} from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -12,16 +12,15 @@ import RadialGradient from 'react-native-radial-gradient';
 
 import styled from 'styled-components/native';
 
+import {Colors} from '../../constants/Colors';
 
-import { Colors } from '../../constants/Colors';
+import {height, width} from '../../constants/Layout';
 
-import { height, width } from '../../constants/Layout';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { useDispatch, useSelector } from 'react-redux';
-
-import { _googleAuth, _facebookAuth } from '../../store/action/authAction';
+import {_googleAuth, _facebookAuth} from '../../store/action/authAction';
 
 export const BackGroundContinerImage = styled(FastImage)`
   flex: 1;
@@ -97,22 +96,20 @@ export const SocialMedia = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: '193382017598-jplb65g6tc6ov2hkag80nnd59c87sa0h.apps.googleusercontent.com',
+      webClientId:
+        '901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com',
     });
-  }, [])
+  }, []);
 
-  const isLoader = useSelector(({ reducer }) => reducer.isLoader);
-  const isError = useSelector(({ reducer }) => reducer.isError);
+  const isLoader = useSelector(({reducer}) => reducer.isLoader);
+  const isError = useSelector(({reducer}) => reducer.isError);
   const navigation = useNavigation();
   return (
     <>
-      < Row >
-
-        {isLoader ?
-          <ActivityIndicator
-            style={{}}
-            size="small" color={'#ffffff'}
-          /> :
+      <Row>
+        {isLoader ? (
+          <ActivityIndicator style={{}} size="small" color={'#ffffff'} />
+        ) : (
           <>
             <TouchableOpacity
               onPress={() => dispatch(_facebookAuth(navigation))}
@@ -132,11 +129,13 @@ export const SocialMedia = () => {
               />
             </TouchableOpacity>
           </>
-        }
-      </Row >
-      {isError !== "" &&
-        <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
-        </Text>}
+        )}
+      </Row>
+      {isError !== '' && (
+        <Text style={{color: 'red', fontSize: 12, alignSelf: 'center'}}>
+          {isError}
+        </Text>
+      )}
     </>
-  )
+  );
 };

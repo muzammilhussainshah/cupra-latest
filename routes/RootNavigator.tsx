@@ -29,7 +29,7 @@ import {HomeComments} from '../features/home/HomeComments/HomeComments';
 import {VideosUri} from '../features/home/HomeDetail/VideosUri/VideosUri';
 
 import {GetAndSubmitReview} from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
-
+ 
 import Routes from './Routes';
 
 import {NavigatorScreenParams} from '@react-navigation/native';
@@ -47,7 +47,7 @@ type AuthStackParamList = {
   otp: {phone_number?: string; routName?: string};
   resetPassword: undefined;
   requestPassword: undefined;
-  VideoPlayScreenHome: undefined;
+  VideoPlayScreenHome: undefined; 
 };
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
@@ -172,6 +172,6 @@ export const RootNavigator = () => {
         component={AddNewPassword}
         options={MyTransition}
       />
-    </AuthStack.Navigator>
+     </AuthStack.Navigator>
   );
 };

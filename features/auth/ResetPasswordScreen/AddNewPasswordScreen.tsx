@@ -24,10 +24,10 @@ interface IPasswordProp {
   new_password: string;
   confirm_password: string;
 }
-export const AddNewPassword: React.FC = () => {
+export const AddNewPassword: React.FC = ({navigation}:any) => {
   const dispatch = useDispatch();
   const route: any = useRoute();
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const passwordModel = useForm<IPasswordProp>({
     defaultValues: {
       new_password: '',
@@ -40,7 +40,7 @@ export const AddNewPassword: React.FC = () => {
   const getpassToken = route?.params?.passToken;
   function onSubmit(model: IPasswordProp) {
     console.warn('form submitted', model);
-    dispatch(_resetNewPassword(model, getPhonneNumber, getpassToken)) 
+    dispatch(_resetNewPassword(model, getPhonneNumber, getpassToken,navigation)) 
   }
 
   return (

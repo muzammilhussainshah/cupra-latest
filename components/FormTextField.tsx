@@ -14,6 +14,7 @@ type Props = React.ComponentProps<typeof TextValidator> & {
   color?: string;
   fontColor?: string;
   radius?: number;
+  getDisable?: any;
   items?: string[] | undefined | any;
 };
 
@@ -27,6 +28,7 @@ const FormTextField: React.FC<Props> = props => {
     color,
     fontColor,
     radius,
+    getDisable,
     items,
     ...restOfProps
   } = (props);
@@ -39,6 +41,7 @@ const FormTextField: React.FC<Props> = props => {
           background={background}
           color={color}
           style={style}
+          getDisable={getDisable&&getDisable}
           placeholder={placeholder}
           items={items.map((i: number) => ({
             id: i,

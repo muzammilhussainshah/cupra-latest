@@ -58,7 +58,7 @@ const BottomContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   `;
-  // margin-top: 10px;
+// margin-top: 10px;
 const VideoLabel = styled.View`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.3);
@@ -82,8 +82,9 @@ export type IVideoTypeProp = {
   getDate?: any;
   likedByMe?: boolean;
   onPress?: () => void;
+  en_header?: () => any;
 };
-export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate, mediaId, likedByMe, navigation, onPress }) => {
+export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate, mediaId, likedByMe, navigation, onPress, en_header }: any) => {
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
@@ -121,9 +122,12 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
           </VideoLabel>
         </View>
         {/* <Text>aaa</Text> */}
+        <Text style={{ color: Colors.black, fontSize: 15, width: "95%" }}>
+          {en_header.substring(0, 17)} {en_header.length > 17 && '...'}
+        </Text>
         <BottomContainer   >
           <RowView>
-            <Text style={{ color: Colors.black, fontSize: 15,  }}> {moment(getDate).fromNow()}</Text>
+            <Text style={{ color: Colors.black, fontSize: 15, }}> {moment(getDate).fromNow()}</Text>
           </RowView>
           <TouchableOpacity
             style={{ height: "100%", }}
@@ -132,7 +136,7 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
               numberOfLikes()
             }}
           >
-            <RowView style={{  }}>
+            <RowView style={{}}>
               <SteeringImage
                 resizeMode={FastImage.resizeMode.contain}
                 source={require('../../assets/images/RealHeart.png')}

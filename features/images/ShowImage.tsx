@@ -17,6 +17,7 @@ export const ShowImage = ({ route, navigation }: any) => {
   // let arrOfSliderImagesPathClone = arrOfSliderImagesPath && arrOfSliderImagesPath.map((str: any,) => ({ url: str, }));
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const getNewsImagesStore = useSelector((state: any) => state.reducer.getNewsImages)
   let dispatch = useDispatch()
   const images = [{
     // Simplest usage.
@@ -39,16 +40,16 @@ export const ShowImage = ({ route, navigation }: any) => {
     setlikeByMe(allData && allData[renderImgIndexFullImg] && allData[renderImgIndexFullImg].likedByMe)
   }, [])
   const numberOfLikes = () => {
-    dispatch(_imageNewsLike(currentUser, allData[renderImgIndexFullImg]._id, navigation, getNewsImages, likeByMe, indexOfNewsMainImages, renderImgIndex))
-    if (!likeByMe) {
-      setimageLikes(imgLikes + 1)
-    } else {
-      if (imgLikes > 0) {
-        setimageLikes(imgLikes - 1)
-      }
-    }
+    dispatch(_imageNewsLike(currentUser, allData[renderImgIndexFullImg]._id, navigation, getNewsImages, likeByMe, indexOfNewsMainImages, renderImgIndexFullImg))
+    // if (!likeByMe) {
+    //   setimageLikes(imgLikes + 1)
+    // } else {
+    //   if (imgLikes > 0) {
+    //     setimageLikes(imgLikes - 1)
+    //   }
+    // }
   }
-
+console.log(indexOfNewsMainImages,renderImgIndex,"renderImgIndexrenderImgIndexrenderImgIndexrenderImgIndex",renderImgIndexFullImg)
   return (
     <>
       {imgScreen &&
@@ -70,7 +71,7 @@ export const ShowImage = ({ route, navigation }: any) => {
               source={require('../../assets/images/RealHeart.png')}
               resizeMode="contain"
             />
-            <Text style={{ color: Colors.white, marginLeft: 15 }}>{imgLikes}</Text>
+            <Text style={{ color: Colors.white, marginLeft: 15 }}>{getNewsImagesStore[indexOfNewsMainImages].media[renderImgIndexFullImg].likesCount}</Text>
           </TouchableOpacity>
         </View>
 

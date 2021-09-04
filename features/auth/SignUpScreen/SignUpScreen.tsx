@@ -49,7 +49,8 @@ export interface DeviceTokenProp {
   device_type?: string;
   device_language?: string;
 }
-const CountryNumber = ['00962', '00972'];
+const CountryNumber = ['00962', '00972', '0090'];
+// const CountryNumber = ['00962', '00972'];
 export const SignUpScreen: React.FC = () => {
   const isLoader = useSelector(({ reducer }) => reducer.isLoader);
   const isError = useSelector(({ reducer }) => reducer.isError);
@@ -124,6 +125,7 @@ export const SignUpScreen: React.FC = () => {
             />
             <View style={{ position: 'absolute' }}>
               <FormTextField
+                getDisable={'false'}
                 isSelectInput={true}
                 name="country_number"
                 items={CountryNumber}

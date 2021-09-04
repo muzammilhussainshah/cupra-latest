@@ -101,7 +101,7 @@ export const NotificationScreen: React.FC = () => {
                     {/* // } */}
                 </View>
                 {isError !== "" &&
-                    <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
+                    <Text style={{ color: Colors.primary,   alignSelf: "center" }}>{isError}
                     </Text>}
             </View>
         </View>

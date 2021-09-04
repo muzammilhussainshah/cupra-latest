@@ -71,10 +71,10 @@ export const Header: React.FC<IHeaderTypeProp> = ({
     let phoneNumber = '';
 
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${0787000300}';
+      phoneNumber = 'tel:0787000300';
     }
     else {
-      phoneNumber = 'telprompt:${0787000300}';
+      phoneNumber = 'telprompt:0787000300';
     }
 
     Linking.openURL(phoneNumber);

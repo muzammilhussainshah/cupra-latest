@@ -154,12 +154,14 @@ export const _logOut = navigation => {
       const userEmail = await AsyncStorage.removeItem('userEmail');
       const password = await AsyncStorage.removeItem('password');
       dispatch({ type: CURRENTUSER, payload: {} });
+      dispatch({ type: MYPROFILE, payload: {} });
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: 'welcome' }],
         }),
       );
+
     } catch (err) {
       console.log(
         err.response,
@@ -277,8 +279,8 @@ export const _resendCode = (emailOrPhone, getroutName) => {
 };
 
 export const _resetPasswordReq = (model, navigation) => {
-  console.log('resetpass');
   const emailOrPhone = model.country_number + model.phone_number;
+  console.log(model, 'resetpass');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');

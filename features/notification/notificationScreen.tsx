@@ -6,37 +6,50 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Header } from '../../components/Header';
 
+import moment from 'moment';
+
 import FastImage from 'react-native-fast-image';
 
-import { Alert, FlatList, View, Switch } from 'react-native';
+import { Alert, FlatList, View, Switch, Text } from 'react-native';
 
 import { Colors } from '../../constants/Colors';
 
-import { _getNotification } from '../../store/action/companyAction'
+import { _getNotification, _error } from '../../store/action/companyAction'
 
-import { Text } from 'react-native-animatable';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import { height } from '../../constants/Layout';
+
+// import { Text } from 'react-native-animatable';
 
 export const NotificationScreen: React.FC = () => {
+    const isError = useSelector((state: any) => state.reducer.isError);
     const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
     const [isEnabled, setIsEnabled] = useState(false);
 
     const dispatch = useDispatch();
 
-    const [getnotification, setgetnotification] = useState([]);
+    const [getnotification, setgetnotification] = useState('');
 
     const notification = useSelector((state: any) => state.reducer.notification)
 
     const navigation = useNavigation()
 
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    const toggleSwitch = () => {
+        setIsEnabled(previousState => !previousState)
+        if (isEnabled) {
+            dispatch(_error('Disable Notification '))
+        } else {
+            dispatch(_error('Enable Notification '))
+        }
+    };
     useEffect(() => {
         dispatch(_getNotification(currentUser, navigation))
     }, [])
     useEffect(() => {
-        console.log(notification, "notificationnotification")
         setgetnotification(notification)
+        console.log(notification, "notificationnotification")
     }, [notification])
     return (
         <View style={{ flex: 1, marginTop: 24 }}>
@@ -45,6 +58,8 @@ export const NotificationScreen: React.FC = () => {
                     RatingScreen={true}
                     notiScreen={() => navigation.navigate('notification')}
                     onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
+                    navigateBack={() => navigation.goBack()}
+                    isGoBack={true}
                 />
             </View>
             <View style={{ flex: 8.5, backgroundColor: Colors.white }}>
@@ -53,7 +68,7 @@ export const NotificationScreen: React.FC = () => {
                     <View style={{ height: "40%", borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: "14%" }}>
                         <Switch
                             trackColor={{ false: "black", true: "black" }}
-                            thumbColor={isEnabled ? '#f4f3f4' : "#f4f3f4"}
+                            thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={toggleSwitch}
                             value={isEnabled}
@@ -61,23 +76,33 @@ export const NotificationScreen: React.FC = () => {
                     </View>
                 </View>
                 <View style={{ flex: 8.8, paddingHorizontal: 20 }}>
-                    <FlatList
-                        data={[0, 1, 2, 3, 5]}
-                        renderItem={({ item }: any) => {
-                            return (
-                                <View style={{ height: 50, width: "100%", marginVertical: 5, flexDirection: "row" }}>
-                                    <View style={{ flex: 1.5, alignItems: "center" }}>
-                                        <FastImage style={{ width: '80%', height: "80%" }} source={require('../../assets/ghanti.png')} resizeMode={FastImage.resizeMode.contain} />
-                                    </View>
-                                    <View style={{ flex: 8.5, justifyContent: "space-between" }}>
-                                        <Text style={{ color: Colors.darkGray }}>6h ago</Text>
-                                        <Text style={{ color: Colors.black, fontSize: 16 }}>New BMW Part Added to our store</Text>
-                                    </View>
-                                </View>
-                            )
-                        }}
-                    />
+                    <ScrollView style={{}}>
+                        <View style={{ height: height / 10 * 7.5,  }}>
+                            {/* {getnotification && getnotification.length > 0 && */}
+                            <FlatList
+                                data={notification}
+                                renderItem={({ item }: any) => {
+                                    return (
+                                        <View style={{ height: 60, backgroundColor: "red", width: "100%", marginVertical: 5, flexDirection: "row" }}>
+                                            <View style={{ flex: 1.5, alignItems: "center" }}>
+                                                <FastImage style={{ width: '80%', height: "80%" }} source={require('../../assets/ghanti.png')} resizeMode={FastImage.resizeMode.contain} />
+                                            </View>
+                                            <View style={{ flex: 8.5, }}>
+                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.title}</Text>
+                                                <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
+                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.body.substring(0, 35)}{item.body.length > 75 && '...'}</Text>
+                                            </View>
+                                        </View>
+                                    )
+                                }}
+                            />
+                        </View>
+                    </ScrollView>
+                    {/* // } */}
                 </View>
+                {isError !== "" &&
+                    <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
+                    </Text>}
             </View>
         </View>
     );

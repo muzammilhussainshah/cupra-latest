@@ -4,6 +4,8 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import styled from 'styled-components/native';
 import { Colors } from '../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Button, ButtonsContainer, ButtonText } from '../components/Button';
 import FastImage from 'react-native-fast-image';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
@@ -54,12 +56,12 @@ export const DrawerContent: React.FC = (props: any) => {
         <MenuWrapper>
           <RowView>
             <ButtonsContainer containerWidth={150}>
-              <Button
+              {/* <Button
                 style={{ borderRadius: 10 }}
                 backgroundColor={'transparent'}
                 onPress={() => { }}>
                 <ButtonText>Arabic</ButtonText>
-              </Button>
+              </Button> */}
             </ButtonsContainer>
             <TouchableOpacity
               onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
@@ -85,7 +87,7 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { props.navigation.navigate("profile")}}
+              onPress={() => { props.navigation.navigate("profile") }}
               icon={({ size }) => (
                 <Ionicons
                   name="person-outline"
@@ -101,8 +103,8 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { props.navigation.navigate("favorites")}}
-               icon={({ size }) => (
+              onPress={() => { props.navigation.navigate("favorites") }}
+              icon={({ size }) => (
                 <Ionicons
                   name="heart-outline"
                   size={size}
@@ -118,7 +120,7 @@ export const DrawerContent: React.FC = (props: any) => {
             />
             <DrawerItem
               // onPress={() => { }}
-              onPress={() => { props.navigation.navigate("claims")}}
+              onPress={() => { props.navigation.navigate("claims") }}
               icon={({ size }) => (
                 <Ionicons
                   name="browsers-outline"
@@ -134,10 +136,10 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { props.navigation.navigate("contactUs")}}
+              onPress={() => { props.navigation.navigate("contactUs") }}
               icon={({ size }) => (
-                <Ionicons
-                  name="help-outline"
+                <AntDesign
+                  name="contacts"
                   size={size}
                   color={Colors.white}
                 />
@@ -150,10 +152,10 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { props.navigation.navigate("PrivacyPolicy")}}
+              onPress={() => { props.navigation.navigate("PrivacyPolicy") }}
               icon={({ size }) => (
-                <Ionicons
-                  name="help-outline"
+                <MaterialIcons
+                  name="privacy-tip"
                   size={size}
                   color={Colors.white}
                 />
@@ -166,19 +168,19 @@ export const DrawerContent: React.FC = (props: any) => {
               }}
             />
             <DrawerItem
-              onPress={() => { props.navigation.navigate("rateCompany")}}
+              onPress={() => { props.navigation.navigate("rateCompany") }}
               icon={({ size }) => (
-                <Ionicons
-                  name="help-outline"
-                  size={size}
+                <MaterialIcons
+                  name="star-rate"
+                  size={28}
                   color={Colors.white}
                 />
               )}
               // label="Privacy Policy"
-              label="Rate company"
+              label="Rate Company"
               labelStyle={{
                 color: 'white',
-                fontSize: 16,
+                fontSize: 15,
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />

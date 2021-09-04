@@ -10,7 +10,6 @@ import { _claim } from "../../store/action/claimsAction"
 import { useDispatch, useSelector } from 'react-redux';
 import { height, width } from '../../constants/Layout';
 export const ClaimsScreen: React.FC = ({ route }: any) => {
-  console.log(route.name, 'asdddddd')
   const [body, setBody] = useState('')
   const [title, settitle] = useState('')
   const navigation = useNavigation();
@@ -26,7 +25,7 @@ export const ClaimsScreen: React.FC = ({ route }: any) => {
   }, [myProfile])
   return (
     <ScrollView>
-      <View style={{ height: height - 24, width: width, backgroundColor: "black", marginTop: 24 }}>
+      <View style={{ height: height+24  , width: width, backgroundColor: "black", marginTop: 24 }}>
         <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.8, borderBottomColor: Colors.brownishGrey }}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

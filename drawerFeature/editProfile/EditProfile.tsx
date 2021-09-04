@@ -299,7 +299,7 @@ export const EditProfile: React.FC = () => {
             <Modal _func={getImg} _func2={Platform.OS === "ios" ? takePhotoIphone : takePhoto} _modalActive={() => setIsModalActive(!isModalActive)} />
           } */}
         < View
-          style={{ height: height }}>
+          style={{ height: height+24 }}>
           <View style={{ flex: 1, paddingTop: 24 }}>
             <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
               <FastImage source={require('../../assets/profileBg.png')}

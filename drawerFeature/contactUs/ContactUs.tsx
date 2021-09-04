@@ -105,15 +105,15 @@ export const ContactUs: React.FC = () => {
                 <Text>{getcontactUsInfo && getcontactUsInfo.email}</Text>
               </TouchableOpacity>
 
-              <View>
+              <View  >
                 <TouchableOpacity onPress={() => { dialCall(getcontactUsInfo.tel) }}>
-                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
+                  <Text style={{ color: Colors.darkGray,marginVertical:3 }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { dialCall(getcontactUsInfo.mobile1) }}>
-                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile1}</Text>
+                  <Text style={{ color: Colors.darkGray,marginVertical:3 }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile1}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { dialCall(getcontactUsInfo.mobile2) }}>
-                  <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile2}</Text>
+                  <Text style={{ color: Colors.darkGray,marginVertical:3 }}>{getcontactUsInfo && "+ " + getcontactUsInfo.mobile2}</Text>
                 </TouchableOpacity>
               </View>
               <Text>{getcontactUsInfo && getcontactUsInfo.address}</Text>

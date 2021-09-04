@@ -30,7 +30,7 @@ export function _error(err, time) {
       () => {
         dispatch({ type: ISERROR, payload: '' });
       },
-      time ? time : 3000,
+      time ? time : 5000,
     );
   };
 }

@@ -75,7 +75,6 @@ export const Select: React.FC<SelectProps> = props => {
   const [selectState, setSelectState] = useState<SelectItem | undefined>(
     props.value,
   );
-
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -151,7 +150,7 @@ export const Select: React.FC<SelectProps> = props => {
                   <>
                     {/* {console.log(item, disableMonth, ' item item item item item item item item item item item item item item item item item item item item item item item')} */}
                     <Item
-                      getDisable={disableMonth}
+                      getDisable={props.getDisable ? false : disableMonth}
                       onChange={() => {
                         handleChange(item as SelectItem)
                         // if (currentDateInNmbr > (selectedDateInNmbr + 2.628e+9)) {

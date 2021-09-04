@@ -34,21 +34,21 @@ interface LoginProp {
 }
 const CountryNumber = ['00962', '00972', '0090'];
 export const LoginScreen: React.FC = () => {
-  const isLoader = useSelector(({ reducer }:any) => reducer.isLoader);
-  const isError = useSelector(({ reducer }:any) => reducer.isError); 
+  const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
+  const isError = useSelector(({ reducer }: any) => reducer.isError);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const loginMethods = useForm<LoginProp>({
     defaultValues: {
-      phone_number: ' ',
+      phone_number: '',
       password: '',
       country_number: '00962',
     },
   });
   function onSubmit(model: LoginProp) {
 
-    dispatch(_signIn({ emailOrPhone: model.country_number + model.phone_number, password: model.password },navigation))
+    dispatch(_signIn({ emailOrPhone: model.country_number+model.phone_number, password: model.password }, navigation))
 
   }
   return (
@@ -83,6 +83,7 @@ export const LoginScreen: React.FC = () => {
                   isSelectInput={true}
                   name="country_number"
                   items={CountryNumber}
+                  getDisable={'false'}
                   // label="Password"
                   rules={{
                     required: 'country number is required.',

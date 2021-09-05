@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { _getItemDetails, getReview } from '../../../store/action/shopAction';
 export const HomeComments = ({ route, navigation, }: any) => {
 
-  const Wheight = Dimensions.get('window').height;
+  const Wheight = Dimensions.get('window').height+24;
 
   const [text, setText] = useState('');
 

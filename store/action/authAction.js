@@ -97,6 +97,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
+    console.log(deviceToken,'deviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceToken')
     dispatch(_loading(true));
     try {
       const option = {
@@ -152,19 +153,30 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
 export const _logOut = navigation => {
   return async dispatch => {
     try {
-      const userEmail = await AsyncStorage.removeItem('userEmail');
-      const password = await AsyncStorage.removeItem('password');
-      const authType = await AsyncStorage.getItem('auth');
-      await AsyncStorage.removeItem('socialId');
-      await AsyncStorage.removeItem('socialType');
-
-      if (authType && authType === 'google') {
+      const socialType = await AsyncStorage.getItem('socialType');
+      // const authType = await AsyncStorage.getItem('auth');
+      // console.log(authType, "authTypeauthTypeauthType")
+      
+      
+      
+      
+      console.log(socialType, "socialTypesocialType")
+      if (socialType === 'Google') {
+        console.log(socialType,"ggg", "socialTypesocialType")
         await GoogleSignin.signOut();
       }
+      else if (socialType === "Facebook") {
+        console.log(socialType, "fff","socialTypesocialType")
+        LoginManager.logOut()
+      }
+      await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('password');
+      await AsyncStorage.removeItem('socialId');
+      await AsyncStorage.removeItem('socialType');
+      await AsyncStorage.removeItem('auth');
 
       dispatch({ type: CURRENTUSER, payload: {} });
       dispatch({ type: MYPROFILE, payload: {} });
-      await AsyncStorage.removeItem('auth');
 
       navigation.dispatch(
         CommonActions.reset({
@@ -452,11 +464,20 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '5555');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Pakistan';
+          let country = 'Jordan';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
 
           // let phoneNumber = resp.user._user.phoneNumber
+          try {
+            await AsyncStorage.setItem('socialId', socialId);
+            await AsyncStorage.setItem('socialType', 'Google');
+            await AsyncStorage.setItem('auth', 'google');
+            dispatch(_loading(false));
+          } catch (error) {
+            dispatch(_loading(false));
+            console.log(error, 'from async');
+          }
           console.log(fullName, email, country, socialId, socialType, '66666');
 
           const option = {
@@ -475,15 +496,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           var resp = await axios(option);
           if (resp.data.status === 200) {
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
-            try {
-              await AsyncStorage.setItem('socialId', socialId);
-              await AsyncStorage.setItem('socialType', socialType);
-              await AsyncStorage.setItem('auth', 'google');
-              dispatch(_loading(false));
-            } catch (error) {
-              dispatch(_loading(false));
-              console.log(error, 'from async');
-            }
+
           } else if (resp.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
             {
@@ -556,13 +569,21 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
         .signInWithCredential(facebookCredential)
         .then(async resp => {
           console.log(resp, 'resp');
-
           console.log(resp, '5555');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Pakistan';
+          let country = 'Jordan';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
+          try {
+            await AsyncStorage.setItem('socialId', socialId);
+            await AsyncStorage.setItem('socialType', 'Facebook');
+            await AsyncStorage.setItem('auth', 'facebook');
+            dispatch(_loading(false));
+          } catch (error) {
+            dispatch(_loading(false));
+            console.log(error, 'from facebook async');
+          }
 
           // let phoneNumber = resp.user._user.phoneNumber
           console.log(fullName, email, country, socialId, socialType, '66666');
@@ -582,16 +603,9 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           };
           var resp = await axios(option);
           if (resp.data.status === 200) {
+            console.log('2000000000000000')
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
-            try {
-              await AsyncStorage.setItem('socialId', socialId);
-              await AsyncStorage.setItem('socialType', socialType);
-              await AsyncStorage.setItem('auth', 'facebook');
-              dispatch(_loading(false));
-            } catch (error) {
-              dispatch(_loading(false));
-              console.log(error, 'from async');
-            }
+
           } else if (resp.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
             {

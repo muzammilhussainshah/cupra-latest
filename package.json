@@ -61,6 +61,7 @@
     "react-native-infinite-scroll": "^1.0.6",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-localization": "^2.1.7",
+    "react-native-localize": "^2.1.4",
     "react-native-media-controls": "^2.3.0",
     "react-native-modal": "^12.0.2",
     "react-native-paper": "^4.9.2",

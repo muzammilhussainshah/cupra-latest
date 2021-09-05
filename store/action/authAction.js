@@ -155,12 +155,6 @@ export const _logOut = navigation => {
       const password = await AsyncStorage.removeItem('password');
       dispatch({ type: CURRENTUSER, payload: {} });
       dispatch({ type: MYPROFILE, payload: {} });
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      await LoginManager.logOut();
-      auth()
-      .signOut()
-
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -169,21 +163,10 @@ export const _logOut = navigation => {
       );
 
     } catch (err) {
-      const userEmail = await AsyncStorage.removeItem('userEmail');
-      const password = await AsyncStorage.removeItem('password');
-      dispatch({ type: CURRENTUSER, payload: {} });
-      dispatch({ type: MYPROFILE, payload: {} });
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      await LoginManager.logOut();
-      auth()
-      .signOut()
-
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'welcome' }],
-        }),
+      console.log(
+        err.response,
+        'error from _signIn',
+        JSON.parse(JSON.stringify(err.message)),
       );
     }
   };
@@ -800,7 +783,7 @@ export const _getProfile = (currentUser, navigation, name) => {
       } else if (resp.data.error.messageEn === 'You Are Unauthorized') {
         dispatch(_loading(false));
         Alert.alert('Authentication!', 'You Are Unauthorized Please Login.', [
-          { text: 'OK', onPress: () => dispatch(_(navigation)) },
+          { text: 'OK', onPress: () => dispatch(_logOut(navigation)) },
         ]);
       } else {
         dispatch(_loading(false));

@@ -42,7 +42,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
 
   return (
     <ScrollView>
-      <View style={{ height: flex1 * 10, backgroundColor: Colors.black }}>
+      <View style={{ height: flex1 * 10+24, backgroundColor: Colors.black }}>
         <View
           style={{ height: "20%", backgroundColor: Colors.black, justifyContent: "center" }}>
           <Header

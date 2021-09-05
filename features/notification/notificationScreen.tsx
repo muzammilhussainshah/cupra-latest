@@ -39,9 +39,9 @@ export const NotificationScreen: React.FC = () => {
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState)
         if (isEnabled) {
-            dispatch(_error('Disable Notification '))
+            dispatch(_error('Notification disabled  '))
         } else {
-            dispatch(_error('Enable Notification '))
+            dispatch(_error('Notification Enabled '))
         }
     };
     useEffect(() => {
@@ -77,20 +77,21 @@ export const NotificationScreen: React.FC = () => {
                 </View>
                 <View style={{ flex: 8.8, paddingHorizontal: 20 }}>
                     <ScrollView style={{}}>
-                        <View style={{ height: height / 10 * 7.5,  }}>
+                        <View style={{ height: height / 10 * 7.5, }}>
                             {/* {getnotification && getnotification.length > 0 && */}
                             <FlatList
                                 data={notification}
                                 renderItem={({ item }: any) => {
                                     return (
-                                        <View style={{ height: 60, backgroundColor: "red", width: "100%", marginVertical: 5, flexDirection: "row" }}>
-                                            <View style={{ flex: 1.5, alignItems: "center" }}>
-                                                <FastImage style={{ width: '80%', height: "80%" }} source={require('../../assets/ghanti.png')} resizeMode={FastImage.resizeMode.contain} />
+                                        <View style={{ width: "100%", marginVertical: 5, flexDirection: "row" }}>
+                                            <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
+                                                <FastImage style={{ width: 50, height: 50 }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
                                             </View>
                                             <View style={{ flex: 8.5, }}>
                                                 <Text style={{ color: Colors.black, fontSize: 16 }}>{item.title}</Text>
                                                 <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
-                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.body.substring(0, 35)}{item.body.length > 75 && '...'}</Text>
+                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.body} </Text>
+
                                             </View>
                                         </View>
                                     )
@@ -101,7 +102,7 @@ export const NotificationScreen: React.FC = () => {
                     {/* // } */}
                 </View>
                 {isError !== "" &&
-                    <Text style={{ color: Colors.primary,   alignSelf: "center" }}>{isError}
+                    <Text style={{ color: Colors.primary, alignSelf: "center" }}>{isError}
                     </Text>}
             </View>
         </View>

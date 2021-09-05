@@ -19,6 +19,7 @@ export const GETSTORIES = 'GETSTORIES'
 export const GETNEWSIMAGES = 'GETNEWSIMAGES'
 export const VIDEOS = 'VIDEOS';
 export const GETCITY = 'GETCITY';
+export const GETCOUNTRY = 'GETCOUNTRY';
 export const MYPROFILE = 'MYPROFILE';
 export const GETFAVCARS = 'GETFAVCARS';
 export const GETMODELS = 'GETMODELS';

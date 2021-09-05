@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 
 import { _signIn } from '../../../store/action/authAction';
+import { _getCountry, } from '../../../store/action/action';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -26,7 +27,6 @@ import {
   FooterButtons,
   LoginTitle,
 } from './LoginStyled';
-
 interface LoginProp {
   phone_number: string;
   password: string;
@@ -34,10 +34,29 @@ interface LoginProp {
 }
 const CountryNumber = ['00962', '00972', '0090'];
 export const LoginScreen: React.FC = () => {
+  const [getcountry, setgetcountry] = useState([])
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
   const isError = useSelector(({ reducer }: any) => reducer.isError);
+  const country = useSelector(({ reducer }: any) => reducer.country);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(_getCountry(navigation))
+  }, [])
+  let localCodeArr: any = []
+  useEffect(() => {
+    // setgetcountry(country)
+    console.log(country, 'country')
+    country && country.length > 0 && country.map((value, index) => {
+      localCodeArr.push('00' + value.country_phone_code.toString())
+    })
+    setgetcountry(localCodeArr)
+    // console.log(localCodeArr, '444444444')
+  }, [country])
+
+
+
+
 
   const loginMethods = useForm<LoginProp>({
     defaultValues: {
@@ -48,7 +67,7 @@ export const LoginScreen: React.FC = () => {
   });
   function onSubmit(model: LoginProp) {
 
-    dispatch(_signIn({ emailOrPhone: model.country_number+model.phone_number, password: model.password }, navigation))
+    dispatch(_signIn({ emailOrPhone: model.country_number + model.phone_number, password: model.password }, navigation))
 
   }
   return (
@@ -82,7 +101,7 @@ export const LoginScreen: React.FC = () => {
                 <FormTextField
                   isSelectInput={true}
                   name="country_number"
-                  items={CountryNumber}
+                  items={getcountry}
                   getDisable={'false'}
                   // label="Password"
                   rules={{

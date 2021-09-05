@@ -2,7 +2,7 @@ import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
   NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,
-  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS
+  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, GETCOUNTRY
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -33,7 +33,8 @@ const INITIAL_STATE = {
   contactUsInfo: {},
   companyPolicy: {},
   notification: {},
-  companyReviews: {}
+  companyReviews: {},
+  country: {},
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -177,6 +178,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         companyReviews: action.payload,
+      };
+    case GETCOUNTRY:
+      return {
+        ...state,
+        country: action.payload,
       };
     default:
       return state;

@@ -44,7 +44,7 @@ export const _checkIsEmptyObj = obj => {
   }
 };
 export const _signUp = (model, navigation) => {
-  console.log(model, 'model')
+  console.log(model, 'model');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -123,6 +123,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
           }),
         );
         try {
+          await AsyncStorage.setItem('auth', 'emailPass');
           await AsyncStorage.setItem('userEmail', emailOrPhone);
           await AsyncStorage.setItem('password', password);
           dispatch(_loading(false));
@@ -153,15 +154,24 @@ export const _logOut = navigation => {
     try {
       const userEmail = await AsyncStorage.removeItem('userEmail');
       const password = await AsyncStorage.removeItem('password');
+      const authType = await AsyncStorage.getItem('auth');
+      await AsyncStorage.removeItem('socialId');
+      await AsyncStorage.removeItem('socialType');
+
+      if (authType && authType === 'google') {
+        await GoogleSignin.signOut();
+      }
+
       dispatch({ type: CURRENTUSER, payload: {} });
       dispatch({ type: MYPROFILE, payload: {} });
+      await AsyncStorage.removeItem('auth');
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: 'welcome' }],
         }),
       );
-
     } catch (err) {
       console.log(
         err.response,
@@ -369,7 +379,12 @@ export const _verifyResetPassOtp = (getPhonneNumber, otpCode, navigation) => {
     }
   };
 };
-export const _resetNewPassword = (model, getPhonneNumber, getpassToken, navigation) => {
+export const _resetNewPassword = (
+  model,
+  getPhonneNumber,
+  getpassToken,
+  navigation,
+) => {
   const emailOrPhone = getPhonneNumber;
   const passwordToken = getpassToken;
   const password = model.new_password;
@@ -463,6 +478,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
             try {
               await AsyncStorage.setItem('socialId', socialId);
               await AsyncStorage.setItem('socialType', socialType);
+              await AsyncStorage.setItem('auth', 'google');
               dispatch(_loading(false));
             } catch (error) {
               dispatch(_loading(false));
@@ -570,6 +586,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
             try {
               await AsyncStorage.setItem('socialId', socialId);
               await AsyncStorage.setItem('socialType', socialType);
+              await AsyncStorage.setItem('auth', 'facebook');
               dispatch(_loading(false));
             } catch (error) {
               dispatch(_loading(false));

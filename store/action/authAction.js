@@ -1,34 +1,34 @@
-import { CURRENTUSER, ISLOADER, ISERROR, MYPROFILE } from '../constant/constant';
+import {CURRENTUSER, ISLOADER, ISERROR, MYPROFILE} from '../constant/constant';
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
 // import { Actions } from 'react-native-router-flux';
 // import AsyncStorage from '@react-native-community/async-storage';
 // import firestore from '@react-native-firebase/firestore';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import auth from '@react-native-firebase/auth';
 
-import { Alert, AsyncStorage } from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import React from 'react';
 
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
 export const _loading = bol => {
   return dispatch => {
-    dispatch({ type: ISLOADER, payload: bol });
+    dispatch({type: ISLOADER, payload: bol});
   };
 };
 
 export function _error(err, time) {
   return dispatch => {
-    dispatch({ type: ISERROR, payload: err });
+    dispatch({type: ISERROR, payload: err});
 
     setTimeout(
       () => {
-        dispatch({ type: ISERROR, payload: '' });
+        dispatch({type: ISERROR, payload: ''});
       },
       time ? time : 3000,
     );
@@ -44,7 +44,7 @@ export const _checkIsEmptyObj = obj => {
   }
 };
 export const _signUp = (model, navigation) => {
-  console.log(model, 'model')
+  console.log(model, 'model');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -93,7 +93,7 @@ export const _signUp = (model, navigation) => {
   };
 };
 
-export const _signIn = ({ emailOrPhone, password }, navigation) => {
+export const _signIn = ({emailOrPhone, password}, navigation) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -115,14 +115,15 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
       var resp = await axios(option);
       if (resp.data.status === 200) {
         console.log(resp.data.status, 'resp.data.status resp.data.status ');
-        dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        dispatch({type: CURRENTUSER, payload: resp.data.data.data});
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'drawerStack' }],
+            routes: [{name: 'drawerStack'}],
           }),
         );
         try {
+          await AsyncStorage.setItem('auth', 'emailPass');
           await AsyncStorage.setItem('userEmail', emailOrPhone);
           await AsyncStorage.setItem('password', password);
           dispatch(_loading(false));
@@ -153,11 +154,21 @@ export const _logOut = navigation => {
     try {
       const userEmail = await AsyncStorage.removeItem('userEmail');
       const password = await AsyncStorage.removeItem('password');
-      dispatch({ type: CURRENTUSER, payload: {} });
+      const authType = await AsyncStorage.getItem('auth');
+      await AsyncStorage.removeItem('socialId');
+      await AsyncStorage.removeItem('socialType');
+
+      if (authType && authType === 'google') {
+        await GoogleSignin.signOut();
+      }
+
+      dispatch({type: CURRENTUSER, payload: {}});
+      const authType = await AsyncStorage.removeItem('auth');
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'welcome' }],
+          routes: [{name: 'welcome'}],
         }),
       );
     } catch (err) {
@@ -367,7 +378,12 @@ export const _verifyResetPassOtp = (getPhonneNumber, otpCode, navigation) => {
     }
   };
 };
-export const _resetNewPassword = (model, getPhonneNumber, getpassToken, navigation) => {
+export const _resetNewPassword = (
+  model,
+  getPhonneNumber,
+  getpassToken,
+  navigation,
+) => {
   const emailOrPhone = getPhonneNumber;
   const passwordToken = getpassToken;
   const password = model.new_password;
@@ -396,7 +412,7 @@ export const _resetNewPassword = (model, getPhonneNumber, getpassToken, navigati
       };
       var resp = await axios(option);
       if (resp.data.status === 200) {
-        dispatch(_signIn({ emailOrPhone, password }, navigation));
+        dispatch(_signIn({emailOrPhone, password}, navigation));
         dispatch(_loading(false));
       } else {
         dispatch(_loading(false));
@@ -423,7 +439,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
     try {
       dispatch(_loading(true));
       // Get the users ID token
-      const { idToken } = await GoogleSignin.signIn();
+      const {idToken} = await GoogleSignin.signIn();
 
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
@@ -457,10 +473,11 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           };
           var resp = await axios(option);
           if (resp.data.status === 200) {
-            dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+            dispatch({type: CURRENTUSER, payload: resp.data.data.data});
             try {
               await AsyncStorage.setItem('socialId', socialId);
               await AsyncStorage.setItem('socialType', socialType);
+              await AsyncStorage.setItem('auth', 'google');
               dispatch(_loading(false));
             } catch (error) {
               dispatch(_loading(false));
@@ -564,10 +581,11 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           };
           var resp = await axios(option);
           if (resp.data.status === 200) {
-            dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+            dispatch({type: CURRENTUSER, payload: resp.data.data.data});
             try {
               await AsyncStorage.setItem('socialId', socialId);
               await AsyncStorage.setItem('socialType', socialType);
+              await AsyncStorage.setItem('auth', 'facebook');
               dispatch(_loading(false));
             } catch (error) {
               dispatch(_loading(false));
@@ -733,7 +751,7 @@ export const _updateProfile = (
       } else if (resp.data.error.messageEn === 'You Are Unauthorized') {
         dispatch(_loading(false));
         Alert.alert('Authentication!', 'You Are Unauthorized Please Login.', [
-          { text: 'OK', onPress: () => dispatch(_logOut(navigation)) },
+          {text: 'OK', onPress: () => dispatch(_logOut(navigation))},
         ]);
       } else {
         dispatch(_loading(false));
@@ -770,12 +788,12 @@ export const _getProfile = (currentUser, navigation) => {
       var resp = await axios(option);
       if (resp.data.status == 200) {
         dispatch(_loading(false));
-        dispatch({ type: MYPROFILE, payload: resp.data.data });
+        dispatch({type: MYPROFILE, payload: resp.data.data});
         // navigation.navigate('profile')
       } else if (resp.data.error.messageEn === 'You Are Unauthorized') {
         dispatch(_loading(false));
         Alert.alert('Authentication!', 'You Are Unauthorized Please Login.', [
-          { text: 'OK', onPress: () => dispatch(_logOut(navigation)) },
+          {text: 'OK', onPress: () => dispatch(_logOut(navigation))},
         ]);
       } else {
         dispatch(_loading(false));

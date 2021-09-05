@@ -47,17 +47,12 @@ export const LoginScreen: React.FC = () => {
   useEffect(() => {
     // setgetcountry(country)
     console.log(country, 'country')
-    country && country.length > 0 && country.map((value, index) => {
+    country && country.length > 0 && country.map((value:any ) => {
       localCodeArr.push('00' + value.country_phone_code.toString())
     })
     setgetcountry(localCodeArr)
     // console.log(localCodeArr, '444444444')
   }, [country])
-
-
-
-
-
   const loginMethods = useForm<LoginProp>({
     defaultValues: {
       phone_number: '',

@@ -14,6 +14,8 @@ import { _signUp } from '../../../store/action/authAction';
 
 import { Button, ButtonsContainer, ButtonText } from '../../../components/Button';
 
+import { _getCountry, } from '../../../store/action/action';
+
 import FormTextField from '../../../components/FormTextField';
 
 import { isEmail, isPhoneNumber } from '../../../constants/Valoidators';
@@ -52,8 +54,11 @@ export interface DeviceTokenProp {
 const CountryNumber = ['00962', '00972', '0090'];
 // const CountryNumber = ['00962', '00972'];
 export const SignUpScreen: React.FC = () => {
+  const [getcountry, setgetcountry] = useState([])
+
   const isLoader = useSelector(({ reducer }) => reducer.isLoader);
   const isError = useSelector(({ reducer }) => reducer.isError);
+  const country = useSelector(({ reducer }: any) => reducer.country);
   const navigation = useNavigation();
   const signupMethods = useForm<SignUpProp>({
     defaultValues: {
@@ -74,6 +79,19 @@ export const SignUpScreen: React.FC = () => {
     // console.log(model, 'aaa', model.country_number?.concat(model.phone_number));
   }
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(_getCountry(navigation))
+  }, [])
+  let localCodeArr: any = []
+  useEffect(() => {
+    // setgetcountry(country)
+    console.log(country, 'country')
+    country && country.length > 0 && country.map((value:any ) => {
+      localCodeArr.push('00' + value.country_phone_code.toString())
+    })
+    setgetcountry(localCodeArr)
+    // console.log(localCodeArr, '444444444')
+  }, [country])
 
   return (
     <Container
@@ -128,7 +146,7 @@ export const SignUpScreen: React.FC = () => {
                 getDisable={'false'}
                 isSelectInput={true}
                 name="country_number"
-                items={CountryNumber}
+                items={getcountry}
                 rules={{
                   required: 'country number is required.',
                 }}

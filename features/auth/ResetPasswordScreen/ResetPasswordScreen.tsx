@@ -1,6 +1,7 @@
 import { useRoute, useNavigation } from '@react-navigation/native';
 
-import React from 'react';
+import { _getCountry, } from '../../../store/action/action';
+import React, { useEffect, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -31,11 +32,11 @@ interface IPhoneNumberProp {
 }
 const CountryNumber = ['00962', '00972', '0090'];
 export const ResetPasswordScreen: React.FC = () => {
+  const [getcountryR, setgetcountryr] = useState([])
   const route = useRoute();
-
-
   const isLoader = useSelector(({ reducer }) => reducer.isLoader);
   const isError = useSelector(({ reducer }) => reducer.isError);
+  const country = useSelector(({ reducer }: any) => reducer.country);
   const getTitle = route?.params?.title;
   const getCompleteSignUp = route?.params?.completeSignUp;
   const getfullName = route?.params?.full_name;
@@ -44,22 +45,31 @@ export const ResetPasswordScreen: React.FC = () => {
   const getsocialId = route?.params?.social_id;
   const getsocialType = route?.params?.social_type;
 
-  console.log(getTitle, getCompleteSignUp, getfullName, getEmail, getcountry, getsocialId, getsocialType, 'abczsadas')
-
+  useEffect(() => {
+    dispatch(_getCountry(navigation))
+  }, [])
+  let localCodeArr: any = []
+  useEffect(() => {
+    console.log(country, 'country')
+    country && country.length > 0 && country.map((value: any) => {
+      localCodeArr.push('00' + value.country_phone_code.toString())
+    })
+    setgetcountryr(localCodeArr)
+  }, [country])
 
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const phoneNumberModel = useForm<IPhoneNumberProp>({
     defaultValues: {
-      phone_number:'',
-      country_number:'00962',
+      phone_number: '',
+      country_number: '00962',
     },
   });
   function onSubmit(model: IPhoneNumberProp) {
     console.warn('form submitted', model);
     let phoneNmbr: string;
-    phoneNmbr = model.country_number+model.phone_number
+    phoneNmbr = model.country_number + model.phone_number
     if (getCompleteSignUp) {
       // dispatch(_resendCode(phoneNmbr))
       // navigation.navigate('otp', {
@@ -111,13 +121,13 @@ export const ResetPasswordScreen: React.FC = () => {
                   message: 'invalid mobile number',
                 },
               }}
-              />
+            />
             <View style={{ position: 'absolute' }}>
               <FormTextField
                 isSelectInput={true}
                 getDisable={'false'}
                 name="country_number"
-                items={CountryNumber}
+                items={getcountryR}
                 rules={{
                   required: 'country number is required.',
                 }}

@@ -137,7 +137,7 @@ export const _getNotification = (currentUser, navigation,) => {
         try {
             const option = {
                 method: 'GET',
-                url: `https://cupranationapp.herokuapp.com/apis/mobile/notification?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/notifications?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
                 headers: {
                     'cache-control': 'no-cache',
                     "Allow-Cross-Origin": '*',

@@ -163,6 +163,7 @@ export const _logOut = navigation => {
       }
 
       dispatch({type: CURRENTUSER, payload: {}});
+      dispatch({type: MYPROFILE, payload: {}});
       const authType = await AsyncStorage.removeItem('auth');
 
       navigation.dispatch(
@@ -288,8 +289,8 @@ export const _resendCode = (emailOrPhone, getroutName) => {
 };
 
 export const _resetPasswordReq = (model, navigation) => {
-  console.log('resetpass');
   const emailOrPhone = model.country_number + model.phone_number;
+  console.log(model, 'resetpass');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');

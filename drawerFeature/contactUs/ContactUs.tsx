@@ -4,7 +4,7 @@ import { useNavigation, DrawerActions, } from '@react-navigation/native';
 
 import { _getcomponyInfo } from '../../store/action/companyAction';
 
-import { Dimensions, ImageBackground, TouchableOpacity, Linking, Platform } from "react-native"
+import { Dimensions, ImageBackground, TouchableOpacity, Linking, Platform, } from "react-native"
 
 import { Text, View } from 'react-native-animatable';
 
@@ -101,7 +101,10 @@ export const ContactUs: React.FC = () => {
               <Text style={{ fontSize: 16 }}>{getcontactUsInfo && getcontactUsInfo.en_name}</Text>
             </View>
             <View style={{ flex: 3.5, alignItems: "center", justifyContent: "space-around" }}>
-              <Text>{getcontactUsInfo && getcontactUsInfo.email}</Text>
+              <TouchableOpacity onPress={() => Linking.openURL(`mailto:${getcontactUsInfo.email}`)}             >
+                <Text>{getcontactUsInfo && getcontactUsInfo.email}</Text>
+              </TouchableOpacity>
+
               <View>
                 <TouchableOpacity onPress={() => { dialCall(getcontactUsInfo.tel) }}>
                   <Text style={{ color: Colors.darkGray }}>{getcontactUsInfo && "+ " + getcontactUsInfo.tel}</Text>
@@ -117,7 +120,7 @@ export const ContactUs: React.FC = () => {
             </View>
             <View style={{ flex: 1.3, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <TouchableOpacity
-                style={{ height: '45%',marginHorizontal:2, width: 30 }}
+                style={{ height: '45%', marginHorizontal: 2, width: 30 }}
 
                 onPress={() => {
                   navigation.navigate("webView", { link: getcontactUsInfo && getcontactUsInfo.facebook })
@@ -126,7 +129,7 @@ export const ContactUs: React.FC = () => {
                 <FastImage style={{ width: "100%", height: "100%" }} source={require('../../assets/ContactUs/Facebook.png')} resizeMode={FastImage.resizeMode.contain} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ height: '60%',marginHorizontal:2, width: 35 }}
+                style={{ height: '60%', marginHorizontal: 2, width: 35 }}
 
                 onPress={() => {
                   navigation.navigate("webView", { link: getcontactUsInfo && getcontactUsInfo.instagram })
@@ -135,7 +138,7 @@ export const ContactUs: React.FC = () => {
                 <FastImage style={{ width: "100%", height: "100%" }} source={require('../../assets/ContactUs/insta.png')} resizeMode={FastImage.resizeMode.contain} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ height: '70%',marginHorizontal:2, width: 37 }}
+                style={{ height: '70%', marginHorizontal: 2, width: 37 }}
 
                 onPress={() => {
                   navigation.navigate("webView", { link: getcontactUsInfo && getcontactUsInfo.youtube })
@@ -144,7 +147,7 @@ export const ContactUs: React.FC = () => {
                 <FastImage style={{ width: "100%", height: "100%" }} source={require('../../assets/ContactUs/youtube.png')} resizeMode={FastImage.resizeMode.contain} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ height: '55%',marginHorizontal:2, width: 35 }}
+                style={{ height: '55%', marginHorizontal: 2, width: 35 }}
 
                 onPress={() => {
                   navigation.navigate("webView", { link: getcontactUsInfo && getcontactUsInfo.pinterest })
@@ -153,7 +156,7 @@ export const ContactUs: React.FC = () => {
                 <FastImage style={{ width: "100%", height: "100%" }} source={require('../../assets/ContactUs/print.png')} resizeMode={FastImage.resizeMode.contain} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ height: '55%',marginHorizontal:2, width: 35 }}
+                style={{ height: '55%', marginHorizontal: 2, width: 35 }}
 
                 onPress={() => {
                   navigation.navigate("webView", { link: getcontactUsInfo && getcontactUsInfo.tiktok })

@@ -52,14 +52,14 @@ export const ResetPasswordScreen: React.FC = () => {
   const navigation = useNavigation();
   const phoneNumberModel = useForm<IPhoneNumberProp>({
     defaultValues: {
-      phone_number: '',
-      country_number: '00962',
+      phone_number:'',
+      country_number:'00962',
     },
   });
   function onSubmit(model: IPhoneNumberProp) {
     console.warn('form submitted', model);
     let phoneNmbr: string;
-    phoneNmbr = model.country_number + model.phone_number
+    phoneNmbr = model.country_number+model.phone_number
     if (getCompleteSignUp) {
       // dispatch(_resendCode(phoneNmbr))
       // navigation.navigate('otp', {
@@ -111,10 +111,11 @@ export const ResetPasswordScreen: React.FC = () => {
                   message: 'invalid mobile number',
                 },
               }}
-            />
+              />
             <View style={{ position: 'absolute' }}>
               <FormTextField
                 isSelectInput={true}
+                getDisable={'false'}
                 name="country_number"
                 items={CountryNumber}
                 rules={{

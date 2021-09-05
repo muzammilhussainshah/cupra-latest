@@ -170,7 +170,7 @@ export const ProfileScreen: React.FC = () => {
               <TouchableOpacity
                 onPress={() => setselectedTab(true)}
                 activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between' }}>
-                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserve Parts</Text>
+                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserved Parts</Text>
                 {selectedTab &&
                   <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
                 }
@@ -185,6 +185,7 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={getMyProfilefilterdData}
                     renderItem={({ item }: any) => {
+                      // console.log(item, 'itemitemitemitem')
                       const { subService_id, date_time } = item
                       const { en_name, _id } = subService_id
                       return (
@@ -192,8 +193,10 @@ export const ProfileScreen: React.FC = () => {
                           style={{ height: 90, marginVertical: 5, justifyContent: "center", alignItems: "center", width: "100%", }}>
                           <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10 }}>
                             <View style={{ flexDirection: "row", height: "70%" }}>
-                              <View style={{ flex: 2.4,   overflow: "hidden", borderRadius: 10 }}>
-                                <FastImage source={require('../../assets/images/mask.png')}
+                              <View style={{ flex: 2.4, overflow: "hidden", borderRadius: 10 }}>
+                                <FastImage source={
+                                  subService_id.icon ? { uri: subService_id.icon } :
+                                    require('../../assets/images/mask.png')}
                                   style={{ height: '100%', width: '100%' }}
                                 />
                               </View>
@@ -237,6 +240,7 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
                     renderItem={({ item }: any) => {
+                      console.log(item, 'itemitemitemitemitemitem')
                       const { item_id, date_time, _id } = item
                       const { en_name } = item_id
                       return (
@@ -245,13 +249,13 @@ export const ProfileScreen: React.FC = () => {
                           <View style={{ height: "100%", width: "80%", borderWidth: 0.5, borderColor: Colors.titleGray, backgroundColor: Colors.white, elevation: 2, borderRadius: 10, padding: 10, }}>
                             <View style={{ flexDirection: "row", height: "70%" }}>
                               <View style={{ flex: 2.4, overflow: "hidden", borderRadius: 10 }}>
-                                <FastImage source={require('../../assets/images/mask.png')}
+                                <FastImage source={
+                                  item_id.icon ? { uri: item_id.icon } :
+                                    require('../../assets/images/mask.png')}
                                   style={{ height: '100%', width: '100%' }}
                                 />
                               </View>
                               <View style={{ flex: 3.8, justifyContent: 'center', alignItems: "center" }}>
-                                {/* <Text>{en_name.substring(0, 10)}{en_name.length > 10 && '...'}</Text> */}
-
                                 <Text  >{moment(date_time).format('L')}</Text>
                               </View>
                               <View style={{ flex: 3.8, alignItems: 'center', justifyContent: "center" }}>

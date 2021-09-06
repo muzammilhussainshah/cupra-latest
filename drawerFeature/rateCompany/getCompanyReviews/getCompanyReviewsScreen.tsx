@@ -18,7 +18,6 @@ export const GetCompanyReview = ({ navigation }) => {
   const { width } = Dimensions.get('window');
   const flex1 = width / 10
   const companyReviews = useSelector(({ reducer }: any) => reducer.companyReviews);
-  console.log(companyReviews, 'companyReviews555')
   return (
     <View
       style={{ height: "100%", width: "100%", backgroundColor: Colors.black, }}>
@@ -41,10 +40,11 @@ export const GetCompanyReview = ({ navigation }) => {
             data={companyReviews}
             renderItem={({ item }) => {
               let items = item;
+              // console.log(item, 'itemitemitem')
               return (
-                <View style={{ height: 70, flexDirection: "row", paddingHorizontal: 10, marginVertical: 10, width: "100%" }}>
-                  <View style={{ flex: 2,   justifyContent: 'center', alignItems: "center" }}>
-                    <View style={{ height: '80%', width: "80%",  borderRadius:10,overflow:"hidden" }}>
+                <View style={{ flexDirection: "row", paddingHorizontal: 10, marginVertical: 10, width: "100%" }}>
+                  <View style={{ flex: 2, justifyContent: 'center', alignItems: "center" }}>
+                    <View style={{ height: 60, width: 60, borderRadius: 10, overflow: "hidden" }}>
                       <FastImage
                         resizeMode={"stretch"}
                         source={
@@ -58,21 +58,29 @@ export const GetCompanyReview = ({ navigation }) => {
                     <Text style={{ color: Colors.black, fontSize: 16, fontWeight: "bold" }}>
                       {item.customer.full_name}
                     </Text>
-                    <Text style={{ color: Colors.brownishGrey, fontWeight: "bold" }}>{moment(item.createdAt,).fromNow()}</Text>
-                    <View  >
-                      <FlatList
-                        data={[1, 2, 3, 4, 5]}
-                        horizontal={true}
-                        renderItem={({ item }) => {
-                          return (
-                            <FastImage
-                              resizeMode={'contain'}
-                              tintColor={item > items.rate ? Colors.titleGray : "#f3c93d"}
-                              source={require('../../../assets/images/RealStar.png')}
-                              style={{ height: 15, marginHorizontal: 2, width: 15, }} />
-                          )
-                        }}
-                      />
+                    <Text style={{ color: Colors.brownishGrey, fontSize: 12, }}>{moment(item.createdAt,).fromNow()}</Text>
+                    <View style={{ flexDirection: "row" }} >
+                      <View style={{ flex: 7, }}>
+                        <Text>{item.review}</Text>
+                      </View>
+                      <View style={{ flex: 3, }}>
+                        <FlatList
+                          showsVerticalScrollIndicator={false}
+                          data={[1, 2, 3, 4, 5]}
+                          horizontal={true}
+                          renderItem={({ item }) => {
+                            return (
+                              <View style={{ justifyContent: "center" }}>
+                                <FastImage
+                                  resizeMode={'contain'}
+                                  tintColor={item > items.rate ? Colors.titleGray : "#f3c93d"}
+                                  source={require('../../../assets/images/RealStar.png')}
+                                  style={{ height: 15, marginHorizontal: 2, width: 14, }} />
+                              </View>
+                            )
+                          }}
+                        />
+                      </View>
                     </View>
                   </View>
                 </View>

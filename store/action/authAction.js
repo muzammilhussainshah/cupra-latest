@@ -568,8 +568,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
       let signInMethod = auth()
         .signInWithCredential(facebookCredential)
         .then(async resp => {
-          console.log(resp, 'resp');
-          console.log(resp, '5555');
+          console.log(resp, '_facebookAuth login');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
           let country = 'Jordan';

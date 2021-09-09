@@ -600,12 +600,12 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
               social_type: getSocialtype ? getSocialtype : socialType,
             },
           };
-          var resp = await axios(option);
-          if (resp.data.status === 200) {
+          var respSocialLogin = await axios(option);
+          if (respSocialLogin.data.status === 200) {
             console.log('2000000000000000')
-            dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+            dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
 
-          } else if (resp.data.error.messageEn == 'Invalid Credentials') {
+          } else if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
             {
               navigation &&
@@ -620,7 +620,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
                 });
             }
           }
-          console.log(resp, 'fb login Succesfull');
+          console.log(respSocialLogin, 'fb login Succesfull');
         })
         .catch(err => {
           console.log(err, 'err');

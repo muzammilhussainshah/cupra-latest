@@ -620,7 +620,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
                 });
             }
           }
-          console.log(respSocialLogin, 'fb login Succesfull');
+          console.log(respSocialLogin, 'fb login  Succesfull');
         })
         .catch(err => {
           console.log(err, 'err');

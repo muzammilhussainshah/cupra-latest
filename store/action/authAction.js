@@ -464,7 +464,8 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '5555');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Jordan';
+          // let country = 'Jordan';
+          let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
 
@@ -571,9 +572,9 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '_facebookAuth login');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Jordan';
+          let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
-          let socialType = 'GOOGLE';
+          let socialType = 'FACEBOOK';
           try {
             await AsyncStorage.setItem('socialId', socialId);
             await AsyncStorage.setItem('socialType', 'Facebook');
@@ -604,6 +605,13 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           if (respSocialLogin.data.status === 200) {
             console.log('2000000000000000')
             dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
+
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'drawerStack' }],
+              }),
+            );
 
           } else if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));

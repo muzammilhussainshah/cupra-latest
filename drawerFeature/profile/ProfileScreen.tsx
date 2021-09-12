@@ -57,7 +57,7 @@ export const ProfileScreen: React.FC = () => {
     }
   }, [isFocused]);
 
-
+console.log(currentUser,"currentUsercurrentUsercurrentUser")
   return (
     // <Animatable.Text 
     // >Up and down you go</Animatable.Text>

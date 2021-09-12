@@ -93,11 +93,12 @@ export const _signUp = (model, navigation) => {
   };
 };
 
-export const _signIn = ({ emailOrPhone, password }, navigation) => {
+export const _signIn = ({ emailOrPhone, password, directSignin }, navigation) => {
+  console.log(navigation, directSignin, 'aaaaaaaaaaaaaaaaaaa')
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
-    console.log(deviceToken,'deviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceToken')
+    console.log(deviceToken, 'deviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceToken')
     dispatch(_loading(true));
     try {
       const option = {
@@ -156,17 +157,17 @@ export const _logOut = navigation => {
       const socialType = await AsyncStorage.getItem('socialType');
       // const authType = await AsyncStorage.getItem('auth');
       // console.log(authType, "authTypeauthTypeauthType")
-      
-      
-      
-      
+
+
+
+
       console.log(socialType, "socialTypesocialType")
       if (socialType === 'Google') {
-        console.log(socialType,"ggg", "socialTypesocialType")
+        console.log(socialType, "ggg", "socialTypesocialType")
         await GoogleSignin.signOut();
       }
       else if (socialType === "Facebook") {
-        console.log(socialType, "fff","socialTypesocialType")
+        console.log(socialType, "fff", "socialTypesocialType")
         LoginManager.logOut()
       }
       await AsyncStorage.removeItem('userEmail');
@@ -540,6 +541,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
     try {
+      dispatch(_loading(true));
       // Attempt login with permissions
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
@@ -586,7 +588,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           }
 
           // let phoneNumber = resp.user._user.phoneNumber
-          console.log(fullName, email, country, socialId, socialType, '66666');
+          console.log(fullName, email, country, socialId, socialType, '66666', getSocialtype);
 
           const option = {
             method: 'POST',
@@ -647,6 +649,55 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
   };
 };
 
+export const _directLogin = (
+  { Id,
+    type, },
+) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    dispatch(_loading(true));
+    try {
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile//customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: {
+
+          "social_id": Id,
+          "social_type": type
+
+        },
+      };
+      var resp = await axios(option);
+      if (resp.data.status === 200) {
+        // dispatch(_signIn({ emailOrPhone, password }, navigation));
+        dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        dispatch(_loading(false));
+
+
+      } else {
+        dispatch(_loading(false));
+        // dispatch(_error(resp.data.error.messageEn));
+      }
+
+      console.log(resp, 'resp _FbDirectLogin');
+    } catch (err) {
+      dispatch(_loading(false));
+      // dispatch(_error(resp.data.error.messageEn));
+
+      console.log(
+        err,
+        'error from _FbDirectLogin',
+        // JSON.parse(JSON.stringify(err.message)),
+      );
+    }
+  };
+};
 export const _completeSignUp = (
   getPhonneNumber,
   navigation,

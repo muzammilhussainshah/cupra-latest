@@ -70,6 +70,7 @@ export function _getVideos(currentUser, navigation) {
 
       dispatch(_loading(false));
     } catch (err) {
+      console.log(err,"_getVideos")
       dispatch(_loading(false));
     }
   };

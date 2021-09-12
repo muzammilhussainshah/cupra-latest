@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import React, { useRef, useState, useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
-
+import Orientation from 'react-native-orientation-locker';
 // TODO:use TYPES HERE 
 export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
   const { videoURL } = route.params;
@@ -50,11 +51,28 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
 
   const onEnd = () => setPlayerState(PLAYER_STATES.ENDED);
 
+  // const onFullScreen = () => {
+  //   setIsFullScreen(isFullScreen);
+  //   if (screenType == 'content') setScreenType('cover');
+  //   else setScreenType('content');
+  // };
   const onFullScreen = () => {
-    setIsFullScreen(isFullScreen);
-    if (screenType == 'content') setScreenType('cover');
-    else setScreenType('content');
+    if (!isFullScreen) {
+      Orientation.lockToLandscape();
+    } else {
+      if (Platform.OS === 'ios') {
+        Orientation.lockToPortrait();
+      }
+      Orientation.lockToPortrait();
+    }
+    setIsFullScreen(!isFullScreen);
   };
+  useEffect(() => {
+    return () => {
+      Orientation.lockToPortrait();
+      setIsFullScreen(false);
+    }
+  }, [])
 
   const renderToolbar = () => (
     <View >
@@ -80,7 +98,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
         ref={videoPlayer}
         // resizeMode={screenType}
         resizeMode={"cover"}
-        onFullScreen={isFullScreen}
+        // onFullScreen={isFullScreen}
         source={{
           uri:
             videoURL,
@@ -93,7 +111,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
         duration={duration}
         isLoading={isLoading}
         mainColor="#333"
-        // onFullScreen={onFullScreen}
+        onFullScreen={onFullScreen}
         onPaused={onPaused}
         onReplay={onReplay}
         onSeek={onSeek}

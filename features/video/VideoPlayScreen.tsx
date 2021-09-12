@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
+import Orientation from 'react-native-orientation-locker';
 
 // TODO:use TYPES HERE 
 export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
@@ -50,11 +51,28 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
 
   const onEnd = () => setPlayerState(PLAYER_STATES.ENDED);
 
+  // const onFullScreen = () => {
+  //   setIsFullScreen(isFullScreen);
+  //   if (screenType == 'content') setScreenType('cover');
+  //   else setScreenType('content');
+  // };
   const onFullScreen = () => {
-    setIsFullScreen(isFullScreen);
-    if (screenType == 'content') setScreenType('cover');
-    else setScreenType('content');
+    if (!isFullScreen) {
+      Orientation.lockToLandscape();
+    } else {
+      if (Platform.OS === 'ios') {
+        Orientation.lockToPortrait();
+      }
+      Orientation.lockToPortrait();
+    }
+    setIsFullScreen(!isFullScreen);
   };
+  useEffect(() => {
+    return () => {
+      Orientation.lockToPortrait();
+      setIsFullScreen(false);
+    }
+  }, [])
 
   const renderToolbar = () => (
     <View >
@@ -64,35 +82,36 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
 
   const onSeeking = (currentTime: any) => setCurrentTime(currentTime);
 
+
   return (
-    <View style={{ flex: 1,justifyContent:"center",alignItems:"center",backgroundColor:"black" }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 20, top: 20 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
       <View style={{ width: "95%", height: 160, borderRadius: 14 }}>
-      <Video
-        onEnd={onEnd}
-        onLoad={onLoad}
-        onLoadStart={onLoadStart}
-        onProgress={onProgress}
-        paused={paused}
-        ref={videoPlayer}
-        resizeMode={"cover"}
-        onFullScreen={isFullScreen}
-        source={{
-          uri:
-            videoURL,
-        }}
-        style={styles.mediaPlayer}
-        volume={10}
-      />
+        <Video
+          onEnd={onEnd}
+          onLoad={onLoad}
+          onLoadStart={onLoadStart}
+          onProgress={onProgress}
+          paused={paused}
+          ref={videoPlayer}
+          resizeMode={"cover"}
+          // onFullScreen={isFullScreen}
+          source={{
+            uri:
+              videoURL,
+          }}
+          style={styles.mediaPlayer}
+          volume={10}
+        />
       </View>
 
       <MediaControls
         duration={duration}
         isLoading={isLoading}
         mainColor="#333"
-        // onFullScreen={onFullScreen}
+        onFullScreen={onFullScreen}
         onPaused={onPaused}
         onReplay={onReplay}
         onSeek={onSeek}

@@ -14,6 +14,8 @@ import { UserStory } from './userStory/UserStory';
 
 import { _getAdds, _getNews, _storiesList, _stories } from '../../store/action/newsAction'
 
+import { _SearchForAllThings } from '../../store/action/action'
+
 import { useDispatch, useSelector } from 'react-redux';
 
 import InfiniteScroll from 'react-native-infinite-scroll';
@@ -77,27 +79,35 @@ export const HomeScreen: React.FC = () => {
       dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
       // setpagination(pagination + 1)
     }
+    else if (paginationLoader != true && searchTxt !== "") {
+      dispatch(_SearchForAllThings(currentUser, searchTxt, "getNews", 10, pagination, navigation, getNews, setpagination))
+
+    }
   }
 
 
 
   const searchUser: any = (e: any) => {
-    let keywords = e.split(' ')
-    setsearch(keywords)
-    console.log('working fine')
-    if (keywords[0] === "") {
-      setgetNewsSt(getNews)
-    }
-    if (keywords[0] !== "") {
-      let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
-      let filterChat = [];
-      for (let index = 0; index < getNews.length; index++) {
-        filterChat = getNews.filter((data: any) => {
-          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern) || data.en_desc.match(searchPattern) || data.ar_desc.match(searchPattern)
-        });
-      }
-      setgetNewsSt(filterChat)
-    }
+    setpagination(2)
+    dispatch(_SearchForAllThings(currentUser, e, "getNews", 10, 1, navigation))
+
+    // let keywords = e.split(' ')
+    // setsearch(keywords)
+    // console.log('working fine')
+    // if (keywords[0] === "") {
+    //   setgetNewsSt(getNews)
+    // }
+    // if (keywords[0] !== "") {
+    //   let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
+    //   let filterChat = [];
+    //   for (let index = 0; index < getNews.length; index++) {
+    //     filterChat = getNews.filter((data: any) => {
+    //       return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern) || data.en_desc.match(searchPattern) || data.ar_desc.match(searchPattern)
+    //     });
+    //   }
+    //   setgetNewsSt(filterChat)
+    // }
+
   }
 
   return (

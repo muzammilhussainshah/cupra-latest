@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, TextInput, Linking,Platform } from 'react-native';
+import { TouchableOpacity, TextInput, Linking, Platform } from 'react-native';
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
@@ -133,13 +133,13 @@ export const Header: React.FC<IHeaderTypeProp> = ({
             <IconPlaceholder
               style={{ justifyContent: "center", width: "90%", flexDirection: 'row', overflow: "hidden" }}
               onPress={onPress} activeOpacity={0.6}>
-              <View style={{ height: 40, width: "85%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
+              <View style={{ height: 40, width: "80%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
                 <TextInput
                   style={{ height: '100%', paddingHorizontal: 15, width: "100%", color: Colors.titleGray }}
                   onChangeText={text => {
 
                     settext(text)
-                    _func(text)
+                    // _func(text)
                   }
                   }
                   placeholder='Search'
@@ -147,14 +147,17 @@ export const Header: React.FC<IHeaderTypeProp> = ({
                   value={text}
                 />
               </View>
-              <View style={{ height: 40, width: "10%", justifyContent: "center", backgroundColor: Colors.darkGray, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>
+              <TouchableOpacity
+              activeOpacity={0.9}
+                onPress={() => _func(text)}
+                style={{ height: 40, width: "15%", justifyContent: "center", backgroundColor: Colors.darkGray, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>
                 <HeaderIcons
                   style={{ height: 17, width: 17 }}
                   resizeMode={FastImage.resizeMode.contain}
                   tintColor={'#FFF'}
                   source={require('../assets/images/search.png')}
                 />
-              </View>
+              </TouchableOpacity>
             </IconPlaceholder>
             <IconPlaceholder onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
               <HeaderIcons

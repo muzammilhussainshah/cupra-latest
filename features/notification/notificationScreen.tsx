@@ -65,7 +65,7 @@ export const NotificationScreen: React.FC = () => {
             <View style={{ flex: 8.5, backgroundColor: Colors.white }}>
                 <View style={{ flex: 1.2, justifyContent: 'space-between', paddingHorizontal: 35, alignItems: "center", flexDirection: "row" }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>Notification</Text>
-                    <View style={{ height: "40%", borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: "14%" }}>
+                    {/* <View style={{ height: "40%", borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: "14%" }}>
                         <Switch
                             trackColor={{ false: "black", true: "black" }}
                             thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
@@ -73,7 +73,7 @@ export const NotificationScreen: React.FC = () => {
                             onValueChange={toggleSwitch}
                             value={isEnabled}
                         />
-                    </View>
+                    </View> */}
                 </View>
                 <View style={{ flex: 8.8, paddingHorizontal: 20 }}>
                     <ScrollView style={{}}>
@@ -83,14 +83,16 @@ export const NotificationScreen: React.FC = () => {
                                 data={notification}
                                 renderItem={({ item }: any) => {
                                     return (
-                                        <View style={{ width: "100%", marginVertical: 5, flexDirection: "row" }}>
+                                        <View style={{ width: "100%", marginVertical: 5, flexDirection: "row", }}>
                                             <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
                                                 <FastImage style={{ width: 50, height: 50 }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
                                             </View>
-                                            <View style={{ flex: 8.5, }}>
-                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.title}</Text>
-                                                <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
-                                                <Text style={{ color: Colors.black, fontSize: 16 }}>{item.body} </Text>
+                                            <View style={{ flex: 8.5,marginHorizontal:5 }}>
+                                                <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                                                    <Text style={{ color: Colors.black, fontSize: 15 }}>{item.title}</Text>
+                                                    <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
+                                                </View>
+                                                <Text style={{ color: Colors.black, fontSize: 15 }}>{item.body} </Text>
 
                                             </View>
                                         </View>

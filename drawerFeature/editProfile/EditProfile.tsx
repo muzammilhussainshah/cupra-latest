@@ -17,7 +17,7 @@ import DocumentPicker from 'react-native-document-picker';
 
 import styled from 'styled-components/native';
 
-import { TouchableOpacity, ScrollView, TextInput, Alert, AsyncStorage, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
+import { TouchableOpacity,Switch, ScrollView, TextInput, Alert, AsyncStorage, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
 
 import { CityModel } from '../../components/cityModel'
 
@@ -66,6 +66,8 @@ export const EditProfile: React.FC = () => {
   const [cityName, setcityName] = useState(currentUser && currentUser.country && currentUser.country.en_name);
 
   const [cityId, setcityId] = useState('');
+
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const [gender, setgender] = useState(myProfile && myProfile.gender && myProfile.gender.toLowerCase());
 
@@ -240,6 +242,16 @@ export const EditProfile: React.FC = () => {
       }
     }
   }
+
+  
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState)
+    // if (isEnabled) {
+    //     dispatch(_error('Notification disabled  '))
+    // } else {
+    //     dispatch(_error('Notification Enabled '))
+    // }
+};
   return (
     <>
       {modalVisible && cityModalEnabled && cities && cities.length > 1 &&
@@ -358,9 +370,18 @@ export const EditProfile: React.FC = () => {
                     style={{ height: '100%', width: '100%' }}
                   />
                 </TouchableOpacity>
+                    <View style={{ height: 30,position:"absolute",right:40, borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: 50 }}>
+                        <Switch
+                            trackColor={{ false: "black", true: "black" }}
+                            thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
+                    </View>
 
               </View>
-              <View style={{ height: "55%", }}>
+              <View style={{ height: "55%",}}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
                   <Text style={{ fontSize: 16 }}>{currentUser.full_name}</Text>
                 </View>

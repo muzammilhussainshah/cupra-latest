@@ -101,7 +101,7 @@ export const ImagesScreen: React.FC = () => {
             style={{ marginTop: "50%" }}
             size="small" color={'black'}
           /> :
-          // imagesArr.length > 0 ?
+          imagesArr.length > 0 ?
           <FlatList
             contentContainerStyle={{ paddingBottom: 90 }}
             numColumns={2}
@@ -121,7 +121,7 @@ export const ImagesScreen: React.FC = () => {
               </>
             )}
           />
-          //  : null
+           : null
         }
 
         {

@@ -76,10 +76,15 @@ export const NotificationScreen: React.FC = () => {
                     </View> */}
                 </View>
                 <View style={{ flex: 8.8, paddingHorizontal: 20 }}>
-                    <ScrollView style={{}}>
+                    <ScrollView 
+                      showsVerticalScrollIndicator ={false}
+                      showsHorizontalScrollIndicator={false}
+                    >
                         <View style={{ height: height / 10 * 7.5, }}>
                             {/* {getnotification && getnotification.length > 0 && */}
                             <FlatList
+                       showsVerticalScrollIndicator ={false}
+                       showsHorizontalScrollIndicator={false}
                                 data={notification}
                                 renderItem={({ item }: any) => {
                                     return (
@@ -89,7 +94,7 @@ export const NotificationScreen: React.FC = () => {
                                             </View>
                                             <View style={{ flex: 8.5,marginHorizontal:5 }}>
                                                 <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                                    <Text style={{ color: Colors.black, fontSize: 15 }}>{item.title}</Text>
+                                                    <Text style={{ color: Colors.black, fontSize: 15 }}>{item.title}sss</Text>
                                                     <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
                                                 </View>
                                                 <Text style={{ color: Colors.black, fontSize: 15 }}>{item.body} </Text>

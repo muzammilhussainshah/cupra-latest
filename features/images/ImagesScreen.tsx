@@ -1,21 +1,26 @@
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Alert, FlatList } from 'react-native';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { _getNewsImages } from '../../store/action/imageAction'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Header } from '../../components/Header';
 import { StaticImages } from '../../data/StaticImages';
 import { ImagesContainer, ImageTile, ImageTitle, ImageTitleWrapper } from './ImagesStyled';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
+import InfiniteScroll from 'react-native-infinite-scroll';
 
 export const ImagesScreen: React.FC = () => {
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
   const dispatch = useDispatch();
   const isFocused = useIsFocused()
 
   const [imagesArr, setImagesArr] = useState([])
+  const [pagination, setpagination] = useState(2);
+  const [searchTxt, setsearchTxt] = useState('')
   const [search, setsearch] = useState([]);
+  const paginationLoader = useSelector((state: any) => state.reducer.paginationLoader);
 
   const getNewsImages = useSelector((state: any) => state.reducer.getNewsImages)
   const navigation = useNavigation()
@@ -32,6 +37,7 @@ export const ImagesScreen: React.FC = () => {
 
 
   const searchUser: any = (e: any) => {
+    
     let keywords = e.split(' ')
     setsearch(keywords)
     console.log('working fine')
@@ -39,6 +45,7 @@ export const ImagesScreen: React.FC = () => {
       setImagesArr(getNewsImages)
     }
     if (keywords[0] !== "") {
+     
       let searchPattern = new RegExp(keywords.map((term: any) => `(?=.*${term})`).join(''), 'i');
       let filterChat = [];
       for (let index = 0; index < getNewsImages.length; index++) {
@@ -50,11 +57,28 @@ export const ImagesScreen: React.FC = () => {
     }
   }
 
+  const loadMorePage = () => {
+    if (paginationLoader != true && searchTxt === "") {
+      // _getNews(currentUser, pagination, freePotatoes)
+      // dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
+      dispatch(_getNewsImages(currentUser, 10, pagination, navigation, getNewsImages, setpagination))
+
+      // setpagination(pagination + 1)
+    }
+
+  }
+  // useEffect(() => {
+  //   return () => {
+  //    setpagination(2)
+  //   }
+  // }, [])
+
   return (
     <ImagesContainer>
       <Header
         _func={(e: any) => {
           searchUser(e)
+          setsearchTxt(e)
         }}
         searchBarInput={true}
         notiScreen={() => navigation.navigate('notification')}
@@ -64,27 +88,57 @@ export const ImagesScreen: React.FC = () => {
         <ImageTitle>Images</ImageTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />
       </ImageTitleWrapper>
-      {imagesArr.length > 0 ?
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 90 }}
-          numColumns={2}
-          style={{ flex: 1 }}
+      <InfiniteScroll
+        style={{}}
+        contentContainerStyle={{ paddingBottom: 130 }}
 
-          showsVerticalScrollIndicator={false}
-          // keyExtractor={item => item.id}
-          data={imagesArr && imagesArr}
-          renderItem={({ item, index }: any) => (
-            <>
-              < ImageTile
-                allData={item}
-                getNewsImages={imagesArr}
-                indexOfNewsMainImages={index}
-                imageUri={item.media && item.media[0].url}
-              />
-            </>
-          )}
-        /> : null
-      }
+        showsHorizontalScrollIndicator={false}
+        horizontal={false}
+        onLoadMoreAsync={loadMorePage}
+      >
+        {isLoader ?
+          <ActivityIndicator
+            style={{ marginTop: "50%" }}
+            size="small" color={'black'}
+          /> :
+          // imagesArr.length > 0 ?
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 90 }}
+            numColumns={2}
+            style={{ flex: 1 }}
+
+            showsVerticalScrollIndicator={false}
+            // keyExtractor={item => item.id}
+            data={imagesArr && imagesArr}
+            renderItem={({ item, index }: any) => (
+              <>
+                < ImageTile
+                  allData={item}
+                  getNewsImages={imagesArr}
+                  indexOfNewsMainImages={index}
+                  imageUri={item.media && item.media[0].url}
+                />
+              </>
+            )}
+          />
+          //  : null
+        }
+
+        {
+          (paginationLoader === true) ? (
+            <View style={{
+              justifyContent: 'center',
+              alignItems: "center",
+              // marginBottom: 20,
+              // marginTop: 20,
+            }}>
+              <ActivityIndicator size="small" color={'black'} />
+            </View>
+          ) : null
+        }
+      </InfiniteScroll>
+
+
     </ImagesContainer>
   );
 };

@@ -58,8 +58,14 @@ export const VideosUri = ({ route, navigation, }: any) => {
         </View>
         <View style={{ height: "80%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: '#18191d', borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
           <ImageTitleWrapper>
-            <ImageTitle>Videos</ImageTitle>
-            <Ionicons name="filter-outline" size={30} color="#fff" />
+            <Text style={{
+              color: Colors.black,
+              fontSize: 20,
+              fontFamily: 'SourceSansPro-Regular'
+            }}
+            >
+              Videos</Text>
+            {/* <Ionicons name="filter-outline" size={30} color="#fff" /> */}
           </ImageTitleWrapper>
           <View style={{ alignItems: videosSlider.length > 1 ? "center" : "flex-start", padding: videosSlider.length > 1 ? 0 : 30 }}>
             <FlatList
@@ -105,6 +111,6 @@ export const VideosUri = ({ route, navigation, }: any) => {
           </ScrollView> */}
         </View >
       </View >
-    </ScrollView>
+    </ScrollView >
   )
 }

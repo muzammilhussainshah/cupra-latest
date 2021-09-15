@@ -13,13 +13,14 @@ import { Colors } from '../../../constants/Colors';
 import { _getHexColor, } from "../../../store/action/action"
 
 import { _commentOnNews, _dltCommentOnNews } from "../../../store/action/newsAction"
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { _getItemDetails, getReview } from '../../../store/action/shopAction';
 export const HomeComments = ({ route, navigation, }: any) => {
 
-  const Wheight = Dimensions.get('window').height;
+  const Wheight = Dimensions.get('window').height+24;
 
   const [text, setText] = useState('');
 
@@ -41,7 +42,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
 
   return (
     <ScrollView>
-      <View style={{ height: flex1 * 10, backgroundColor: Colors.black }}>
+      <View style={{ height: flex1 * 10+24, backgroundColor: Colors.black }}>
         <View
           style={{ height: "20%", backgroundColor: Colors.black, justifyContent: "center" }}>
           <Header
@@ -49,15 +50,19 @@ export const HomeComments = ({ route, navigation, }: any) => {
             RatingScreen={true}
             navigateBack={() => { navigation.goBack() }} />
         </View>
-        <View style={{ height: "80%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: '#18191d', borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
+        <View style={{ height: "80%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: Colors.white, borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
           <View style={{ height: "10%", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
             <View style={{ height: "50%", justifyContent: "flex-end" }}>
-              <FastImage
+              {/* <FastImage
                 resizeMode={'contain'}
                 source={require('../../../assets/images/comment.png')}
-                style={{ height: 20, marginHorizontal: 10, width: 20, }} />
+                style={{ height: 20, marginHorizontal: 10, width: 20, }} /> */}
+              <MaterialCommunityIcons name="message-processing" size={20} color={Colors.titleGray}
+                style={{ marginRight:10 }} />
             </View>
-            <Text style={{ color: Colors.white }}>Comments</Text>
+            {/* <MaterialCommunityIcons size={25}/> */}
+
+            <Text style={{ color: Colors.black }}>Comments</Text>
           </View>
           <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
             {isLoader ?
@@ -91,7 +96,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
                           }
                         </View>
                         <View style={{ flex: mine ? 7.6 : 8.6, justifyContent: 'center' }}>
-                          <Text style={{ color: Colors.white, fontWeight: "bold", marginHorizontal: 10 }}>{createdBy.full_name}</Text>
+                          <Text style={{ color: Colors.black, fontWeight: "bold", marginHorizontal: 10 }}>{createdBy.full_name}</Text>
                           <Text style={{ color: Colors.brownishGrey, marginHorizontal: 10 }}>{moment(createdAt).fromNow()}</Text>
                         </View>
                         {mine &&
@@ -107,7 +112,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
                         }
                       </View>
                       <View style={{ flex: 4, marginVertical: 5, paddingHorizontal: 10, justifyContent: "center" }}>
-                        <Text style={{ color: Colors.titleGray, maxWidth: "80%" }}>{text}</Text>
+                        <Text style={{ color: Colors.black, maxWidth: "80%" }}>{text}</Text>
                       </View>
                     </View>
                   )

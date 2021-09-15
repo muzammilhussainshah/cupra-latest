@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {AsyncStorage} from 'react-native';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-import {Button, ButtonsContainer, ButtonText} from '../../components/Button';
-import {height} from '../../constants/Layout';
-import {useSelector} from 'react-redux';
+import { Button, ButtonsContainer, ButtonText } from '../../components/Button';
+import { height } from '../../constants/Layout';
+import { useSelector } from 'react-redux';
 import {
   BackGroundContinerImage,
   WelcomeTitle,
@@ -27,15 +27,38 @@ export const WelcomeScreen: React.FC = () => {
 
   const getDataAsync = async () => {
     const getEmail = await AsyncStorage.getItem('userEmail');
+    const getSocialtype = await AsyncStorage.getItem('socialType');
+
     if (getEmail && getEmail !== 'null') {
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
-          routes: [{name: 'drawerStack'}],
+          routes: [{ name: 'drawerStack' }],
         }),
       );
       setUser(true);
-    } else {
+    }
+    else if (getSocialtype && getSocialtype == 'Facebook') {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'drawerStack' }],
+        }),
+      );
+      setUser(true);
+    }
+    else if (getSocialtype && getSocialtype == 'Google') {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'drawerStack' }],
+        }),
+      );
+      setUser(true);
+    }
+
+
+    else {
       setUser(false);
     }
   };

@@ -25,6 +25,8 @@ export type FullImage = PressableProps & {
  */
 export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex, sliderBoxEnabled }: any) => {
   let type = typeof (coverImage)
+
+  console.log(coverImage, coverImage[selectedImageIndex], ' coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex]')
   return (
 
     <View
@@ -39,21 +41,18 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
       </View>
       <View style={{ height: "85%", justifyContent: "center" }}>
         {sliderBoxEnabled ?
-          <ImageViewer 
-          saveToLocalByLongPress={false}
-          
-          index={selectedImageIndex} imageUrls={coverImage} />
-          // <SliderBox
-          //   images={coverImage}
-          //   resizeMode={'cover'}
-          //   dotColor="rgba(0,0,0,0)"
-          //   inactiveDotColor="rgba(0,0,0,0)"
-          //   firstItem={selectedImageIndex}
-          //   onCurrentImagePressed={(index: any) => { }}
-          // />
+          <ImageViewer
+            saveToLocalByLongPress={false}
+
+            index={selectedImageIndex} imageUrls={coverImage} />
           :
-          <FastImage style={{ width: "100%", height: "100%" }} source={{ uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }}
-            resizeMode={FastImage.resizeMode.contain} />
+          <ImageViewer
+            saveToLocalByLongPress={false}
+
+            // index={selectedImageIndex} 
+            imageUrls={[{ url: coverImage }]} />
+          // <FastImage style={{ width: "100%", height: "100%" }} source={{ uri: type == "string" ? coverImage : coverImage[selectedImageIndex] }}
+          //   resizeMode={FastImage.resizeMode.contain} />
         }
       </View>
     </View >

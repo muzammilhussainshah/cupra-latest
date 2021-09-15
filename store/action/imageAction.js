@@ -1,4 +1,4 @@
-import { GETNEWSIMAGES, ISLOADER, ISERROR } from "../constant/constant";
+import { GETNEWSIMAGES, ISLOADER, ISERROR,PAGINATIONLOADER } from "../constant/constant";
 import axios from 'axios';
 import { _logOut } from './authAction';
 
@@ -30,9 +30,11 @@ export const _checkIsEmptyObj = (obj) => {
     }
 }
 
-export const _getNewsImages = (currentUser, page_size, page_index, navigation,) => {
+export const _getNewsImages = (currentUser, page_size, page_index, navigation,getNewsImages, setpagination) => {
     // console.log(currentUser, page_size, page_index, 'uniqueId')
     return async (dispatch) => {
+        dispatch({ type: PAGINATIONLOADER, payload: true, });
+
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         // console.log(deviceToken, 'deviceToken', model)
@@ -52,9 +54,19 @@ export const _getNewsImages = (currentUser, page_size, page_index, navigation,) 
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                dispatch({ type: GETNEWSIMAGES, payload: resp.data.data })
-                // console.log(resp, 'resp _getAdds')
+                if (getNewsImages&&page_index>1) {
+                    let getNewsImagesClone = getNewsImages;
+                    getNewsImagesClone = getNewsImagesClone.concat(resp.data.data);
+                    console.log(getNewsImagesClone,"getNewsImagesClone")
+                    dispatch({ type: GETNEWSIMAGES, payload: getNewsImagesClone });
+                    setpagination(page_index + 1)
+                    console.log(getNewsImagesClone, page_size, page_index," page_size, page_index,")
+                }
+                else {
+                    dispatch({ type: GETNEWSIMAGES, payload: resp.data.data })
+                }
                 dispatch(_loading(false));
+                dispatch({ type: PAGINATIONLOADER, payload: false, });
 
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));

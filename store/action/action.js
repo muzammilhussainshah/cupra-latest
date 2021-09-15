@@ -1,4 +1,4 @@
-import { ISLOADER, ISERROR, GETCITY } from "../constant/constant";
+import { ISLOADER, ISERROR, GETCITY, GETCOUNTRY,PAGINATIONLOADER,GETNEWS } from "../constant/constant";
 import { _logOut } from './authAction';
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
@@ -120,6 +120,107 @@ export const _getCity = (currentUser, navigation, setModalVisible) => {
         catch (err) {
             dispatch(_loading(false));
             console.log(err.response, "error from _getCity", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const _getCountry = ( navigation,) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/country?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: GETCOUNTRY, payload: resp.data.data })
+                dispatch(_loading(false));
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+            console.log(resp, 'resp _getCountry',)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _getCountry", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const _SearchForAllThings = ( currentUser,keyWord,searchingFor,page_size,page_index,navigation,getNews, setpagination) => {
+    return async (dispatch) => {
+        dispatch({ type: PAGINATIONLOADER, payload: true, });
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        // dispatch(_loading(true));
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/search?deviceToken=${deviceToken}&deviceKey=${uniqueId}&page_size=${page_size}&page_index=${page_index}&text=${keyWord}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+
+                if (getNews&&page_index>1) {
+                    let getNewsClone = getNews;
+                    getNewsClone = getNewsClone.concat(resp.data.data.news);
+                    console.log(getNewsClone,"getNewsClone")
+                    dispatch({ type: GETNEWS, payload: getNewsClone });
+                    setpagination(page_index + 1)
+                }
+                else {
+                    dispatch({ type: GETNEWS, payload: resp.data.data.news })
+                }
+                dispatch(_loading(false));
+                dispatch({ type: PAGINATIONLOADER, payload: false, });
+
+
+            } else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+            else {
+                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_loading(false));
+            }
+            console.log(resp, 'resp _SearchForAllThings',page_size,page_index)
+            dispatch(_loading(false));
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err, "error from _SearchForAllThings", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

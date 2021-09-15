@@ -23,7 +23,7 @@ export const VideosTabs: React.FC = () => {
       gestureEnabled: true,
     }}>
     <VideosStack.Screen name="video" component={VideoScreen} />
-    <VideosStack.Screen name="videoPlay" component={VideoPlayScreen} />
+    {/* <VideosStack.Screen name="videoPlay" component={VideoPlayScreen} /> */}
 
   </VideosStack.Navigator>
 };

@@ -30,6 +30,8 @@ import {VideosUri} from '../features/home/HomeDetail/VideosUri/VideosUri';
 
 import {GetAndSubmitReview} from '../features/services/GetAndSubmitReviews/GetAndSubmitReviews';
  
+import { VideoPlayScreen as videoPlay } from '../features/video/VideoPlayScreen';
+
 import Routes from './Routes';
 
 import {NavigatorScreenParams} from '@react-navigation/native';
@@ -48,6 +50,7 @@ type AuthStackParamList = {
   resetPassword: undefined;
   requestPassword: undefined;
   VideoPlayScreenHome: undefined; 
+  videoPlay: undefined; 
 };
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
@@ -119,6 +122,11 @@ export const RootNavigator = () => {
       <AuthStack.Screen
         name="VideoPlayScreenHome"
         component={VideoPlayScreenHome}
+        options={MyTransition}
+      />
+      <AuthStack.Screen
+        name="videoPlay"
+        component={videoPlay}
         options={MyTransition}
       />
       <AuthStack.Screen

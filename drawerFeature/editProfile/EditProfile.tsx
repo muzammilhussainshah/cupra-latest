@@ -17,7 +17,7 @@ import DocumentPicker from 'react-native-document-picker';
 
 import styled from 'styled-components/native';
 
-import { TouchableOpacity, ScrollView, TextInput, Alert, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
+import { TouchableOpacity,Switch, ScrollView, TextInput, Alert, AsyncStorage, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
 
 import { CityModel } from '../../components/cityModel'
 
@@ -50,9 +50,9 @@ export const EditProfile: React.FC = () => {
   const dispatch = useDispatch()
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-
   const myProfile = useSelector((state: any) => state.reducer.myProfile)
-
+  const getSocialtype = AsyncStorage.getItem('socialType');
+  console.log(getSocialtype, 'getSocialtype')
   const isError = useSelector((state: any) => state.reducer.isError);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,13 +63,15 @@ export const EditProfile: React.FC = () => {
 
   const navigation = useNavigation();
 
-  const [cityName, setcityName] = useState(currentUser && currentUser.country.en_name);
+  const [cityName, setcityName] = useState(currentUser && currentUser.country && currentUser.country.en_name);
 
   const [cityId, setcityId] = useState('');
 
+  const [isEnabled, setIsEnabled] = useState(false);
+
   const [gender, setgender] = useState(myProfile && myProfile.gender && myProfile.gender.toLowerCase());
 
-  const [fullName, setfullName] = useState(currentUser && currentUser.full_name);
+  const [fullName, setfullName] = useState(currentUser && currentUser.full_name && currentUser.full_name);
 
   const [isModalActive, setIsModalActive] = useState(false);
 
@@ -81,7 +83,7 @@ export const EditProfile: React.FC = () => {
 
   const [imgFile, setimgFile] = useState("");
 
-  const [mobile, setmobile] = useState(currentUser && currentUser.email.toString());
+  const [mobile, setmobile] = useState(currentUser && currentUser.email && currentUser.email.toString());
 
   const getCity = useSelector((state: any) => state.reducer.getCity);
 
@@ -240,6 +242,16 @@ export const EditProfile: React.FC = () => {
       }
     }
   }
+
+  
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState)
+    // if (isEnabled) {
+    //     dispatch(_error('Notification disabled  '))
+    // } else {
+    //     dispatch(_error('Notification Enabled '))
+    // }
+};
   return (
     <>
       {modalVisible && cityModalEnabled && cities && cities.length > 1 &&
@@ -299,7 +311,7 @@ export const EditProfile: React.FC = () => {
             <Modal _func={getImg} _func2={Platform.OS === "ios" ? takePhotoIphone : takePhoto} _modalActive={() => setIsModalActive(!isModalActive)} />
           } */}
         < View
-          style={{ height: height }}>
+          style={{ height: height + 24 }}>
           <View style={{ flex: 1, paddingTop: 24 }}>
             <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
               <FastImage source={require('../../assets/profileBg.png')}
@@ -358,9 +370,18 @@ export const EditProfile: React.FC = () => {
                     style={{ height: '100%', width: '100%' }}
                   />
                 </TouchableOpacity>
+                    <View style={{ height: 30,position:"absolute",right:40, borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: 50 }}>
+                        <Switch
+                            trackColor={{ false: "black", true: "black" }}
+                            thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
+                    </View>
 
               </View>
-              <View style={{ height: "55%", }}>
+              <View style={{ height: "55%",}}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
                   <Text style={{ fontSize: 16 }}>{currentUser.full_name}</Text>
                 </View>
@@ -378,13 +399,15 @@ export const EditProfile: React.FC = () => {
                       defaultValue={fullName}
                     />
                   </View>
-                  <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                    <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>
-                    <TextInput
-                      style={{ height: 40, width: "75%" }}
-                      onChangeText={text => setmobile(text)}
-                      defaultValue={mobile} />
-                  </View>
+                  {!getSocialtype &&
+                    <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
+                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>
+                      <TextInput
+                        style={{ height: 40, width: "75%" }}
+                        onChangeText={text => setmobile(text)}
+                        defaultValue={mobile} />
+                    </View>
+                  }
                   <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                     <View style={{ justifyContent: "center", flex: 1 }}>
                       <Text style={{ fontSize: 16, fontWeight: "bold" }}>Gender</Text>

@@ -92,7 +92,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
         duration={duration}
         isLoading={isLoading}
         mainColor="#333"
-        // onFullScreen={onFullScreen}
+        onFullScreen={onFullScreen}
         onPaused={onPaused}
         onReplay={onReplay}
         onSeek={onSeek}

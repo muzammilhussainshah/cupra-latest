@@ -6,11 +6,12 @@ import {
   VideoTitle,
   VideoTitleWrapper,
 } from './VideoStyled';
-import { View, Dimensions, FlatList } from 'react-native';
+import { View, Dimensions, FlatList ,ActivityIndicator} from 'react-native';
 import { StaticVideos } from '../../data/StaticVideos';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getVideos } from '../../store/action/videoAction';
+import InfiniteScroll from 'react-native-infinite-scroll';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -19,13 +20,16 @@ export const VideoScreen: React.FC = () => {
   const navigation = useNavigation();
   const currentUser = useSelector((state: any) => state.reducer.currentUser);
   const videos = useSelector((state: any) => state.reducer.videos);
+  const paginationLoader = useSelector((state: any) => state.reducer.paginationLoader);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
+  const [pagination, setpagination] = useState(2);
   const [search, setsearch] = useState([]);
   const [videosST, setvideosST] = useState([]);
+  const [searchTxt, setsearchTxt] = useState('')
 
   useEffect(() => {
-    dispatch(_getVideos(currentUser, navigation));
+    dispatch(_getVideos(currentUser, navigation, 10, 1,));
   }, []);
 
   useEffect(() => {
@@ -36,7 +40,7 @@ export const VideoScreen: React.FC = () => {
 
 
 
-  
+
   const searchUser: any = (e: any) => {
     let keywords = e.split(' ')
     setsearch(keywords)
@@ -49,7 +53,7 @@ export const VideoScreen: React.FC = () => {
       let filterChat = [];
       for (let index = 0; index < videos.length; index++) {
         filterChat = videos.filter((data: any) => {
-          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern)|| data.en_desc.match(searchPattern)|| data.ar_desc.match(searchPattern)
+          return data.en_header.match(searchPattern) || data.ar_header.match(searchPattern) || data.en_desc.match(searchPattern) || data.ar_desc.match(searchPattern)
         });
       }
       setvideosST(filterChat)
@@ -57,56 +61,92 @@ export const VideoScreen: React.FC = () => {
   }
 
 
-  
+
+  const loadMorePage = () => {
+    if (paginationLoader != true && searchTxt === "") {
+      // _getNews(currentUser, pagination, freePotatoes)
+      // dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
+
+      dispatch(_getVideos(currentUser, navigation, 10, pagination, videos, setpagination));
+
+      // setpagination(pagination + 1)
+    }
+    // else if (paginationLoader != true && searchTxt !== "") {
+    //   dispatch(_SearchForAllThings(currentUser, searchTxt, "getNews", 10, pagination, navigation, getNews, setpagination))
+
+    // }
+  }
   return (
     <VideoContainer>
-      <Header 
-      
-      // isEmptyserch={isEmptyserch}
-      _func={(e: any) => {
-        searchUser(e)
-      }}
+      <Header
+
+        // isEmptyserch={isEmptyserch}
+        _func={(e: any) => {
+          searchUser(e)
+        }}
         notiScreen={() => navigation.navigate('notification')}
-      searchBarInput={true}
-      onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        searchBarInput={true}
+        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       <VideoTitleWrapper>
         <VideoTitle>Videos</VideoTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />
       </VideoTitleWrapper>
-      <FlatList
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item:any) => item.id}
-        data={videosST}
-        renderItem={item1 => (
-          <SwiperFlatList
-            keyExtractor={item => item.id}
-            style={{ flex: 1 }}
-            data={item1.item.media}
-            renderItem={item2 => {
-              console.log(item1.item.en_desc,  'item2item2item2item2item2item2item2item2item2item2item2item2')
-              return (
-                <VideoTile
-                  VideoImage={item2.item.url}
-                  likes={item2.item.likesCount}
-                  getDate={item2.item.createdAt}
-                  mediaId={item2.item._id}
-                  en_header={item1.item.en_header}
-                  navigation={navigation}
-                  likedByMe={item2.item.likedByMe}
-                  onPress={() =>
-                    navigation.navigate('videoPlay', {
-                      videoURL: item2.item.url,
-                    })
-                  }
-                />
-              )
-            }
-            }
-          />
-        )}
-      />
+      <InfiniteScroll
+        style={{}}
+        contentContainerStyle={{ paddingBottom: 130 }}
+
+        showsHorizontalScrollIndicator={false}
+        horizontal={false}
+        onLoadMoreAsync={loadMorePage}
+      >
+        <FlatList
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item: any) => item.id}
+          data={videosST}
+          renderItem={item1 => (
+            <SwiperFlatList
+              keyExtractor={item => item.id}
+              style={{ flex: 1 }}
+              data={item1.item.media}
+              renderItem={item2 => {
+                console.log(item1.item.en_desc, 'VideoTileVideoTile')
+                return (
+                  <VideoTile
+                    VideoImage={item2.item.url}
+                    likes={item2.item.likesCount}
+                    getDate={item2.item.createdAt}
+                    mediaId={item2.item._id}
+                    en_header={item1.item.en_header}
+                    navigation={navigation}
+                    likedByMe={item2.item.likedByMe}
+                    onPress={() =>
+                      navigation.navigate('videoPlay', {
+                        videoURL: item2.item.url,
+                      })
+                    }
+                  />
+                )
+              }
+              }
+            />
+          )}
+        />
+
+        {
+          (paginationLoader === true) ? (
+            <View style={{
+              justifyContent: 'center',
+              alignItems: "center",
+              // marginBottom: 20,
+              // marginTop: 20,
+            }}>
+              <ActivityIndicator size="small" color={'black'} />
+            </View>
+          ) : null
+        }
+      </InfiniteScroll>
     </VideoContainer>
   );
 };

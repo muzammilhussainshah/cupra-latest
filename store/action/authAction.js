@@ -30,7 +30,7 @@ export function _error(err, time) {
       () => {
         dispatch({ type: ISERROR, payload: '' });
       },
-      time ? time : 3000,
+      time ? time : 5000,
     );
   };
 }
@@ -44,7 +44,7 @@ export const _checkIsEmptyObj = obj => {
   }
 };
 export const _signUp = (model, navigation) => {
-  console.log(model, 'model')
+  console.log(model, 'model');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -64,7 +64,8 @@ export const _signUp = (model, navigation) => {
           full_name: model.name,
           mobile: `${model.country_number}${model.phone_number}`,
           email: model.email,
-          country: 'Pakistan',
+          // country: 'Pakistan',
+          country : '60930f6ecb8d330015688090',
           password: model.password,
           confirmPassword: model.confirm_password,
         },
@@ -93,10 +94,12 @@ export const _signUp = (model, navigation) => {
   };
 };
 
-export const _signIn = ({ emailOrPhone, password }, navigation) => {
+export const _signIn = ({ emailOrPhone, password, directSignin }, navigation) => {
+  console.log(navigation, directSignin, 'aaaaaaaaaaaaaaaaaaa')
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
+    console.log(deviceToken, 'deviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceTokendeviceToken')
     dispatch(_loading(true));
     try {
       const option = {
@@ -123,6 +126,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
           }),
         );
         try {
+          await AsyncStorage.setItem('auth', 'emailPass');
           await AsyncStorage.setItem('userEmail', emailOrPhone);
           await AsyncStorage.setItem('password', password);
           dispatch(_loading(false));
@@ -151,9 +155,31 @@ export const _signIn = ({ emailOrPhone, password }, navigation) => {
 export const _logOut = navigation => {
   return async dispatch => {
     try {
-      const userEmail = await AsyncStorage.removeItem('userEmail');
-      const password = await AsyncStorage.removeItem('password');
+      const socialType = await AsyncStorage.getItem('socialType');
+      // const authType = await AsyncStorage.getItem('auth');
+      // console.log(authType, "authTypeauthTypeauthType")
+
+
+
+
+      console.log(socialType, "socialTypesocialType")
+      if (socialType === 'Google') {
+        console.log(socialType, "ggg", "socialTypesocialType")
+        await GoogleSignin.signOut();
+      }
+      else if (socialType === "Facebook") {
+        console.log(socialType, "fff", "socialTypesocialType")
+        LoginManager.logOut()
+      }
+      await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('password');
+      await AsyncStorage.removeItem('socialId');
+      await AsyncStorage.removeItem('socialType');
+      await AsyncStorage.removeItem('auth');
+
       dispatch({ type: CURRENTUSER, payload: {} });
+      dispatch({ type: MYPROFILE, payload: {} });
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -277,8 +303,8 @@ export const _resendCode = (emailOrPhone, getroutName) => {
 };
 
 export const _resetPasswordReq = (model, navigation) => {
-  console.log('resetpass');
   const emailOrPhone = model.country_number + model.phone_number;
+  console.log(model, 'resetpass');
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -367,7 +393,12 @@ export const _verifyResetPassOtp = (getPhonneNumber, otpCode, navigation) => {
     }
   };
 };
-export const _resetNewPassword = (model, getPhonneNumber, getpassToken, navigation) => {
+export const _resetNewPassword = (
+  model,
+  getPhonneNumber,
+  getpassToken,
+  navigation,
+) => {
   const emailOrPhone = getPhonneNumber;
   const passwordToken = getpassToken;
   const password = model.new_password;
@@ -435,11 +466,21 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '5555');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Pakistan';
+          // let country = 'Jordan';
+          let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
 
           // let phoneNumber = resp.user._user.phoneNumber
+          try {
+            await AsyncStorage.setItem('socialId', socialId);
+            await AsyncStorage.setItem('socialType', 'Google');
+            await AsyncStorage.setItem('auth', 'google');
+            dispatch(_loading(false));
+          } catch (error) {
+            dispatch(_loading(false));
+            console.log(error, 'from async');
+          }
           console.log(fullName, email, country, socialId, socialType, '66666');
 
           const option = {
@@ -458,14 +499,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           var resp = await axios(option);
           if (resp.data.status === 200) {
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
-            try {
-              await AsyncStorage.setItem('socialId', socialId);
-              await AsyncStorage.setItem('socialType', socialType);
-              dispatch(_loading(false));
-            } catch (error) {
-              dispatch(_loading(false));
-              console.log(error, 'from async');
-            }
+
           } else if (resp.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
             {
@@ -508,6 +542,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
     try {
+      dispatch(_loading(true));
       // Attempt login with permissions
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
@@ -537,17 +572,24 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
       let signInMethod = auth()
         .signInWithCredential(facebookCredential)
         .then(async resp => {
-          console.log(resp, 'resp');
-
-          console.log(resp, '5555');
+          console.log(resp, '_facebookAuth login');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = 'Pakistan';
+          let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
-          let socialType = 'GOOGLE';
+          let socialType = 'FACEBOOK';
+          try {
+            await AsyncStorage.setItem('socialId', socialId);
+            await AsyncStorage.setItem('socialType', 'Facebook');
+            await AsyncStorage.setItem('auth', 'facebook');
+            dispatch(_loading(false));
+          } catch (error) {
+            dispatch(_loading(false));
+            console.log(error, 'from facebook async');
+          }
 
           // let phoneNumber = resp.user._user.phoneNumber
-          console.log(fullName, email, country, socialId, socialType, '66666');
+          console.log(fullName, email, country, socialId, socialType, '66666', getSocialtype);
 
           const option = {
             method: 'POST',
@@ -562,18 +604,19 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
               social_type: getSocialtype ? getSocialtype : socialType,
             },
           };
-          var resp = await axios(option);
-          if (resp.data.status === 200) {
-            dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
-            try {
-              await AsyncStorage.setItem('socialId', socialId);
-              await AsyncStorage.setItem('socialType', socialType);
-              dispatch(_loading(false));
-            } catch (error) {
-              dispatch(_loading(false));
-              console.log(error, 'from async');
-            }
-          } else if (resp.data.error.messageEn == 'Invalid Credentials') {
+          var respSocialLogin = await axios(option);
+          if (respSocialLogin.data.status === 200) {
+            console.log('2000000000000000')
+            dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
+
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'drawerStack' }],
+              }),
+            );
+
+          } else if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
             {
               navigation &&
@@ -588,7 +631,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
                 });
             }
           }
-          console.log(resp, 'fb login Succesfull');
+          console.log(respSocialLogin, 'fb login  Succesfull');
         })
         .catch(err => {
           console.log(err, 'err');
@@ -607,6 +650,55 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
   };
 };
 
+export const _directLogin = (
+  { Id,
+    type, },
+) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    dispatch(_loading(true));
+    try {
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile//customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: {
+
+          "social_id": Id,
+          "social_type": type
+
+        },
+      };
+      var resp = await axios(option);
+      if (resp.data.status === 200) {
+        // dispatch(_signIn({ emailOrPhone, password }, navigation));
+        dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        dispatch(_loading(false));
+
+
+      } else {
+        dispatch(_loading(false));
+        // dispatch(_error(resp.data.error.messageEn));
+      }
+
+      console.log(resp, 'resp _FbDirectLogin');
+    } catch (err) {
+      dispatch(_loading(false));
+      // dispatch(_error(resp.data.error.messageEn));
+
+      console.log(
+        err,
+        'error from _FbDirectLogin',
+        // JSON.parse(JSON.stringify(err.message)),
+      );
+    }
+  };
+};
 export const _completeSignUp = (
   getPhonneNumber,
   navigation,
@@ -700,7 +792,8 @@ export const _updateProfile = (
     data.append('full_name', fullName);
   }
   if (mobile) {
-    data.append('email', mobile);
+    console.log('email', mobile.replace(/ /g, ''))
+    // data.append('email', mobile);
   }
   if (gender) {
     data.append('gender', gender == 'male' ? '1' : '2');
@@ -751,11 +844,16 @@ export const _updateProfile = (
   };
 };
 
-export const _getProfile = (currentUser, navigation) => {
+export const _getProfile = (currentUser, navigation, name) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
-    dispatch(_loading(true));
+    if (name == 'claims') {
+      dispatch(_loading(false));
+    } else {
+
+      dispatch(_loading(true));
+    }
     try {
       const option = {
         method: 'GET',

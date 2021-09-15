@@ -58,17 +58,11 @@ export const RateCompanyScreen: React.FC = () => {
       let sumOfRatelocal: any = 0
       companyReviews.map((value: any) => {
         sumOfRatelocal = sumOfRatelocal + value.rate
-        console.log(value, 'valuevaluevaluevaluevaluevaluevaluevalue')
-      })
-      console.log(sumOfRatelocal, 'sumOfRatelocal')
-      console.log(companyReviews.length, 'companyReviews.length')
+      }) 
       setsumOfRating(sumOfRatelocal)
       setnoOfRating(companyReviews.length)
       setrating(sumOfRatelocal / companyReviews.length)
     }
-
-
-
   }, [companyReviews])
   useEffect(() => {
     setgetcompanyInfo(contactUsInfo)
@@ -177,7 +171,7 @@ export const RateCompanyScreen: React.FC = () => {
                     size="small" color={Colors.black}
                   /> :
                   <TouchableOpacity
-                    onPress={() => dispatch(_addCompanyReviews(currentUser, navigation, noOfReviews, reviewText, setnoOfReviews, setreviewText))}
+                    onPress={() => dispatch(_addCompanyReviews(currentUser, navigation, noOfReviews, reviewText, setnoOfReviews, setreviewText,companyReviews))}
                     activeOpacity={0.7}
                     style={{ height: "60%", width: "60%", borderRadius: 5, backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center" }}>
                     <Text style={{ color: Colors.white }}>Send Review</Text>

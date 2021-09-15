@@ -1,6 +1,7 @@
 import { useRoute, useNavigation } from '@react-navigation/native';
 
-import React from 'react';
+import { _getCountry, } from '../../../store/action/action';
+import React, { useEffect, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -31,11 +32,11 @@ interface IPhoneNumberProp {
 }
 const CountryNumber = ['00962', '00972', '0090'];
 export const ResetPasswordScreen: React.FC = () => {
+  const [getcountryR, setgetcountryr] = useState([])
   const route = useRoute();
-
-
   const isLoader = useSelector(({ reducer }) => reducer.isLoader);
   const isError = useSelector(({ reducer }) => reducer.isError);
+  const country = useSelector(({ reducer }: any) => reducer.country);
   const getTitle = route?.params?.title;
   const getCompleteSignUp = route?.params?.completeSignUp;
   const getfullName = route?.params?.full_name;
@@ -44,8 +45,17 @@ export const ResetPasswordScreen: React.FC = () => {
   const getsocialId = route?.params?.social_id;
   const getsocialType = route?.params?.social_type;
 
-  console.log(getTitle, getCompleteSignUp, getfullName, getEmail, getcountry, getsocialId, getsocialType, 'abczsadas')
-
+  useEffect(() => {
+    dispatch(_getCountry(navigation))
+  }, [])
+  let localCodeArr: any = []
+  useEffect(() => {
+    console.log(country, 'country')
+    country && country.length > 0 && country.map((value: any) => {
+      localCodeArr.push('00' + value.country_phone_code.toString())
+    })
+    setgetcountryr(localCodeArr)
+  }, [country])
 
 
   const dispatch = useDispatch();
@@ -115,8 +125,9 @@ export const ResetPasswordScreen: React.FC = () => {
             <View style={{ position: 'absolute' }}>
               <FormTextField
                 isSelectInput={true}
+                getDisable={'false'}
                 name="country_number"
-                items={CountryNumber}
+                items={getcountryR}
                 rules={{
                   required: 'country number is required.',
                 }}

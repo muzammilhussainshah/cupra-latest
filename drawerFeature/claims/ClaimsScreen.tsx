@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation, DrawerActions, } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { _getProfile } from '../../store/action/authAction';
-import { TouchableOpacity, ScrollView, TextInput, ActivityIndicator,   } from "react-native"
+import { TouchableOpacity, ScrollView, TextInput, ActivityIndicator, } from "react-native"
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import { Colors } from '../../constants/Colors';
 import { _claim } from "../../store/action/claimsAction"
 import { useDispatch, useSelector } from 'react-redux';
-import { height, width } from '../../constants/Layout'; 
-export const ClaimsScreen: React.FC = () => {
+import { height, width } from '../../constants/Layout';
+export const ClaimsScreen: React.FC = ({ route }: any) => {
   const [body, setBody] = useState('')
   const [title, settitle] = useState('')
   const navigation = useNavigation();
@@ -19,13 +19,13 @@ export const ClaimsScreen: React.FC = () => {
   const isError = useSelector((state: any) => state.reducer.isError);
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
   useEffect(() => {
-    dispatch(_getProfile(currentUser, navigation))
+    dispatch(_getProfile(currentUser, navigation,route.name))
   }, [])
   useEffect(() => {
   }, [myProfile])
   return (
     <ScrollView>
-      <View style={{ height: height - 24, width: width, backgroundColor: "black", marginTop: 24 }}>
+      <View style={{ height: height+24  , width: width, backgroundColor: "black", marginTop: 24 }}>
         <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.8, borderBottomColor: Colors.brownishGrey }}>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

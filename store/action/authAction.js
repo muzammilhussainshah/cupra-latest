@@ -531,7 +531,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
       dispatch(_error(resp.data.error.messageEn));
       console.log(
         err.response,
-        'error from _resetNewPassword',
+        'error from _googleAuth',
         JSON.parse(JSON.stringify(err.message)),
       );
     }
@@ -643,7 +643,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
       dispatch(_error(resp.data.error.messageEn));
       console.log(
         err.response,
-        'error from _resetNewPassword',
+        'error from _facebookAuth',
         JSON.parse(JSON.stringify(err.message)),
       );
     }
@@ -745,6 +745,7 @@ export const _completeSignUp = (
         },
       };
       var resp = await axios(option);
+      console.log(resp, '_completeSignUp');
       if (resp.data.status == 200) {
         dispatch(_loading(false));
         navigation.navigate('otp', {
@@ -757,14 +758,13 @@ export const _completeSignUp = (
         dispatch(_loading(false));
         dispatch(_error(resp.data.error.messageEn));
       }
-      console.log(resp, '_completeSignUp');
     } catch (err) {
       dispatch(_loading(false));
       // dispatch(_error(resp.data.error.messageEn));
 
       console.log(
         err,
-        'error from _resetNewPassword',
+        'error from _completeSignUp',
         JSON.parse(JSON.stringify(err.message)),
       );
     }

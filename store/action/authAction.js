@@ -65,7 +65,7 @@ export const _signUp = (model, navigation) => {
           mobile: `${model.country_number}${model.phone_number}`,
           email: model.email,
           // country: 'Pakistan',
-          country : '60930f6ecb8d330015688090',
+          country: '60930f6ecb8d330015688090',
           password: model.password,
           confirmPassword: model.confirm_password,
         },
@@ -94,8 +94,9 @@ export const _signUp = (model, navigation) => {
   };
 };
 
-export const _signIn = ({ emailOrPhone, password, directSignin }, navigation) => {
-  console.log(navigation, directSignin, 'aaaaaaaaaaaaaaaaaaa')
+// export const _signIn = ({ emailOrPhone, password,}, navigation) => {
+export const _signIn = ({ emailOrPhone, password }, navigation, setUser) => {
+  console.log(navigation, 'aaaaaaaaaaaaaaaaaaa')
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -121,7 +122,7 @@ export const _signIn = ({ emailOrPhone, password, directSignin }, navigation) =>
         dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
         navigation.dispatch(
           CommonActions.reset({
-            index: 0,
+            index: 1,
             routes: [{ name: 'drawerStack' }],
           }),
         );
@@ -187,9 +188,24 @@ export const _logOut = navigation => {
         }),
       );
     } catch (err) {
+      await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('password');
+      await AsyncStorage.removeItem('socialId');
+      await AsyncStorage.removeItem('socialType');
+      await AsyncStorage.removeItem('auth');
+
+      dispatch({ type: CURRENTUSER, payload: {} });
+      dispatch({ type: MYPROFILE, payload: {} });
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'welcome' }],
+        }),
+      );
       console.log(
         err.response,
-        'error from _signIn',
+        'error from _logOut',
         JSON.parse(JSON.stringify(err.message)),
       );
     }
@@ -499,6 +515,12 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           var resp = await axios(option);
           if (resp.data.status === 200) {
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'drawerStack' }],
+              }),
+            );
 
           } else if (resp.data.error.messageEn == 'Invalid Credentials') {
             dispatch(_loading(false));
@@ -516,8 +538,6 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
             }
           }
           console.log(resp, 'login Succesfull');
-
-          console.log(resp, '10000');
 
           // dispatch(_loading(false));
         })
@@ -650,10 +670,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
   };
 };
 
-export const _directLogin = (
-  { Id,
-    type, },
-) => {
+export const _directLogin = ({ Id, type, }, navigation, setUser) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -678,6 +695,12 @@ export const _directLogin = (
       if (resp.data.status === 200) {
         // dispatch(_signIn({ emailOrPhone, password }, navigation));
         dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: 'drawerStack' }],
+          }),
+        );
         dispatch(_loading(false));
 
 

@@ -170,7 +170,6 @@ export const HomeDetail = ({ route, navigation }: any) => {
       <ShopDetailsContainer>
         {imageSlider.length > 0 ?
           <View style={{
-            backgroundColor: "red",
             height: Wheight - 390,
           }}>
 

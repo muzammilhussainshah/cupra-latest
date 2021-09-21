@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState } from 'react';
 
-import { View,ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Alert } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Alert } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -41,7 +41,7 @@ export const HomeScreen: React.FC = () => {
   const [getStoriesSt, setgetStoriesSt] = useState('')
 
   const [isEmptyserch, setisEmptyserch] = useState(false)
-  
+
   const [isMore, setisMore] = useState<any>(true)
 
   const [currentUserSt, setcurrentUserSt] = useState('')
@@ -69,8 +69,8 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       dispatch(_stories(currentUser, filterdBy, navigation,))
-      dispatch(_getAds(currentUser,navigation))
-      dispatch(_onlineUser(currentUser,navigation))
+      dispatch(_getAds(currentUser, navigation))
+      dispatch(_onlineUser(currentUser, navigation))
     }
     setcurrentUserSt(currentUser)
   }, [currentUser])
@@ -92,7 +92,7 @@ export const HomeScreen: React.FC = () => {
       console.log('work ifff')
 
       // _getNews(currentUser, pagination, freePotatoes)
-      dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination,setisMore))
+      dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination, setisMore))
       // setpagination(pagination + 1)
     }
     else if (paginationLoader != true && searchTxt !== "") {
@@ -105,7 +105,12 @@ export const HomeScreen: React.FC = () => {
 
   const searchUser: any = (e: any) => {
     setpagination(2)
-    dispatch(_SearchForAllThings(currentUser, e, "getNews", 10, 1, navigation))
+    if (e !== '') {
+      dispatch(_SearchForAllThings(currentUser, e, "getNews", 10, 1, navigation))
+    }
+    else if(e === ''){
+      dispatch(_stories(currentUser, filterdBy, navigation,))
+    }
 
     // let keywords = e.split(' ')
     // setsearch(keywords)
@@ -128,12 +133,12 @@ export const HomeScreen: React.FC = () => {
 
 
 
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20;
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
   };
-  
+
 
 
 
@@ -155,17 +160,17 @@ export const HomeScreen: React.FC = () => {
           size="small" color={'black'}
         /> :
         <ScrollView
-        
-        onScroll={({nativeEvent}) => {
-          if (isCloseToBottom(nativeEvent)&&isMore) {
-            loadMorePage()
-          }
-        }}
-        scrollEventThrottle={400}
-        
-        
-        
-        
+
+          onScroll={({ nativeEvent }) => {
+            if (isCloseToBottom(nativeEvent) && isMore) {
+              loadMorePage()
+            }
+          }}
+          scrollEventThrottle={400}
+
+
+
+
         >
           <UserStory data={getStories} navigation={navigation} filterdBy={filterdBy} />
           {/* adds */}
@@ -179,7 +184,7 @@ export const HomeScreen: React.FC = () => {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("webView", { link: item.external_link });
-                    dispatch(_adclick(currentUser,item._id))
+                    dispatch(_adclick(currentUser, item._id))
                   }}
                   activeOpacity={.9}
                   style={{ marginHorizontal: 5, borderRadius: 15 }}
@@ -190,6 +195,7 @@ export const HomeScreen: React.FC = () => {
                     source={{ uri: item.icon }}
                   />
                   <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text>
+                  <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '75%' }}>• • •</Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => String(index)}
@@ -286,7 +292,7 @@ export const HomeScreen: React.FC = () => {
 
             <FlatList
               data={getNewsSt}
-              contentContainerStyle={{paddingBottom:'20%'}}
+              contentContainerStyle={{ paddingBottom: '20%' }}
               // onEndReachedThreshold={0.1}
               // onEndReached={isMore&&loadMorePage}
               renderItem={({ item, index }) => (

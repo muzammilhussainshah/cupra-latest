@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform,StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Orientation from 'react-native-orientation-locker';
@@ -60,7 +60,10 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
   const onFullScreen = () => {
     if (!isFullScreen) {
       Orientation.lockToLandscape();
+      StatusBar.setHidden(true)
+
     } else {
+      StatusBar.setHidden(false)
       if (Platform.OS === 'ios') {
         Orientation.lockToPortrait();
       }
@@ -72,6 +75,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
     return () => {
       Orientation.lockToPortrait();
       setIsFullScreen(false);
+      StatusBar.setHidden(false)
     }
   }, [])
   const renderToolbar = () => (

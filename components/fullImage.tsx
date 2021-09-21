@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SliderBox } from "react-native-image-slider-box";
 
 import ImageViewer from 'react-native-image-zoom-viewer';
 
-import { PressableProps, TouchableOpacity } from 'react-native';
+import { Alert, PressableProps, TouchableOpacity } from 'react-native';
 
 import { Text, View } from 'react-native-animatable';
 
@@ -11,11 +11,16 @@ import FastImage from 'react-native-fast-image';
 
 import { Colors } from '../constants/Colors';
 
+import { _mediaView } from '../store/action/newsAction';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 export type FullImage = PressableProps & {
   _func?: Function;
   coverImage?: any;
   selectedImageIndex?: number;
   sliderBoxEnabled?: boolean;
+  media?: any;
 };
 
 /**
@@ -23,10 +28,25 @@ export type FullImage = PressableProps & {
  *
  * @param props {@link PressableProps}
  */
-export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex, sliderBoxEnabled }: any) => {
+export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImage, selectedImageIndex, sliderBoxEnabled,media }: any) => {
   let type = typeof (coverImage)
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const dispatch = useDispatch()
 
-  console.log(coverImage, coverImage[selectedImageIndex], ' coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex]')
+  useEffect(() => {
+    mediaView(selectedImageIndex)
+  }, [])
+
+
+
+  const mediaView = ((selectedImageIndex:any) => {
+    dispatch(_mediaView(currentUser,media[selectedImageIndex]._id))
+    // console.log(media[selectedImageIndex],'@mediamedia',selectedImageIndex)
+
+  })
+
+
+  console.log(coverImage, coverImage[selectedImageIndex], ' aaa[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex] coverImage[selectedImageIndex]')
   return (
 
     <View
@@ -43,7 +63,9 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
         {sliderBoxEnabled ?
           <ImageViewer
             saveToLocalByLongPress={false}
-
+            onChange={(index: any) => {
+              mediaView(index)
+            }}
             index={selectedImageIndex} imageUrls={coverImage} />
           :
           <ImageViewer

@@ -339,6 +339,47 @@ export const _adclick = (currentUser,_id) => {
     }
 }
 
+export const _mediaView = (currentUser,_id) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        try {
+            const option = {
+                method: 'POST',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/media-view?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "media": _id,
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+
+            console.log(resp, 'resp _mediaView', )
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _mediaView", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
 
 
 

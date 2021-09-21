@@ -91,7 +91,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 20, top: 20 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
-      <View style={{ width: "95%", height: 160, borderRadius: 14 }}>
+      <View style={{  width: "100%", height:"100%", borderRadius: 14 }}>
 
       <Video
         onEnd={onEnd}
@@ -101,7 +101,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
         paused={paused}
         ref={videoPlayer}
         // resizeMode={screenType}
-        resizeMode={"cover"}
+        resizeMode={"contain"}
         // onFullScreen={isFullScreen}
         source={{
           uri:

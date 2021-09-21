@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT, PAGINATIONLOADER ,ADS} from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT, PAGINATIONLOADER, ADS } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -201,7 +201,7 @@ export const _stories = (currentUser, filterd_by, navigation) => {
 }
 
 
-export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable, getNews, setpagination) => {
+export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable, getNews, setpagination, setisMore) => {
     return async (dispatch) => {
         dispatch({ type: PAGINATIONLOADER, payload: true, });
         const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -231,6 +231,7 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
                 else {
                     dispatch({ type: GETNEWS, payload: resp.data.data })
                 }
+                resp.data.data.length === 0 && setisMore(false)
                 dispatch(_loading(false));
                 dispatch({ type: PAGINATIONLOADER, payload: false, });
 
@@ -259,7 +260,7 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
 }
 
 
-export const _getAds = (currentUser,navigation) => {
+export const _getAds = (currentUser, navigation) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -276,7 +277,7 @@ export const _getAds = (currentUser,navigation) => {
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                dispatch({ type: ADS, payload: resp.data.data  });
+                dispatch({ type: ADS, payload: resp.data.data });
 
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
@@ -290,7 +291,7 @@ export const _getAds = (currentUser,navigation) => {
                 );
             }
 
-            console.log(resp, 'resp _getAds', )
+            console.log(resp, 'resp _getAds',)
         }
         catch (err) {
             dispatch(_loading(false));
@@ -298,7 +299,7 @@ export const _getAds = (currentUser,navigation) => {
         }
     }
 }
-export const _adclick = (currentUser,_id) => {
+export const _adclick = (currentUser, _id) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -330,7 +331,7 @@ export const _adclick = (currentUser,_id) => {
                 );
             }
 
-            console.log(resp, 'resp _adclick', )
+            console.log(resp, 'resp _adclick',)
         }
         catch (err) {
             dispatch(_loading(false));
@@ -339,7 +340,7 @@ export const _adclick = (currentUser,_id) => {
     }
 }
 
-export const _mediaView = (currentUser,_id) => {
+export const _mediaView = (currentUser, _id) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -371,7 +372,7 @@ export const _mediaView = (currentUser,_id) => {
                 );
             }
 
-            console.log(resp, 'resp _mediaView', )
+            console.log(resp, 'resp _mediaView',)
         }
         catch (err) {
             dispatch(_loading(false));

@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState } from 'react';
 
-import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import { View,ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Alert } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -21,7 +21,6 @@ import { _onlineUser } from '../../store/action/authAction'
 import { useDispatch, useSelector } from 'react-redux';
 
 import InfiniteScroll from 'react-native-infinite-scroll';
-import { ScrollView } from 'react-native-gesture-handler';
 
 import FastImage from 'react-native-fast-image';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
@@ -42,6 +41,8 @@ export const HomeScreen: React.FC = () => {
   const [getStoriesSt, setgetStoriesSt] = useState('')
 
   const [isEmptyserch, setisEmptyserch] = useState(false)
+  
+  const [isMore, setisMore] = useState<any>(true)
 
   const [currentUserSt, setcurrentUserSt] = useState('')
 
@@ -88,8 +89,10 @@ export const HomeScreen: React.FC = () => {
 
   const loadMorePage = () => {
     if (paginationLoader != true && searchTxt === "") {
+      console.log('work ifff')
+
       // _getNews(currentUser, pagination, freePotatoes)
-      dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination))
+      dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination,setisMore))
       // setpagination(pagination + 1)
     }
     else if (paginationLoader != true && searchTxt !== "") {
@@ -123,6 +126,17 @@ export const HomeScreen: React.FC = () => {
 
   }
 
+
+
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+  };
+  
+
+
+
   return (
     < Container >
       <Header
@@ -140,7 +154,19 @@ export const HomeScreen: React.FC = () => {
           style={{ marginTop: "50%" }}
           size="small" color={'black'}
         /> :
-        <>
+        <ScrollView
+        
+        onScroll={({nativeEvent}) => {
+          if (isCloseToBottom(nativeEvent)&&isMore) {
+            loadMorePage()
+          }
+        }}
+        scrollEventThrottle={400}
+        
+        
+        
+        
+        >
           <UserStory data={getStories} navigation={navigation} filterdBy={filterdBy} />
           {/* adds */}
           <View style={{ width: '90%', alignSelf: 'center', marginTop: '2%' }}>
@@ -257,10 +283,12 @@ export const HomeScreen: React.FC = () => {
 
 
           {getNewsSt.length > 0 &&
+
             <FlatList
               data={getNewsSt}
-              onEndReachedThreshold={0.4}
-              onEndReached={loadMorePage}
+              contentContainerStyle={{paddingBottom:'20%'}}
+              // onEndReachedThreshold={0.1}
+              // onEndReached={isMore&&loadMorePage}
               renderItem={({ item, index }) => (
                 <CardView
                   navigation={navigation}
@@ -279,13 +307,14 @@ export const HomeScreen: React.FC = () => {
               )}
               keyExtractor={(item, index) => String(index)}
             />
+
           }
           {
             (paginationLoader === true) ? (
               <View style={{
                 justifyContent: 'center',
                 alignItems: "center",
-                marginBottom: 50,
+                marginBottom: 100,
                 // marginTop: 20,
               }}>
                 <ActivityIndicator size="small" color={'black'} />
@@ -295,7 +324,7 @@ export const HomeScreen: React.FC = () => {
           {/* </InfiniteScroll> */}
           {/* </Body> */}
 
-        </>
+        </ScrollView>
       }
     </Container >
   );

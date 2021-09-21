@@ -128,7 +128,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
         }
       </LogoContainer>
       {searchBarInput &&
-        <View style={{ height: "100%", width: "100%", left: 16, position: 'absolute' }}>
+        <View style={{ width: "100%", left: 16,top:15, position: 'absolute' }}>
           <View style={{ height: "50%", top: "18%", alignItems: "center", flexDirection: "row" }}>
             <IconPlaceholder
               style={{ justifyContent: "center", width: "90%", flexDirection: 'row', overflow: "hidden" }}

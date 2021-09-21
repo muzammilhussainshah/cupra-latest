@@ -88,14 +88,14 @@ export const ImagesScreen: React.FC = () => {
         <ImageTitle>Images</ImageTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />
       </ImageTitleWrapper>
-      <InfiniteScroll
+      {/* <InfiniteScroll
         style={{}}
         contentContainerStyle={{ paddingBottom: 130 }}
 
         showsHorizontalScrollIndicator={false}
         horizontal={false}
         onLoadMoreAsync={loadMorePage}
-      >
+      > */}
         {isLoader ?
           <ActivityIndicator
             style={{ marginTop: "50%" }}
@@ -110,6 +110,10 @@ export const ImagesScreen: React.FC = () => {
             showsVerticalScrollIndicator={false}
             // keyExtractor={item => item.id}
             data={imagesArr && imagesArr}
+            onEndReachedThreshold={0.4}
+            onEndReached={loadMorePage}
+
+
             renderItem={({ item, index }: any) => (
               <>
                 < ImageTile
@@ -129,14 +133,15 @@ export const ImagesScreen: React.FC = () => {
             <View style={{
               justifyContent: 'center',
               alignItems: "center",
-              // marginBottom: 20,
-              // marginTop: 20,
+              marginBottom: 50,
+              // marginTop: 50,
             }}>
               <ActivityIndicator size="small" color={'black'} />
+              {/* <ActivityIndicator size="large" color={'black'} /> */}
             </View>
           ) : null
         }
-      </InfiniteScroll>
+      {/* </InfiniteScroll> */}
 
 
     </ImagesContainer>

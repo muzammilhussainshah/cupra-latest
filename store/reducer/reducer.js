@@ -2,7 +2,8 @@ import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
   NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,
-  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, GETCOUNTRY
+  GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, 
+  GETCOUNTRY,ADS
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -35,6 +36,7 @@ const INITIAL_STATE = {
   notification: {},
   companyReviews: {},
   country: {},
+  ads: {},
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -183,6 +185,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         country: action.payload,
+      };
+    case ADS:
+      return {
+        ...state,
+        ads: action.payload,
       };
     default:
       return state;

@@ -59,7 +59,7 @@ export const VideosUri = ({ route, navigation, }: any) => {
         <View style={{ height: "80%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: '#18191d', borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
           <ImageTitleWrapper>
             <Text style={{
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 20,
               fontFamily: 'SourceSansPro-Regular'
             }}

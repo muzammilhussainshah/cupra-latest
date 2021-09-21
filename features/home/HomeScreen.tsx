@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState } from 'react';
 
-import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -12,21 +12,28 @@ import { Container, CardView } from './HomeStyled';
 
 import { UserStory } from './userStory/UserStory';
 
-import { _getAdds, _getNews, _storiesList, _stories } from '../../store/action/newsAction'
+import { _getAdds, _getNews, _storiesList, _stories, _getAds, _adclick } from '../../store/action/newsAction'
 
 import { _SearchForAllThings } from '../../store/action/action'
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import InfiniteScroll from 'react-native-infinite-scroll';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import FastImage from 'react-native-fast-image';
+import { colors } from 'react-native-swiper-flatlist/src/themes';
+
+const { width, height } = Dimensions.get("window");
 
 export type HomeScreenTypeProp = {
   title: string;
 };
 export const HomeScreen: React.FC = () => {
-  const [filterdBy, setfilterdBy] = useState('MINE')
+  // const [filterdBy, setfilterdBy] = useState('MINE')
+  const [filterdBy, setfilterdBy] = useState('LATEST')
 
-  const [getNewsSt, setgetNewsSt] = useState('')
+  const [getNewsSt, setgetNewsSt]: any = useState('')
 
   const [searchTxt, setsearchTxt] = useState('')
 
@@ -50,13 +57,16 @@ export const HomeScreen: React.FC = () => {
 
   const getNews = useSelector((state: any) => state.reducer.getNews)
 
-  const navigation = useNavigation();
+  const ads = useSelector((state: any) => state.reducer.ads)
+
+  const navigation: any = useNavigation();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       dispatch(_stories(currentUser, filterdBy, navigation,))
+      dispatch(_getAds(currentUser,))
     }
     setcurrentUserSt(currentUser)
   }, [currentUser])
@@ -120,8 +130,8 @@ export const HomeScreen: React.FC = () => {
         }}
         searchBarInput={true}
         notiScreen={() => navigation.navigate('notification')}
-        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
-      />
+        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+
       {isLoader ?
         <ActivityIndicator
           style={{ marginTop: "50%" }}
@@ -129,7 +139,39 @@ export const HomeScreen: React.FC = () => {
         /> :
         <>
           <UserStory data={getStories} navigation={navigation} filterdBy={filterdBy} />
-          <View
+          {/* adds */}
+          <View style={{ width: '90%', alignSelf: 'center', marginTop: '2%' }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={ads}
+              style={{}}
+              horizontal
+              renderItem={({ item, index }) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("webView", { link: item.external_link });
+                    dispatch(_adclick(currentUser,item._id))
+                  }}
+                  activeOpacity={.9}
+                  style={{ marginHorizontal: 5, borderRadius: 15 }}
+                >
+                  <FastImage
+                    style={{ width: width / 1.16, height: height / 5, borderRadius: 15 }}
+                    resizeMode={FastImage.resizeMode.stretch}
+                    source={{ uri: item.icon }}
+                  />
+                  <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => String(index)}
+            />
+            <View  >
+              <Text style={{ color: 'black', fontSize: 17, marginVertical: '2%' }}>Latest News</Text>
+            </View>
+          </View>
+
+
+          {/* <View
             style={{
               justifyContent: 'space-around',
               flexDirection: 'row',
@@ -178,20 +220,20 @@ export const HomeScreen: React.FC = () => {
                 <View style={{ height: 3, backgroundColor: 'black', width: 20 }} />
               }
             </TouchableOpacity>
-          </View>
-          <InfiniteScroll
+          </View> */}
+          {/* <InfiniteScroll
             style={{}}
             contentContainerStyle={{ paddingBottom: 130 }}
 
             showsHorizontalScrollIndicator={false}
             horizontal={false}
             onLoadMoreAsync={loadMorePage}
-          >
-            {/* <Body> */}
-            {getNewsSt.length > 0 &&
-              <FlatList
-                data={getNewsSt}
-                renderItem={({ item, index }) => (
+          > */}
+          {/* <Body> */}
+
+          {/* {getNewsSt.length > 0 &&
+              getNewsSt.map((item: any, index: any) => {
+                return (
                   <CardView
                     navigation={navigation}
                     icon={item.icon}
@@ -206,23 +248,48 @@ export const HomeScreen: React.FC = () => {
                     filterdBy={filterdBy}
                     onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy, likedByMe: item.likedByMe, index })}
                   />
-                )}
-                keyExtractor={(item, index) => String(index)}
-              />
-            }
-            {
-              (paginationLoader === true) ? (
-                <View style={{
-                  justifyContent: 'center',
-                  alignItems: "center",
-                  // marginBottom: 20,
-                  // marginTop: 20,
-                }}>
-                  <ActivityIndicator size="small" color={'black'} />
-                </View>
-              ) : null
-            }
-          </InfiniteScroll>
+                )
+              })
+            } */}
+
+
+          {getNewsSt.length > 0 &&
+            <FlatList
+              data={getNewsSt}
+              onEndReachedThreshold={0.4}
+              onEndReached={loadMorePage}
+              renderItem={({ item, index }) => (
+                <CardView
+                  navigation={navigation}
+                  icon={item.icon}
+                  likedByMe={item.likedByMe}
+                  likes_count={item.likes_count}
+                  name={item.en_header}
+                  disc={item.en_desc}
+                  index={index}
+                  commentCount={item.comments_count}
+                  postTime={item.createdAt}
+                  _id={item._id}
+                  filterdBy={filterdBy}
+                  onPress={() => navigation.push("HomeDetail", { newsId: item._id, noOfLikes: item.likes_count, filterdBy: filterdBy, likedByMe: item.likedByMe, index })}
+                />
+              )}
+              keyExtractor={(item, index) => String(index)}
+            />
+          }
+          {
+            (paginationLoader === true) ? (
+              <View style={{
+                justifyContent: 'center',
+                alignItems: "center",
+                marginBottom: 50,
+                // marginTop: 20,
+              }}>
+                <ActivityIndicator size="small" color={'black'} />
+              </View>
+            ) : null
+          }
+          {/* </InfiniteScroll> */}
           {/* </Body> */}
 
         </>

@@ -4,8 +4,9 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { Button, ButtonsContainer, ButtonText } from '../../components/Button';
 import { height } from '../../constants/Layout';
-import { _signIn,_directLogin } from '../../store/action/authAction';
+import { _signIn, _directLogin } from '../../store/action/authAction';
 import { useDispatch } from 'react-redux';
+import { SpashScreen } from '../../components/SplashScreen';
 import {
   BackGroundContinerImage,
   WelcomeTitle,
@@ -16,10 +17,11 @@ import {
   Label,
   SocialMedia,
 } from './styled';
+import { Text } from 'react-native-animatable';
 // TODO:Refactor the GradientBanckground to make reusable component that take
 // a different height and width
 export const WelcomeScreen: React.FC = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -36,7 +38,7 @@ export const WelcomeScreen: React.FC = () => {
 
     if (getEmail && getEmail !== 'null') {
 
-      dispatch(_signIn({ emailOrPhone: getEmail, password: password},navigation,setUser));
+      dispatch(_signIn({ emailOrPhone: getEmail, password: password }, navigation, setUser));
 
       // navigation.dispatch(
       //   CommonActions.reset({
@@ -47,7 +49,7 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Facebook') {
-      dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' },navigation,setUser));
+      dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' }, navigation, setUser));
       // navigation.dispatch(
       //   CommonActions.reset({
       //     index: 1,
@@ -57,8 +59,8 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Google') {
-      dispatch(_directLogin({ Id: getsocialId, type: 'GOOGLE' },navigation,setUser));
-     
+      dispatch(_directLogin({ Id: getsocialId, type: 'GOOGLE' }, navigation, setUser));
+
       // navigation.dispatch(
       //   CommonActions.reset({
       //     index: 1,
@@ -75,7 +77,7 @@ export const WelcomeScreen: React.FC = () => {
   };
 
   return (
-    user === false && (
+    user === false ? (
       <BackGroundContinerImage
         resizeMode={FastImage.resizeMode.cover}
         source={require('../../assets/backgroundImage.png')}>
@@ -126,6 +128,7 @@ export const WelcomeScreen: React.FC = () => {
           <SocialMedia />
         </GradientBanckground>
       </BackGroundContinerImage>
-    )
+    ) :
+      <SpashScreen /> 
   );
 };

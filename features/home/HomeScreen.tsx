@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState } from 'react';
 
-import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Alert } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -183,7 +183,16 @@ export const HomeScreen: React.FC = () => {
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("webView", { link: item.external_link });
+                    // navigation.navigate("webView", { link: item.external_link });
+                      Linking.canOpenURL(item.external_link).then(supported => {
+                        if (supported) {
+                          Linking.openURL(item.external_link);
+                        } else {
+                          console.log("Don't know how to open URI: " + item.external_link);
+                        }
+                      });
+
+
                     dispatch(_adclick(currentUser, item._id))
                   }}
                   activeOpacity={.9}

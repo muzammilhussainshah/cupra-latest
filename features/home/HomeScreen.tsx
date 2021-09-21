@@ -1,6 +1,6 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking } from 'react-native';
 
@@ -21,6 +21,7 @@ import { _onlineUser } from '../../store/action/authAction'
 import { useDispatch, useSelector } from 'react-redux';
 
 import InfiniteScroll from 'react-native-infinite-scroll';
+import Video from 'react-native-video';
 
 import FastImage from 'react-native-fast-image';
 import { colors } from 'react-native-swiper-flatlist/src/themes';
@@ -65,6 +66,7 @@ export const HomeScreen: React.FC = () => {
   const navigation: any = useNavigation();
 
   const dispatch = useDispatch();
+  const videoPlayer = useRef(null);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
@@ -108,7 +110,7 @@ export const HomeScreen: React.FC = () => {
     if (e !== '') {
       dispatch(_SearchForAllThings(currentUser, e, "getNews", 10, 1, navigation))
     }
-    else if(e === ''){
+    else if (e === '') {
       dispatch(_stories(currentUser, filterdBy, navigation,))
     }
 
@@ -184,25 +186,44 @@ export const HomeScreen: React.FC = () => {
                 <TouchableOpacity
                   onPress={() => {
                     // navigation.navigate("webView", { link: item.external_link });
-                      Linking.canOpenURL(item.external_link).then(supported => {
-                        if (supported) {
-                          Linking.openURL(item.external_link);
-                        } else {
-                          console.log("Don't know how to open URI: " + item.external_link);
-                        }
-                      });
-
+                    Linking.canOpenURL(item.external_link).then(supported => {
+                      if (supported) {
+                        Linking.openURL(item.external_link);
+                      } else {
+                        console.log("Don't know how to open URI: " + item.external_link);
+                      }
+                    });
 
                     dispatch(_adclick(currentUser, item._id))
                   }}
-                  activeOpacity={.9}
-                  style={{ marginHorizontal: 5, borderRadius: 15 }}
+                  activeOpacity={.7}
+                  style={{ marginHorizontal: 5 ,width: 360, height: 160,}}
                 >
-                  <FastImage
-                    style={{ width: width / 1.16, height: height / 5, borderRadius: 15 }}
-                    resizeMode={FastImage.resizeMode.stretch}
-                    source={{ uri: item.icon }}
-                  />
+                  {item.media_type === "VIDEO" ?
+
+                    <Video source={{ uri: item.icon }}   // Can be a URL or a local file.
+                      ref={videoPlayer}
+                      // Store reference
+                      // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                      // onError={this.videoError}               // Callback when video cannot be loaded
+                      resizeMode="cover"
+                      repeat={true}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                      }} />
+                    :
+
+
+                    <FastImage
+                      style={{ width: width / 1.16, height: height / 5, }}
+                      resizeMode={FastImage.resizeMode.stretch}
+                      source={{ uri: item.icon }}
+                    />
+                  }
                   <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text>
                   <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '75%' }}>• • •</Text>
                 </TouchableOpacity>

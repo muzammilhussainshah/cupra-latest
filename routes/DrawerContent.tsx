@@ -128,7 +128,7 @@ export const DrawerContent: React.FC = (props: any) => {
                   color={Colors.white}
                 />
               )}
-              label="Clamis"
+              label="Feedback"
               labelStyle={{
                 color: 'white',
                 fontSize: 16,

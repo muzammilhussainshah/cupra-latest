@@ -111,10 +111,11 @@ export const VideoScreen: React.FC = () => {
               style={{ flex: 1 }}
               data={item1.item.media}
               renderItem={item2 => {
-                console.log(item1.item.en_desc, 'VideoTileVideoTile')
+                console.log(item1.item, 'VideoTileVideoTile')
                 return (
                   <VideoTile
                     VideoImage={item2.item.url}
+                    _id={item2.item._id}
                     likes={item2.item.likesCount}
                     getDate={item2.item.createdAt}
                     mediaId={item2.item._id}
@@ -124,6 +125,7 @@ export const VideoScreen: React.FC = () => {
                     onPress={() =>
                       navigation.navigate('videoPlay', {
                         videoURL: item2.item.url,
+                        _id:item2.item._id
                       })
                     }
                   />

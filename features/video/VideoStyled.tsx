@@ -81,10 +81,11 @@ export type IVideoTypeProp = {
   mediaId?: any;
   getDate?: any;
   likedByMe?: boolean;
+  _id?: any;
   onPress?: () => void;
   en_header?: () => any;
 };
-export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate, mediaId, likedByMe, navigation, onPress, en_header }: any) => {
+export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate, mediaId, likedByMe, navigation, onPress, en_header,_id }: any) => {
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 

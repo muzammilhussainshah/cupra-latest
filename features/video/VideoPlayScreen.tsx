@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform, Alert } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Orientation from 'react-native-orientation-locker';
+import { useDispatch, useSelector } from 'react-redux';
+import { _mediaView } from '../../store/action/newsAction';
 
 // TODO:use TYPES HERE 
 export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
-  const { videoURL } = route.params;
+  const { videoURL,_id } = route.params;
   const videoPlayer = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -17,6 +19,8 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
     playerState, setPlayerState
   ] = useState(PLAYER_STATES.PLAYING);
   const [screenType, setScreenType] = useState<string>('content');
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const dispatch = useDispatch()
 
   const onSeek = (seek: any) => {
     //Handler for change in seekbar
@@ -45,9 +49,12 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
   const onLoad = (data: any) => {
     setDuration(data.duration);
     setIsLoading(false);
+    dispatch(_mediaView(currentUser,_id))
   };
 
-  const onLoadStart = () => setIsLoading(true);
+  const onLoadStart = () => {
+    setIsLoading(true)
+  };
 
   const onEnd = () => setPlayerState(PLAYER_STATES.ENDED);
 

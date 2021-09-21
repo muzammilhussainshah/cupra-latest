@@ -96,7 +96,8 @@ export const Header: React.FC<IHeaderTypeProp> = ({
           <IconPlaceholder onPress={onOpenDrawer} activeOpacity={0.6}>
             <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
-              source={require('../assets/images/steering.png')}
+              source={require('../assets/images/menu.png')}
+              // source={require('../assets/images/steering.png')}
             />
           </IconPlaceholder>
         )}

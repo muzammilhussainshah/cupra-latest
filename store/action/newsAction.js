@@ -259,7 +259,7 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
 }
 
 
-export const _getAds = (currentUser,) => {
+export const _getAds = (currentUser,navigation) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');

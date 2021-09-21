@@ -12,9 +12,11 @@ import { Container, CardView } from './HomeStyled';
 
 import { UserStory } from './userStory/UserStory';
 
-import { _getAdds, _getNews, _storiesList, _stories, _getAds, _adclick } from '../../store/action/newsAction'
+import { _getAdds, _getNews, _storiesList, _stories, _getAds, _adclick, } from '../../store/action/newsAction'
 
 import { _SearchForAllThings } from '../../store/action/action'
+
+import { _onlineUser } from '../../store/action/authAction'
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -66,7 +68,8 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       dispatch(_stories(currentUser, filterdBy, navigation,))
-      dispatch(_getAds(currentUser,))
+      dispatch(_getAds(currentUser,navigation))
+      dispatch(_onlineUser(currentUser,navigation))
     }
     setcurrentUserSt(currentUser)
   }, [currentUser])

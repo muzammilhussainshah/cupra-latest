@@ -161,7 +161,9 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                     setlikeByMe(arrOfSliderImagesData && arrOfSliderImagesData[index] && arrOfSliderImagesData[index].likedByMe)
                     setrenderImgIndex(index)
                   }}
-                  enableImageZoom={false} onClick={() =>
+
+                  enableImageZoom={false}
+                  onClick={() =>
                     navigation.navigate('showImage', { imageURL: { uri: imageUri }, renderImgIndex, arrOfSliderImagesPath, imgScreen: true, allData: arrOfSliderImagesData, likes: allData.media[renderImgIndex].likesCount, getNewsImages, indexOfNewsMainImages })
 
                   } imageUrls={arrOfSliderImagesPath} />

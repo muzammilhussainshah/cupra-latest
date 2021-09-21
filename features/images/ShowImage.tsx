@@ -6,6 +6,7 @@ import { height, width } from '../../constants/Layout';
 import { _imageNewsLike } from '../../store/action/imageAction'
 import { SliderBox } from "react-native-image-slider-box";
 import ImageViewer from 'react-native-image-zoom-viewer';
+import {_mediaView} from '../../store/action/newsAction';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
@@ -36,6 +37,7 @@ export const ShowImage = ({ route, navigation }: any) => {
 
   }]
   useEffect(() => {
+    mediaView(renderImgIndexFullImg)
     setimageLikes(allData && allData[renderImgIndexFullImg] && allData[renderImgIndexFullImg].likesCount)
     setlikeByMe(allData && allData[renderImgIndexFullImg] && allData[renderImgIndexFullImg].likedByMe)
   }, [])
@@ -49,6 +51,12 @@ export const ShowImage = ({ route, navigation }: any) => {
     //   }
     // }
   }
+
+const mediaView=(renderImgIndexFullImg:any)=>{
+  dispatch(_mediaView(currentUser,getNewsImagesStore[indexOfNewsMainImages].media[renderImgIndexFullImg]._id))
+}
+
+
 console.log(indexOfNewsMainImages,renderImgIndex,"renderImgIndexrenderImgIndexrenderImgIndexrenderImgIndex",renderImgIndexFullImg)
   return (
     <>
@@ -112,6 +120,7 @@ console.log(indexOfNewsMainImages,renderImgIndex,"renderImgIndexrenderImgIndexre
                 setimageLikes(allData && allData[index] && allData[index].likesCount)
                 setlikeByMe(allData && allData[index] && allData[index].likedByMe)
                 setrenderImgIndexFullImg(index)
+                mediaView(index)
               }}
 
               index={renderImgIndex} imageUrls={arrOfSliderImagesPath} />

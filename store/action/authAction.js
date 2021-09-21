@@ -157,6 +157,8 @@ export const _signIn = ({ emailOrPhone, password }, navigation, setUser) => {
         },
       };
       var resp = await axios(option);
+  console.log(resp, 'resp _signIn')
+
       if (resp.data.status === 200) {
         console.log(resp.data.status, 'resp.data.status resp.data.status ');
         dispatch({ type: CURRENTUSER, payload: resp.data.data.data });

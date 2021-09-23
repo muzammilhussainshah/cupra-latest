@@ -224,8 +224,8 @@ export const HomeScreen: React.FC = () => {
                       source={{ uri: item.icon }}
                     />
                   }
-                  <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text>
-                  <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '75%' }}>• • •</Text>
+                  {/* <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text> */}
+                  <Text style={{ position: 'absolute',  fontSize: 17, color: colors.white, alignSelf: 'center', top: '75%' }}>{index+1+'/'+ads.length}</Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => String(index)}

@@ -175,7 +175,7 @@ export const ResetPasswordScreen: React.FC = () => {
           signupNavigate={() => navigation.navigate('signup')}
           forgetPasswordNavigate={() => { }}
           forgetPassword={'Forget your password?'}
-          signup={'Don’t have an acceount ? Sign up'}
+          signup={'Don’t have an account ? Sign up'}
         />
       </ScrollView>
     </Container>

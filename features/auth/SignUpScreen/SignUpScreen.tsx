@@ -194,7 +194,7 @@ export const SignUpScreen: React.FC = () => {
           />
           <Row>
             <CheckBox />
-            <Title>Yes ! Agree all Teams & Condition</Title>
+            <Title>Yes ! Agree all Terms & Condition</Title>
           </Row>
           {isLoader ?
             <ActivityIndicator

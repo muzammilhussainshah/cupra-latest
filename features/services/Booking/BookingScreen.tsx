@@ -52,7 +52,7 @@ interface IBookingProp {
 const Services = ['service2', 'Nano Ceramic', 'service3'];
 
 export const BookingScreen: React.FC = ({ route }: any) => {
-  const { serviceId, subserviceId } = route.params
+  const { serviceId, subserviceId,serviceName } = route.params
   
   const [openModal, setopenModal] = useState(false);
 
@@ -211,6 +211,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
               required: 'service  is required.',
             }}
           /> */}
+            <Title>You are booking : {serviceName}</Title>
             <Title>Name</Title>
             <FormTextField
               name="name"

@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState, useRef } from 'react';
 
-import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking, Alert } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -40,6 +40,8 @@ export const HomeScreen: React.FC = () => {
   const [searchTxt, setsearchTxt] = useState('')
 
   const [getStoriesSt, setgetStoriesSt] = useState('')
+
+  const [isHome, setisHome] = useState(true)
 
   const [isEmptyserch, setisEmptyserch] = useState(false)
 
@@ -80,6 +82,22 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     setgetNewsSt(getNews)
   }, [getNews, currentUser])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setisHome(false)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setisHome(true)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
@@ -197,9 +215,9 @@ export const HomeScreen: React.FC = () => {
                     dispatch(_adclick(currentUser, item._id))
                   }}
                   activeOpacity={.7}
-                  style={{ marginHorizontal: 5 ,width: 360, height: 160,}}
+                  style={{ marginHorizontal: 5, width: 360, height: 160, }}
                 >
-                  {item.media_type === "VIDEO" ?
+                  {item.media_type === "VIDEO" && isHome ?
 
                     <Video source={{ uri: item.icon }}   // Can be a URL or a local file.
                       ref={videoPlayer}
@@ -225,7 +243,7 @@ export const HomeScreen: React.FC = () => {
                     />
                   }
                   {/* <Text style={{ position: 'absolute', color: colors.white, fontSize: 25, alignSelf: 'center', top: '45%' }}>Advertisement Banner</Text> */}
-                  <Text style={{ position: 'absolute',  fontSize: 17, color: colors.white, alignSelf: 'center', top: '75%' }}>{index+1+'/'+ads.length}</Text>
+                  <Text style={{ position: 'absolute', fontSize: 17, color: colors.white, alignSelf: 'center', top: '75%' }}>{index + 1 + '/' + ads.length}</Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => String(index)}

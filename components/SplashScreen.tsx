@@ -66,7 +66,7 @@ export const SpashScreen: React.FC<any> = ({
       />
       <Animated.Image
         style={{ transform: [{ rotate: spin }], position: 'absolute', width: 100, height: 100, alignSelf: 'center', top: '50%' }}
-        source={require('../assets/images/steering.png')}
+        source={require('../assets/images/st.png')}
       />
     </BackgroundContiner>
   );

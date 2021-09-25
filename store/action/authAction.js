@@ -83,8 +83,14 @@ export const _onlineUser = (currentUser, navigation) => {
     }
   };
 };
-export const _signUp = (model, navigation) => {
-  console.log(model, 'model');
+export const _signUp = (model, navigation, country) => {
+  console.log(model, 'model', model.country_number + model.phone_number);
+
+  const countryId = country.find(x => x.country_phone_code === model.country_number)
+  let phone_numberWithout0 = model.phone_number;
+  if (model.phone_number[0] === '0') phone_numberWithout0 = phone_numberWithout0.substring(1);
+
+  console.log('country id', countryId._id)
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -102,17 +108,18 @@ export const _signUp = (model, navigation) => {
         },
         data: {
           full_name: model.name,
-          mobile: `${model.country_number}${model.phone_number}`,
+          mobile: `${model.country_number}${phone_numberWithout0}`,
           email: model.email,
           // country: 'Pakistan',
-          country: '60930f6ecb8d330015688090',
+          country: countryId._id,
+          // country: '60930f6ecb8d330015688090',
           password: model.password,
           confirmPassword: model.confirm_password,
         },
       };
       var resp = await axios(option);
       if (resp.data.status === 200) {
-        dispatch(_resendCode(`${model.country_number}${model.phone_number}`));
+        // dispatch(_resendCode(`${model.country_number}${model.phone_number}`));
         navigation.navigate('otp', {
           phone_number: model.country_number?.concat(model.phone_number),
         });
@@ -157,7 +164,7 @@ export const _signIn = ({ emailOrPhone, password }, navigation, setUser) => {
         },
       };
       var resp = await axios(option);
-  console.log(resp, 'resp _signIn')
+      console.log(resp, 'resp _signIn')
 
       if (resp.data.status === 200) {
         console.log(resp.data.status, 'resp.data.status resp.data.status ');

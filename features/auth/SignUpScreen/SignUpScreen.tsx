@@ -46,6 +46,7 @@ export interface SignUpProp {
   email?: string;
   confirm_password?: string;
   country_number?: string;
+  country_numberId?: string;
 }
 export interface DeviceTokenProp {
   device_token?: string;
@@ -69,6 +70,7 @@ export const SignUpScreen: React.FC = () => {
       password: '',
       confirm_password: '',
       country_number: '00962',
+      // country_numberId: '60930f6ecb8d330015688090',
     },
   });
   function onSubmit(model: SignUpProp) {
@@ -76,7 +78,7 @@ export const SignUpScreen: React.FC = () => {
     // navigation.navigate('otp', {
     //   phone_number: model.country_number?.concat(model.phone_number),
     // });
-    dispatch(_signUp(model, navigation))
+    dispatch(_signUp(model, navigation,country))
     // console.log(model, 'aaa', model.country_number?.concat(model.phone_number));
   }
   const dispatch = useDispatch();
@@ -88,7 +90,8 @@ export const SignUpScreen: React.FC = () => {
     // setgetcountry(country)
     console.log(country, 'country')
     country && country.length > 0 && country.map((value: any) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+      localCodeArr.push( value.country_phone_code.toString())
+      // localCodeArr.push('00' + value.country_phone_code.toString())
     })
     setgetcountry(localCodeArr)
     // console.log(localCodeArr, '444444444')
@@ -141,7 +144,7 @@ export const SignUpScreen: React.FC = () => {
             style={{ marginBottom: 15 }}
             keyboardType="default"
             rules={{
-              required: 'email is required.',
+              // required: 'email is required.',
               pattern: {
                 value: isEmail,
                 message: 'invalid email',

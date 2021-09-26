@@ -58,7 +58,7 @@ export const LoginScreen: React.FC = () => {
     // setgetcountry(country)
     console.log(country, 'country')
     country && country.length > 0 && country.map((value:any ) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+      localCodeArr.push( value.country_phone_code.toString())
     })
     setgetcountry(localCodeArr)
     // console.log(localCodeArr, '444444444')

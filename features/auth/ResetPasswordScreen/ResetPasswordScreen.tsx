@@ -63,7 +63,7 @@ export const ResetPasswordScreen: React.FC = () => {
   useEffect(() => {
     console.log(country, 'country')
     country && country.length > 0 && country.map((value: any) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+      localCodeArr.push( value.country_phone_code.toString())
     })
     setgetcountryr(localCodeArr)
   }, [country])
@@ -80,7 +80,12 @@ export const ResetPasswordScreen: React.FC = () => {
   function onSubmit(model: IPhoneNumberProp) {
     console.warn('form submitted', model);
     let phoneNmbr: string;
-    phoneNmbr = model.country_number + model.phone_number
+
+    let phone_numberWithout0 = model.phone_number;
+    if (model.phone_number[0] === '0') phone_numberWithout0 = phone_numberWithout0.substring(1);
+
+
+    phoneNmbr = model.country_number + phone_numberWithout0
     if (getCompleteSignUp) {
       // dispatch(_resendCode(phoneNmbr))
       // navigation.navigate('otp', {
@@ -93,7 +98,8 @@ export const ResetPasswordScreen: React.FC = () => {
       //   getsocialType: getsocialType, 
       // })
       console.log(getCompleteSignUp, 'asvd')
-      dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType,));
+      dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail,  getsocialId, getsocialType,model.country_number,country));
+      // dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType,));
 
     } else {
       dispatch(_resetPasswordReq(model, navigation))

@@ -532,7 +532,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
           // let country = 'Jordan';
-          let country = '60930f6ecb8d330015688090';
+          // let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
 
@@ -644,7 +644,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '_facebookAuth login');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          let country = '60930f6ecb8d330015688090';
+          // let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'FACEBOOK';
           try {
@@ -776,19 +776,21 @@ export const _completeSignUp = (
   navigation,
   getfullName,
   getEmail,
-  getcountry,
   getsocialId,
   getsocialType,
+  country_number,
+  country
 ) => {
   // let phoneNumber = model.country_number + model.phone_number
   console.log('complete');
+  const countryId = country.find(x => x.country_phone_code === country_number)
+
 
   console.log(
     getPhonneNumber,
     navigation,
     getfullName,
     getEmail,
-    getcountry,
     getsocialId,
     getsocialType,
     '9874',
@@ -811,7 +813,8 @@ export const _completeSignUp = (
           full_name: getfullName,
           mobile: getPhonneNumber,
           email: getEmail,
-          country: getcountry,
+          // country: ,
+          country: countryId._id,
           social_id: getsocialId,
           social_type: getsocialType,
         },

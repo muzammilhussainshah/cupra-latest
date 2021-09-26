@@ -39,8 +39,8 @@ var spinValue = new Animated.Value(0);
 Animated.timing(
   spinValue,
   {
-    toValue: 5,
-    duration: 6000,
+    toValue: 20,
+    duration: 35000,
     easing: Easing.linear, // Easing is an additional import from react-native
     useNativeDriver: true  // To make use of native driver for performance
   }

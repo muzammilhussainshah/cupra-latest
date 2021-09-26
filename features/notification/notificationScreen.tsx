@@ -79,14 +79,15 @@ export const NotificationScreen: React.FC = () => {
 
                     <View style={{ height: height / 10 * 7.5, }}>
                         {/* {getnotification && getnotification.length > 0 && */}
+                        {notification&&notification.length>0&&notification&&
                         <FlatList
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: '10%' }}
-                            data={notification}
-                            renderItem={({ item }: any) => {
-                                return (
-                                    <View style={{ width: "100%", marginVertical: 5, flexDirection: "row", }}>
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ paddingBottom: '10%' }}
+                        data={notification&&notification.length>0&&notification}
+                        renderItem={({ item }: any) => {
+                            return (
+                                <View style={{ width: "100%", marginVertical: 5, flexDirection: "row", }}>
                                         <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
                                             <FastImage style={{ width: 50, height: 50 }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
                                         </View>
@@ -101,12 +102,13 @@ export const NotificationScreen: React.FC = () => {
                                     </View>
                                 )
                             }}
-                        />
+                            />
+                        }
                     </View>
                     {/* // } */}
                 </View>
                 {isError !== "" &&
-                    <Text style={{ color: Colors.primary, alignSelf: "center" }}>{isError}
+                <Text style={{ color: Colors.primary, alignSelf: "center" }}>{isError}
                     </Text>}
             </View>
         </View>

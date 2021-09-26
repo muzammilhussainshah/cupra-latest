@@ -40,7 +40,7 @@ export const FullImage: React.FunctionComponent<FullImage> = ({ _func, coverImag
 
 
   const mediaView = ((selectedImageIndex:any) => {
-    dispatch(_mediaView(currentUser,media[selectedImageIndex]._id))
+    dispatch(_mediaView(currentUser,media&&media[selectedImageIndex]&&media[selectedImageIndex]._id))
     // console.log(media[selectedImageIndex],'@mediamedia',selectedImageIndex)
 
   })

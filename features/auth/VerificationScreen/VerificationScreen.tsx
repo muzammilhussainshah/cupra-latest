@@ -37,6 +37,7 @@ export const VerificationScreen: React.FC = () => {
 
   const isLoader = useSelector(({ reducer }) => reducer.isLoader);
   const isError = useSelector(({ reducer }) => reducer.isError);
+  const getpassword = route?.params?.password;
   const getroutName = route?.params?.getroutName;
   const getPhonneNumber = route?.params?.phone_number;
   const getsocialId = route?.params?.getsocialId;
@@ -118,9 +119,9 @@ export const VerificationScreen: React.FC = () => {
                 if (getroutName && getroutName == "_resetPasswordReq") {
                   dispatch(_verifyResetPassOtp(getPhonneNumber, otpCode, navigation,))
                 } else if (getroutName && getroutName == "SocialSigninVerification") {
-                  dispatch(_varifyCustomer(getPhonneNumber, otpCode, getroutName, getsocialId, getsocialType))
+                  dispatch(_varifyCustomer(getPhonneNumber, otpCode, getroutName, getsocialId, getsocialType,navigation))
                 } else {
-                  dispatch(_varifyCustomer(getPhonneNumber, otpCode,))
+                  dispatch(_varifyCustomer(getPhonneNumber, otpCode,null,null,null,navigation,getpassword))
                 }
               }}>
                 <ButtonText color={'#000'}>Verify</ButtonText>

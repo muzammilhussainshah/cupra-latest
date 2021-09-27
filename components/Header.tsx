@@ -85,7 +85,8 @@ export const Header: React.FC<IHeaderTypeProp> = ({
     <BackgroundContiner style={{ height: searchBarInput ? 130 : 80,}}>
       <LogoContainer >
         {isGoBack ? (
-          <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
+          <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: 40, width: 40, alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
+          {/* <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}> */}
             <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
             {/* <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}

@@ -46,6 +46,7 @@ export const HomeScreen: React.FC = () => {
   const [isEmptyserch, setisEmptyserch] = useState(false)
 
   const [isMore, setisMore] = useState<any>(true)
+  const [homeLoader, sethomeLoader] = useState<any>(false)
 
   const [currentUserSt, setcurrentUserSt] = useState('')
 
@@ -72,7 +73,8 @@ export const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
-      dispatch(_stories(currentUser, filterdBy, navigation,))
+      sethomeLoader(true)
+      dispatch(_stories(currentUser, filterdBy, navigation,sethomeLoader))
       dispatch(_getAds(currentUser, navigation))
       dispatch(_onlineUser(currentUser, navigation))
     }
@@ -86,6 +88,14 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setisHome(false)
+      setisEmptyserch(false)
+      console.log(searchTxt,"searchTxt")
+      // setsearchTxt('')
+        dispatch(_stories(currentUser, filterdBy, navigation,))
+      // if(searchTxt){
+      // }
+      // console.log(searchTxt,"searchTxt")
+
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
@@ -94,6 +104,11 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setisHome(true)
+      setisEmptyserch(true)
+      // if (searchTxt !== '') {
+      //   console.log(searchTxt,"searchTxt")
+      //   dispatch(_stories(currentUser, filterdBy, navigation,))
+      // }
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
@@ -161,20 +176,35 @@ export const HomeScreen: React.FC = () => {
 
 
 
-
+  console.log("re rendger", isEmptyserch)
   return (
     < Container >
-      <Header
-        isEmptyserch={isEmptyserch}
-        _func={(e: any) => {
-          searchUser(e)
-          setsearchTxt(e)
-        }}
-        searchBarInput={true}
-        notiScreen={() => navigation.navigate('notification')}
-        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
-      {isLoader ?
+{/* 
+      {isEmptyserch ?
+        <Header
+          isEmptyserch={isEmptyserch}
+          _func={(e: any) => {
+            searchUser(e)
+            setsearchTxt(e)
+          }}
+          searchBarInput={true}
+          notiScreen={() => navigation.navigate('notification')}
+          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+        : */}
+
+        <Header
+          isEmptyserch={isEmptyserch}
+          _func={(e: any) => {
+            searchUser(e)
+            setsearchTxt(e)
+          }}
+          searchBarInput={true}
+          notiScreen={() => navigation.navigate('notification')}
+          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+
+      {/* // } */}
+      {homeLoader ?
         <ActivityIndicator
           style={{ marginTop: "50%" }}
           size="small" color={'black'}

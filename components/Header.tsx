@@ -63,6 +63,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
 
   useEffect(() => {
     settext("")
+    console.log("header rerender",isEmptyserch)
   }, [isEmptyserch])
 
 

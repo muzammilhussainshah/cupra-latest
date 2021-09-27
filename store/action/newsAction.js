@@ -148,12 +148,12 @@ export const _storiesList = (currentUser, page_size, page_index, filterd_by, nav
         }
     }
 }
-export const _stories = (currentUser, filterd_by, navigation) => {
+export const _stories = (currentUser, filterd_by, navigation,sethomeLoader) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         // alert('')
-        dispatch(_loading(true));
+        // dispatch(_loading(true));
         try {
             const option = {
                 method: 'GET',
@@ -170,7 +170,8 @@ export const _stories = (currentUser, filterd_by, navigation) => {
             if (resp.data.status === 200) {
                 dispatch({ type: GETSTORIES, payload: resp.data.data })
                 dispatch(_loading(false));
-                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation));
+                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation,sethomeLoader));
+                sethomeLoader(false)
                 // dispatch(_loading(false));
                 // console.log(resp, 'resp _getAdds')
 

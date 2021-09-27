@@ -109,7 +109,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
   return (
     <>
       {fullImageScreen &&
-        <View style={{ height: "100%", width: "100%" }}>
+        <View style={{position:'absolute',zIndex:2, height: "100%", width: "100%" }}>
           <FullImage
             sliderBoxEnabled={imageSlider.length > 0 ? true : false}
             selectedImageIndex={selectedImageIndex}

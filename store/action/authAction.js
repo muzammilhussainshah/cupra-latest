@@ -122,6 +122,7 @@ export const _signUp = (model, navigation, country) => {
         // dispatch(_resendCode(`${model.country_number}${model.phone_number}`));
         navigation.navigate('otp', {
           phone_number: model.country_number?.concat(model.phone_number),
+          password:  model.password,
         });
         dispatch(_loading(false));
       } else {
@@ -267,6 +268,8 @@ export const _varifyCustomer = (
   getroutName,
   getsocialId,
   getsocialType,
+  navigation,
+  getpassword
 ) => {
   console.log(
     getPhonneNumber,
@@ -290,7 +293,7 @@ export const _varifyCustomer = (
           'Content-Type': 'application/json',
         },
         data: {
-          mobile: getPhonneNumber && getPhonneNumber,
+          mobile:getPhonneNumber&&getPhonneNumber,
           otp: otpCode && otpCode,
         },
       };
@@ -304,7 +307,11 @@ export const _varifyCustomer = (
             dispatch(_facebookAuth('testing', getsocialId, getsocialType));
           }
         } else {
-          navigation.navigate('login');
+          
+          // getpassword in this case getroutName
+      dispatch(_signIn({ emailOrPhone: getPhonneNumber, password: getpassword }, navigation, ));
+
+          // navigation.navigate('login');
           dispatch(_loading(false));
         }
       } else {

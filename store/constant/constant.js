@@ -28,3 +28,4 @@ export const CONTACTUSINFO = 'CONTACTUSINFO';
 export const COMPANYPOLICY = 'COMPANYPOLICY';
 export const NOTIFICATION = 'NOTIFICATION';
 export const COMPANYREVIEWS = 'COMPANYREVIEWS';
+export const ADS = 'ADS';

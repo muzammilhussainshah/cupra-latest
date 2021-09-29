@@ -53,7 +53,7 @@ export const _claim = (currentUser, navigation, title, body, settitle, setBody) 
                 settitle('')
                 setBody('')
                 Alert.alert(
-                    "Your Claim Succesfully Sent!",
+                    "Your Feedback Succesfully Sent!",
                     "Cupra will contact you soon!",
                     [
                         { text: "OK" }
@@ -70,10 +70,15 @@ export const _claim = (currentUser, navigation, title, body, settitle, setBody) 
                 );
             }
             else {
-                dispatch(_error(resp.data.error.messageEn));
+                if(resp.data.error.messageEn==='Claim title and body are required'){
+                    dispatch(_error('Feedback title and body are required'));
+                }
+                else{
+                    dispatch(_error('Feedback title and body are required'));
+                }
                 dispatch(_loading(false));
             }
-            console.log(resp, 'resp _claim',)
+            console.log(resp, 'resp _claim',resp.data.error.messageEn)
             dispatch(_loading(false));
         }
         catch (err) {

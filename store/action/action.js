@@ -128,7 +128,7 @@ export const _getCountry = ( navigation,) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
-        dispatch(_loading(true));
+        // dispatch(_loading(true));
         try {
             const option = {
                 method: 'GET',

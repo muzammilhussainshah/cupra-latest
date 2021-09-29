@@ -106,11 +106,11 @@ export const ServicesGreeting: React.FC<IGreetingTypeProp> = ({
     <GreetingContainer>
       <ServiceTitle>Hello {name} !</ServiceTitle>
       <ServiceTitle>{seriveTitle}</ServiceTitle>
-      {isLoader &&
+      {/* {isLoader &&
         <ActivityIndicator
           style={{ marginTop: "15%" }}
           size="small" color={Colors.black}
-        />}
+        />} */}
     </GreetingContainer>
   )
 }

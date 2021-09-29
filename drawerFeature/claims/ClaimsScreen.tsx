@@ -28,7 +28,7 @@ export const ClaimsScreen: React.FC = ({ route }: any) => {
       <View style={{ height: height+24  , width: width, backgroundColor: "black", marginTop: 24 }}>
         <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.8, borderBottomColor: Colors.brownishGrey }}>
           <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+            onPress={() => navigation.goBack()}
             style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
             <View style={{ height: "45%", width: "50%", borderRadius: 10, justifyContent: "center", alignItems: "center", backgroundColor: Colors.primary }}>
               < Text style={{ color: Colors.white }}>{"<"}</Text>
@@ -89,7 +89,7 @@ export const ClaimsScreen: React.FC = ({ route }: any) => {
                       }}
                       value={body}
                       placeholderTextColor={Colors.brownishGrey}
-                      placeholder="Type Your Claim Here"
+                      placeholder="Type Your Feedback Here"
                       onChangeText={(text: string) => setBody(text)}
                       multiline={true}
                       underlineColorAndroid='transparent'
@@ -107,7 +107,7 @@ export const ClaimsScreen: React.FC = ({ route }: any) => {
                     onPress={() => dispatch(_claim(currentUser, navigation, title, body, settitle, setBody))}
                     activeOpacity={0.7}
                     style={{ height: "60%", width: "60%", borderRadius: 5, backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ color: Colors.white }}>Send Claims</Text>
+                    <Text style={{ color: Colors.white }}>Send Feedback</Text>
                   </TouchableOpacity>
                 }
                 {isError !== "" &&

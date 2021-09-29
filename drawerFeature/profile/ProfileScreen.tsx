@@ -103,7 +103,8 @@ console.log(currentUser,"currentUsercurrentUsercurrentUser")
           }>
             <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
-              source={require('../../assets/images/steering.png')}
+              source={require('../../assets/images/menu.png')}
+              // source={require('../../assets/images/steering.png')}
             />
           </TouchableOpacity>
           <Text style={{ fontSize: 16, color: Colors.white, marginLeft: 10 }}>My Profile</Text>

@@ -17,6 +17,7 @@ export const BackGroundContinerImage = styled(FastImage)`
   width: 300px;
   height: 150px;
   align-self: center;
+
 `;
 export const GradientBanckground = styled(RadialGradient)`
   width: ${width * 2}px;

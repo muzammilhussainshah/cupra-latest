@@ -7,11 +7,15 @@ import React, { useEffect, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ScrollView, View, ActivityIndicator, Text } from 'react-native';
+import { ScrollView, View, ActivityIndicator, Text ,Platform,TouchableOpacity} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
+import styled from 'styled-components/native';
+
 import { useDispatch, useSelector } from 'react-redux';
+
+import { Colors } from '../../../constants/Colors';
 
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -27,6 +31,12 @@ import {
   FooterButtons,
   LoginTitle,
 } from './LoginStyled';
+
+const IconPlaceholder = styled(TouchableOpacity)`
+background-color: transparent;
+border-width: 1px;
+border-radius: 20px;
+`;
 interface LoginProp {
   phone_number: string;
   password: string;
@@ -48,7 +58,7 @@ export const LoginScreen: React.FC = () => {
     // setgetcountry(country)
     console.log(country, 'country')
     country && country.length > 0 && country.map((value:any ) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+      localCodeArr.push( value.country_phone_code.toString())
     })
     setgetcountry(localCodeArr)
     // console.log(localCodeArr, '444444444')
@@ -70,10 +80,19 @@ export const LoginScreen: React.FC = () => {
       <Container
         resizeMode={FastImage.resizeMode.cover}
         source={require('../../../assets/BG.png')}>
+      <View style={{ flexDirection: Platform.OS === "ios" ? "row" : "column", paddingHorizontal: Platform.OS ==="ios"? "5%" : "0%" }}>
+
+        {Platform.OS === "ios" &&
+          <IconPlaceholder style={{ marginTop: "10%", backgroundColor: Colors.primary, justifyContent: "center", height: 50, width: '13%', alignItems: "center", borderRadius: 10 }} onPress={() => navigation.goBack()} activeOpacity={0.6}>
+            <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
+          </IconPlaceholder>
+        }
         <BackGroundContinerImage
           resizeMode={FastImage.resizeMode.contain}
           source={require('../../../assets/logo.png')}
         />
+      </View>
+
         <ScrollView
           contentContainerStyle={{ paddingTop: 70, paddingHorizontal: 15 }}>
           <LoginTitle>Login</LoginTitle>

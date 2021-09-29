@@ -27,6 +27,7 @@ export const VideoScreen: React.FC = () => {
   const [search, setsearch] = useState([]);
   const [videosST, setvideosST] = useState([]);
   const [searchTxt, setsearchTxt] = useState('')
+  const [isEmptyserch, setisEmptyserch] = useState(false)
 
   useEffect(() => {
     dispatch(_getVideos(currentUser, navigation, 10, 1,));
@@ -39,7 +40,22 @@ export const VideoScreen: React.FC = () => {
 
 
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setisEmptyserch(false)
+      dispatch(_getVideos(currentUser, navigation, 10, 1,));
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setisEmptyserch(true)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   const searchUser: any = (e: any) => {
     let keywords = e.split(' ')
@@ -80,7 +96,7 @@ export const VideoScreen: React.FC = () => {
     <VideoContainer>
       <Header
 
-        // isEmptyserch={isEmptyserch}
+        isEmptyserch={isEmptyserch}
         _func={(e: any) => {
           searchUser(e)
         }}
@@ -100,6 +116,7 @@ export const VideoScreen: React.FC = () => {
         horizontal={false}
         onLoadMoreAsync={loadMorePage}
       >
+        
         <FlatList
           numColumns={2}
           showsVerticalScrollIndicator={false}
@@ -111,10 +128,11 @@ export const VideoScreen: React.FC = () => {
               style={{ flex: 1 }}
               data={item1.item.media}
               renderItem={item2 => {
-                console.log(item1.item.en_desc, 'VideoTileVideoTile')
+                console.log(item1.item, 'VideoTileVideoTile')
                 return (
                   <VideoTile
                     VideoImage={item2.item.url}
+                    _id={item2.item._id}
                     likes={item2.item.likesCount}
                     getDate={item2.item.createdAt}
                     mediaId={item2.item._id}
@@ -124,6 +142,7 @@ export const VideoScreen: React.FC = () => {
                     onPress={() =>
                       navigation.navigate('videoPlay', {
                         videoURL: item2.item.url,
+                        _id:item2.item._id
                       })
                     }
                   />

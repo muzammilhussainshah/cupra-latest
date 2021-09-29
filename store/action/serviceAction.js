@@ -30,9 +30,9 @@ export const _checkIsEmptyObj = (obj) => {
 }
 
 
-export const _getServices = (currentUser, navigation) => {
+export const _getServices = (currentUser, navigation,setserviceLoader) => {
     return async (dispatch) => {
-        dispatch(_loading(true));
+        // dispatch(_loading(true));
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -52,6 +52,7 @@ export const _getServices = (currentUser, navigation) => {
                 var services = resp.data.data;
                 dispatch({ type: SERVICES, payload: services })
                 dispatch(_loading(false));
+                setserviceLoader(false)
             }
             else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 Alert.alert(

@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ScrollView, ActivityIndicator, View, Text } from 'react-native';
+import { ScrollView, ActivityIndicator, View, Text, Platform, TouchableOpacity } from 'react-native';
+
+import { Colors } from '../../../constants/Colors';
+
+import styled from 'styled-components/native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -30,6 +34,13 @@ interface IPhoneNumberProp {
   phone_number: string;
   country_number: string;
 }
+
+const IconPlaceholder = styled(TouchableOpacity)`
+background-color: transparent;
+border-width: 1px;
+border-radius: 20px;
+`;
+
 const CountryNumber = ['00962', '00972', '0090'];
 export const ResetPasswordScreen: React.FC = () => {
   const [getcountryR, setgetcountryr] = useState([])
@@ -52,7 +63,7 @@ export const ResetPasswordScreen: React.FC = () => {
   useEffect(() => {
     console.log(country, 'country')
     country && country.length > 0 && country.map((value: any) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+      localCodeArr.push( value.country_phone_code.toString())
     })
     setgetcountryr(localCodeArr)
   }, [country])
@@ -69,7 +80,12 @@ export const ResetPasswordScreen: React.FC = () => {
   function onSubmit(model: IPhoneNumberProp) {
     console.warn('form submitted', model);
     let phoneNmbr: string;
-    phoneNmbr = model.country_number + model.phone_number
+
+    let phone_numberWithout0 = model.phone_number;
+    if (model.phone_number[0] === '0') phone_numberWithout0 = phone_numberWithout0.substring(1);
+
+
+    phoneNmbr = model.country_number + phone_numberWithout0
     if (getCompleteSignUp) {
       // dispatch(_resendCode(phoneNmbr))
       // navigation.navigate('otp', {
@@ -82,7 +98,8 @@ export const ResetPasswordScreen: React.FC = () => {
       //   getsocialType: getsocialType, 
       // })
       console.log(getCompleteSignUp, 'asvd')
-      dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType,));
+      dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail,  getsocialId, getsocialType,model.country_number,country));
+      // dispatch(_completeSignUp(phoneNmbr, navigation, getfullName, getEmail, getcountry, getsocialId, getsocialType,));
 
     } else {
       dispatch(_resetPasswordReq(model, navigation))
@@ -100,10 +117,18 @@ export const ResetPasswordScreen: React.FC = () => {
     <Container
       resizeMode={FastImage.resizeMode.cover}
       source={require('../../../assets/BG.png')}>
-      <BackGroundContinerImage
-        resizeMode={FastImage.resizeMode.contain}
-        source={require('../../../assets/logo.png')}
-      />
+      <View style={{ flexDirection: Platform.OS === "ios" ? "row" : "column", paddingHorizontal: Platform.OS === "ios" ? "5%" : "0%" }}>
+
+        {Platform.OS === "ios" &&
+          <IconPlaceholder style={{ marginTop: "10%", backgroundColor: Colors.primary, justifyContent: "center", height: 50, width: '13%', alignItems: "center", borderRadius: 10 }} onPress={() => navigation.goBack()} activeOpacity={0.6}>
+            <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
+          </IconPlaceholder>
+        }
+        <BackGroundContinerImage
+          resizeMode={FastImage.resizeMode.contain}
+          source={require('../../../assets/logo.png')}
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{ paddingTop: 100, paddingHorizontal: 15 }}>
         <LoginTitle>{getTitle ? getTitle : "Reset Password"}</LoginTitle>
@@ -156,7 +181,7 @@ export const ResetPasswordScreen: React.FC = () => {
           signupNavigate={() => navigation.navigate('signup')}
           forgetPasswordNavigate={() => { }}
           forgetPassword={'Forget your password?'}
-          signup={'Don’t have an acceount ? Sign up'}
+          signup={'Don’t have an account ? Sign up'}
         />
       </ScrollView>
     </Container>

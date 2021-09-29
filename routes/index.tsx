@@ -27,31 +27,31 @@ export const Navigation: React.FC<Props> = ({ children }) => {
   const dispatch = useDispatch();
   // console.log(Navigation)
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      const userEmail = await AsyncStorage.getItem('userEmail');
-      const password = await AsyncStorage.getItem('password');
-      const getSocialId = await AsyncStorage.getItem('socialId');
-      const getSocialtype = await AsyncStorage.getItem('socialType');
+  // useEffect(() => {
+  //   async function fetchMyAPI() {
+  //     const userEmail = await AsyncStorage.getItem('userEmail');
+  //     const password = await AsyncStorage.getItem('password');
+  //     const getSocialId = await AsyncStorage.getItem('socialId');
+  //     const getSocialtype = await AsyncStorage.getItem('socialType');
 
-      console.log(userEmail, password)
-      if (getSocialId && getSocialtype == 'Facebook') {
+  //     console.log(userEmail, password)
+  //     if (getSocialId && getSocialtype == 'Facebook') {
 
-        dispatch(_directLogin({ Id: getSocialId, type: 'FACEBOOK' }));
-        // dispatch(_facebookAuth('testing', getSocialId, 'FACEBOOK'));
-      } else if (getSocialId && getSocialtype == 'Google') {
-        // dispatch(_directLogin(getSocialId, 'FACEBOOK'));
-        dispatch(_directLogin({ Id: getSocialId, type: 'GOOGLE' }));
-        // dispatch(_googleAuth('testing', getSocialId, 'GOOGLE'));
-      }
+  //       dispatch(_directLogin({ Id: getSocialId, type: 'FACEBOOK' }));
+  //       // dispatch(_facebookAuth('testing', getSocialId, 'FACEBOOK'));
+  //     } else if (getSocialId && getSocialtype == 'Google') {
+  //       // dispatch(_directLogin(getSocialId, 'FACEBOOK'));
+  //       dispatch(_directLogin({ Id: getSocialId, type: 'GOOGLE' }));
+  //       // dispatch(_googleAuth('testing', getSocialId, 'GOOGLE'));
+  //     }
 
-      else if (userEmail && password) {
-        dispatch(_signIn({ emailOrPhone: userEmail, password: password, directSignin: 'directsignin' }));
-      }
-    }
+  //     else if (userEmail && password) {
+  //       dispatch(_signIn({ emailOrPhone: userEmail, password: password, directSignin: 'directsignin' }));
+  //     }
+  //   }
 
-    fetchMyAPI();
-  }, []);
+  //   fetchMyAPI();
+  // }, []);
 
   return (
     <NavigationContainer>

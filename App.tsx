@@ -78,7 +78,8 @@ export default function App() {
       <SafeAreaProvider>
         <Navigation />
         <StatusBar
-          barStyle={'light-content'}
+
+          // barStyle={'light-content'}
           translucent={Platform.OS === 'android'}
         />
       </SafeAreaProvider>

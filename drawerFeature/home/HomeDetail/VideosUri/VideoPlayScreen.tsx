@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform,StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Orientation from 'react-native-orientation-locker';
@@ -60,7 +60,10 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
   const onFullScreen = () => {
     if (!isFullScreen) {
       Orientation.lockToLandscape();
+      StatusBar.setHidden(true)
+
     } else {
+      StatusBar.setHidden(false)
       if (Platform.OS === 'ios') {
         Orientation.lockToPortrait();
       }
@@ -72,6 +75,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
     return () => {
       Orientation.lockToPortrait();
       setIsFullScreen(false);
+      StatusBar.setHidden(false)
     }
   }, [])
   const renderToolbar = () => (
@@ -87,7 +91,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 20, top: 20 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
-      <View style={{ width: "95%", height: 160, borderRadius: 14 }}>
+      <View style={{ width: "100%", height:"100%", borderRadius: 14 }}>
 
       <Video
         onEnd={onEnd}
@@ -97,7 +101,7 @@ export const VideoPlayScreenHome: React.FC = ({ route, navigation }: any) => {
         paused={paused}
         ref={videoPlayer}
         // resizeMode={screenType}
-        resizeMode={"cover"}
+        resizeMode={"contain"}
         // onFullScreen={isFullScreen}
         source={{
           uri:

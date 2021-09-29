@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ScrollView, View, Platform, AsyncStorage, ActivityIndicator, Text } from 'react-native';
+import { ScrollView, View, Platform, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -27,7 +27,8 @@ import DeviceInfo, { getDeviceId } from 'react-native-device-info';
 // import LocalizedStrings from 'react-native-localization';
 
 import messaging from '@react-native-firebase/messaging';
-
+import styled from 'styled-components/native';
+import { Colors } from '../../../constants/Colors';
 
 import {
   BackGroundContinerImage,
@@ -45,6 +46,7 @@ export interface SignUpProp {
   email?: string;
   confirm_password?: string;
   country_number?: string;
+  country_numberId?: string;
 }
 export interface DeviceTokenProp {
   device_token?: string;
@@ -68,6 +70,7 @@ export const SignUpScreen: React.FC = () => {
       password: '',
       confirm_password: '',
       country_number: '00962',
+      // country_numberId: '60930f6ecb8d330015688090',
     },
   });
   function onSubmit(model: SignUpProp) {
@@ -75,7 +78,7 @@ export const SignUpScreen: React.FC = () => {
     // navigation.navigate('otp', {
     //   phone_number: model.country_number?.concat(model.phone_number),
     // });
-    dispatch(_signUp(model, navigation))
+    dispatch(_signUp(model, navigation,country))
     // console.log(model, 'aaa', model.country_number?.concat(model.phone_number));
   }
   const dispatch = useDispatch();
@@ -86,21 +89,42 @@ export const SignUpScreen: React.FC = () => {
   useEffect(() => {
     // setgetcountry(country)
     console.log(country, 'country')
-    country && country.length > 0 && country.map((value:any ) => {
-      localCodeArr.push('00' + value.country_phone_code.toString())
+    country && country.length > 0 && country.map((value: any) => {
+      localCodeArr.push( value.country_phone_code.toString())
+      // localCodeArr.push('00' + value.country_phone_code.toString())
     })
     setgetcountry(localCodeArr)
     // console.log(localCodeArr, '444444444')
   }, [country])
 
+
+
+  const IconPlaceholder = styled(TouchableOpacity)`
+  background-color: transparent;
+  border-width: 1px;
+  border-radius: 20px;
+`;
+
+
   return (
     <Container
       resizeMode={FastImage.resizeMode.cover}
       source={require('../../../assets/BG.png')}>
-      <BackGroundContinerImage
-        resizeMode={FastImage.resizeMode.contain}
-        source={require('../../../assets/logo.png')}
-      />
+      <View style={{ flexDirection: Platform.OS === "ios" ? "row" : "column", paddingHorizontal: Platform.OS ==="ios"? "5%" : "0%" }}>
+
+
+        {Platform.OS === "ios" &&
+          <IconPlaceholder style={{ marginTop: "10%", backgroundColor: Colors.primary, justifyContent: "center", height: 50, width: '13%', alignItems: "center", borderRadius: 10 }} onPress={() => navigation.goBack()} activeOpacity={0.6}>
+            <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
+          </IconPlaceholder>
+        }
+        <BackGroundContinerImage
+          resizeMode={FastImage.resizeMode.contain}
+          source={require('../../../assets/logo.png')}
+        />
+
+      </View>
+
       <ScrollView
         contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 15 }}>
         <SignupTitle>Sign up</SignupTitle>
@@ -120,7 +144,7 @@ export const SignUpScreen: React.FC = () => {
             style={{ marginBottom: 15 }}
             keyboardType="default"
             rules={{
-              required: 'email is required.',
+              // required: 'email is required.',
               pattern: {
                 value: isEmail,
                 message: 'invalid email',
@@ -173,7 +197,7 @@ export const SignUpScreen: React.FC = () => {
           />
           <Row>
             <CheckBox />
-            <Title>Yes ! Agree all Teams & Condition</Title>
+            <Title>Yes ! Agree all Terms & Condition</Title>
           </Row>
           {isLoader ?
             <ActivityIndicator

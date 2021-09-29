@@ -1,4 +1,4 @@
-import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT, PAGINATIONLOADER } from "../constant/constant";
+import { SIGNUPUSER, CURRENTUSER, ISLOADER, ISERROR, GETNEWS, NEWSITEMDETAILS, GETADDS, GETSTORIES, NEWSCOMMENT, PAGINATIONLOADER, ADS } from "../constant/constant";
 import axios from 'axios';
 // import DeviceInfo from 'react-native-device-info';
 // import BaseUrl from '../../common/BaseUrl';
@@ -148,12 +148,12 @@ export const _storiesList = (currentUser, page_size, page_index, filterd_by, nav
         }
     }
 }
-export const _stories = (currentUser, filterd_by, navigation) => {
+export const _stories = (currentUser, filterd_by, navigation,sethomeLoader) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         // alert('')
-        dispatch(_loading(true));
+        // dispatch(_loading(true));
         try {
             const option = {
                 method: 'GET',
@@ -170,7 +170,8 @@ export const _stories = (currentUser, filterd_by, navigation) => {
             if (resp.data.status === 200) {
                 dispatch({ type: GETSTORIES, payload: resp.data.data })
                 dispatch(_loading(false));
-                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation));
+                dispatch(_getNews(currentUser, 10, 1, filterd_by, navigation,sethomeLoader));
+                sethomeLoader(false)
                 // dispatch(_loading(false));
                 // console.log(resp, 'resp _getAdds')
 
@@ -199,7 +200,9 @@ export const _stories = (currentUser, filterd_by, navigation) => {
         }
     }
 }
-export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable, getNews, setpagination) => {
+
+
+export const _getNews = (currentUser, page_size, page_index, filterd_by, navigation, LoaderDisable, getNews, setpagination, setisMore) => {
     return async (dispatch) => {
         dispatch({ type: PAGINATIONLOADER, payload: true, });
         const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -229,6 +232,7 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
                 else {
                     dispatch({ type: GETNEWS, payload: resp.data.data })
                 }
+                resp.data.data.length === 0 && setisMore(false)
                 dispatch(_loading(false));
                 dispatch({ type: PAGINATIONLOADER, payload: false, });
 
@@ -255,6 +259,132 @@ export const _getNews = (currentUser, page_size, page_index, filterd_by, navigat
         }
     }
 }
+
+
+export const _getAds = (currentUser, navigation) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        try {
+            const option = {
+                method: 'GET',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/ads?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+                dispatch({ type: ADS, payload: resp.data.data });
+
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+
+            console.log(resp, 'resp _getAds',)
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _getAds", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+export const _adclick = (currentUser, _id) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        try {
+            const option = {
+                method: 'POST',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/adclick?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "ad": _id,
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+
+            console.log(resp, 'resp _adclick',)
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _adclick", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+export const _mediaView = (currentUser, _id) => {
+    return async (dispatch) => {
+        const deviceToken = await AsyncStorage.getItem('deviceToken');
+        const uniqueId = await AsyncStorage.getItem('uniqueId');
+        try {
+            const option = {
+                method: 'POST',
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/media-view?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+                headers: {
+                    'cache-control': 'no-cache',
+                    "Allow-Cross-Origin": '*',
+                    'Content-Type': 'application/json',
+                    'Authorization': `${currentUser.token}`
+                },
+                data: {
+                    "media": _id,
+                }
+            };
+            var resp = await axios(option);
+            if (resp.data.status === 200) {
+            }
+            else if (resp.data.error.messageEn === "You Are Unauthorized") {
+                dispatch(_loading(false));
+                Alert.alert(
+                    "Authentication!",
+                    "You Are Unauthorized Please Login.",
+                    [
+                        { text: "OK", onPress: () => dispatch(_logOut(navigation)) }
+                    ]
+                );
+            }
+
+            console.log(resp, 'resp _mediaView',)
+        }
+        catch (err) {
+            dispatch(_loading(false));
+            console.log(err.response, "error from _mediaView", JSON.parse(JSON.stringify(err.message)));
+        }
+    }
+}
+
+
+
+
 export const _likeDisLike = (currentUser, news_id, navigation, filterd_by, getNews, likedByMe, index) => {
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');

@@ -69,8 +69,8 @@ export const DrawerContent: React.FC = (props: any) => {
               <CloseImage source={require('../assets/images/close.png')} />
             </TouchableOpacity>
           </RowView>
-          <SectionView>
-            <DrawerItem
+          <SectionView style={{width:'100%'}}>
+            <DrawerItem style={{width:'100%'}}
               onPress={() => { props.navigation.navigate("HomeTab") }}
               icon={({ size }) => (
                 <Ionicons
@@ -86,7 +86,7 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%'}}
               onPress={() => { props.navigation.navigate("profile") }}
               icon={({ size }) => (
                 <Ionicons
@@ -102,7 +102,7 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%'}}
               onPress={() => { props.navigation.navigate("favorites") }}
               icon={({ size }) => (
                 <Ionicons
@@ -118,7 +118,7 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%'}}
               // onPress={() => { }}
               onPress={() => { props.navigation.navigate("claims") }}
               icon={({ size }) => (
@@ -128,14 +128,14 @@ export const DrawerContent: React.FC = (props: any) => {
                   color={Colors.white}
                 />
               )}
-              label="Clamis"
+              label="Feedback"
               labelStyle={{
                 color: 'white',
                 fontSize: 16,
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%'}}
               onPress={() => { props.navigation.navigate("contactUs") }}
               icon={({ size }) => (
                 <AntDesign
@@ -151,7 +151,7 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%'}}
               onPress={() => { props.navigation.navigate("PrivacyPolicy") }}
               icon={({ size }) => (
                 <MaterialIcons
@@ -167,12 +167,12 @@ export const DrawerContent: React.FC = (props: any) => {
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />
-            <DrawerItem
+            <DrawerItem style={{width:'100%',}}
               onPress={() => { props.navigation.navigate("rateCompany") }}
               icon={({ size }) => (
                 <MaterialIcons
                   name="star-rate"
-                  size={28}
+                  size={size}
                   color={Colors.white}
                 />
               )}
@@ -180,7 +180,7 @@ export const DrawerContent: React.FC = (props: any) => {
               label="Rate Company"
               labelStyle={{
                 color: 'white',
-                fontSize: 15,
+                fontSize: 16,
                 fontFamily: 'SourceSansPro-Bold',
               }}
             />

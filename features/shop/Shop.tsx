@@ -69,6 +69,26 @@ export const Shop: React.FC = ({ navigation, }: any) => {
   };
 
 
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setisEmptyserch(false)
+      dispatch(_getCatogery(currentUser, navigation))
+
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setisEmptyserch(true)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+
   const searchUser: any = async (e: any) => {
     dispatch(_loading(true))
     let keywords = e.split(' ')

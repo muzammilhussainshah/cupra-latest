@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, TextInput, Linking, Platform } from 'react-native';
+import { TouchableOpacity, TextInput, Linking, Platform, Alert } from 'react-native';
 import { Text, View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
@@ -63,6 +63,7 @@ export const Header: React.FC<IHeaderTypeProp> = ({
 
   useEffect(() => {
     settext("")
+    console.log("header rerender",isEmptyserch)
   }, [isEmptyserch])
 
 
@@ -82,10 +83,11 @@ export const Header: React.FC<IHeaderTypeProp> = ({
 
 
   return (
-    <BackgroundContiner style={{ height: searchBarInput ? 130 : 80 }}>
+    <BackgroundContiner style={{ height: searchBarInput ? 130 : 80,}}>
       <LogoContainer >
         {isGoBack ? (
-          <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
+          <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: 40, width: 40, alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}>
+          {/* <IconPlaceholder style={{ backgroundColor: Colors.primary, justifyContent: "center", height: '45%', width: '13%', alignItems: "center", borderRadius: 10 }} onPress={navigateBack} activeOpacity={0.6}> */}
             <Text style={{ color: Colors.white, fontSize: 20 }}>{"<"}</Text>
             {/* <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
@@ -93,14 +95,16 @@ export const Header: React.FC<IHeaderTypeProp> = ({
             /> */}
           </IconPlaceholder>
         ) : (
-          <IconPlaceholder onPress={onOpenDrawer} activeOpacity={0.6}>
+          <IconPlaceholder onPress={onOpenDrawer}   activeOpacity={0.6}>
             <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
-              source={require('../assets/images/steering.png')}
+              source={require('../assets/images/menu.png')}
+              // source={require('../assets/images/steering.png')}
             />
           </IconPlaceholder>
         )}
         <Logo
+        style={{height:80}}
           source={require('../assets/logo.png')}
           resizeMode={FastImage.resizeMode.contain}
         />
@@ -128,14 +132,19 @@ export const Header: React.FC<IHeaderTypeProp> = ({
         }
       </LogoContainer>
       {searchBarInput &&
-        <View style={{ height: "100%", width: "100%", left: 16, position: 'absolute' }}>
-          <View style={{ height: "50%", top: "18%", alignItems: "center", flexDirection: "row" }}>
+        <View style={{ width: "100%", }}>
+        {/* <View style={{ width: "100%", left: 16,top:15, position: 'absolute',zIndex:-2 ,backgroundColor:'red'}}> */}
+          <View style={{ alignItems: "center", flexDirection: "row" }}>
+          {/* <View style={{ height: "50%", top: "18%", alignItems: "center", flexDirection: "row" }}> */}
             <IconPlaceholder
               style={{ justifyContent: "center", width: "90%", flexDirection: 'row', overflow: "hidden" }}
               onPress={onPress} activeOpacity={0.6}>
               <View style={{ height: 40, width: "80%", backgroundColor: Colors.darkGray, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}>
                 <TextInput
                   style={{ height: '100%', paddingHorizontal: 15, width: "100%", color: Colors.titleGray }}
+                  returnKeyType="next"
+                  onSubmitEditing={()=>_func(text)}
+
                   onChangeText={text => {
 
                     settext(text)
@@ -159,12 +168,12 @@ export const Header: React.FC<IHeaderTypeProp> = ({
                 />
               </TouchableOpacity>
             </IconPlaceholder>
-            <IconPlaceholder onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
+            <TouchableOpacity style={{}}   onPress={() => notiScreen && notiScreen()} activeOpacity={0.6}>
               <HeaderIcons
                 resizeMode={FastImage.resizeMode.contain}
                 source={require('../assets/images/bell.png')}
               />
-            </IconPlaceholder>
+            </TouchableOpacity>
           </View>
         </View>
       }

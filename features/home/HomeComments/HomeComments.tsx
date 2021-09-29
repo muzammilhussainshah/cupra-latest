@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Text, ScrollView, Dimensions, TextInput, FlatList, ActivityIndicator, TouchableOpacity, View, } from 'react-native';
+import { Text, ScrollView, Dimensions,StatusBar, TextInput,KeyboardAvoidingView, FlatList, ActivityIndicator, TouchableOpacity, View, } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -16,6 +16,7 @@ import { _commentOnNews, _dltCommentOnNews } from "../../../store/action/newsAct
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { useDispatch, useSelector } from 'react-redux';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import { _getItemDetails, getReview } from '../../../store/action/shopAction';
 export const HomeComments = ({ route, navigation, }: any) => {
@@ -41,16 +42,16 @@ export const HomeComments = ({ route, navigation, }: any) => {
   const dispatch = useDispatch()
 
   return (
-    <ScrollView>
-      <View style={{ height: flex1 * 10+24, backgroundColor: Colors.black }}>
+    <ScrollView contentContainerStyle={{flex:1,}}>
+      <View style={{ height:( flex1 * 10)-StatusBar.currentHeight, backgroundColor: Colors.black }}>
         <View
-          style={{ height: "20%", backgroundColor: Colors.black, justifyContent: "center" }}>
+          style={{ height: "17%", backgroundColor: Colors.black, justifyContent: "center" }}>
           <Header
             isGoBack={true}
             RatingScreen={true}
             navigateBack={() => { navigation.goBack() }} />
         </View>
-        <View style={{ height: "80%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: Colors.white, borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
+        <View style={{ height: "83%", overflow: "hidden", borderColor: Colors.brownishGrey, backgroundColor: Colors.white, borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, }}>
           <View style={{ height: "10%", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
             <View style={{ height: "50%", justifyContent: "flex-end" }}>
               {/* <FastImage
@@ -64,8 +65,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
 
             <Text style={{ color: Colors.black }}>Comments</Text>
           </View>
-          <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-            {isLoader ?
+            {isLoader==='s' ?
               <ActivityIndicator
                 style={{ marginTop: "40%" }}
                 size="small" color={Colors.white}
@@ -119,9 +119,12 @@ export const HomeComments = ({ route, navigation, }: any) => {
                 }}
               />
             }
-          </ScrollView>
-          <View style={{ height: "15%", paddingHorizontal: 15, backgroundColor: Colors.black, flexDirection: 'row' }}>
-            <View style={{ width: "90%", justifyContent: "center", }}>
+          <View style={{ height: "12%", paddingHorizontal: 15, backgroundColor: Colors.black, flexDirection: 'row' }}>
+          {/* <KeyboardAvoidingView
+                                    behavior={Platform.OS === "ios" ? "position" : "height"}
+                                    style={{ backgroundColor: colors.backgroundColor }}
+                                > */}
+           <View style={{ width: "90%", justifyContent: "center", }}>
               <TextInput
                 placeholder="Type your Comment here"
                 multiline
@@ -131,6 +134,7 @@ export const HomeComments = ({ route, navigation, }: any) => {
                 onChangeText={text => setText(text)}
               />
             </View>
+            {/* </KeyboardAvoidingView> */}
             <View style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
               <TouchableOpacity
                 onPress={() => {
@@ -154,6 +158,8 @@ export const HomeComments = ({ route, navigation, }: any) => {
               </TouchableOpacity>
             </View>
           </View>
+          <KeyboardSpacer/>
+
           {Err ? <Text style={{ color: "red", textAlign: "center", backgroundColor: Colors.black, width: "100%" }}>{Err}</Text> : null}
         </View >
       </View >

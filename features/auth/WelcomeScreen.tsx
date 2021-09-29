@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { AsyncStorage } from 'react-native';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { Button, ButtonsContainer, ButtonText } from '../../components/Button';
 import { height } from '../../constants/Layout';
-import { useSelector } from 'react-redux';
+import { _signIn, _directLogin } from '../../store/action/authAction';
+import { useDispatch } from 'react-redux';
+import { SpashScreen } from '../../components/SplashScreen';
 import {
   BackGroundContinerImage,
   WelcomeTitle,
@@ -15,11 +17,13 @@ import {
   Label,
   SocialMedia,
 } from './styled';
+import { Text } from 'react-native-animatable';
 // TODO:Refactor the GradientBanckground to make reusable component that take
 // a different height and width
 export const WelcomeScreen: React.FC = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getDataAsync();
@@ -28,33 +32,42 @@ export const WelcomeScreen: React.FC = () => {
   const getDataAsync = async () => {
     const getEmail = await AsyncStorage.getItem('userEmail');
     const getSocialtype = await AsyncStorage.getItem('socialType');
+    const getsocialId = await AsyncStorage.getItem('socialId');
+    const password = await AsyncStorage.getItem('password');
+
 
     if (getEmail && getEmail !== 'null') {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: 'drawerStack' }],
-        }),
-      );
-      setUser(true);
+
+      dispatch(_signIn({ emailOrPhone: getEmail, password: password }, navigation, setUser));
+
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [{ name: 'drawerStack' }],
+      //   }),
+      // );
+      // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Facebook') {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: 'drawerStack' }],
-        }),
-      );
-      setUser(true);
+      dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' }, navigation, setUser));
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [{ name: 'drawerStack' }],
+      //   }),
+      // );
+      // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Google') {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: 'drawerStack' }],
-        }),
-      );
-      setUser(true);
+      dispatch(_directLogin({ Id: getsocialId, type: 'GOOGLE' }, navigation, setUser));
+
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [{ name: 'drawerStack' }],
+      //   }),
+      // );
+      // setUser(true);
     }
 
 
@@ -64,7 +77,7 @@ export const WelcomeScreen: React.FC = () => {
   };
 
   return (
-    user === false && (
+    user === false ? (
       <BackGroundContinerImage
         resizeMode={FastImage.resizeMode.cover}
         source={require('../../assets/backgroundImage.png')}>
@@ -115,6 +128,7 @@ export const WelcomeScreen: React.FC = () => {
           <SocialMedia />
         </GradientBanckground>
       </BackGroundContinerImage>
-    )
+    ) :
+      <SpashScreen /> 
   );
 };

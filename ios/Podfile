@@ -1,11 +1,9 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'Cupra' do
-
   config = use_native_modules!
 
   use_react_native!(
@@ -13,9 +11,8 @@ target 'Cupra' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
-  pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
 
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'CupraTests' do
     inherit! :complete
@@ -30,5 +27,11 @@ target 'Cupra' do
 
   post_install do |installer|
     react_native_post_install(installer)
+    installer.aggregate_targets.first.user_project.native_targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['LIBRARY_SEARCH_PATHS'] = ['$(inherited)', '$(SDKROOT)/usr/lib/swift']
+      end
+    end
+
   end
 end

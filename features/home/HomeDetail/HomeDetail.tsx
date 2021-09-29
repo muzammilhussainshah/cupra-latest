@@ -56,7 +56,7 @@ export const HomeDetail = ({ route, navigation }: any) => {
 
   const getNews = useSelector((state: any) => state.reducer.getNews)
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState()
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   const newsItemDetails = useSelector((state: any) => state.reducer.newsItemDetails)
 
@@ -109,8 +109,14 @@ export const HomeDetail = ({ route, navigation }: any) => {
   return (
     <>
       {fullImageScreen &&
-        <View style={{ height: "100%", width: "100%" }}>
-          <FullImage sliderBoxEnabled={imageSlider.length > 0 ? true : false} selectedImageIndex={selectedImageIndex} coverImage={imageSlider.length > 0 ? imageSlider : coverImage} _func={() => setFullImageScreen(false)} />
+        <View style={{position:'absolute',zIndex:2, height: "100%", width: "100%" }}>
+          <FullImage
+            sliderBoxEnabled={imageSlider.length > 0 ? true : false}
+            selectedImageIndex={selectedImageIndex}
+            coverImage={imageSlider.length > 0 ? imageSlider : coverImage}
+            _func={() => setFullImageScreen(false)}
+            media={newsItemDetails.media && newsItemDetails.media.length > 0 && newsItemDetails.media}
+          />
         </View>
       }
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
@@ -164,22 +170,20 @@ export const HomeDetail = ({ route, navigation }: any) => {
       <ShopDetailsContainer>
         {imageSlider.length > 0 ?
           <View style={{
-            backgroundColor: "red",
             height: Wheight - 390,
           }}>
 
             <ImageViewer
-                  saveToLocalByLongPress={false}
+              saveToLocalByLongPress={false}
 
               onChange={(index: any) => {
                 setSelectedImageIndex(index)
               }}
-              enableImageZoom={false} onClick={
-                () => {
-
-                  // setSelectedImageIndex(index)
-                  setFullImageScreen(true)
-                }
+              enableImageZoom={false}
+              onClick={() => {
+                // setSelectedImageIndex(index)
+                setFullImageScreen(true)
+              }
 
                 // () => navigation.navigate('showImage', { imageURL: { uri: coverImage }, selectedImageIndex, imageSlider })
               }

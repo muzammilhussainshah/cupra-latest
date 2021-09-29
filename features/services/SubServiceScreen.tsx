@@ -48,6 +48,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const [search, setsearch] = useState([]);
 
   const [flag, setflag] = useState(false);
+  const [isHome, setisHome] = useState(true);
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
@@ -58,6 +59,28 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   const { serviceId } = routes;
   console.log(routes, 'routerouterouterouterouterouteroute')
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setisHome(false)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setisHome(true)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+
+
+
+
+
   useEffect(() => {
     dispatch(_getSubServices(currentUser, serviceId, navigation))
   }, [])
@@ -89,14 +112,16 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
   return (
     <ScrollView>
 
-      <Container style={{ height: height  }}>
+      <Container style={{ height: height }}>
 
         <Header isGoBack={true} navigateBack={() => navigation.goBack()}
-        notiScreen={() => navigation.navigate('notification')}
-        _func={(e: any) => searchUser(e)}
+          notiScreen={() => navigation.navigate('notification')}
+          _func={(e: any) => searchUser(e)}
           searchBarInput={true}
         />
-        <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
+        {isHome &&
+          <CardBannerSection bannerPath={routes.item.banner} banner_type={routes.item.banner_type} />
+        }
         <ServicesGreeting
           name={currentUser.full_name}
           seriveTitle={'You want to book this service ?'}
@@ -120,7 +145,7 @@ export const SubServiceScreen: React.FC<Props> = ({ route, navigation }: any) =>
                 getserviceId={serviceId}
                 serviceImage={{ uri: item.icon }}
                 onPress={() => {
-                  navigation.push('booking', { serviceId, subserviceId: item._id });
+                  navigation.push('booking', { serviceId, subserviceId: item._id, serviceName: item.en_name });
                 }}
               />
             </>

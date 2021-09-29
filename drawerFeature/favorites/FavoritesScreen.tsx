@@ -267,7 +267,8 @@ export const FavoritesScreen: React.FC = () => {
             >
               <SteeringIcon
                 resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/images/steering.png')}
+                // source={require('../../assets/images/steering.png')}
+                source={require('../../assets/images/menu.png')}
               />
             </TouchableOpacity>
             <View style={{ flex: 8 }}>

@@ -18,6 +18,8 @@ export const ImagesScreen: React.FC = () => {
 
   const [imagesArr, setImagesArr] = useState([])
   const [pagination, setpagination] = useState(2);
+  const [isEmptyserch, setisEmptyserch] = useState(false)
+
   const [searchTxt, setsearchTxt] = useState('')
   const [search, setsearch] = useState([]);
   const paginationLoader = useSelector((state: any) => state.reducer.paginationLoader);
@@ -35,6 +37,23 @@ export const ImagesScreen: React.FC = () => {
   }, [getNewsImages])
 
 
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setisEmptyserch(false)
+      dispatch(_getNewsImages(currentUser, 10, 1, navigation))
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setisEmptyserch(true)
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   const searchUser: any = (e: any) => {
     
@@ -76,6 +95,7 @@ export const ImagesScreen: React.FC = () => {
   return (
     <ImagesContainer>
       <Header
+        isEmptyserch={isEmptyserch}
         _func={(e: any) => {
           searchUser(e)
           setsearchTxt(e)
@@ -88,14 +108,14 @@ export const ImagesScreen: React.FC = () => {
         <ImageTitle>Images</ImageTitle>
         <Ionicons name="filter-outline" size={30} color="#fff" />
       </ImageTitleWrapper>
-      <InfiniteScroll
+      {/* <InfiniteScroll
         style={{}}
         contentContainerStyle={{ paddingBottom: 130 }}
 
         showsHorizontalScrollIndicator={false}
         horizontal={false}
         onLoadMoreAsync={loadMorePage}
-      >
+      > */}
         {isLoader ?
           <ActivityIndicator
             style={{ marginTop: "50%" }}
@@ -110,6 +130,10 @@ export const ImagesScreen: React.FC = () => {
             showsVerticalScrollIndicator={false}
             // keyExtractor={item => item.id}
             data={imagesArr && imagesArr}
+            onEndReachedThreshold={0.4}
+            onEndReached={loadMorePage}
+
+
             renderItem={({ item, index }: any) => (
               <>
                 < ImageTile
@@ -129,14 +153,15 @@ export const ImagesScreen: React.FC = () => {
             <View style={{
               justifyContent: 'center',
               alignItems: "center",
-              // marginBottom: 20,
-              // marginTop: 20,
+              marginBottom: 50,
+              // marginTop: 50,
             }}>
               <ActivityIndicator size="small" color={'black'} />
+              {/* <ActivityIndicator size="large" color={'black'} /> */}
             </View>
           ) : null
         }
-      </InfiniteScroll>
+      {/* </InfiniteScroll> */}
 
 
     </ImagesContainer>

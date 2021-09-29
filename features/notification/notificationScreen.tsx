@@ -76,40 +76,39 @@ export const NotificationScreen: React.FC = () => {
                     </View> */}
                 </View>
                 <View style={{ flex: 8.8, paddingHorizontal: 20 }}>
-                    <ScrollView 
-                      showsVerticalScrollIndicator ={false}
-                      showsHorizontalScrollIndicator={false}
-                    >
-                        <View style={{ height: height / 10 * 7.5, }}>
-                            {/* {getnotification && getnotification.length > 0 && */}
-                            <FlatList
-                       showsVerticalScrollIndicator ={false}
-                       showsHorizontalScrollIndicator={false}
-                                data={notification}
-                                renderItem={({ item }: any) => {
-                                    return (
-                                        <View style={{ width: "100%", marginVertical: 5, flexDirection: "row", }}>
-                                            <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
-                                                <FastImage style={{ width: 50, height: 50 }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
-                                            </View>
-                                            <View style={{ flex: 8.5,marginHorizontal:5 }}>
-                                                <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                                    <Text style={{ color: Colors.black, fontSize: 15 }}>{item.title}sss</Text>
-                                                    <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
-                                                </View>
-                                                <Text style={{ color: Colors.black, fontSize: 15 }}>{item.body} </Text>
 
-                                            </View>
+                    <View style={{ height: height / 10 * 7.5, }}>
+                        {/* {getnotification && getnotification.length > 0 && */}
+                        {notification&&notification.length>0&&notification&&
+                        <FlatList
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ paddingBottom: '10%' }}
+                        data={notification&&notification.length>0&&notification}
+                        renderItem={({ item }: any) => {
+                            return (
+                                <View style={{ width: "100%", marginVertical: 5, flexDirection: "row", }}>
+                                        <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
+                                            <FastImage style={{ width: 50, height: 50 }} source={require('../../assets/images/RealCupraLogo.png')} resizeMode={FastImage.resizeMode.contain} />
                                         </View>
-                                    )
-                                }}
+                                        <View style={{ flex: 8.5, marginHorizontal: 5 }}>
+                                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                <Text style={{ color: Colors.black, fontSize: 15 }}>{item.title}</Text>
+                                                <Text style={{ color: Colors.darkGray, fontSize: 13 }}>{moment(item.createdAt).fromNow()}</Text>
+                                            </View>
+                                            <Text style={{ color: Colors.black, fontSize: 15 }}>{item.body} </Text>
+
+                                        </View>
+                                    </View>
+                                )
+                            }}
                             />
-                        </View>
-                    </ScrollView>
+                        }
+                    </View>
                     {/* // } */}
                 </View>
                 {isError !== "" &&
-                    <Text style={{ color: Colors.primary, alignSelf: "center" }}>{isError}
+                <Text style={{ color: Colors.primary, alignSelf: "center" }}>{isError}
                     </Text>}
             </View>
         </View>

@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform, Alert,StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Orientation from 'react-native-orientation-locker';
+import { useDispatch, useSelector } from 'react-redux';
+import { _mediaView } from '../../store/action/newsAction';
 
 // TODO:use TYPES HERE 
 export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
-  const { videoURL } = route.params;
+  const { videoURL,_id } = route.params;
   const videoPlayer = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -17,6 +19,8 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
     playerState, setPlayerState
   ] = useState(PLAYER_STATES.PLAYING);
   const [screenType, setScreenType] = useState<string>('content');
+  const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const dispatch = useDispatch()
 
   const onSeek = (seek: any) => {
     //Handler for change in seekbar
@@ -45,9 +49,12 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
   const onLoad = (data: any) => {
     setDuration(data.duration);
     setIsLoading(false);
+    dispatch(_mediaView(currentUser,_id))
   };
 
-  const onLoadStart = () => setIsLoading(true);
+  const onLoadStart = () => {
+    setIsLoading(true)
+  };
 
   const onEnd = () => setPlayerState(PLAYER_STATES.ENDED);
 
@@ -59,7 +66,10 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
   const onFullScreen = () => {
     if (!isFullScreen) {
       Orientation.lockToLandscape();
+      StatusBar.setHidden(true)
     } else {
+      StatusBar.setHidden(false)
+
       if (Platform.OS === 'ios') {
         Orientation.lockToPortrait();
       }
@@ -71,6 +81,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
     return () => {
       Orientation.lockToPortrait();
       setIsFullScreen(false);
+      StatusBar.setHidden(false)
     }
   }, [])
 
@@ -88,7 +99,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 20, top: 20 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
-      <View style={{ width: "95%", height: 160, borderRadius: 14 }}>
+      <View style={{ width: "100%", height:"100%", borderRadius: 14 }}>
         <Video
           onEnd={onEnd}
           onLoad={onLoad}
@@ -96,7 +107,7 @@ export const VideoPlayScreen: React.FC = ({ route, navigation }: any) => {
           onProgress={onProgress}
           paused={paused}
           ref={videoPlayer}
-          resizeMode={"cover"}
+          resizeMode={"contain"}
           // onFullScreen={isFullScreen}
           source={{
             uri:

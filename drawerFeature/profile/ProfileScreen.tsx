@@ -118,7 +118,7 @@ export const ProfileScreen: React.FC = () => {
             />
             {/* Absolute for image insert inside border */}
             <View style={{ height: "100%", width: "100%", overflow: "hidden", position: 'absolute', justifyContent: "center", alignItems: "center", zIndex: -2 }}>
-              <View style={{ height: "86%", width: "53%", borderRadius: 100, backgroundColor: Colors.darkGray, justifyContent: "center", alignItems: "center" }}>
+              <View style={{ height: "86%", width: "53%", borderRadius: 100, backgroundColor: Colors.darkGray,overflow:"hidden", justifyContent: "center", alignItems: "center" }}>
                 < FastImage
                   resizeMode={icon ? 'cover' : 'contain'}
                   style={{ height: icon ? '100%' : "70%", width: icon ? '100%' : "70%", borderRadius: 60 }}

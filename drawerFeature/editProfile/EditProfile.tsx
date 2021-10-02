@@ -350,7 +350,7 @@ export const EditProfile: React.FC = () => {
                   />
                   {/* Absolute for image insert inside border */}
                   <View style={{ height: "100%", width: "100%", overflow: "hidden", position: 'absolute', justifyContent: "center", alignItems: "center", zIndex: -2 }}>
-                    <View style={{ height: "86%", width: "86%", borderRadius: 100, backgroundColor: imageUriLocal == "" ? Colors.darkGray : null, justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ height: "86%", width: "86%", borderRadius: 100, backgroundColor: imageUriLocal == "" ? Colors.darkGray : null, justifyContent: "center", alignItems: "center" ,overflow:"hidden"}}>
                       < FastImage
                         resizeMode={imageUriLocal ? 'cover' : 'contain'}
                         style={{ height: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", width: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", borderRadius: 60 }}

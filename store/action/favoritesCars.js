@@ -144,6 +144,7 @@ export const _addFavCars = (currentUser, navigation, brandName, modalName, yearN
     }
 }
 export const _dltFavCars = (currentUser, navigation, carId) => {
+    console.log(carId,"carId")
     return async (dispatch) => {
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');

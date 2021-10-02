@@ -367,12 +367,12 @@ export const FavoritesScreen: React.FC = () => {
                   numColumns={3}
                   renderItem={({ item }: any) => {
                     const { brand, model, year, _id }: any = item
-                    setFavCarId(_id)
                     return (
                       <View style={{ height: height / 10 * 2.3, width: width / 10 * 2.8, marginHorizontal: 10, marginTop: 20, borderRadius: 15, }}>
                         <View style={{ position: "absolute", zIndex: 2, height: "100%", width: "100%" }}>
                           <TouchableOpacity
                             onPress={() => {
+                              setFavCarId(_id)
                               setdltModalEnabled(true)
                             }}
                             activeOpacity={0.7}

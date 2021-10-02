@@ -31,7 +31,6 @@ export const _checkIsEmptyObj = (obj) => {
 
 
 export const _getCatogery = (currentUser, navigation) => {
-    console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -80,7 +79,6 @@ export const _getCatogery = (currentUser, navigation) => {
 
 
 export const _getSubCatogery = (currentUser, catId, navigation) => {
-    console.log(currentUser, catId, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -226,7 +224,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
         }
     }
 }
-export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => {
+export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => { 
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -244,7 +242,7 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
                 },
                 data: {
                     "reservation_id": reservationId.toString(),
-                    "reason": reason
+                    "reason": reason.toString()
                 }
             };
             var resp = await axios(option);

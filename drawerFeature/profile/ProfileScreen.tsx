@@ -57,7 +57,6 @@ export const ProfileScreen: React.FC = () => {
     }
   }, [isFocused]);
 
-  console.log(currentUser, "currentUsercurrentUsercurrentUser")
   return (
     // <Animatable.Text 
     // >Up and down you go</Animatable.Text>
@@ -242,7 +241,7 @@ export const ProfileScreen: React.FC = () => {
                     contentContainerStyle={{ marginTop: 5 }}
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
-                    renderItem={({ item }: any) => {
+                    renderItem={({ item }: any) => { 
                       const { item_id, date_time, _id } = item
                       const { en_name } = item_id
                       return (

@@ -57,7 +57,7 @@ export const ProfileScreen: React.FC = () => {
     }
   }, [isFocused]);
 
-console.log(currentUser,"currentUsercurrentUsercurrentUser")
+  console.log(currentUser, "currentUsercurrentUsercurrentUser")
   return (
     // <Animatable.Text 
     // >Up and down you go</Animatable.Text>
@@ -104,7 +104,7 @@ console.log(currentUser,"currentUsercurrentUsercurrentUser")
             <SteeringIcon
               resizeMode={FastImage.resizeMode.contain}
               source={require('../../assets/images/menu.png')}
-              // source={require('../../assets/images/steering.png')}
+            // source={require('../../assets/images/steering.png')}
             />
           </TouchableOpacity>
           <Text style={{ fontSize: 16, color: Colors.white, marginLeft: 10 }}>My Profile</Text>
@@ -135,54 +135,56 @@ console.log(currentUser,"currentUsercurrentUsercurrentUser")
 
         </View>
         <View style={{ height: "55%", backgroundColor: "rgba(0,0,0,0)" }}>
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
+          <View style={{ justifyContent: "center",paddingBottom:15, alignItems: "center", }}>
             <Text style={{ fontSize: 16 }}>{full_name && full_name}</Text>
           </View>
-          <View style={{ flex: 2.5, justifyContent: "center", alignItems: "center", }}>
-            <View style={{ height: "65%", width: "80%", flexDirection: "row", alignItems: "center", elevation: 5, backgroundColor: Colors.white, borderRadius: 10, padding: 10 }}>
-              <TouchableOpacity
-                activeOpacity={0.5} style={{ width: "49.7%", height: "100%", alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ color: "#cccaca" }}>LIKES</Text>
-                <Text style={{ fontSize: 18 }}>{numberOfLikes && numberOfLikes}</Text>
-              </TouchableOpacity>
-              <View style={{ width: "0.6%", height: "60%", backgroundColor: Colors.titleGray }}></View>
-              <TouchableOpacity
-                activeOpacity={0.5} style={{ width: "49.7%", height: "100%", alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ color: "#cccaca" }}>REVIEWS</Text>
-                <Text style={{ fontSize: 18 }}>{numberOfReviews && numberOfReviews}</Text>
-              </TouchableOpacity>
+          <ScrollView contentContainerStyle={{}}>
+
+            <View style={{ flex: 2.5, justifyContent: "center", alignItems: "center", }}>
+              <View style={{ height: "65%", width: "80%", flexDirection: "row", alignItems: "center", elevation: 5, backgroundColor: Colors.white, borderRadius: 10, padding: 10 }}>
+                <TouchableOpacity
+                  activeOpacity={0.5} style={{ width: "49.7%", height: 70, alignItems: "center", justifyContent: "center" }}>
+                  <Text style={{ color: "#cccaca" }}>LIKES</Text>
+                  <Text style={{ fontSize: 18 }}>{numberOfLikes && numberOfLikes}</Text>
+                </TouchableOpacity>
+                <View style={{ width: "0.6%", height: "60%", backgroundColor: Colors.titleGray }}></View>
+                <TouchableOpacity
+                  activeOpacity={0.5} style={{ width: "49.7%", height: 70, alignItems: "center", justifyContent: "center" }}>
+                  <Text style={{ color: "#cccaca" }}>REVIEWS</Text>
+                  <Text style={{ fontSize: 18 }}>{numberOfReviews && numberOfReviews}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          {isLoader &&
-            <ActivityIndicator
-              style={{ marginTop: "0%" }}
-              size="small" color={Colors.black}
-            />}
-          <View style={{ flex: 6.5 }}>
-            <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.5, borderColor: Colors.darkGray }}>
-              <TouchableOpacity
-                onPress={() => setselectedTab(false)}
-                activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between', }}>
-                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Booked Services</Text>
-                {!selectedTab &&
-                  <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
-                }
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setselectedTab(true)}
-                activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between' }}>
-                <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserved Parts</Text>
-                {selectedTab &&
-                  <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
-                }
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex: 8.5 }}>
-              <ScrollView  >
+            {isLoader &&
+              <ActivityIndicator
+                style={{ marginTop: "0%" }}
+                size="small" color={Colors.black}
+              />}
+            <View style={{ flex: 6.5 }}>
+              <View style={{ flex: 1.5, flexDirection: "row", borderBottomWidth: 0.5, borderColor: Colors.darkGray }}>
+                <TouchableOpacity
+                  onPress={() => setselectedTab(false)}
+                  activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between', }}>
+                  <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Booked Services</Text>
+                  {!selectedTab &&
+                    <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
+                  }
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setselectedTab(true)}
+                  activeOpacity={0.7} style={{ flex: 1, alignItems: "center", justifyContent: 'space-between' }}>
+                  <Text style={{ fontWeight: "bold", color: Colors.darkGray }}>Reserved Parts</Text>
+                  {selectedTab &&
+                    <View style={{ height: 3, width: "20%", backgroundColor: Colors.primary }}></View>
+                  }
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 8.5 }}>
                 {!selectedTab ?
                   bookedServices &&
                   <FlatList
-                    contentContainerStyle={{ marginTop: 5 }}
+                    // contentContainerStyle={{ marginTop: 20 }}
+                    style={{marginTop:20}}
                     keyExtractor={(item: any) => item._id}
                     data={getMyProfilefilterdData}
                     renderItem={({ item }: any) => {
@@ -289,9 +291,9 @@ console.log(currentUser,"currentUsercurrentUsercurrentUser")
                     }}
                   />
                 }
-              </ScrollView>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
       </ View >
     </View >

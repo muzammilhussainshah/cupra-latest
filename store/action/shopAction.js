@@ -227,7 +227,6 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
     }
 }
 export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => {
-    console.log(reservationId, reason, 'reservationId, reason')
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -277,9 +276,9 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
             dispatch(_loading(false));
         }
         catch (err) {
-            dispatch(_loading(false));
+            // dispatch(_loading(false));
 
-            console.log(err, "error from _cancelResetvation", JSON.parse(JSON.stringify(err.message)));
+            // console.log(err, "error from _cancelResetvation", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

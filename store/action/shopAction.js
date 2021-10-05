@@ -227,6 +227,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
 export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => { 
     return async (dispatch) => {
         dispatch(_loading(true));
+        console.log(reservationId,reason,'++++++++++++')
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');

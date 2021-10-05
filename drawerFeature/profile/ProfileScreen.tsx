@@ -242,6 +242,7 @@ export const ProfileScreen: React.FC = () => {
                     keyExtractor={(item: any) => item._id}
                     data={reservedParts}
                     renderItem={({ item }: any) => { 
+                      console.log(item,'itemitemitemitemitemitemitem')
                       const { item_id, date_time, _id } = item
                       const { en_name } = item_id
                       return (

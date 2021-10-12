@@ -31,7 +31,6 @@ export const _checkIsEmptyObj = (obj) => {
 
 
 export const _getCatogery = (currentUser, navigation) => {
-    console.log(currentUser, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -80,7 +79,6 @@ export const _getCatogery = (currentUser, navigation) => {
 
 
 export const _getSubCatogery = (currentUser, catId, navigation) => {
-    console.log(currentUser, catId, "currentUsercurrentUsercurrentUsercurrentUser")
     return async (dispatch) => {
         dispatch(_loading(true));
         try {
@@ -226,10 +224,10 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
         }
     }
 }
-export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => {
-    console.log(reservationId, reason, 'reservationId, reason')
+export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => { 
     return async (dispatch) => {
         dispatch(_loading(true));
+        console.log(reservationId,reason,'++++++++++++')
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -245,7 +243,7 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
                 },
                 data: {
                     "reservation_id": reservationId.toString(),
-                    "reason": reason
+                    "reason": reason.toString()
                 }
             };
             var resp = await axios(option);
@@ -277,9 +275,9 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
             dispatch(_loading(false));
         }
         catch (err) {
-            dispatch(_loading(false));
+            // dispatch(_loading(false));
 
-            console.log(err, "error from _cancelResetvation", JSON.parse(JSON.stringify(err.message)));
+            // console.log(err, "error from _cancelResetvation", JSON.parse(JSON.stringify(err.message)));
         }
     }
 }

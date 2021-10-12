@@ -1,4 +1,4 @@
-package com.cupra;
+package com.cupranation.cupra;
 
 import com.facebook.react.ReactActivity;
 

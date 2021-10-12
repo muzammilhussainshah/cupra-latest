@@ -38,7 +38,6 @@ export const HomeComments = ({ route, navigation, }: any) => {
   const newsComment = useSelector((state: any) => state.reducer.newsComment)
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
-  // console.log(currentUser, 'currentUsercurrentUsercurrentUser')
   const dispatch = useDispatch()
 
   return (

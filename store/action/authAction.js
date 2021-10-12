@@ -553,7 +553,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
             dispatch(_loading(false));
             console.log(error, 'from async');
           }
-          console.log(fullName, email, country, socialId, socialType, '66666');
+          console.log(fullName, email,  socialId, socialType, '66666');
 
           const option = {
             method: 'POST',
@@ -587,7 +587,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
                   completeSignUp: 'Complete Signup',
                   full_name: fullName,
                   email: email,
-                  country: country,
+                  // country: country,
                   social_id: socialId,
                   social_type: socialType,
                 });
@@ -665,7 +665,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           }
 
           // let phoneNumber = resp.user._user.phoneNumber
-          console.log(fullName, email, country, socialId, socialType, '66666', getSocialtype);
+          console.log(fullName, email,  socialId, socialType, '66666', getSocialtype);
 
           const option = {
             method: 'POST',
@@ -701,7 +701,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
                   completeSignUp: 'Complete Signup',
                   full_name: fullName,
                   email: email,
-                  country: country,
+                  // country: country,
                   social_id: socialId,
                   social_type: socialType,
                 });
@@ -710,7 +710,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(respSocialLogin, 'fb login  Succesfull');
         })
         .catch(err => {
-          console.log(err, 'err');
+          console.log(err, 'err from facebook auth');
         });
       console.log(signInMethod, 'signInMethod');
       return signInMethod;
@@ -765,7 +765,11 @@ export const _directLogin = ({ Id, type, }, navigation, setUser) => {
         // dispatch(_error(resp.data.error.messageEn));
       }
 
-      console.log(resp, 'resp _FbDirectLogin');
+      console.log(resp.data.status, 'resp _FbDirectLogin');
+      if(resp.data.status===400){
+        dispatch(_logOut(navigation))
+
+      }
     } catch (err) {
       dispatch(_loading(false));
       // dispatch(_error(resp.data.error.messageEn));

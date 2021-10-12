@@ -765,7 +765,11 @@ export const _directLogin = ({ Id, type, }, navigation, setUser) => {
         // dispatch(_error(resp.data.error.messageEn));
       }
 
-      console.log(resp, 'resp _FbDirectLogin');
+      console.log(resp.data.status, 'resp _FbDirectLogin');
+      if(resp.data.status===400){
+        dispatch(_logOut(navigation))
+
+      }
     } catch (err) {
       dispatch(_loading(false));
       // dispatch(_error(resp.data.error.messageEn));

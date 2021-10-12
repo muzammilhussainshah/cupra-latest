@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.cupra"
+        applicationId "com.cupranation.cupra"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

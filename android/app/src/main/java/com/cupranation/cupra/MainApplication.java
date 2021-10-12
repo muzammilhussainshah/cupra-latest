@@ -1,4 +1,4 @@
-package com.cupra;
+package com.cupranation.cupra;
 
 import android.app.Application;
 import android.content.Context;

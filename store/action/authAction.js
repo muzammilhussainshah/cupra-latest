@@ -632,7 +632,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
 
       // Once signed in, get the users AccesToken
       const data = await AccessToken.getCurrentAccessToken();
-      console.log(data, 'data');
+      console.log(data, '_facebookAuth');
 
       if (!data) {
         throw 'Something went wrong obtaining access token';

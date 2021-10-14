@@ -173,7 +173,10 @@ export const HomeScreen: React.FC = () => {
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
   };
-
+  const onViewableItemsChanged = ({ viewableItems, changed }) => {
+    console.log("Visible items are", viewableItems);
+    console.log("Changed in this iteration", changed);
+  }
 
 
   console.log("re rendger", isEmptyserch)
@@ -211,7 +214,14 @@ export const HomeScreen: React.FC = () => {
         /> :
         <ScrollView
 
-          onScroll={({ nativeEvent }) => {
+          onScroll={({ nativeEvent }:any) => {
+            console.log(nativeEvent,'nativeEventnativeEventnativeEvent')
+            if(nativeEvent.contentOffset.y>160){
+              setisHome(false)
+            }
+            else{
+              setisHome(true)
+            }
             if (isCloseToBottom(nativeEvent) && isMore) {
               loadMorePage()
             }
@@ -226,6 +236,10 @@ export const HomeScreen: React.FC = () => {
           {/* adds */}
           <View style={{ width: '90%', alignSelf: 'center', marginTop: '2%' }}>
             <FlatList
+              // onViewableItemsChanged={(data)=>onViewableItemsChanged(data) }
+              // viewabilityConfig={{
+              //   itemVisiblePercentThreshold: 50
+              // }}
               showsHorizontalScrollIndicator={false}
               data={ads}
               style={{}}

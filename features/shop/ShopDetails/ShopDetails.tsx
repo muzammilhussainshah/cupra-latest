@@ -229,7 +229,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
               size="small" color={'black'}
             /> :
 
-            <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
               <View style={{ width: "60%" }}>
                 <ItemName>{en_name}</ItemName>
               </View>

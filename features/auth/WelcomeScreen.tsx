@@ -122,7 +122,7 @@ export const WelcomeScreen: React.FC = () => {
           </ButtonsRow>
           <Row>
             <Hairline />
-            <Label>Or via social</Label>
+            <Label>Or Signup Using</Label>
             <Hairline />
           </Row>
           <SocialMedia />

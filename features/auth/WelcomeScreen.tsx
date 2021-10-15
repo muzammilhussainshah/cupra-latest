@@ -49,6 +49,7 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Facebook') {
+      console.log('FacebookFacebookFacebook')
       dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' }, navigation, setUser));
       // navigation.dispatch(
       //   CommonActions.reset({
@@ -72,6 +73,8 @@ export const WelcomeScreen: React.FC = () => {
 
 
     else {
+      console.log('elseelseelse')
+      
       setUser(false);
     }
   };

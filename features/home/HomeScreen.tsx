@@ -215,7 +215,6 @@ export const HomeScreen: React.FC = () => {
         <ScrollView
 
           onScroll={({ nativeEvent }:any) => {
-            console.log(nativeEvent,'nativeEventnativeEventnativeEvent')
             if(nativeEvent.contentOffset.y>160){
               setisHome(false)
             }

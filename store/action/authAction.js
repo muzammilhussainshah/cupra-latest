@@ -122,7 +122,7 @@ export const _signUp = (model, navigation, country) => {
         // dispatch(_resendCode(`${model.country_number}${model.phone_number}`));
         navigation.navigate('otp', {
           phone_number: model.country_number?.concat(model.phone_number),
-          password:  model.password,
+          password: model.password,
         });
         dispatch(_loading(false));
       } else {
@@ -293,7 +293,7 @@ export const _varifyCustomer = (
           'Content-Type': 'application/json',
         },
         data: {
-          mobile:getPhonneNumber&&getPhonneNumber,
+          mobile: getPhonneNumber && getPhonneNumber,
           otp: otpCode && otpCode,
         },
       };
@@ -301,15 +301,85 @@ export const _varifyCustomer = (
       if (resp.data.status === 200) {
         if (getroutName == 'SocialSigninVerification') {
           dispatch(_loading(false));
-          if (getsocialType == 'GOOGLE') {
-            dispatch(_googleAuth('testing', getsocialId, getsocialType));
-          } else {
-            dispatch(_facebookAuth('testing', getsocialId, getsocialType));
+          // if (getsocialType == 'GOOGLE') {
+          //   dispatch(_googleAuth('testing', getsocialId, getsocialType));
+          // } else {
+          // dispatch(_facebookAuth('testing', getsocialId, getsocialType));
+
+
+          const option = {
+            method: 'POST',
+            url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+            headers: {
+              'cache-control': 'no-cache',
+              'Allow-Cross-Origin': '*',
+              'Content-Type': 'application/json',
+            },
+            data: {
+              social_id: getsocialId,
+              social_type: getsocialType,
+            },
+          };
+          var respSocialLogin = await axios(option);
+          if (respSocialLogin.data.status === 200) {
+
+            if (getsocialType == 'GOOGLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Google');
+                await AsyncStorage.setItem('auth', 'google');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
+            else {
+
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Facebook');
+                await AsyncStorage.setItem('auth', 'facebook');
+                // dispatch(_loading(false));
+              } catch (error) {
+                console.log(error, 'from facebook async');
+              }
+            }
+
+
+
+            console.log('2000000000000000')
+            dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
+
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'drawerStack' }],
+              }),
+            );
+
           }
-        } else {
-          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          // }
+        }
+        else {
+
           // getpassword in this case getroutName
-      dispatch(_signIn({ emailOrPhone: getPhonneNumber, password: getpassword }, navigation, ));
+          dispatch(_signIn({ emailOrPhone: getPhonneNumber, password: getpassword }, navigation,));
 
           // navigation.navigate('login');
           dispatch(_loading(false));
@@ -544,16 +614,16 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           let socialType = 'GOOGLE';
 
           // let phoneNumber = resp.user._user.phoneNumber
-          try {
-            await AsyncStorage.setItem('socialId', socialId);
-            await AsyncStorage.setItem('socialType', 'Google');
-            await AsyncStorage.setItem('auth', 'google');
-            dispatch(_loading(false));
-          } catch (error) {
-            dispatch(_loading(false));
-            console.log(error, 'from async');
-          }
-          console.log(fullName, email,  socialId, socialType, '66666');
+          // try {
+          //   await AsyncStorage.setItem('socialId', socialId);
+          //   await AsyncStorage.setItem('socialType', 'Google');
+          //   await AsyncStorage.setItem('auth', 'google');
+          //   dispatch(_loading(false));
+          // } catch (error) {
+          //   dispatch(_loading(false));
+          //   console.log(error, 'from async');
+          // }
+          console.log(fullName, email, socialId, socialType, '66666');
 
           const option = {
             method: 'POST',
@@ -570,6 +640,14 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           };
           var resp = await axios(option);
           if (resp.data.status === 200) {
+            try {
+              await AsyncStorage.setItem('socialId', socialId);
+              await AsyncStorage.setItem('socialType', 'Google');
+              await AsyncStorage.setItem('auth', 'google');
+            } catch (error) {
+              console.log(error, 'from async');
+            }
+
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
             navigation.dispatch(
               CommonActions.reset({
@@ -579,7 +657,6 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
             );
 
           } else if (resp.data.error.messageEn == 'Invalid Credentials') {
-            dispatch(_loading(false));
             {
               navigation &&
                 navigation.navigate('resetPassword', {
@@ -598,18 +675,33 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
           // dispatch(_loading(false));
         })
         .catch(err => {
-          console.log(err, 'eraaar');
           dispatch(_loading(false));
+          console.log(
+            err.response,
+            'error from google auth',
+            JSON.parse(JSON.stringify(err.message)),
+
+          );
+          dispatch(_error('Network error please check you connection'))
         });
       return signInMethod;
     } catch (err) {
+
       dispatch(_loading(false));
-      dispatch(_error(resp.data.error.messageEn));
+      // dispatch(_error(resp.data.error.messageEn));
       console.log(
         err.response,
         'error from _resetNewPassword',
         JSON.parse(JSON.stringify(err.message)),
+
       );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
+      // if (JSON.parse(JSON.stringify(err.message)) === 'User logged in as different Facebook user.') {
+      GoogleSignin.signOut();
+      // }
+
+
+
     }
   };
 };
@@ -617,6 +709,8 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
+    // if (LoginManager.getInstance() != null) {
+    // }
     try {
       dispatch(_loading(true));
       // Attempt login with permissions
@@ -654,18 +748,18 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           // let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'FACEBOOK';
-          try {
-            await AsyncStorage.setItem('socialId', socialId);
-            await AsyncStorage.setItem('socialType', 'Facebook');
-            await AsyncStorage.setItem('auth', 'facebook');
-            dispatch(_loading(false));
-          } catch (error) {
-            dispatch(_loading(false));
-            console.log(error, 'from facebook async');
-          }
+          // try {
+          //   await AsyncStorage.setItem('socialId', socialId);
+          //   await AsyncStorage.setItem('socialType', 'Facebook');
+          //   await AsyncStorage.setItem('auth', 'facebook');
+          //   dispatch(_loading(false));
+          // } catch (error) {
+          //   dispatch(_loading(false));
+          //   console.log(error, 'from facebook async');
+          // }
 
           // let phoneNumber = resp.user._user.phoneNumber
-          console.log(fullName, email,  socialId, socialType, '66666', getSocialtype);
+          console.log(fullName, email, socialId, socialType, '66666', getSocialtype);
 
           const option = {
             method: 'POST',
@@ -682,6 +776,17 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           };
           var respSocialLogin = await axios(option);
           if (respSocialLogin.data.status === 200) {
+            try {
+              await AsyncStorage.setItem('socialId', socialId);
+              await AsyncStorage.setItem('socialType', 'Facebook');
+              await AsyncStorage.setItem('auth', 'facebook');
+              // dispatch(_loading(false));
+            } catch (error) {
+              console.log(error, 'from facebook async');
+            }
+
+
+
             console.log('2000000000000000')
             dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
 
@@ -693,7 +798,6 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
             );
 
           } else if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
-            dispatch(_loading(false));
             {
               navigation &&
                 navigation.navigate('resetPassword', {
@@ -706,22 +810,39 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
                   social_type: socialType,
                 });
             }
+            dispatch(_loading(false));
           }
           console.log(respSocialLogin, 'fb login  Succesfull');
         })
         .catch(err => {
-          console.log(err, 'err from facebook auth');
+          dispatch(_loading(false));
+          console.log(
+            err.response,
+            'error from facebook auth',
+            JSON.parse(JSON.stringify(err.message)),
+
+          );
+          // dispatch(_error(JSON.parse(JSON.stringify(err.message))))
+          dispatch(_error('Network error please check you connection'))
+
         });
       console.log(signInMethod, 'signInMethod');
       return signInMethod;
     } catch (err) {
       dispatch(_loading(false));
-      dispatch(_error(resp.data.error.messageEn));
+      // dispatch(_error(resp.data.error.messageEn));
       console.log(
         err.response,
         'error from _resetNewPassword',
         JSON.parse(JSON.stringify(err.message)),
+
       );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
+      if (JSON.parse(JSON.stringify(err.message)) === 'User logged in as different Facebook user.') {
+        LoginManager.logOut()
+      }
+
+
     }
   };
 };
@@ -766,7 +887,7 @@ export const _directLogin = ({ Id, type, }, navigation, setUser) => {
       }
 
       console.log(resp.data.status, 'resp _FbDirectLogin');
-      if(resp.data.status===400){
+      if (resp.data.status === 400) {
         dispatch(_logOut(navigation))
 
       }

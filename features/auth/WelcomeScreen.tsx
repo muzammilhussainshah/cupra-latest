@@ -103,7 +103,7 @@ export const WelcomeScreen: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('login');
                 }}>
-                <ButtonText>Log in</ButtonText>
+                <ButtonText>Login</ButtonText>
               </Button>
             </ButtonsContainer>
             <ButtonsContainer
@@ -119,7 +119,7 @@ export const WelcomeScreen: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('signup');
                 }}>
-                <ButtonText>Sign Up</ButtonText>
+                <ButtonText>Signup</ButtonText>
               </Button>
             </ButtonsContainer>
           </ButtonsRow>

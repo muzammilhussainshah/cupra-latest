@@ -160,7 +160,7 @@ export const LoginScreen: React.FC = () => {
             signupNavigate={() => navigation.navigate('signup')}
             forgetPasswordNavigate={() => navigation.navigate('resetPassword')}
             forgetPassword={'Forget your password?'}
-            signup={'Don’t have an account ? Sign up'}
+            signup={'Don’t have an account ? Signup'}
           />
           <Row>
             <Hairline />

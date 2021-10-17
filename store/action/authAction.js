@@ -883,7 +883,7 @@ export const _facebookAuthSignUp = (navigation, getSocialId, getSocialtype) => {
       console.log(result, 'result');
 
       if (result.isCancelled) {
-      dispatch(_loading(false));
+        dispatch(_loading(false));
         throw 'User cancelled the login process';
       }
 
@@ -1033,8 +1033,7 @@ export const _completeSignUp = (
     getsocialId,
     getsocialType,
     '9874',
-  );
-  // console.log(model.country_number + model.phone_number, getfullName, getEmail, getcountry, getsocialId, getsocialType, navigation, '555555')
+  ); 
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -1059,14 +1058,66 @@ export const _completeSignUp = (
         },
       };
       var resp = await axios(option);
-      if (resp.data.status == 200) {
-        dispatch(_loading(false));
-        navigation.navigate('otp', {
-          phone_number: getPhonneNumber,
-          getroutName: 'SocialSigninVerification',
-          getsocialId,
-          getsocialType,
-        });
+      if (resp.data.status == 200) { 
+        if (resp.data.data.token) {
+          const option = {
+            method: 'POST',
+            url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+            headers: {
+              'cache-control': 'no-cache',
+              'Allow-Cross-Origin': '*',
+              'Content-Type': 'application/json',
+            },
+            data: {
+              social_id: getsocialId,
+              social_type: getsocialType,
+            },
+          };
+          var respSocialLogin = await axios(option);
+          if (respSocialLogin.data.status === 200) {
+
+            if (getsocialType == 'GOOGLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Google');
+                await AsyncStorage.setItem('auth', 'google');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
+            else {
+
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Facebook');
+                await AsyncStorage.setItem('auth', 'facebook');
+                // dispatch(_loading(false));
+              } catch (error) {
+                console.log(error, 'from facebook async');
+              }
+            }
+            console.log(respSocialLogin, '100000000')
+            dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'drawerStack' }],
+              }),
+            );
+          }
+          dispatch(_loading(false));
+        } else {
+
+          dispatch(_loading(false));
+          navigation.navigate('otp', {
+            phone_number: getPhonneNumber,
+            getroutName: 'SocialSigninVerification',
+            getsocialId,
+            getsocialType,
+          }
+          )
+        }
+        ;
       } else {
         dispatch(_loading(false));
         dispatch(_error(resp.data.error.messageEn));

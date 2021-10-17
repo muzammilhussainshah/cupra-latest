@@ -43,6 +43,8 @@ export const HomeScreen: React.FC = () => {
 
   const [isHome, setisHome] = useState(true)
 
+  const [blur, setblur] = useState(false)
+
   const [isEmptyserch, setisEmptyserch] = useState(false)
 
   const [isMore, setisMore] = useState<any>(true)
@@ -74,7 +76,7 @@ export const HomeScreen: React.FC = () => {
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
       sethomeLoader(true)
-      dispatch(_stories(currentUser, filterdBy, navigation,sethomeLoader))
+      dispatch(_stories(currentUser, filterdBy, navigation, sethomeLoader))
       dispatch(_getAds(currentUser, navigation))
       dispatch(_onlineUser(currentUser, navigation))
     }
@@ -87,11 +89,12 @@ export const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
+      setblur(true)
       setisHome(false)
       setisEmptyserch(false)
-      console.log(searchTxt,"searchTxt")
+      console.log(searchTxt, "searchTxt")
       // setsearchTxt('')
-        dispatch(_stories(currentUser, filterdBy, navigation,))
+      dispatch(_stories(currentUser, filterdBy, navigation,))
       // if(searchTxt){
       // }
       // console.log(searchTxt,"searchTxt")
@@ -103,6 +106,7 @@ export const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setblur(false)
       setisHome(true)
       setisEmptyserch(true)
       // if (searchTxt !== '') {
@@ -183,7 +187,7 @@ export const HomeScreen: React.FC = () => {
   return (
     < Container >
 
-{/* 
+      {/* 
       {isEmptyserch ?
         <Header
           isEmptyserch={isEmptyserch}
@@ -196,15 +200,15 @@ export const HomeScreen: React.FC = () => {
           onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
         : */}
 
-        <Header
-          isEmptyserch={isEmptyserch}
-          _func={(e: any) => {
-            searchUser(e)
-            setsearchTxt(e)
-          }}
-          searchBarInput={true}
-          notiScreen={() => navigation.navigate('notification')}
-          onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
+      <Header
+        isEmptyserch={isEmptyserch}
+        _func={(e: any) => {
+          searchUser(e)
+          setsearchTxt(e)
+        }}
+        searchBarInput={true}
+        notiScreen={() => navigation.navigate('notification')}
+        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
       {/* // } */}
       {homeLoader ?
@@ -214,13 +218,17 @@ export const HomeScreen: React.FC = () => {
         /> :
         <ScrollView
 
-          onScroll={({ nativeEvent }:any) => {
-            if(nativeEvent.contentOffset.y>160){
+          onScroll={({ nativeEvent }: any) => {
+            if (nativeEvent.contentOffset.y > 160) {
               setisHome(false)
             }
-            else{
+            else if (nativeEvent.contentOffset.y < 160 && !blur) {
+              console.log(nativeEvent.contentOffset.y, '+++++++++++++nativeEvent.contentOffset.y')
               setisHome(true)
             }
+            // else{
+            //   setisHome(true)
+            // }
             if (isCloseToBottom(nativeEvent) && isMore) {
               loadMorePage()
             }

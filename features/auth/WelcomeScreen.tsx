@@ -123,12 +123,12 @@ export const WelcomeScreen: React.FC = () => {
               </Button>
             </ButtonsContainer>
           </ButtonsRow>
-          <Row>
+          {/* <Row>
             <Hairline />
             <Label>Or Signup Using</Label>
             <Hairline />
           </Row>
-          <SocialMedia />
+          <SocialMedia /> */}
         </GradientBanckground>
       </BackGroundContinerImage>
     ) :

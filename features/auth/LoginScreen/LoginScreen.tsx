@@ -32,6 +32,14 @@ import {
   LoginTitle,
 } from './LoginStyled';
 
+
+import { 
+  SocialMedia,
+  Row,
+  Hairline,
+  Label,
+} from '../styled';
+
 const IconPlaceholder = styled(TouchableOpacity)`
 background-color: transparent;
 border-width: 1px;
@@ -145,7 +153,7 @@ export const LoginScreen: React.FC = () => {
               </ButtonsContainer>
             }
             {isError !== "" &&
-              <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
+              <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}{' ' }{isError=="Invalid Credentials"&& "please signup first"}
               </Text>}
           </FormProvider>
           <FooterButtons
@@ -154,6 +162,12 @@ export const LoginScreen: React.FC = () => {
             forgetPassword={'Forget your password?'}
             signup={'Don’t have an account ? Sign up'}
           />
+          <Row>
+            <Hairline />
+            <Label>Or Login Using</Label>
+            <Hairline />
+          </Row>
+          <SocialMedia routeName={'SignIn'}/>
           <KeyboardSpacer />
         </ScrollView>
       </Container>

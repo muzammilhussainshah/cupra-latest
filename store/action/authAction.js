@@ -220,7 +220,7 @@ export const _logOut = navigation => {
       }
       else if (socialType === "Facebook") {
         console.log(socialType, "fff", "socialTypesocialType")
-        LoginManager.logOut()
+        await LoginManager.logOut()
       }
       await AsyncStorage.removeItem('userEmail');
       await AsyncStorage.removeItem('password');
@@ -589,8 +589,10 @@ export const _resetNewPassword = (
     }
   };
 };
-export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
+export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
+    await GoogleSignin.signOut();
+
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
     try {
@@ -606,25 +608,9 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
         .signInWithCredential(googleCredential)
         .then(async resp => {
           console.log(resp, '5555');
-          let fullName = resp.user._user.displayName;
-          let email = resp.user._user.email;
-          // let country = 'Jordan';
-          // let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
-
-          // let phoneNumber = resp.user._user.phoneNumber
-          // try {
-          //   await AsyncStorage.setItem('socialId', socialId);
-          //   await AsyncStorage.setItem('socialType', 'Google');
-          //   await AsyncStorage.setItem('auth', 'google');
-          //   dispatch(_loading(false));
-          // } catch (error) {
-          //   dispatch(_loading(false));
-          //   console.log(error, 'from async');
-          // }
-          console.log(fullName, email, socialId, socialType, '66666');
-
+          // console.log(getSocialId,socialId,getSocialtype,socialType,'creditional')
           const option = {
             method: 'POST',
             url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
@@ -646,6 +632,7 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
               await AsyncStorage.setItem('auth', 'google');
             } catch (error) {
               console.log(error, 'from async');
+              dispatch(_loading(false));
             }
 
             dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
@@ -656,22 +643,11 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
               }),
             );
 
-          } else if (resp.data.error.messageEn == 'Invalid Credentials') {
-            {
-              navigation &&
-                navigation.navigate('resetPassword', {
-                  title: 'Enter Phone Number',
-                  completeSignUp: 'Complete Signup',
-                  full_name: fullName,
-                  email: email,
-                  // country: country,
-                  social_id: socialId,
-                  social_type: socialType,
-                });
-            }
+          } else {
+            console.log(resp, 'login Succesfull');
+            dispatch(_error(resp.data.error.messageEn))
+            dispatch(_loading(false));
           }
-          console.log(resp, 'login Succesfull');
-
           // dispatch(_loading(false));
         })
         .catch(err => {
@@ -705,8 +681,10 @@ export const _googleAuth = (navigation, getSocialId, getSocialtype) => {
     }
   };
 };
-export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
+export const _facebookAuthSignIn = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
+    await LoginManager.logOut()
+
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
     // if (LoginManager.getInstance() != null) {
@@ -721,6 +699,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
       console.log(result, 'result');
 
       if (result.isCancelled) {
+        dispatch(_loading(false));
         throw 'User cancelled the login process';
       }
 
@@ -745,22 +724,8 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
           console.log(resp, '_facebookAuth login');
           let fullName = resp.user._user.displayName;
           let email = resp.user._user.email;
-          // let country = '60930f6ecb8d330015688090';
           let socialId = resp.user._user.uid;
           let socialType = 'FACEBOOK';
-          // try {
-          //   await AsyncStorage.setItem('socialId', socialId);
-          //   await AsyncStorage.setItem('socialType', 'Facebook');
-          //   await AsyncStorage.setItem('auth', 'facebook');
-          //   dispatch(_loading(false));
-          // } catch (error) {
-          //   dispatch(_loading(false));
-          //   console.log(error, 'from facebook async');
-          // }
-
-          // let phoneNumber = resp.user._user.phoneNumber
-          console.log(fullName, email, socialId, socialType, '66666', getSocialtype);
-
           const option = {
             method: 'POST',
             url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
@@ -775,6 +740,7 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
             },
           };
           var respSocialLogin = await axios(option);
+          console.log(respSocialLogin, 'respSocialLoginrespSocialLogin')
           if (respSocialLogin.data.status === 200) {
             try {
               await AsyncStorage.setItem('socialId', socialId);
@@ -784,35 +750,180 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
             } catch (error) {
               console.log(error, 'from facebook async');
             }
-
-
-
-            console.log('2000000000000000')
             dispatch({ type: CURRENTUSER, payload: respSocialLogin.data.data.data });
-
             navigation.dispatch(
               CommonActions.reset({
                 index: 0,
                 routes: [{ name: 'drawerStack' }],
               }),
             );
-
-          } else if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
-            {
-              navigation &&
-                navigation.navigate('resetPassword', {
-                  title: 'Enter Phone Number',
-                  completeSignUp: 'Complete Signup',
-                  full_name: fullName,
-                  email: email,
-                  // country: country,
-                  social_id: socialId,
-                  social_type: socialType,
-                });
-            }
-            dispatch(_loading(false));
           }
-          console.log(respSocialLogin, 'fb login  Succesfull');
+          else {
+            // alert(respSocialLogin + '1')
+            // console.log(respSocialLogin, 'login Error');
+            dispatch(_error(respSocialLogin.data.error.messageEn + " Please SignUp First "))
+          }
+          dispatch(_loading(false));
+        })
+        .catch(err => {
+          // alert(JSON.parse(JSON.stringify(err.message)) + '2')
+
+          dispatch(_loading(false));
+          console.log(
+            err.response,
+            'error from facebook auth',
+            JSON.parse(JSON.stringify(err.message)),
+          );
+          dispatch(_error('Network error please check you connection'))
+        });
+      return signInMethod;
+    } catch (err) {
+      // alert(JSON.parse(JSON.stringify(err.message)) + '3')
+
+      dispatch(_loading(false));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
+      if (JSON.parse(JSON.stringify(err.message)) === 'User logged in as different Facebook user.') {
+        LoginManager.logOut()
+      }
+
+
+    }
+  };
+};
+export const _googleAuthSignup = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    await GoogleSignin.signOut();
+
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    try {
+      dispatch(_loading(true));
+      // Get the users ID token
+      const { idToken } = await GoogleSignin.signIn();
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      let signInMethod = auth()
+        .signInWithCredential(googleCredential)
+        .then(async resp => {
+          console.log(resp, '5555');
+          let socialId = resp.user._user.uid;
+          let socialType = 'GOOGLE';
+          // console.log(getSocialId,socialId,getSocialtype,socialType,'creditional') 
+          // if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
+          {
+            navigation &&
+              navigation.navigate('resetPassword', {
+                title: 'Enter Phone Number',
+                completeSignUp: 'Complete Signup',
+                full_name: resp.additionalUserInfo.profile.name,
+                email: resp.additionalUserInfo.profile.email,
+                // country: country,
+                social_id: socialId,
+                social_type: socialType,
+              });
+          }
+          // }
+          // dispatch(_loading(false));
+        })
+        .catch(err => {
+          dispatch(_loading(false));
+          console.log(
+            err.response,
+            'error from google auth',
+            JSON.parse(JSON.stringify(err.message)),
+
+          );
+          dispatch(_error('Network error please check you connection'))
+        });
+      return signInMethod;
+    } catch (err) {
+
+      dispatch(_loading(false));
+      // dispatch(_error(resp.data.error.messageEn));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
+      // if (JSON.parse(JSON.stringify(err.message)) === 'User logged in as different Facebook user.') {
+      GoogleSignin.signOut();
+      // }
+
+
+
+    }
+  };
+};
+export const _facebookAuthSignUp = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    await LoginManager.logOut()
+
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    // if (LoginManager.getInstance() != null) {
+    // }
+    try {
+      dispatch(_loading(true));
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+      console.log(result, 'result');
+
+      if (result.isCancelled) {
+      dispatch(_loading(false));
+        throw 'User cancelled the login process';
+      }
+
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+      console.log(data, '_facebookAuth');
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+      console.log(facebookCredential, 'facebookCredential');
+
+      // Sign-in the user with the credential
+      let signInMethod = auth()
+        .signInWithCredential(facebookCredential)
+        .then(async resp => {
+          console.log(resp, '5555');
+          let socialId = resp.user._user.uid;
+          let socialType = 'FACEBOOK';
+          // console.log(getSocialId,socialId,getSocialtype,socialType,'creditional') 
+          // if (respSocialLogin.data.error.messageEn == 'Invalid Credentials') {
+          {
+            navigation &&
+              navigation.navigate('resetPassword', {
+                title: 'Enter Phone Number',
+                completeSignUp: 'Complete Signup',
+                full_name: resp.additionalUserInfo.profile.name,
+                email: resp.additionalUserInfo.profile.email,
+                // country: country,
+                social_id: socialId,
+                social_type: socialType,
+              });
+          }
+          // }
+          // dispatch(_loading(false));
         })
         .catch(err => {
           dispatch(_loading(false));
@@ -822,15 +933,11 @@ export const _facebookAuth = (navigation, getSocialId, getSocialtype) => {
             JSON.parse(JSON.stringify(err.message)),
 
           );
-          // dispatch(_error(JSON.parse(JSON.stringify(err.message))))
           dispatch(_error('Network error please check you connection'))
-
         });
-      console.log(signInMethod, 'signInMethod');
       return signInMethod;
     } catch (err) {
       dispatch(_loading(false));
-      // dispatch(_error(resp.data.error.messageEn));
       console.log(
         err.response,
         'error from _resetNewPassword',

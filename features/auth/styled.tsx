@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
-import {TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -12,15 +12,15 @@ import RadialGradient from 'react-native-radial-gradient';
 
 import styled from 'styled-components/native';
 
-import {Colors} from '../../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
-import {height, width} from '../../constants/Layout';
+import { height, width } from '../../constants/Layout';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {_googleAuth, _facebookAuth} from '../../store/action/authAction';
+import { _googleAuthSignIn, _facebookAuthSignIn ,_facebookAuthSignUp,_googleAuthSignup} from '../../store/action/authAction';
 
 export const BackGroundContinerImage = styled(FastImage)`
   flex: 1;
@@ -58,12 +58,13 @@ export const Row = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  padding-bottom: 20px;
   width: 100%;
+  margin-top:20px;
   padding-left: 25px;
   padding-right: 25px;
   overflow: hidden;
-`;
+  `;
+// padding-bottom: 20px;
 export const Hairline = styled.View`
   background-color: ${Colors.white};
   height: 1px;
@@ -91,7 +92,8 @@ const Facebook = styled(FastImage)`
   margin-left: 5px;
   margin-right: 5px;
 `;
-export const SocialMedia = () => {
+export const SocialMedia = ({ routeName }: any) => {
+  console.log(routeName, 'RouteName')
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -101,41 +103,55 @@ export const SocialMedia = () => {
     });
   }, []);
 
-  const isLoader = useSelector(({reducer}) => reducer.isLoader);
-  const isError = useSelector(({reducer}) => reducer.isError);
+  const isLoader = useSelector(({ reducer }) => reducer.isLoader);
+  const isError = useSelector(({ reducer }) => reducer.isError);
   const navigation = useNavigation();
   return (
     <>
       <Row>
-        {isLoader ? (
+        {/* {isLoader ? (
           <ActivityIndicator style={{}} size="small" color={'#ffffff'} />
-        ) : (
-          <>
-            <TouchableOpacity
-              onPress={() => dispatch(_facebookAuth(navigation))}
-              activeOpacity={0.8}>
-              <Facebook
-                resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/facebook.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              // onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
-              onPress={() => dispatch(_googleAuth(navigation))}
-              activeOpacity={0.8}>
-              <Google
-                resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/gmail.png')}
-              />
-            </TouchableOpacity>
-          </>
-        )}
+        ) : ( */}
+        <>
+          <TouchableOpacity
+            // style={{marginTop:20}}
+            onPress={() => {
+              if (routeName == "SignIn") {
+                dispatch(_facebookAuthSignIn(navigation))
+              }else{
+                dispatch(_facebookAuthSignUp(navigation))
+              }
+            }}
+            activeOpacity={0.8}>
+            <Facebook
+              resizeMode={FastImage.resizeMode.contain}
+              source={require('../../assets/facebook.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            // onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+            // style={{marginTop:20}}
+            onPress={() => {
+              if (routeName == "SignIn") {
+                dispatch(_googleAuthSignIn(navigation))
+              }else{
+                dispatch(_googleAuthSignup(navigation))
+              }
+            }}
+            activeOpacity={0.8}>
+            <Google
+              resizeMode={FastImage.resizeMode.contain}
+              source={require('../../assets/gmail.png')}
+            />
+          </TouchableOpacity>
+        </>
+        {/* )} */}
       </Row>
-      {isError !== '' && (
+      {/* {isError !== '' && (
         <Text style={{color: 'red', fontSize: 12, alignSelf: 'center'}}>
           {isError}
         </Text>
-      )}
+      )} */}
     </>
   );
 };

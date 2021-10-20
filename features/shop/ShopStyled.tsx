@@ -101,6 +101,9 @@ export type ISubCategoryTypeProp = {
   currentUser?: any;
   likedByMe?: string;
   _func?: Function;
+  shopSubCatogery?: any;
+  shopSubCatogeryIndex?: any;
+  shopSubCatogeryItemIndex?: any;
 
   onPress?: () => void;
   price?: number;
@@ -114,26 +117,37 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   noOfLikes,
   rating,
   _func,
+  shopSubCatogery,
+  shopSubCatogeryIndex,
+  shopSubCatogeryItemIndex,
   onPress,
   currentUser,
   likedByMe,
   navigation,
-  price
+  price,
 }: any) => {
   const [totalLikes, settotalLikes] = useState(noOfLikes);
   const [sendLike, setsendLike] = useState(likedByMe);
+  const [flag, setflag] = useState(false);
   const dispatch = useDispatch();
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(item_id, currentUser, likedByMe, navigation))
-    if (!sendLike) {
-      settotalLikes(totalLikes + 1)
-    } else {
-      if (totalLikes > 0) {
-        settotalLikes(totalLikes - 1)
-      }
-    }
+    dispatch(likeDislike(item_id, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex,shopSubCatogeryItemIndex))
+    // if (!sendLike) {
+    //   settotalLikes(totalLikes + 1)
+    // } else {
+    //   if (totalLikes > 0) {
+    //     settotalLikes(totalLikes - 1)
+    //   }
+    // }
   }
+  // console.log(noOfLikes,'noOfLikes')
+  
+  // useEffect(() => {
+  //   setflag(!flag)
+  // }, [noOfLikes])
+
+
   return (
     <TouchableScale
       style={{}}
@@ -161,10 +175,10 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             }}>
             <FastImage
               style={{ height: 25, width: 25, }}
-            source={sendLike?require('../../assets/images/RealHeart.png'):require('../../assets/Heart-2.png')} 
+              source={shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe ? require('../../assets/images/RealHeart.png') : require('../../assets/Heart-2.png')}
               resizeMode="contain"
             />
-            <Text style={{ color: "#ffffff", elevation: 2 }}>{totalLikes}</Text>
+            <Text style={{ color: "#ffffff", elevation: 2 }}>{shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likes}</Text>
           </TouchableOpacity>
         </View>
         <SubCategoryTileCover source={serviceImage} />

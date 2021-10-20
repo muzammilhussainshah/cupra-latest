@@ -133,6 +133,23 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
         />
         <NumberOfComentsText>{commentCount}</NumberOfComentsText>
       </TouchableOpacity>
+      <TouchableOpacity
+
+        onPress={() => {
+          setsendLike(!sendLike)
+          numberOfLikes()
+        }}
+        style={{ justifyContent: 'center', alignItems: 'center', position: "absolute", bottom: "26%", right: "20%", zIndex: 1 }}>
+        <CommentIcon
+          resizeMode={FastImage.resizeMode.contain}
+          source={sendLike ?require("../../assets/images/RealHeart.png"):require('../../assets/Heart-2.png')}
+        />
+        <NumberOfComentsText>{totalLikes}</NumberOfComentsText>
+      </TouchableOpacity>
+
+
+
+
 
       <View
         style={{ flex: 1, backgroundColor: "rgba(0,0,0,0)" }}
@@ -153,7 +170,7 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                   resizeMode={FastImage.resizeMode.cover}
                 />
               </TouchableScale>
-              <View style={{ width: "100%", padding: 10, alignItems: "flex-end", position: "absolute", zIndex: 1 }}>
+              {/* <View style={{ width: "100%", padding: 10, alignItems: "flex-end",top:50, position: "absolute", zIndex: 1 }}>
                 <TouchableOpacity
                   onPress={() => {
                     setsendLike(!sendLike)
@@ -171,7 +188,7 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                     /> 
                   <Text style={{ color: "#ffffff", marginHorizontal: 7, elevation: 2 }}>{totalLikes}</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               <View
                 style={{
                   justifyContent: 'center',

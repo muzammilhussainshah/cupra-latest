@@ -202,7 +202,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
                       showsVerticalScrollIndicator={false}
                       keyExtractor={item => item.id}
                       data={v.items}
-                      renderItem={({ item }) => (
+                      renderItem={({ item ,index}) => (
                         <>
                           <SubCategoryTile
                             numberOfRates={item.total_rate}
@@ -213,11 +213,14 @@ export const Shop: React.FC = ({ navigation, }: any) => {
                             serviceImage={{ uri: item.icon }}
                             price={item.price}
                             item_id={item._id}
+                            shopSubCatogery={shopSubCatogery}
+                            shopSubCatogeryIndex={i}
+                            shopSubCatogeryItemIndex={index}
                             likedByMe={item.likedByMe}
                             currentUser={currentUser}
                             rating={item.rating}
                             _func={() => setgetReview(true)}
-                            onPress={() => navigation.navigate('shopDetail', item)}
+                            onPress={() => navigation.navigate('shopDetail', {item,shopSubCatogery,shopSubCatogeryIndex:i,shopSubCatogeryItemIndex:index})}
                           />
                         </>
                       )}

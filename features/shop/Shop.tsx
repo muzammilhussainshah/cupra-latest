@@ -73,7 +73,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setisEmptyserch(false)
-      dispatch(_getCatogery(currentUser, navigation))
+      // dispatch(_getCatogery(currentUser, navigation))
 
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount

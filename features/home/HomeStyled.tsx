@@ -163,12 +163,12 @@ export const CardView = ({ _id, name, postTime, commentCount, disc, icon, naviga
                   style={{
                     flexDirection: "row",
                     borderRadius: 10,
-                  }}>
-                  <FastImage
-                    style={{ height: 20, width: 20, }}
-                    source={require('../../assets/images/RealHeart.png')}
-                    resizeMode="contain"
-                  />
+                  }}> 
+                    <FastImage
+                      style={{ height: 20, width: 20, }}
+                      source={sendLike ?require("../../assets/images/RealHeart.png"):require('../../assets/Heart-2.png')}
+                      resizeMode="contain"
+                    /> 
                   <Text style={{ color: "#ffffff", marginHorizontal: 7, elevation: 2 }}>{totalLikes}</Text>
                 </TouchableOpacity>
               </View>

@@ -8,7 +8,7 @@ export const ShowImage = ({ route, navigation }: any) => {
   console.log(imageURL, "imageURL")
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex: 99999, paddingTop: 20, position: 'absolute', right: 10, top: 50 }}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{ zIndex:  9, paddingTop: 20, position: 'absolute', right: 10, top: 50 }}>
         <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
       </TouchableOpacity>
       <FastImage style={{ width: width * 0.9, height: height * 0.9 }} source={imageURL} resizeMode={FastImage.resizeMode.contain} />

@@ -126,11 +126,13 @@ export const HomeDetail = ({ route, navigation }: any) => {
             width: 55,
             alignItems: "center"
           }}>
-          <FastImage
+          {/* <FastImage
             style={{ height: 25, width: 25, }}
-            source={require('../../../assets/images/RealHeart.png')}
+            source={sendLike?require('../../../assets/images/RealHeart.png'):require('../../../assets/Heart-2.png')}
+            // source={likeByMe ?require("../../assets/images/RealHeart.png"):require('../../assets/Heart-2.png')}
+
             resizeMode="contain"
-          />
+          /> */}
           <Text style={{}}>{totalLikes}</Text>
         </TouchableOpacity>
       </View>

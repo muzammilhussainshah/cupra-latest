@@ -136,11 +136,11 @@ export const VideoTile: React.FC<IVideoTypeProp> = ({ VideoImage, likes, getDate
               setlikebyme(!likebyme)
               numberOfLikes()
             }}
-          >
+          > 
             <RowView style={{}}>
               <SteeringImage
-                resizeMode={FastImage.resizeMode.contain}
-                source={require('../../assets/images/RealHeart.png')}
+                resizeMode={FastImage.resizeMode.contain} 
+                source={likebyme ?require("../../assets/images/RealHeart.png"):require('../../assets/Heart-2.png')}
               />
               <NumberOfRates>{imageLikes}</NumberOfRates>
             </RowView>

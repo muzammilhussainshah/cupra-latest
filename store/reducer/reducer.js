@@ -3,7 +3,7 @@ import {
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
   NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,
   GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, 
-  GETCOUNTRY,ADS
+  GETCOUNTRY,ADS,SHOPSCROLL
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -37,6 +37,7 @@ const INITIAL_STATE = {
   companyReviews: {},
   country: {},
   ads: {},
+  shopScroll: 0,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -185,6 +186,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         country: action.payload,
+      };
+    case SHOPSCROLL:
+      return {
+        ...state,
+        shopScroll: action.payload,
       };
     case ADS:
       return {

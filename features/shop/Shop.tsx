@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 
 import { Header } from '../../components/Header';
 
 import { DrawerActions } from '@react-navigation/native';
+
+import { SHOPSCROLL, } from '../../store/constant/constant';
 
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
 
@@ -29,9 +31,13 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   const [isEmptyserch, setisEmptyserch] = useState(false);
 
+  const [isScrollable, setisScrollable] = useState(true);
+
   const dispatch = useDispatch();
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+
+  const shopScroll = useSelector((state: any) => state.reducer.shopScroll)
 
   const shopCatogery = useSelector((state: any) => state.reducer.shopCatogery)
 
@@ -39,9 +45,13 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
 
+  const scrollRef: any = useRef();
+
 
   useEffect(() => {
     dispatch(_getCatogery(currentUser, navigation))
+    dispatch({ type: SHOPSCROLL, payload: 500 });
+
   }, [])
 
   useEffect(() => {
@@ -72,8 +82,9 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
+      setisScrollable(false)
       setisEmptyserch(false)
-      // dispatch(_getCatogery(currentUser, navigation))
+      dispatch(_getCatogery(currentUser, navigation))
 
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -82,11 +93,17 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setisScrollable(true)
+      console.log(shopScroll, 'shopScroll inside focus')
       setisEmptyserch(true)
+      scrollRef.current?.scrollTo({
+        y: shopScroll,
+        animated: true,
+      });
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, shopScroll]);
 
 
   const searchUser: any = async (e: any) => {
@@ -117,9 +134,11 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   }
   const handleScroll = (event) => {
-    const positionX = event.nativeEvent.contentOffset.x;
     const positionY = event.nativeEvent.contentOffset.y;
-    console.log(positionX, positionY, 'Ahmedshah')
+    
+    if (isScrollable) console.log(positionY, 'positionY')
+    if (isScrollable) dispatch({ type: SHOPSCROLL, payload: positionY });
+
   };
   return (
     <>
@@ -131,9 +150,10 @@ export const Shop: React.FC = ({ navigation, }: any) => {
           notiScreen={() => navigation.navigate('notification')}
           onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
-        <ScrollView
-
+        <ScrollView ref={scrollRef}
           onScroll={(event) => handleScroll(event)}
+
+
           contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>

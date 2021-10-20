@@ -29,3 +29,4 @@ export const COMPANYPOLICY = 'COMPANYPOLICY';
 export const NOTIFICATION = 'NOTIFICATION';
 export const COMPANYREVIEWS = 'COMPANYREVIEWS';
 export const ADS = 'ADS';
+export const SHOPSCROLL = 'SHOPSCROLL';

@@ -176,7 +176,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
           }}>
           <FastImage
             style={{ height: 25, width: 25, }} 
-            source={sendLike?require('../../../assets/images/RealHeart.png'):require('../../../assets/Heart-2.png')} 
+            source={!sendLike?require('../../../assets/images/RealHeart.png'):require('../../../assets/Heart-2.png')} 
 
             resizeMode="contain"
           />

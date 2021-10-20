@@ -116,8 +116,11 @@ export const Shop: React.FC = ({ navigation, }: any) => {
     dispatch(_loading(false))
 
   }
-
-
+  const handleScroll = (event) => {
+    const positionX = event.nativeEvent.contentOffset.x;
+    const positionY = event.nativeEvent.contentOffset.y;
+    console.log(positionX, positionY, 'Ahmedshah')
+  };
   return (
     <>
       <ShopContainer>
@@ -128,14 +131,18 @@ export const Shop: React.FC = ({ navigation, }: any) => {
           notiScreen={() => navigation.navigate('notification')}
           onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
 
-        <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+        <ScrollView
+
+          onScroll={(event) => handleScroll(event)}
+          contentContainerStyle={{ paddingBottom: 80 }}>
 
           <HeaderTitle>
             Find the Best
             Parts for your vehicle!
           </HeaderTitle>
           <View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}  >
+            <ScrollView
+              horizontal={true} showsHorizontalScrollIndicator={false}  >
               {catogery.length > 0 && catogery.map((item: any, index) => {
                 // index === 1 && console.log(item, "sssssssssssss")
                 return (

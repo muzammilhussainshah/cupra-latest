@@ -186,11 +186,12 @@ export const ImageTile: React.FC<IImageTypeProp> = ({
                 setlikeByMe(!likeByMe)
                 numberOfLikes()
               }}
-            >
+            > 
               <RowView>
                 <SteeringImage
-                  resizeMode={FastImage.resizeMode.contain}
-                  source={require('../../assets/images/RealHeart.png')}
+                  resizeMode={FastImage.resizeMode.contain} 
+                  source={likeByMe ?require("../../assets/images/RealHeart.png"):require('../../assets/Heart-2.png')}
+                  
                 />
                 <NumberOfRates style={{ marginLeft: "5%" }}>{allData.media[renderImgIndex].likesCount}</NumberOfRates>
               </RowView>

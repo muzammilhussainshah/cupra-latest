@@ -71,21 +71,24 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const routes = route.params
 
-  const isLoader = useSelector((state: any) => state.reducer.isLoader)
+  // const isLoader = useSelector((state: any) => state.reducer.isLoader)
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
   const shopItemDetails = useSelector((state: any) => state.reducer.shopItemDetails)
 
-  const item = routes;
+  const { item, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex } = routes;
 
   const { en_name, icon, rating, en_desc, fromYear, toYear, size, price, en_treatment, colors, images, height, width, stock_count, _id, likedByMe, } = shopItemDetails;
 
-  console.log(routes, 'isLoaderisLoaderisLoader')
 
   const [totalLikes, settotalLikes] = useState(item.likes);
 
-  const [sendLike, setsendLike] = useState(likedByMe);
+  const [sendLike, setsendLike] = useState(shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe);
+
+  const [itemLoader, setitemLoader] = useState(false);
+
+  const [Dbounce, setDbounce] = useState(true);
 
   const [reviewScreen, setreviewScreen] = useState(false)
 
@@ -109,7 +112,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   useEffect(() => {
 
-    dispatch(_getItemDetails(currentUser, item._id, navigation,))
+    dispatch(_getItemDetails(currentUser, item._id, navigation, setitemLoader))
 
     // setCelectedClr(routes.colors[0])
     // let firstClr = routes.colors[0]
@@ -128,12 +131,17 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id, currentUser, likedByMe, navigation))
-    if (!sendLike) {
-      settotalLikes(totalLikes + 1)
-    } else {
-      if (totalLikes > 0) {
-        settotalLikes(totalLikes - 1)
+    if (Dbounce) {
+      setsendLike(!sendLike)
+      dispatch(likeDislike(_id, currentUser, shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex, setDbounce))
+      // dispatch(likeDislike(item_id, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex,shopSubCatogeryItemIndex))
+
+      if (!sendLike) {
+        settotalLikes(totalLikes + 1)
+      } else {
+        if (totalLikes > 0) {
+          settotalLikes(totalLikes - 1)
+        }
       }
     }
   }
@@ -160,7 +168,6 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
         <TouchableOpacity onPress={() => {
-          setsendLike(!sendLike)
           numberOfLikes()
 
         }}
@@ -176,7 +183,8 @@ export const ShopDetails = ({ route, navigation }: any) => {
           }}>
           <FastImage
             style={{ height: 25, width: 25, }}
-            source={require('../../../assets/images/RealHeart.png')}
+            source={sendLike ? require('../../../assets/images/RealHeart.png') : require('../../../assets/Heart-2.png')}
+
             resizeMode="contain"
           />
           <Text style={{}}>{totalLikes}</Text>
@@ -184,7 +192,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
       </View>
       <ShopDetailsContainer>
         {imageSlider ?
-          <View style={{ height:Wheight - 390}}>
+          <View style={{ height: Wheight - 390 }}>
             <ImageViewer
               onChange={(index: any) => {
                 setSelectedImageIndex(index)
@@ -209,7 +217,7 @@ export const ShopDetails = ({ route, navigation }: any) => {
           //   }}
           // />
           :
-          isLoader ?
+          itemLoader ?
             <ActivityIndicator
               style={{ marginTop: "20%" }}
               size="small" color={'black'}
@@ -223,13 +231,13 @@ export const ShopDetails = ({ route, navigation }: any) => {
         </TouchableOpacity>
         <MainSheet scroll sheetHeight={0.4}>
 
-          {isLoader ?
+          {itemLoader ?
             <ActivityIndicator
               style={{ marginTop: "20%" }}
               size="small" color={'black'}
             /> :
 
-            <ScrollView contentContainerStyle={{ paddingBottom: 170 }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
               <View style={{ width: "60%" }}>
                 <ItemName>{en_name}</ItemName>
               </View>

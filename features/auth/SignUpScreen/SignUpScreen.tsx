@@ -39,6 +39,13 @@ import {
   Title,
 } from './SignupStyled';
 
+
+import { 
+  SocialMedia,
+  // Row,
+  Hairline,
+  Label,
+} from '../styled';
 export interface SignUpProp {
   phone_number: string | number | any;
   password?: string;
@@ -126,8 +133,8 @@ export const SignUpScreen: React.FC = () => {
       </View>
 
       <ScrollView
-        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 15 }}>
-        <SignupTitle>Sign up</SignupTitle>
+        contentContainerStyle={{  paddingHorizontal: 15 }}>
+        <SignupTitle>Signup</SignupTitle>
         <FormProvider {...signupMethods}>
           <FormTextField
             name="name"
@@ -197,7 +204,7 @@ export const SignUpScreen: React.FC = () => {
           />
           <Row>
             <CheckBox />
-            <Title>Yes ! Agree all Terms & Condition</Title>
+            <Title>Yes ! Agree on all Terms & Conditions</Title>
           </Row>
           {isLoader ?
             <ActivityIndicator
@@ -207,13 +214,19 @@ export const SignUpScreen: React.FC = () => {
 
             <ButtonsContainer>
               <Button onPress={signupMethods.handleSubmit(onSubmit)}>
-                <ButtonText color={'#000'}>Sign up</ButtonText>
+                <ButtonText color={'#000'}>Signup</ButtonText>
               </Button>
             </ButtonsContainer>
           }
           {isError !== "" &&
             <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}
             </Text>}
+          <Row style={{marginLeft:"5%"}}>
+            <Hairline />
+            <Label>Or Signup Using</Label>
+            <Hairline />
+          </Row>
+          <SocialMedia routeName={'SignUp'}/>
         </FormProvider>
         <KeyboardSpacer />
       </ScrollView>

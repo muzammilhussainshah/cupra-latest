@@ -49,6 +49,7 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Facebook') {
+      console.log('FacebookFacebookFacebook')
       dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' }, navigation, setUser));
       // navigation.dispatch(
       //   CommonActions.reset({
@@ -72,6 +73,8 @@ export const WelcomeScreen: React.FC = () => {
 
 
     else {
+      console.log('elseelseelse')
+      
       setUser(false);
     }
   };
@@ -100,7 +103,7 @@ export const WelcomeScreen: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('login');
                 }}>
-                <ButtonText>Log in</ButtonText>
+                <ButtonText>Login</ButtonText>
               </Button>
             </ButtonsContainer>
             <ButtonsContainer
@@ -116,16 +119,16 @@ export const WelcomeScreen: React.FC = () => {
                 onPress={() => {
                   navigation.navigate('signup');
                 }}>
-                <ButtonText>Sign Up</ButtonText>
+                <ButtonText>Signup</ButtonText>
               </Button>
             </ButtonsContainer>
           </ButtonsRow>
-          <Row>
+          {/* <Row>
             <Hairline />
-            <Label>Or via social</Label>
+            <Label>Or Signup Using</Label>
             <Hairline />
           </Row>
-          <SocialMedia />
+          <SocialMedia /> */}
         </GradientBanckground>
       </BackGroundContinerImage>
     ) :

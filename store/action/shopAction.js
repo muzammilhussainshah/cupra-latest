@@ -120,11 +120,11 @@ export const _getSubCatogery = (currentUser, catId, navigation) => {
     }
 }
 
-export const _getItemDetails = (currentUser, itemId, navigation,) => {
+export const _getItemDetails = (currentUser, itemId, navigation, setitemLoader) => {
     // console.log(itemLikes, 'item.likesitem.likesv')
     return async (dispatch) => {
         dispatch({ type: ITEMDETAILS, payload: {} })
-        dispatch(_loading(true));
+        setitemLoader(true);
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -155,10 +155,11 @@ export const _getItemDetails = (currentUser, itemId, navigation,) => {
                 );
             }
             console.log(resp, 'resp _getItemDetails',)
-            dispatch(_loading(false));
+            setitemLoader(false);
+
         }
         catch (err) {
-            dispatch(_loading(false));
+            setitemLoader(false);
             // dispatch(_error(resp.data.error.messageEn));
             console.log(err.response, "error from _getItemDetails", JSON.parse(JSON.stringify(err.message)));
         }
@@ -224,10 +225,10 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
         }
     }
 }
-export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => { 
+export const _cancelResetvation = (currentUser, reservationId, reason, navigation) => {
     return async (dispatch) => {
         dispatch(_loading(true));
-        console.log(reservationId,reason,'++++++++++++')
+        console.log(reservationId, reason, '++++++++++++')
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -281,10 +282,15 @@ export const _cancelResetvation = (currentUser, reservationId, reason, navigatio
         }
     }
 }
-export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
-    console.log(itemId, 'itemId,likeDislike')
+export const likeDislike = (itemId, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex, setDbounce) => {
+    console.log(itemId, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex, 'likeDislike')
+    setDbounce(false)
     return async (dispatch) => {
         // dispatch(_loading(true));
+
+        let shopSubCatogeryClone = [...shopSubCatogery];
+        let item = shopSubCatogeryClone[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex];
+
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -305,8 +311,17 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
             var resp = await axios(option);
             if (resp.data.status === 200) {
                 console.log(resp, 'resp likeDislike')
+                if (likedByMe) {
+                    item.likedByMe = false;
+                    item.likes = (item.likes) - 1;
+                }
+                else {
+                    item.likedByMe = true;
+                    item.likes = (item.likes) + 1;
+                }
+                console.log(shopSubCatogeryClone, "shopSubCatogeryClone")
+                dispatch({ type: SHOPSUBCATOGERY, payload: shopSubCatogeryClone })
 
-                dispatch(_loading(false));
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));
                 Alert.alert(
@@ -319,10 +334,12 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation) => {
             }
             // console.log(resp, 'resp likeDislike')
             dispatch(_loading(false));
+            setDbounce(true)
+
         }
         catch (err) {
+            setDbounce(true)
             dispatch(_loading(false));
-
             console.log(err, "error from likeDislike", JSON.parse(JSON.stringify(err.message)));
         }
     }

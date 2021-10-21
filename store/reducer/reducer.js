@@ -1,9 +1,9 @@
 import {
   SIGNUPUSER, CURRENTUSER, SERVICES, GETNEWSIMAGES, SUBSERVICES, NEWSCOMMENT, ISLOADER,
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
-  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,
+  NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,SHOPSELECTEDHORIZONTALTAB,
   GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, 
-  GETCOUNTRY,ADS
+  GETCOUNTRY,ADS,SHOPSCROLL
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -37,6 +37,8 @@ const INITIAL_STATE = {
   companyReviews: {},
   country: {},
   ads: {},
+  shopScroll: 0,
+  shopSelectedHorizontaltab:'',
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -185,6 +187,16 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         country: action.payload,
+      };
+    case SHOPSCROLL:
+      return {
+        ...state,
+        shopScroll: action.payload,
+      };
+    case SHOPSELECTEDHORIZONTALTAB:
+      return {
+        ...state,
+        shopSelectedHorizontaltab: action.payload,
       };
     case ADS:
       return {

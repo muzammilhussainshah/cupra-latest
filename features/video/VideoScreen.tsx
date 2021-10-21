@@ -111,7 +111,6 @@ export const VideoScreen: React.FC = () => {
       <InfiniteScroll
         style={{}}
         contentContainerStyle={{ paddingBottom: 130 }}
-
         showsHorizontalScrollIndicator={false}
         horizontal={false}
         onLoadMoreAsync={loadMorePage}

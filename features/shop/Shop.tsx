@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 
 import { Header } from '../../components/Header';
 
 import { DrawerActions } from '@react-navigation/native';
+
+import { SHOPSCROLL, SHOPSELECTEDHORIZONTALTAB } from '../../store/constant/constant';
 
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
 
@@ -21,34 +23,39 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   const [search, setsearch] = useState([]);
 
-  const [searchedItems, setsearchedItems] = useState([]);
-
   const [getReview, setgetReview] = useState(false);
 
   const [flag, setflag] = useState(false);
 
   const [isEmptyserch, setisEmptyserch] = useState(false);
 
+  const [isScrollable, setisScrollable] = useState(true);
+
   const dispatch = useDispatch();
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
 
+  const shopScroll = useSelector((state: any) => state.reducer.shopScroll)
+
+  const shopSelectedHorizontaltab = useSelector((state: any) => state.reducer.shopSelectedHorizontaltab)
   const shopCatogery = useSelector((state: any) => state.reducer.shopCatogery)
 
   const shopSubCatogery = useSelector((state: any) => state.reducer.shopSubCatogery)
 
   const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
 
+  const scrollRef: any = useRef();
+
 
   useEffect(() => {
     dispatch(_getCatogery(currentUser, navigation))
+    dispatch({ type: SHOPSCROLL, payload: 500 });
   }, [])
 
   useEffect(() => {
     setcatogery(shopCatogery)
     setflag(!flag)
   }, [shopCatogery])
-
   useEffect(() => {
     setSubcatogery(shopSubCatogery)
     setflag(!flag)
@@ -72,6 +79,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
+      setisScrollable(false)
       setisEmptyserch(false)
       dispatch(_getCatogery(currentUser, navigation))
 
@@ -82,11 +90,23 @@ export const Shop: React.FC = ({ navigation, }: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setisEmptyserch(true)
+      setisScrollable(true)
+      if (catogery.length > 0 && shopSelectedHorizontaltab != '') {
+        let cloneCatogery = catogery
+        cloneCatogery.length > 0 && cloneCatogery.map((x: any) => {
+          x.isSelected = false;
+        });
+
+        cloneCatogery[shopSelectedHorizontaltab].isSelected = true
+        setcatogery(cloneCatogery);
+      }
+      scrollRef.current?.scrollTo({
+        y: shopScroll,
+        animated: true,
+      });
     });
-    // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, shopScroll, shopSelectedHorizontaltab]);
 
 
   const searchUser: any = async (e: any) => {
@@ -116,8 +136,13 @@ export const Shop: React.FC = ({ navigation, }: any) => {
     dispatch(_loading(false))
 
   }
+  const handleScroll = (event) => {
+    const positionY = event.nativeEvent.contentOffset.y;
 
+    if (isScrollable) console.log(positionY, 'positionY')
+    if (isScrollable) dispatch({ type: SHOPSCROLL, payload: positionY });
 
+  };
   return (
     <>
       <ShopContainer>
@@ -127,19 +152,20 @@ export const Shop: React.FC = ({ navigation, }: any) => {
           searchBarInput={true}
           notiScreen={() => navigation.navigate('notification')}
           onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} />
-
-        <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-
+        <ScrollView ref={scrollRef}
+          onScroll={(event) => handleScroll(event)}
+          contentContainerStyle={{ paddingBottom: 80 }}>
           <HeaderTitle>
             Find the Best
             Parts for your vehicle!
           </HeaderTitle>
           <View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}  >
+            <ScrollView
+              horizontal={true} showsHorizontalScrollIndicator={false}  >
               {catogery.length > 0 && catogery.map((item: any, index) => {
-                // index === 1 && console.log(item, "sssssssssssss")
                 return (
                   <TouchableOpacity key={index} onPress={() => {
+                    dispatch({ type: SHOPSELECTEDHORIZONTALTAB, payload: index })
                     setisEmptyserch(!isEmptyserch)
                     dispatch(_getSubCatogery(currentUser, item._id))
                     var cloneCatogery: any = catogery;
@@ -175,7 +201,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
                       showsVerticalScrollIndicator={false}
                       keyExtractor={item => item.id}
                       data={v.items}
-                      renderItem={({ item }) => (
+                      renderItem={({ item, index }) => (
                         <>
                           <SubCategoryTile
                             numberOfRates={item.total_rate}
@@ -186,11 +212,14 @@ export const Shop: React.FC = ({ navigation, }: any) => {
                             serviceImage={{ uri: item.icon }}
                             price={item.price}
                             item_id={item._id}
+                            shopSubCatogery={shopSubCatogery}
+                            shopSubCatogeryIndex={i}
+                            shopSubCatogeryItemIndex={index}
                             likedByMe={item.likedByMe}
                             currentUser={currentUser}
                             rating={item.rating}
                             _func={() => setgetReview(true)}
-                            onPress={() => navigation.navigate('shopDetail', item)}
+                            onPress={() => navigation.navigate('shopDetail', { item, shopSubCatogery, shopSubCatogeryIndex: i, shopSubCatogeryItemIndex: index })}
                           />
                         </>
                       )}
@@ -201,7 +230,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
             })
           }
         </ScrollView>
-      </ShopContainer>
+      </ShopContainer >
     </>
 
   )

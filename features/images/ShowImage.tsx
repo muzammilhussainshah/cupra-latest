@@ -75,8 +75,9 @@ console.log(indexOfNewsMainImages,renderImgIndex,"renderImgIndexrenderImgIndexre
               alignItems: "center"
             }}>
             <FastImage
-              style={{ height: 25, width: 25, }}
-              source={require('../../assets/images/RealHeart.png')}
+              style={{ height: 25, width: 25, }} 
+            source={likeByMe?require('../../assets/images/RealHeart.png'):require('../../assets/Heart-2.png')}
+
               resizeMode="contain"
             />
             <Text style={{ color: Colors.white, marginLeft: 15 }}>{getNewsImagesStore[indexOfNewsMainImages].media[renderImgIndexFullImg].likesCount}</Text>

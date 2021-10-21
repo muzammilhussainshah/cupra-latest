@@ -88,6 +88,8 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
   const [itemLoader, setitemLoader] = useState(false);
 
+  const [Dbounce, setDbounce] = useState(true);
+
   const [reviewScreen, setreviewScreen] = useState(false)
 
   const dispatch = useDispatch()
@@ -129,14 +131,17 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(_id, currentUser, shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex))
-    // dispatch(likeDislike(item_id, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex,shopSubCatogeryItemIndex))
+    if (Dbounce) {
+      setsendLike(!sendLike)
+      dispatch(likeDislike(_id, currentUser, shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex, setDbounce))
+      // dispatch(likeDislike(item_id, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex,shopSubCatogeryItemIndex))
 
-    if (!sendLike) {
-      settotalLikes(totalLikes + 1)
-    } else {
-      if (totalLikes > 0) {
-        settotalLikes(totalLikes - 1)
+      if (!sendLike) {
+        settotalLikes(totalLikes + 1)
+      } else {
+        if (totalLikes > 0) {
+          settotalLikes(totalLikes - 1)
+        }
       }
     }
   }
@@ -163,7 +168,6 @@ export const ShopDetails = ({ route, navigation }: any) => {
 
       <View style={{ height: 55, width: 55, position: "absolute", right: 40, top: "35%", zIndex: 1, }}>
         <TouchableOpacity onPress={() => {
-          setsendLike(!sendLike)
           numberOfLikes()
 
         }}

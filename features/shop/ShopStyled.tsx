@@ -129,10 +129,13 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
   const [totalLikes, settotalLikes] = useState(noOfLikes);
   const [sendLike, setsendLike] = useState(likedByMe);
   const [flag, setflag] = useState(false);
+  const [Dbounce, setDbounce] = useState(true);
   const dispatch = useDispatch();
 
   const numberOfLikes = () => {
-    dispatch(likeDislike(item_id, currentUser, likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex,shopSubCatogeryItemIndex))
+    if (Dbounce) {
+      dispatch(likeDislike(item_id, currentUser, shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe, navigation, shopSubCatogery, shopSubCatogeryIndex, shopSubCatogeryItemIndex,setDbounce))
+    }
     // if (!sendLike) {
     //   settotalLikes(totalLikes + 1)
     // } else {
@@ -142,7 +145,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
     // }
   }
   // console.log(noOfLikes,'noOfLikes')
-  
+
   // useEffect(() => {
   //   setflag(!flag)
   // }, [noOfLikes])
@@ -160,7 +163,7 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
         <View style={{ height: "90%", bottom: "15%", width: "100%", marginLeft: 15, padding: 5, alignItems: "flex-end", position: "absolute", zIndex: 1 }}>
           <TouchableOpacity
             onPress={() => {
-              setsendLike(!sendLike)
+              // setsendLike(!sendLike)
               numberOfLikes()
 
             }}
@@ -175,10 +178,10 @@ export const SubCategoryTile: React.FC<ISubCategoryTypeProp> = ({
             }}>
             <FastImage
               style={{ height: 25, width: 25, }}
-              source={shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe ? require('../../assets/images/RealHeart.png') : require('../../assets/Heart-2.png')}
+              source={(shopSubCatogery.length > 0 && shopSubCatogery[shopSubCatogeryIndex] && shopSubCatogery[shopSubCatogeryIndex].items && shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex] && shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likedByMe) ? require('../../assets/images/RealHeart.png') : require('../../assets/Heart-2.png')}
               resizeMode="contain"
             />
-            <Text style={{ color: "#ffffff", elevation: 2 }}>{shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likes}</Text>
+            <Text style={{ color: "#ffffff", elevation: 2 }}>{shopSubCatogery.length > 0 && shopSubCatogery[shopSubCatogeryIndex] && shopSubCatogery[shopSubCatogeryIndex].items && shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex] && shopSubCatogery[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex].likes}</Text>
           </TouchableOpacity>
         </View>
         <SubCategoryTileCover source={serviceImage} />

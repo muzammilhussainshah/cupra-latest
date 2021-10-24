@@ -109,6 +109,8 @@ export const HomeScreen: React.FC = () => {
       setblur(false)
       setisHome(true)
       setisEmptyserch(true)
+      setpagination(2)
+      setisMore(true)
       // if (searchTxt !== '') {
       //   console.log(searchTxt,"searchTxt")
       //   dispatch(_stories(currentUser, filterdBy, navigation,))
@@ -127,14 +129,18 @@ export const HomeScreen: React.FC = () => {
 
 
   const loadMorePage = () => {
+    console.log('working')
     if (paginationLoader != true && searchTxt === "") {
-      console.log('work ifff')
+      console.log('work if')
 
       // _getNews(currentUser, pagination, freePotatoes)
       dispatch(_getNews(currentUser, 10, pagination, filterdBy, navigation, true, getNews, setpagination, setisMore))
       // setpagination(pagination + 1)
     }
     else if (paginationLoader != true && searchTxt !== "") {
+
+      console.log('work else if')
+
       dispatch(_SearchForAllThings(currentUser, searchTxt, "getNews", 10, pagination, navigation, getNews, setpagination))
 
     }
@@ -173,7 +179,7 @@ export const HomeScreen: React.FC = () => {
 
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-    const paddingToBottom = 20;
+    const paddingToBottom = 5;
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
   };

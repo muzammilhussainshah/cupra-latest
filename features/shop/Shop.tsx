@@ -6,7 +6,7 @@ import { Header } from '../../components/Header';
 
 import { DrawerActions } from '@react-navigation/native';
 
-import { SHOPSCROLL, SHOPSELECTEDHORIZONTALTAB } from '../../store/constant/constant';
+import { SHOPSCROLL, SHOPSELECTEDHORIZONTALTAB, SHOPSUBCATOGERY } from '../../store/constant/constant';
 
 import { HeaderTitle, ShopContainer, SubCategoryTile } from './ShopStyled';
 
@@ -81,7 +81,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
     const unsubscribe = navigation.addListener('blur', () => {
       setisScrollable(false)
       setisEmptyserch(false)
-      dispatch(_getCatogery(currentUser, navigation))
+      // dispatch(_getCatogery(currentUser, navigation))
 
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -114,7 +114,8 @@ export const Shop: React.FC = ({ navigation, }: any) => {
     let keywords = e.split(' ')
     setsearch(keywords)
     if (keywords[0] === "") {
-      setSubcatogery(shopSubCatogery)
+      // setSubcatogery(shopSubCatogery)
+      dispatch(_getCatogery(currentUser, navigation))
 
     }
     if (keywords[0] !== "") {
@@ -132,6 +133,8 @@ export const Shop: React.FC = ({ navigation, }: any) => {
       }
       searchedItems = await removeDuplicates(filterChat, item => item._id)
       setSubcatogery(searchedItems)
+      dispatch({ type: SHOPSUBCATOGERY, payload: searchedItems})
+
     }
     dispatch(_loading(false))
 

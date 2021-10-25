@@ -6,7 +6,7 @@ import {
   VideoTitle,
   VideoTitleWrapper,
 } from './VideoStyled';
-import { View, Dimensions, FlatList ,ActivityIndicator} from 'react-native';
+import { View, Dimensions, FlatList ,ActivityIndicator,Platform} from 'react-native';
 import { StaticVideos } from '../../data/StaticVideos';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +93,7 @@ export const VideoScreen: React.FC = () => {
     // }
   }
   return (
-    <VideoContainer>
+    <VideoContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}>
       <Header
 
         isEmptyserch={isEmptyserch}

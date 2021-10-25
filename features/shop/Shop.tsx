@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { FlatList, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
 import { Header } from '../../components/Header';
 
@@ -148,7 +148,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
   };
   return (
     <>
-      <ShopContainer>
+      <ShopContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}>
         <Header
           isEmptyserch={isEmptyserch}
           _func={(e: any) => searchUser(e)}

@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState, useRef } from 'react';
 
-import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking, Alert } from 'react-native';
+import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking, Alert, Platform } from 'react-native';
 
 import { Body } from '../../components/Body';
 
@@ -191,7 +191,8 @@ export const HomeScreen: React.FC = () => {
 
   console.log("re rendger", isEmptyserch)
   return (
-    < Container >
+      <Container style={{paddingVertical:Platform.OS="ios"?-15:0}}>
+
 
       {/* 
       {isEmptyserch ?

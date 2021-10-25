@@ -1,7 +1,7 @@
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { View, FlatList, ActivityIndicator,Platform } from 'react-native';
 import { _getNewsImages } from '../../store/action/imageAction'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Header } from '../../components/Header';
@@ -93,7 +93,7 @@ export const ImagesScreen: React.FC = () => {
   // }, [])
 
   return (
-    <ImagesContainer>
+    <ImagesContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}>
       <Header
         isEmptyserch={isEmptyserch}
         _func={(e: any) => {

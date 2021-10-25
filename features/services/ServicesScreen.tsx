@@ -2,7 +2,7 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useState, useEffect } from 'react';
 
-import { FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator,Platform } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -99,7 +99,9 @@ export const ServicesScreen: React.FC = () => {
   }
 
   return (
-    <Container>
+    <Container style={{paddingVertical:Platform.OS="ios"?-15:0}}>     
+    
+      
       <Header
         isEmptyserch={isEmptyserch}
 

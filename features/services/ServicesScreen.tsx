@@ -99,7 +99,7 @@ export const ServicesScreen: React.FC = () => {
   }
 
   return (
-    <Container style={{paddingVertical:Platform.OS="ios"?-15:0}}>     
+    <Container style={{paddingVertical:0}}>     
     
       
       <Header

@@ -148,7 +148,7 @@ export const Shop: React.FC = ({ navigation, }: any) => {
   };
   return (
     <>
-      <ShopContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}>
+      <ShopContainer style={{paddingVertical:0}}>
         <Header
           isEmptyserch={isEmptyserch}
           _func={(e: any) => searchUser(e)}

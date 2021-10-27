@@ -93,7 +93,8 @@ export const VideoScreen: React.FC = () => {
     // }
   }
   return (
-    <VideoContainer style={{paddingVertical:0}}>
+    <VideoContainer >
+    {/* <VideoContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}> */}
       <Header
 
         isEmptyserch={isEmptyserch}

@@ -61,14 +61,9 @@ export const WelcomeScreen: React.FC = () => {
     }
     else if (getSocialtype && getSocialtype == 'Google') {
       dispatch(_directLogin({ Id: getsocialId, type: 'GOOGLE' }, navigation, setUser));
-
-      // navigation.dispatch(
-      //   CommonActions.reset({
-      //     index: 1,
-      //     routes: [{ name: 'drawerStack' }],
-      //   }),
-      // );
-      // setUser(true);
+    }
+    else if (getSocialtype && getSocialtype == 'Apple') {
+      dispatch(_directLogin({ Id: getsocialId, type: 'APPLE' }, navigation, setUser));
     }
 
 

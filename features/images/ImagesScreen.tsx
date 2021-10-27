@@ -93,7 +93,8 @@ export const ImagesScreen: React.FC = () => {
   // }, [])
 
   return (
-    <ImagesContainer style={{paddingVertical:0}}>
+    <ImagesContainer >
+    {/* <ImagesContainer style={{paddingVertical:Platform.OS="ios"?-15:0}}> */}
       <Header
         isEmptyserch={isEmptyserch}
         _func={(e: any) => {

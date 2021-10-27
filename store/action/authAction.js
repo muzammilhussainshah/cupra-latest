@@ -332,6 +332,15 @@ export const _varifyCustomer = (
                 console.log(error, 'from async');
               }
             }
+           else if (getsocialType == 'APPLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Apple');
+                await AsyncStorage.setItem('auth', 'apple');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
             else {
 
               try {
@@ -681,6 +690,66 @@ export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
     }
   };
 };
+export const _appleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    await GoogleSignin.signOut();
+
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    try {
+      dispatch(_loading(true));
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: {
+          social_id: getSocialId,
+          social_type: getSocialtype,
+        },
+      };
+      var resp = await axios(option);
+      if (resp.data.status === 200) {
+        try {
+          await AsyncStorage.setItem('socialId', getSocialId);
+          await AsyncStorage.setItem('socialType', 'Apple');
+          await AsyncStorage.setItem('auth', 'apple');
+        } catch (error) {
+          console.log(error, 'from async');
+          dispatch(_loading(false));
+        }
+
+        dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'drawerStack' }],
+          }),
+        );
+
+      } else {
+        console.log(resp, 'login Succesfull');
+        dispatch(_error(resp.data.error.messageEn))
+        dispatch(_loading(false));
+      }
+      // dispatch(_loading(false));
+
+    } catch (err) {
+      dispatch(_loading(false));
+      // dispatch(_error(resp.data.error.messageEn));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
+    }
+  };
+};
 export const _facebookAuthSignIn = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
     await LoginManager.logOut()
@@ -793,6 +862,35 @@ export const _facebookAuthSignIn = (navigation, getSocialId, getSocialtype) => {
       }
 
 
+    }
+  };
+};
+export const _appleAuthSignup = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    try {
+      dispatch(_loading(true));
+
+      navigation &&
+        navigation.navigate('resetPassword', {
+          title: 'Enter Phone Number',
+          completeSignUp: 'Complete Signup',
+          full_name: '',
+          email: '',
+          social_id: getSocialId,
+          social_type: getSocialtype,
+        });
+
+
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
     }
   };
 };
@@ -1033,7 +1131,7 @@ export const _completeSignUp = (
     getsocialId,
     getsocialType,
     '9874',
-  ); 
+  );
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -1058,7 +1156,7 @@ export const _completeSignUp = (
         },
       };
       var resp = await axios(option);
-      if (resp.data.status == 200) { 
+      if (resp.data.status == 200) {
         if (resp.data.data.token) {
           const option = {
             method: 'POST',
@@ -1081,6 +1179,15 @@ export const _completeSignUp = (
                 await AsyncStorage.setItem('socialId', getsocialId);
                 await AsyncStorage.setItem('socialType', 'Google');
                 await AsyncStorage.setItem('auth', 'google');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
+           else if (getsocialType == 'APPLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Apple');
+                await AsyncStorage.setItem('auth', 'apple');
               } catch (error) {
                 console.log(error, 'from async');
               }

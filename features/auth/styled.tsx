@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { TouchableOpacity, Text, ActivityIndicator, Alert, View } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, Alert, View ,Platform} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -158,6 +158,7 @@ export const SocialMedia = ({ routeName }: any) => {
               source={require('../../assets/gmail.png')}
             />
           </TouchableOpacity>
+          {Platform.OS === "ios" &&
           <TouchableOpacity>
             <Apple
               resizeMode={FastImage.resizeMode.contain}
@@ -169,7 +170,7 @@ export const SocialMedia = ({ routeName }: any) => {
               callBack: appleSignIn,
               buttonText: " ",
             })}
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </>
         {/* )} */}
       </Row>

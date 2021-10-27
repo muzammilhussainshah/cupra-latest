@@ -211,7 +211,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
                     ]
                 );
             } else {
-                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_error(resp.data.error.messageEn,8000));
                 dispatch(_loading(false));
 
             }

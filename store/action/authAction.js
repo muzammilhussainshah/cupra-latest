@@ -332,7 +332,7 @@ export const _varifyCustomer = (
                 console.log(error, 'from async');
               }
             }
-           else if (getsocialType == 'APPLE') {
+            else if (getsocialType == 'APPLE') {
               try {
                 await AsyncStorage.setItem('socialId', getsocialId);
                 await AsyncStorage.setItem('socialType', 'Apple');
@@ -1183,7 +1183,7 @@ export const _completeSignUp = (
                 console.log(error, 'from async');
               }
             }
-           else if (getsocialType == 'APPLE') {
+            else if (getsocialType == 'APPLE') {
               try {
                 await AsyncStorage.setItem('socialId', getsocialId);
                 await AsyncStorage.setItem('socialType', 'Apple');
@@ -1263,15 +1263,18 @@ export const _updateProfile = (
   if (fullName) {
     data.append('full_name', fullName);
   }
-  if (mobile) {
-    console.log('email', mobile.replace(/ /g, ''))
-    // data.append('email', mobile);
-  }
+  // if (mobile) {
+  //   console.log('email', mobile.replace(/ /g, ''))
+  //   // data.append('email', mobile);
+  // }
   if (gender) {
     data.append('gender', gender == 'male' ? '1' : '2');
   }
   if (cityName) {
     data.append('city', cityName);
+  }
+  if (mobile) {
+    data.append('mobile', mobile);
   }
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -1361,4 +1364,56 @@ export const _getProfile = (currentUser, navigation, name) => {
       );
     }
   };
+};
+export const _guestLogin = (navigation, countryId) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId')
+    try {
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/guest-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: { "countryId": countryId },
+      };
+      var resp = await axios(option);
+      if (resp.data.status == 200) {
+        dispatch({ type: CURRENTUSER, payload: resp.data.data });
+        try { 
+          await AsyncStorage.setItem('socialType', 'Guest');
+
+          dispatch(_loading(false));
+        } catch (error) {
+          dispatch(_loading(false));
+          console.log(error, 'from async');
+        }
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: 'drawerStack' }],
+          }),
+        );
+        dispatch(_loading(false));
+      } else if (resp.data.error.messageEn === 'You Are Unauthorized') {
+        dispatch(_loading(false));
+        Alert.alert('Authentication!', 'You Are Unauthorized Please Login.', [
+          { text: 'OK', onPress: () => dispatch(_logOut(navigation)) },
+        ]);
+      } else {
+        dispatch(_loading(false));
+        dispatch(_error(resp.data.error.messageEn));
+      }
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err,
+        'error from Guest login',
+        JSON.parse(JSON.stringify(err.message)),
+      );
+    };
+  }
 };

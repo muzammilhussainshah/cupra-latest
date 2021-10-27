@@ -7,67 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:901870504657:android:d18a6c277c3f0c58ac13f0",
-        "android_client_info": {
-          "package_name": "com.cupra"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "901870504657-f34m5m4on66ceg3k52c4iff15nn553av.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cupra",
-            "certificate_hash": "cdeeb7a0de2be4e40977bc4476f43d0b7702df1c"
-          }
-        },
-        {
-          "client_id": "901870504657-oqlk8evpc8s7d3vg0da5ur9demt8dpt0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cupra",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDAwU0ictdG8Z9qZYuAgT05P5j1nvnTDd4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:901870504657:android:0af493778d739b12ac13f0",
+        "mobilesdk_app_id": "1:901870504657:android:cab9feb7e032e2ceac13f0",
         "android_client_info": {
           "package_name": "com.cupranation.cupra"
         }
       },
       "oauth_client": [
         {
-          "client_id": "901870504657-24tet3qvv2670our442oc5926j5s0gnj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cupranation.cupra",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "901870504657-p184hol5qks3kqkom8h6tt4cjq38qm79.apps.googleusercontent.com",
+          "client_id": "901870504657-r208d21ssrp7scq77uburdkhg1ef5vm9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cupranation.cupra",
@@ -90,6 +37,13 @@
             {
               "client_id": "901870504657-s6vn80fp3jje5jal1cdthv49rp7kq46u.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "901870504657-gogss6kl787a1ssh1401aqra3ke7oo65.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abc.CupraNation-App"
+              }
             }
           ]
         }

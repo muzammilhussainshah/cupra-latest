@@ -17,7 +17,7 @@ import DocumentPicker from 'react-native-document-picker';
 
 import styled from 'styled-components/native';
 
-import { TouchableOpacity,Switch, ScrollView, TextInput, Alert, AsyncStorage, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
+import { TouchableOpacity, Switch, ScrollView, TextInput, Alert, AsyncStorage, Platform, PermissionsAndroid, ActivityIndicator, TouchableWithoutFeedback, FlatList } from "react-native"
 
 import { CityModel } from '../../components/cityModel'
 
@@ -52,7 +52,7 @@ export const EditProfile: React.FC = () => {
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const myProfile = useSelector((state: any) => state.reducer.myProfile)
   const getSocialtype = AsyncStorage.getItem('socialType');
-  console.log(getSocialtype, 'getSocialtype')
+  console.log(myProfile, 'myProfile')
   const isError = useSelector((state: any) => state.reducer.isError);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +71,8 @@ export const EditProfile: React.FC = () => {
 
   const [gender, setgender] = useState(myProfile && myProfile.gender && myProfile.gender.toLowerCase());
 
-  const [fullName, setfullName] = useState(currentUser && currentUser.full_name && currentUser.full_name);
+  const [fullName, setfullName] = useState(myProfile && myProfile.full_name && myProfile.full_name);
+  // const [fullName, setfullName] = useState(currentUser && currentUser.full_name && currentUser.full_name);
 
   const [isModalActive, setIsModalActive] = useState(false);
 
@@ -82,8 +83,10 @@ export const EditProfile: React.FC = () => {
   const [imageUriLocal, setimageUriLocal] = useState("");
 
   const [imgFile, setimgFile] = useState("");
+  const [accType, setaccType] = useState("");
 
-  const [mobile, setmobile] = useState(currentUser && currentUser.email && currentUser.email.toString());
+  const [mobile, setmobile] = useState(myProfile && myProfile.mobile && myProfile.mobile);
+  // const [mobile, setmobile] = useState(currentUser && currentUser.email && currentUser.email.toString());
 
   const getCity = useSelector((state: any) => state.reducer.getCity);
 
@@ -92,11 +95,16 @@ export const EditProfile: React.FC = () => {
     setModalVisible(!modalVisible);
   };
 
-
   useEffect(() => {
     setCities(getCity)
-    console.log(getCity, '555555555555')
+    guestMode()
   }, [getCity])
+  const guestMode = async () => {
+    let accType = await AsyncStorage.getItem('socialType');
+    setaccType(accType)
+    
+  }
+  console.log(currentUser, '555555555555')
   const takePhoto = async () => {
     try {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA,)
@@ -243,7 +251,7 @@ export const EditProfile: React.FC = () => {
     }
   }
 
-  
+
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState)
     // if (isEnabled) {
@@ -251,7 +259,7 @@ export const EditProfile: React.FC = () => {
     // } else {
     //     dispatch(_error('Notification Enabled '))
     // }
-};
+  };
   return (
     <>
       {modalVisible && cityModalEnabled && cities && cities.length > 1 &&
@@ -350,7 +358,7 @@ export const EditProfile: React.FC = () => {
                   />
                   {/* Absolute for image insert inside border */}
                   <View style={{ height: "100%", width: "100%", overflow: "hidden", position: 'absolute', justifyContent: "center", alignItems: "center", zIndex: -2 }}>
-                    <View style={{ height: "86%", width: "86%", borderRadius: 100, backgroundColor: imageUriLocal == "" ? Colors.darkGray : null, justifyContent: "center", alignItems: "center" ,overflow:"hidden"}}>
+                    <View style={{ height: "86%", width: "86%", borderRadius: 100, backgroundColor: imageUriLocal == "" ? Colors.darkGray : null, justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
                       < FastImage
                         resizeMode={imageUriLocal ? 'cover' : 'contain'}
                         style={{ height: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", width: imageUriLocal ? '100%' : myProfile.icon ? "100%" : "70%", borderRadius: 60 }}
@@ -370,20 +378,20 @@ export const EditProfile: React.FC = () => {
                     style={{ height: '100%', width: '100%' }}
                   />
                 </TouchableOpacity>
-                    <View style={{ height: 30,position:"absolute",right:40, borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: 50 }}>
-                        <Switch
-                            trackColor={{ false: "black", true: "black" }}
-                            thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch}
-                            value={isEnabled}
-                        />
-                    </View>
+                <View style={{ height: 30, position: "absolute", right: 40, borderRadius: 20, justifyContent: "center", alignItems: "center", backgroundColor: "black", width: 50 }}>
+                  <Switch
+                    trackColor={{ false: "black", true: "black" }}
+                    thumbColor={isEnabled ? Colors.primary : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                  />
+                </View>
 
               </View>
-              <View style={{ height: "55%",}}>
+              <View style={{ height: "55%", }}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
-                  <Text style={{ fontSize: 16 }}>{currentUser.full_name}</Text>
+                  <Text style={{ fontSize: 16 }}>{fullName}</Text>
                 </View>
                 <View style={{ flex: 9, alignItems: "center" }}>
                   <Text style={{ color: Colors.primary }}>Personal info</Text>
@@ -399,6 +407,15 @@ export const EditProfile: React.FC = () => {
                       defaultValue={fullName}
                     />
                   </View>
+                  {accType == "Guest" &&
+                    <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
+                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Mobile No</Text>
+                      <TextInput
+                        style={{ height: 40, width: "75%" }}
+                        onChangeText={text => setmobile(text)}
+                        defaultValue={mobile} />
+                    </View>
+                  }
                   {!getSocialtype &&
                     <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
                       <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>

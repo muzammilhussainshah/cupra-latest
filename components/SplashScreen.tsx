@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, TextInput, Dimensions, Image, Animated, Easing } from 'react-native';
 import { AsyncStorage } from 'react-native';
-import { _signIn, _directLogin } from '../store/action/authAction';
+import { _signIn, _directLogin, _directLoginForGuest } from '../store/action/authAction';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { Text, View } from 'react-native-animatable';
@@ -76,7 +76,7 @@ export const SpashScreen: React.FC<any> = ({
     const getSocialtype = await AsyncStorage.getItem('socialType');
     const getsocialId = await AsyncStorage.getItem('socialId');
     const password = await AsyncStorage.getItem('password');
-
+// console.log(getSocialtype,'socialType')
 
     if (getEmail && getEmail !== 'null') {
 
@@ -111,6 +111,17 @@ export const SpashScreen: React.FC<any> = ({
       // );
       // setUser(true);
     }
+    // else if (getSocialtype && getSocialtype == 'Guest') {
+    //   dispatch(_directLoginForGuest(  navigation,  ));
+
+    //   // navigation.dispatch(
+    //   //   CommonActions.reset({
+    //   //     index: 1,
+    //   //     routes: [{ name: 'drawerStack' }],
+    //   //   }),
+    //   // );
+    //   // setUser(true);
+    // }
 
 
     else {

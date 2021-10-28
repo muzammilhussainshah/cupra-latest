@@ -227,6 +227,8 @@ export const _logOut = navigation => {
       await AsyncStorage.removeItem('socialId');
       await AsyncStorage.removeItem('socialType');
       await AsyncStorage.removeItem('auth');
+      await AsyncStorage.removeItem('currentUserForGuest');
+
 
       dispatch({ type: CURRENTUSER, payload: {} });
       dispatch({ type: MYPROFILE, payload: {} });
@@ -321,6 +323,7 @@ export const _varifyCustomer = (
             },
           };
           var respSocialLogin = await axios(option);
+          console.log(respSocialLogin, 'respSocialLogin social-login')
           if (respSocialLogin.data.status === 200) {
 
             if (getsocialType == 'GOOGLE') {
@@ -600,6 +603,7 @@ export const _resetNewPassword = (
 };
 export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
+    console.log('work')
     await GoogleSignin.signOut();
 
     const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -611,12 +615,12 @@ export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
 
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // console.log( '5555');
 
       // Sign-in the user with the credential
       let signInMethod = auth()
         .signInWithCredential(googleCredential)
         .then(async resp => {
-          console.log(resp, '5555');
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
           // console.log(getSocialId,socialId,getSocialtype,socialType,'creditional')
@@ -1108,6 +1112,33 @@ export const _directLogin = ({ Id, type, }, navigation, setUser) => {
     }
   };
 };
+export const _directLoginForGuest = (navigation, setUser) => {
+  return async dispatch => {
+    dispatch(_loading(true));
+    let currentUserForGuest = await AsyncStorage.getItem('currentUserForGuest');
+    currentUserForGuest = JSON.parse(currentUserForGuest)
+    try {
+      // console.log(currentUserForGuest, 'currentUserForGuestcurrentUserForGuest')
+
+      dispatch({ type: CURRENTUSER, payload: currentUserForGuest });
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'drawerStack' }],
+        }),
+      );
+      dispatch(_loading(false));
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err,
+        'error from _FbDirectLogin',
+        // JSON.parse(JSON.stringify(err.message)),
+      );
+    }
+  };
+};
 export const _completeSignUp = (
   getPhonneNumber,
   navigation,
@@ -1172,6 +1203,8 @@ export const _completeSignUp = (
             },
           };
           var respSocialLogin = await axios(option);
+          console.log(respSocialLogin,getsocialId,getsocialType, 'respSocialLogin');
+
           if (respSocialLogin.data.status === 200) {
 
             if (getsocialType == 'GOOGLE') {
@@ -1229,7 +1262,6 @@ export const _completeSignUp = (
         dispatch(_loading(false));
         dispatch(_error(resp.data.error.messageEn));
       }
-      console.log(resp, '_completeSignUp');
     } catch (err) {
       dispatch(_loading(false));
       // dispatch(_error(resp.data.error.messageEn));
@@ -1369,6 +1401,8 @@ export const _guestLogin = (navigation, countryId) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId')
+    dispatch(_loading(true));
+
     try {
       const option = {
         method: 'POST',
@@ -1383,8 +1417,9 @@ export const _guestLogin = (navigation, countryId) => {
       var resp = await axios(option);
       if (resp.data.status == 200) {
         dispatch({ type: CURRENTUSER, payload: resp.data.data });
-        try { 
+        try {
           await AsyncStorage.setItem('socialType', 'Guest');
+          await AsyncStorage.setItem('currentUserForGuest', JSON.stringify(resp.data.data));
 
           dispatch(_loading(false));
         } catch (error) {

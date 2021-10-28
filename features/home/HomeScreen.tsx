@@ -1,6 +1,7 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { HOMESCROLL } from '../../store/constant/constant';
 
 import { View, ScrollView, Text, ActivityIndicator, FlatList, TouchableOpacity, Dimensions, Linking, Alert, Platform } from 'react-native';
 
@@ -56,6 +57,8 @@ export const HomeScreen: React.FC = () => {
 
   const [search, setsearch] = useState([]);
 
+  const [isScrollable, setisScrollable] = useState(true);
+
   const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
   const paginationLoader = useSelector((state: any) => state.reducer.paginationLoader);
@@ -66,9 +69,11 @@ export const HomeScreen: React.FC = () => {
 
   const getNews = useSelector((state: any) => state.reducer.getNews)
 
+  const homeScroll = useSelector((state: any) => state.reducer.homeScroll)
   const ads = useSelector((state: any) => state.reducer.ads)
-
+  
   const navigation: any = useNavigation();
+  const scrollRef: any = useRef();
 
   const dispatch = useDispatch();
   const videoPlayer = useRef(null);
@@ -91,6 +96,7 @@ export const HomeScreen: React.FC = () => {
     const unsubscribe = navigation.addListener('blur', () => {
       setblur(true)
       setisHome(false)
+      setisScrollable(false)
       setisEmptyserch(false)
       console.log(searchTxt, "searchTxt")
       // setsearchTxt('')
@@ -109,16 +115,21 @@ export const HomeScreen: React.FC = () => {
       setblur(false)
       setisHome(true)
       setisEmptyserch(true)
+      setisScrollable(true)
       setpagination(2)
       setisMore(true)
       // if (searchTxt !== '') {
       //   console.log(searchTxt,"searchTxt")
       //   dispatch(_stories(currentUser, filterdBy, navigation,))
       // }
+      scrollRef.current?.scrollTo({
+        y: homeScroll,
+        animated: true,
+      });
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation,homeScroll]);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
@@ -189,7 +200,13 @@ export const HomeScreen: React.FC = () => {
   }
 
 
-  console.log("re rendger", isEmptyserch)
+  const handleScroll = (event) => {
+    const positionY = event.nativeEvent.contentOffset.y;
+
+    // if (isScrollable) console.log(positionY, 'positionY')
+    if (isScrollable) dispatch({ type: HOMESCROLL, payload: positionY });
+
+  };
   return (
       <Container >
 
@@ -224,23 +241,24 @@ export const HomeScreen: React.FC = () => {
           size="small" color={'black'}
         /> :
         <ScrollView
-
-          onScroll={({ nativeEvent }: any) => {
-            if (nativeEvent.contentOffset.y > 160) {
-              setisHome(false)
-            }
-            else if (nativeEvent.contentOffset.y < 160 && !blur) {
-              console.log(nativeEvent.contentOffset.y, '+++++++++++++nativeEvent.contentOffset.y')
-              setisHome(true)
-            }
-            // else{
-            //   setisHome(true)
-            // }
-            if (isCloseToBottom(nativeEvent) && isMore) {
-              loadMorePage()
-            }
-          }}
-          scrollEventThrottle={400}
+        ref={scrollRef}
+        onScroll={(event) => handleScroll(event)}
+          // onScroll={({ nativeEvent }: any) => {
+          //   if (nativeEvent.contentOffset.y > 160) {
+          //     setisHome(false)
+          //   }
+          //   else if (nativeEvent.contentOffset.y < 160 && !blur) {
+          //     console.log(nativeEvent.contentOffset.y, '+++++++++++++nativeEvent.contentOffset.y')
+          //     setisHome(true)
+          //   }
+          //   // else{
+          //   //   setisHome(true)
+          //   // }
+          //   if (isCloseToBottom(nativeEvent) && isMore) {
+          //     loadMorePage()
+          //   }
+          // }}
+          // scrollEventThrottle={400}
 
 
 

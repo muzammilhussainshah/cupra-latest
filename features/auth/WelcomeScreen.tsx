@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   TouchableWithoutFeedback,
+  ActivityIndicator,
   View, Text
 } from 'react-native';
 import {
@@ -28,8 +29,9 @@ import {
   _signIn,
   _directLogin
 } from '../../store/action/authAction';
-import { _getCountry,  } from '../../store/action/action';
-import { _guestLogin,  } from '../../store/action/authAction';
+import { _getCountry, } from '../../store/action/action';
+import { _guestLogin, _directLoginForGuest } from '../../store/action/authAction';
+import { CommonActions } from '@react-navigation/native';
 import { SpashScreen } from '../../components/SplashScreen';
 import {
   BackGroundContinerImage,
@@ -67,12 +69,18 @@ export const WelcomeScreen: React.FC = () => {
   const dispatch = useDispatch();
 
   const country = useSelector(({ reducer }: any) => reducer.country);
-
+  const isLoader = useSelector(({ reducer }: any) => reducer.isLoader);
+  const isError = useSelector(({ reducer }: any) => reducer.isError);
+  let currentUserForGuest;
   useEffect(() => {
     getDataAsync();
     dispatch(_getCountry(navigation))
+    directLogInForGuest()
   }, []);
-
+  const directLogInForGuest = async () => {
+    currentUserForGuest = await AsyncStorage.getItem('currentUserForGuest');
+    // console.log(JSON.parse(currentUserForGuest), 'currentUserForGuest')
+  }
   let localCodeArr: any = []
   // console.log(getcountry,'getcountrygetcountrygetcountry')
   useEffect(() => {
@@ -91,10 +99,10 @@ export const WelcomeScreen: React.FC = () => {
   const handleChange = (item: SelectItem) => {
     Keyboard.dismiss();
     if (getcountry.onChange) {
-      getcountry.onChange(item.country_phone_code);
+      getcountry.onChange(item.en_name);
     }
     setcountryId(item._id)
-    setSelectCountry(item.country_phone_code);
+    setSelectCountry(item.en_name);
     toggleModal();
   };
   const getDataAsync = async () => {
@@ -103,7 +111,7 @@ export const WelcomeScreen: React.FC = () => {
     const getSocialtype = await AsyncStorage.getItem('socialType');
     const getsocialId = await AsyncStorage.getItem('socialId');
     const password = await AsyncStorage.getItem('password');
-
+    // console.log(getSocialtype,'getSocialtype')
 
     if (getEmail && getEmail !== 'null') {
 
@@ -134,7 +142,20 @@ export const WelcomeScreen: React.FC = () => {
     else if (getSocialtype && getSocialtype == 'Apple') {
       dispatch(_directLogin({ Id: getsocialId, type: 'APPLE' }, navigation, setUser));
     }
+    else if (getSocialtype && getSocialtype == 'Guest') {
+      // console.log('saghirahmedshah')
+      dispatch(_directLoginForGuest(   navigation, setUser));
 
+      // dispatch({ type: CURRENTUSER, payload: JSON.parse(currentUserForGuest) });
+
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [{ name: 'drawerStack' }],
+      //   }),
+      // );
+      // setUser(true);
+    }
 
     else {
       console.log('elseelseelse')
@@ -187,7 +208,7 @@ export const WelcomeScreen: React.FC = () => {
                         onChange={() => {
                           handleChange(item as SelectItem)
                         }}>
-                        {(item.country_phone_code as SelectItem)}
+                        {(item.en_name as SelectItem)}
                       </Item>
                     </>
                   )
@@ -238,24 +259,35 @@ export const WelcomeScreen: React.FC = () => {
               </Button>
             </ButtonsContainer>
           </ButtonsRow>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={{ color: "white" }}>Guest from</Text>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setModalVisible(true)}
-              style={{ height: 40, flexDirection: 'row', marginHorizontal: 20, justifyContent: "center", alignItems: 'center', paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'white' }}>
-              <Text style={{ color: "white", marginRight: 15 }}>{SelectCountry ? SelectCountry : 'Country'}</Text>
-              <AntDesign name="caretdown" size={13} color={Colors.primary} />
-            </TouchableOpacity>
 
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => dispatch(_guestLogin(navigation, countryId))}
-              style={{ height: 40, justifyContent: "center", alignItems: 'center', paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'white' }}>
-              <Text style={{ color: "white" }}>Go</Text>
-            </TouchableOpacity>
 
-          </View>
+          {isLoader ?
+            <ActivityIndicator
+              // style={{ marginTop: "15%" }}
+              size="small" color={'#ffffff'}
+            /> :
+            <View style={{ flexDirection: "row", marginBottom: 5, alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Guest from</Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setModalVisible(true)}
+                style={{ height: 40, flexDirection: 'row', marginHorizontal: 20, justifyContent: "center", alignItems: 'center', paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'white' }}>
+                <Text style={{ color: "white", marginRight: 15 }}>{SelectCountry ? SelectCountry : 'Country'}</Text>
+                <AntDesign name="caretdown" size={13} color={Colors.primary} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => dispatch(_guestLogin(navigation, countryId))}
+                style={{ height: 40, justifyContent: "center", alignItems: 'center', paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'white' }}>
+                <Text style={{ color: "white" }}>Go</Text>
+              </TouchableOpacity>
+            </View>
+          }
+          {isError !== "" &&
+            <Text style={{ color: "red", fontSize: 12, alignSelf: "center" }}>{isError}{' '}{isError == "Invalid Credentials" && "please signup first"}
+            </Text>}
+
         </GradientBanckground>
       </BackGroundContinerImage>
     ) :

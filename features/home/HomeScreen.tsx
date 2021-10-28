@@ -71,7 +71,7 @@ export const HomeScreen: React.FC = () => {
 
   const homeScroll = useSelector((state: any) => state.reducer.homeScroll)
   const ads = useSelector((state: any) => state.reducer.ads)
-  
+
   const navigation: any = useNavigation();
   const scrollRef: any = useRef();
 
@@ -129,7 +129,7 @@ export const HomeScreen: React.FC = () => {
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation,homeScroll]);
+  }, [navigation, homeScroll]);
 
   useEffect(() => {
     if (Object.keys(currentUser).length > 0) {
@@ -208,7 +208,7 @@ export const HomeScreen: React.FC = () => {
 
   };
   return (
-      <Container >
+    <Container >
 
 
       {/* 
@@ -241,24 +241,27 @@ export const HomeScreen: React.FC = () => {
           size="small" color={'black'}
         /> :
         <ScrollView
-        ref={scrollRef}
-        onScroll={(event) => handleScroll(event)}
-          // onScroll={({ nativeEvent }: any) => {
-          //   if (nativeEvent.contentOffset.y > 160) {
-          //     setisHome(false)
-          //   }
-          //   else if (nativeEvent.contentOffset.y < 160 && !blur) {
-          //     console.log(nativeEvent.contentOffset.y, '+++++++++++++nativeEvent.contentOffset.y')
-          //     setisHome(true)
-          //   }
-          //   // else{
-          //   //   setisHome(true)
-          //   // }
-          //   if (isCloseToBottom(nativeEvent) && isMore) {
-          //     loadMorePage()
-          //   }
-          // }}
-          // scrollEventThrottle={400}
+          ref={scrollRef}
+          // onScroll={(event) => handleScroll(event)}
+          onScroll={({ nativeEvent }: any) => {
+            // handleScroll(nativeEvent)
+            if (isScrollable) dispatch({ type: HOMESCROLL, payload: nativeEvent.contentOffset.y });
+
+            if (nativeEvent.contentOffset.y > 160) {
+              setisHome(false)
+            }
+            else if (nativeEvent.contentOffset.y < 160 && !blur) {
+              console.log(nativeEvent.contentOffset.y, '+++++++++++++nativeEvent.contentOffset.y')
+              setisHome(true)
+            }
+            // else{
+            //   setisHome(true)
+            // }
+            if (isCloseToBottom(nativeEvent) && isMore) {
+              loadMorePage()
+            }
+          }}
+          scrollEventThrottle={400}
 
 
 

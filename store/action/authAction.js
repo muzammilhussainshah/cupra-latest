@@ -1203,7 +1203,7 @@ export const _completeSignUp = (
             },
           };
           var respSocialLogin = await axios(option);
-          console.log(respSocialLogin,getsocialId,getsocialType, 'respSocialLogin');
+          console.log(respSocialLogin, getsocialId, getsocialType, 'respSocialLogin');
 
           if (respSocialLogin.data.status === 200) {
 
@@ -1279,8 +1279,11 @@ export const _updateProfile = (
   currentUser,
   navigation,
   fileURL,
-  mobile,
+  notification,
   fullName,
+  mobile,
+  email,
+  password,
   gender,
   cityName,
 ) => {
@@ -1292,22 +1295,28 @@ export const _updateProfile = (
       type: fileURL.type,
     });
   }
+  if (notification) {
+    data.append('allow_notifications', notification);
+  }
   if (fullName) {
     data.append('full_name', fullName);
   }
-  // if (mobile) {
-  //   console.log('email', mobile.replace(/ /g, ''))
-  //   // data.append('email', mobile);
-  // }
+  if (mobile) {
+    data.append('mobile', mobile);
+  }
+  if (email) {
+    data.append('email', email);
+  }
+  if (password) {
+    data.append('password', password);
+  }
   if (gender) {
     data.append('gender', gender == 'male' ? '1' : '2');
   }
   if (cityName) {
     data.append('city', cityName);
   }
-  if (mobile) {
-    data.append('mobile', mobile);
-  }
+  console.log(data, 'append data')
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -1401,6 +1410,7 @@ export const _guestLogin = (navigation, countryId) => {
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId')
+    const guestToken = await AsyncStorage.getItem('guestToken')
     dispatch(_loading(true));
 
     try {
@@ -1414,10 +1424,13 @@ export const _guestLogin = (navigation, countryId) => {
         },
         data: { "countryId": countryId },
       };
+      if (guestToken) option.headers.Authorization = guestToken
+
       var resp = await axios(option);
       if (resp.data.status == 200) {
         dispatch({ type: CURRENTUSER, payload: resp.data.data });
         try {
+          await AsyncStorage.setItem('guestToken', resp.data.data.token);
           await AsyncStorage.setItem('socialType', 'Guest');
           await AsyncStorage.setItem('currentUserForGuest', JSON.stringify(resp.data.data));
 
@@ -1440,7 +1453,13 @@ export const _guestLogin = (navigation, countryId) => {
         ]);
       } else {
         dispatch(_loading(false));
-        dispatch(_error(resp.data.error.messageEn));
+        if (resp.data.error.messageEn === 'countryId is not valid') {
+          dispatch(_error('Please select country'));
+        }
+        else {
+          dispatch(_error(resp.data.error.messageEn));
+        }
+        // dispatch(_error(resp.data.error.messageEn));
       }
     } catch (err) {
       dispatch(_loading(false));

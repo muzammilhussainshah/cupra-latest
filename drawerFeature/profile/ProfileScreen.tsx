@@ -61,7 +61,7 @@ export const ProfileScreen: React.FC = () => {
     // <Animatable.Text 
     // >Up and down you go</Animatable.Text>
 
-    < View style={{ flex: 1, paddingTop: 24 }}>
+    < View style={{ flex: 1, paddingTop: 24,backgroundColor:'black' }}>
 
       <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
         <FastImage source={require('../../assets/profileBg.png')}

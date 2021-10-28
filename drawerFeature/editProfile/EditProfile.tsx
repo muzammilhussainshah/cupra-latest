@@ -52,7 +52,7 @@ export const EditProfile: React.FC = () => {
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
   const myProfile = useSelector((state: any) => state.reducer.myProfile)
   const getSocialtype = AsyncStorage.getItem('socialType');
-  console.log(myProfile, 'myProfile')
+  console.log(myProfile, 'myProfile',currentUser)
   const isError = useSelector((state: any) => state.reducer.isError);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +71,7 @@ export const EditProfile: React.FC = () => {
 
   const [gender, setgender] = useState(myProfile && myProfile.gender && myProfile.gender.toLowerCase());
 
-  const [fullName, setfullName] = useState(myProfile && myProfile.full_name && myProfile.full_name);
+  const [fullName, setfullName] = useState('');
   // const [fullName, setfullName] = useState(currentUser && currentUser.full_name && currentUser.full_name);
 
   const [isModalActive, setIsModalActive] = useState(false);
@@ -85,7 +85,9 @@ export const EditProfile: React.FC = () => {
   const [imgFile, setimgFile] = useState("");
   const [accType, setaccType] = useState("");
 
-  const [mobile, setmobile] = useState(myProfile && myProfile.mobile && myProfile.mobile);
+  const [mobile, setmobile] = useState('');
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
   // const [mobile, setmobile] = useState(currentUser && currentUser.email && currentUser.email.toString());
 
   const getCity = useSelector((state: any) => state.reducer.getCity);
@@ -102,7 +104,7 @@ export const EditProfile: React.FC = () => {
   const guestMode = async () => {
     let accType = await AsyncStorage.getItem('socialType');
     setaccType(accType)
-    
+
   }
   console.log(currentUser, '555555555555')
   const takePhoto = async () => {
@@ -314,31 +316,31 @@ export const EditProfile: React.FC = () => {
           </KeyboardView>
         </Modal>}
 
-      < ScrollView contentContainerStyle={{ paddingBottom: 30, backgroundColor: Colors.white }}>
+      < ScrollView contentContainerStyle={{ backgroundColor:'black' }}>
         {/* {isModalActive &&
             <Modal _func={getImg} _func2={Platform.OS === "ios" ? takePhotoIphone : takePhoto} _modalActive={() => setIsModalActive(!isModalActive)} />
           } */}
         < View
-          style={{ height: height + 24 }}>
-          <View style={{ flex: 1, paddingTop: 24 }}>
-            <View style={{ height: '45%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
+          style={{ height: (height / 10 * 12) + 24,  }}>
+          <View style={{ flex: 1,  }}>
+            <View style={{ height: '35%', borderTopRightRadius: 20, overflow: "hidden", borderTopLeftRadius: 20, backgroundColor: Colors.black, width: '100%' }}>
               <FastImage source={require('../../assets/profileBg.png')}
                 resizeMode='cover'
                 style={{ height: '100%', width: '100%' }}
               />
             </View>
             {/*Absolute for background Images */}
-            <View style={{ height: "100%", marginTop: 24, justifyContent: "flex-end", position: "absolute", width: "100%" }}>
-              <View style={{ height: "80%", }}>
+            <View style={{ height: "100%",justifyContent:"flex-end",    position: "absolute", width: "100%" }}>
+              {/* <View style={{ height: "90%", backgroundColor:"green"}}> */}
                 <FastImage source={require('../../assets/white.png')}
                   resizeMode='cover'
                   style={{ height: '100%', width: '100%' }}
                 />
-              </View>
+              {/* </View> */}
             </View>
             {/*Absolute for Work */}
             <View style={{ height: "100%", marginTop: 24, zIndex: 3, position: "absolute", width: "100%" }}>
-              <View style={{ height: "10%", marginHorizontal: 20, alignItems: "center", flexDirection: "row" }}>
+              <View style={{ height: "8%", marginHorizontal: 20, alignItems: "center", flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}
                   style={{ height: '65%', width: '12%', backgroundColor: Colors.primary, borderRadius: 10, justifyContent: "center", alignItems: "center" }}
                 >
@@ -350,7 +352,7 @@ export const EditProfile: React.FC = () => {
                 </TouchableOpacity>
                 <Text style={{ fontSize: 16, color: Colors.white, marginLeft: 20 }}>My Profile</Text>
               </View>
-              <View style={{ height: "35%", flexDirection: "row", paddingHorizontal: 5, alignItems: 'flex-end', justifyContent: "center" }}>
+              <View style={{ height: "27%", flexDirection: "row", paddingHorizontal: 5, alignItems: 'flex-end', justifyContent: "center" }}>
                 <View style={{ height: '50%', width: '30%', }}>
                   <FastImage source={require('../../assets/users/border.png')}
                     resizeMode='contain'
@@ -389,9 +391,9 @@ export const EditProfile: React.FC = () => {
                 </View>
 
               </View>
-              <View style={{ height: "55%", }}>
+              <View style={{ height: "65%"}}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
-                  <Text style={{ fontSize: 16 }}>{fullName}</Text>
+                  <Text style={{ fontSize: 16 }}>{myProfile && myProfile.full_name && myProfile.full_name}</Text>
                 </View>
                 <View style={{ flex: 9, alignItems: "center" }}>
                   <Text style={{ color: Colors.primary }}>Personal info</Text>
@@ -404,27 +406,34 @@ export const EditProfile: React.FC = () => {
                     <TextInput
                       style={{ height: 40, width: "75%" }}
                       onChangeText={text => setfullName(text)}
-                      defaultValue={fullName}
+                      defaultValue={myProfile && myProfile.full_name && myProfile.full_name}
                     />
                   </View>
-                  {accType == "Guest" &&
-                    <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Mobile No</Text>
-                      <TextInput
-                        style={{ height: 40, width: "75%" }}
-                        onChangeText={text => setmobile(text)}
-                        defaultValue={mobile} />
-                    </View>
-                  }
-                  {!getSocialtype &&
-                    <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
-                      <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>
-                      <TextInput
-                        style={{ height: 40, width: "75%" }}
-                        onChangeText={text => setmobile(text)}
-                        defaultValue={mobile} />
-                    </View>
-                  }
+                  {/* {accType == "Guest" && */}
+                  <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
+                    <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Mobile No</Text>
+                    <TextInput
+                      style={{ height: 40, width: "75%" }}
+                      onChangeText={text => setmobile(text)}
+                      defaultValue={myProfile && myProfile.mobile && myProfile.mobile} />
+                  </View>
+                  {/* } */}
+                  {/* {!getSocialtype && */}
+                  <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
+                    <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Email</Text>
+                    <TextInput
+                      style={{ height: 40, width: "75%" }}
+                      onChangeText={text => setemail(text)}
+                      defaultValue={myProfile && myProfile.email && myProfile.email} />
+                  </View>
+                  {/* } */}
+                  <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, alignItems: "center", borderRadius: 20, width: "80%", padding: 10, marginVertical: 5 }}>
+                    <Text style={{ fontSize: 16, width: "25%", fontWeight: "bold" }}>Password</Text>
+                    <TextInput
+                      style={{ height: 40, width: "75%" }}
+                      onChangeText={text => setpassword(text)}
+                      defaultValue={password} />
+                  </View>
                   <View style={{ backgroundColor: '#f3f3fa', flexDirection: "row", height: 40, borderRadius: 20, width: "80%", padding: 10, marginVertical: 5, }}>
                     <View style={{ justifyContent: "center", flex: 1 }}>
                       <Text style={{ fontSize: 16, fontWeight: "bold" }}>Gender</Text>
@@ -460,7 +469,7 @@ export const EditProfile: React.FC = () => {
                     /> :
                     <TouchableOpacity
                       onPress={() =>
-                        dispatch(_updateProfile(currentUser, navigation, imgFile, mobile, fullName, gender, cityId))
+                        dispatch(_updateProfile(currentUser, navigation, imgFile, isEnabled, fullName, mobile,email, password, gender, cityId))
                       }
                       activeOpacity={0.8}
                       style={{ backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 20, width: "80%", padding: 10, marginTop: 15 }}>

@@ -167,7 +167,7 @@ export const _bookService = (currentUser, model, date, serviceId, setopenModal, 
             }
             else {
                 setopenModal(false)
-                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_error(resp.data.error.messageEn,8000));
                 dispatch(_loading(false));
             }
             dispatch(_loading(false));

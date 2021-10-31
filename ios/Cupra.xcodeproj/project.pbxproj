@@ -15,7 +15,7 @@
 		33350D8C26DC0565001AE4F3 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33350D8B26DC0565001AE4F3 /* SourceSansPro-Regular.ttf */; };
 		33350DFD26DC0A23001AE4F3 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33350DFC26DC0A1F001AE4F3 /* SourceSansPro-Bold.ttf */; };
 		33350E0126DC18DF001AE4F3 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33350E0026DC18DF001AE4F3 /* SourceSansPro-SemiBold.ttf */; };
-		3341D8FF26DB805A002B09D0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3341D8FE26DB805A002B09D0 /* GoogleService-Info.plist */; };
+		33D4278C271564F70061EFDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 33D4278B271564F70061EFDD /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		EF27D857E22108301C12C138 /* libPods-Cupra-CupraTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DCA0ABD81069AD1F4970EB /* libPods-Cupra-CupraTests.a */; };
 /* End PBXBuildFile section */
@@ -47,8 +47,8 @@
 		33350D8B26DC0565001AE4F3 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		33350DFC26DC0A1F001AE4F3 /* SourceSansPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Bold.ttf"; sourceTree = "<group>"; };
 		33350E0026DC18DF001AE4F3 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		3341D8FE26DB805A002B09D0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		336A087E26F530700068C7C4 /* Cupra.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Cupra.entitlements; path = Cupra/Cupra.entitlements; sourceTree = "<group>"; };
+		33D4278B271564F70061EFDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Cupra/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		386298BDBA031E9A26256D76 /* Pods-Cupra-CupraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cupra-CupraTests.debug.xcconfig"; path = "Target Support Files/Pods-Cupra-CupraTests/Pods-Cupra-CupraTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4526468389388D1CB1C36E77 /* Pods-Cupra-CupraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cupra-CupraTests.release.xcconfig"; path = "Target Support Files/Pods-Cupra-CupraTests/Pods-Cupra-CupraTests.release.xcconfig"; sourceTree = "<group>"; };
 		4FB7985570B4476FA8F61DA5 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -113,7 +113,6 @@
 			children = (
 				336A087E26F530700068C7C4 /* Cupra.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				3341D8FE26DB805A002B09D0 /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -166,6 +165,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				33D4278B271564F70061EFDD /* GoogleService-Info.plist */,
 				33350D8B26DC0565001AE4F3 /* SourceSansPro-Regular.ttf */,
 				33350DFC26DC0A1F001AE4F3 /* SourceSansPro-Bold.ttf */,
 				33350E0026DC18DF001AE4F3 /* SourceSansPro-SemiBold.ttf */,
@@ -301,8 +301,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				33350DFD26DC0A23001AE4F3 /* SourceSansPro-Bold.ttf in Resources */,
 				33350E0126DC18DF001AE4F3 /* SourceSansPro-SemiBold.ttf in Resources */,
-				3341D8FF26DB805A002B09D0 /* GoogleService-Info.plist in Resources */,
 				33350D8C26DC0565001AE4F3 /* SourceSansPro-Regular.ttf in Resources */,
+				33D4278C271564F70061EFDD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,10 +566,11 @@
 				CODE_SIGN_ENTITLEMENTS = Cupra/Cupra.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = R26ZZ4FRJZ;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = DVZU72D68H;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Cupra/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -578,13 +579,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.abc.Cupra-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abc.CupraNation-App";
 				PRODUCT_NAME = Cupra;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -602,9 +603,10 @@
 				CODE_SIGN_ENTITLEMENTS = Cupra/Cupra.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
-				DEVELOPMENT_TEAM = R26ZZ4FRJZ;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = DVZU72D68H;
 				INFOPLIST_FILE = Cupra/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -613,13 +615,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.abc.Cupra-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abc.CupraNation-App";
 				PRODUCT_NAME = Cupra;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

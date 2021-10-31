@@ -3,7 +3,7 @@ import {
   ISERROR, GETSTORIES, SHOPCATOGERY, SHOPSUBCATOGERY, ITEMDETAILS, GETREVIEWS, GETNEWS,
   NEWSITEMDETAILS, GETADDS, STORIESLIST, VIDEOS, PAGINATIONLOADER, GETCITY, MYPROFILE,SHOPSELECTEDHORIZONTALTAB,
   GETFAVCARS, GETMODELS, GETBRANDS, CONTACTUSINFO, COMPANYPOLICY, NOTIFICATION, COMPANYREVIEWS, 
-  GETCOUNTRY,ADS,SHOPSCROLL
+  GETCOUNTRY,ADS,SHOPSCROLL,HOMESCROLL
 } from "../constant/constant";
 
 const INITIAL_STATE = {
@@ -38,6 +38,8 @@ const INITIAL_STATE = {
   country: {},
   ads: {},
   shopScroll: 0,
+  homeScroll: 0,
+  
   shopSelectedHorizontaltab:'',
 }
 
@@ -192,6 +194,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         shopScroll: action.payload,
+      };
+    case HOMESCROLL:
+      return {
+        ...state,
+        homeScroll: action.payload,
       };
     case SHOPSELECTEDHORIZONTALTAB:
       return {

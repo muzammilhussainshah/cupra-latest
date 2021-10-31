@@ -176,13 +176,14 @@ export const _getNotification = (currentUser, navigation,) => {
 }
 export const _getCompanyReviews = (currentUser, page_size, page_index, navigation) => {
     return async (dispatch) => {
+        console.log(currentUser, page_size, page_index, navigation,'_getCompanyReviews data')
         const deviceToken = await AsyncStorage.getItem('deviceToken');
         const uniqueId = await AsyncStorage.getItem('uniqueId');
         dispatch(_loading(true));
         try {
             const option = {
                 method: 'GET',
-                url: `https://cupranationapp.herokuapp.com/apis/mobile/company-review?deviceToken=${deviceToken}&deviceKey=${uniqueId}&page_size=${page_size}&page_index=${page_index}`,
+                url: `https://cupranationapp.herokuapp.com/apis/mobile/company-review?deviceToken=${deviceToken}&deviceKey=${uniqueId}&page_size=${1}&page_index=${1}`,
                 headers: {
                     'cache-control': 'no-cache',
                     "Allow-Cross-Origin": '*',

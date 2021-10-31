@@ -40,6 +40,14 @@
 				<string>com.googleusercontent.apps.193382017598-h2r9v2qedc3kaeo4nbhbhrepe3idnehj</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.901870504657-gogss6kl787a1ssh1401aqra3ke7oo65</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>

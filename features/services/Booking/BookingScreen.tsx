@@ -22,7 +22,7 @@ import { Button, ButtonsContainer, ButtonText } from '../../../components/Button
 
 import { Colors } from '../../../constants/Colors';
 
-import { Alert, Text, View } from 'react-native';
+import { Alert, Text, View,ActivityIndicator } from 'react-native';
 
 import { _bookService, _error } from "../../../store/action/serviceAction"
 
@@ -52,15 +52,17 @@ interface IBookingProp {
 const Services = ['service2', 'Nano Ceramic', 'service3'];
 
 export const BookingScreen: React.FC = ({ route }: any) => {
-  const { serviceId, subserviceId,serviceName } = route.params
-  
+  const { serviceId, subserviceId, serviceName } = route.params
+
   const [openModal, setopenModal] = useState(false);
 
   let dispatch = useDispatch()
 
   const isError = useSelector((state: any) => state.reducer.isError);
+  const isLoader = useSelector((state: any) => state.reducer.isLoader);
 
   const currentUser = useSelector((state: any) => state.reducer.currentUser)
+  const myProfile = useSelector((state: any) => state.reducer.myProfile)
 
   const navigation = useNavigation();
 
@@ -69,7 +71,7 @@ export const BookingScreen: React.FC = ({ route }: any) => {
   const bookingMethods = useForm<IBookingProp>({
     defaultValues: {
       name: currentUser && currentUser.full_name && currentUser.full_name.toString(),
-      phone_number: currentUser && currentUser.mobile && currentUser.mobile.toString(),
+      phone_number: currentUser && currentUser.mobile && currentUser.mobile.toString() || myProfile && myProfile.mobile && myProfile.mobile,
       second_phone_number: '',
       service: '',
       note: '',
@@ -266,12 +268,18 @@ export const BookingScreen: React.FC = ({ route }: any) => {
               }}
             />
             <ButtonsContainer style={{ paddingHorizontal: 20 }}>
-              <Button
-                borderRadius={10}
-                backgroundColor={Colors.primary}
-                onPress={bookingMethods.handleSubmit(onSubmit)}>
-                <ButtonText>Book Now</ButtonText>
-              </Button>
+              {isLoader ?
+                <ActivityIndicator
+                  style={{  }}
+                  size="small" color={'white'}
+                /> :
+                <Button
+                  borderRadius={10}
+                  backgroundColor={Colors.primary}
+                  onPress={bookingMethods.handleSubmit(onSubmit)}>
+                  <ButtonText>Book Now</ButtonText>
+                </Button>
+              }
             </ButtonsContainer>
             {isError !== "" &&
               <Text style={{ color: "red", fontSize: 12, marginTop: 5, alignSelf: "center" }}>{isError}

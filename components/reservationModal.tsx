@@ -43,16 +43,16 @@ export const ReservationModal: React.FunctionComponent<ReservationModalprops> = 
           </Text>
         </View>
 
-        <View style={{ flex: 6, flexDirection: "row", justifyContent: "space-evenly", }}>
+        <View style={{ flex: 6,alignItems:'center'  }}>
           {Title == "Are you sure you want to make this reservation?" ?
             <>
 
               {isLoader ?
                 <ActivityIndicator
-                  style={{ marginBottom: "30%", marginLeft: "20%" }}
+                  style={{ marginBottom: "30%",}}
                   size="small" color={'#ffffff'}
                 /> :
-                <>
+                <View style={{width:'100%', flexDirection: "row", justifyContent: "space-evenly",}}>
                   <TouchableOpacity
                     onPress={() => _func2()}
                     style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
@@ -63,12 +63,10 @@ export const ReservationModal: React.FunctionComponent<ReservationModalprops> = 
                     style={{ width: "35%", marginTop: 10, justifyContent: "center", alignItems: "center", height: 40, borderRadius: 5, backgroundColor: Colors.primary }}>
                     <Text style={{ color: Colors.white }}>Cancel</Text>
                   </TouchableOpacity>
-                </>
+                </View>
 
               }
-              {isError !== "" &&
-                <Text style={{ color: "red", fontSize: 12, marginTop: 5, alignSelf: "center" }}>{isError}
-                </Text>}
+             
 
 
               {/* <TouchableOpacity
@@ -84,7 +82,10 @@ export const ReservationModal: React.FunctionComponent<ReservationModalprops> = 
               <Text style={{ color: Colors.white }}>Okay</Text>
             </TouchableOpacity>
           }
-        </View>
+           {isError !== "" &&
+                <Text style={{padding:'5%', color: "red", fontSize: 12, marginTop: 15, alignSelf: "center" }}>{isError}
+                </Text>}
+                </View>
 
       </TouchableOpacity >
     </TouchableOpacity >

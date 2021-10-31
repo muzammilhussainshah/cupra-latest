@@ -124,6 +124,7 @@ export const LoginScreen: React.FC = () => {
                   isSelectInput={true}
                   name="country_number"
                   items={getcountry}
+                  placeholder={'Country'}
                   getDisable={'false'}
                   // label="Password"
                   rules={{

@@ -211,7 +211,7 @@ export const _makeItemReservation = (itemId, quantity, color, currentUser, setCo
                     ]
                 );
             } else {
-                dispatch(_error(resp.data.error.messageEn));
+                dispatch(_error(resp.data.error.messageEn,8000));
                 dispatch(_loading(false));
 
             }
@@ -291,6 +291,25 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation, shopSubC
         let shopSubCatogeryClone = [...shopSubCatogery];
         let item = shopSubCatogeryClone[shopSubCatogeryIndex].items[shopSubCatogeryItemIndex];
 
+
+
+        console.log(resp, 'resp likeDislike')
+        if (likedByMe) {
+            item.likedByMe = false;
+            item.likes = (item.likes) - 1;
+        }
+        else {
+            item.likedByMe = true;
+            item.likes = (item.likes) + 1;
+        }
+        console.log(shopSubCatogeryClone, "shopSubCatogeryClone")
+        dispatch({ type: SHOPSUBCATOGERY, payload: shopSubCatogeryClone })
+
+
+
+
+
+
         try {
             const deviceToken = await AsyncStorage.getItem('deviceToken');
             const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -310,17 +329,7 @@ export const likeDislike = (itemId, currentUser, likedByMe, navigation, shopSubC
             };
             var resp = await axios(option);
             if (resp.data.status === 200) {
-                console.log(resp, 'resp likeDislike')
-                if (likedByMe) {
-                    item.likedByMe = false;
-                    item.likes = (item.likes) - 1;
-                }
-                else {
-                    item.likedByMe = true;
-                    item.likes = (item.likes) + 1;
-                }
-                console.log(shopSubCatogeryClone, "shopSubCatogeryClone")
-                dispatch({ type: SHOPSUBCATOGERY, payload: shopSubCatogeryClone })
+              
 
             } else if (resp.data.error.messageEn === "You Are Unauthorized") {
                 dispatch(_loading(false));

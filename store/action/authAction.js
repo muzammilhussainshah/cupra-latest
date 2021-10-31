@@ -227,6 +227,8 @@ export const _logOut = navigation => {
       await AsyncStorage.removeItem('socialId');
       await AsyncStorage.removeItem('socialType');
       await AsyncStorage.removeItem('auth');
+      await AsyncStorage.removeItem('currentUserForGuest');
+
 
       dispatch({ type: CURRENTUSER, payload: {} });
       dispatch({ type: MYPROFILE, payload: {} });
@@ -321,6 +323,7 @@ export const _varifyCustomer = (
             },
           };
           var respSocialLogin = await axios(option);
+          console.log(respSocialLogin, 'respSocialLogin social-login')
           if (respSocialLogin.data.status === 200) {
 
             if (getsocialType == 'GOOGLE') {
@@ -328,6 +331,15 @@ export const _varifyCustomer = (
                 await AsyncStorage.setItem('socialId', getsocialId);
                 await AsyncStorage.setItem('socialType', 'Google');
                 await AsyncStorage.setItem('auth', 'google');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
+            else if (getsocialType == 'APPLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Apple');
+                await AsyncStorage.setItem('auth', 'apple');
               } catch (error) {
                 console.log(error, 'from async');
               }
@@ -591,6 +603,7 @@ export const _resetNewPassword = (
 };
 export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
   return async dispatch => {
+    console.log('work')
     await GoogleSignin.signOut();
 
     const deviceToken = await AsyncStorage.getItem('deviceToken');
@@ -602,12 +615,12 @@ export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
 
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // console.log( '5555');
 
       // Sign-in the user with the credential
       let signInMethod = auth()
         .signInWithCredential(googleCredential)
         .then(async resp => {
-          console.log(resp, '5555');
           let socialId = resp.user._user.uid;
           let socialType = 'GOOGLE';
           // console.log(getSocialId,socialId,getSocialtype,socialType,'creditional')
@@ -678,6 +691,66 @@ export const _googleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
 
 
 
+    }
+  };
+};
+export const _appleAuthSignIn = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    await GoogleSignin.signOut();
+
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    try {
+      dispatch(_loading(true));
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/social-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: {
+          social_id: getSocialId,
+          social_type: getSocialtype,
+        },
+      };
+      var resp = await axios(option);
+      if (resp.data.status === 200) {
+        try {
+          await AsyncStorage.setItem('socialId', getSocialId);
+          await AsyncStorage.setItem('socialType', 'Apple');
+          await AsyncStorage.setItem('auth', 'apple');
+        } catch (error) {
+          console.log(error, 'from async');
+          dispatch(_loading(false));
+        }
+
+        dispatch({ type: CURRENTUSER, payload: resp.data.data.data });
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'drawerStack' }],
+          }),
+        );
+
+      } else {
+        console.log(resp, 'login Succesfull');
+        dispatch(_error(resp.data.error.messageEn))
+        dispatch(_loading(false));
+      }
+      // dispatch(_loading(false));
+
+    } catch (err) {
+      dispatch(_loading(false));
+      // dispatch(_error(resp.data.error.messageEn));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
     }
   };
 };
@@ -793,6 +866,35 @@ export const _facebookAuthSignIn = (navigation, getSocialId, getSocialtype) => {
       }
 
 
+    }
+  };
+};
+export const _appleAuthSignup = (navigation, getSocialId, getSocialtype) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId');
+    try {
+      dispatch(_loading(true));
+
+      navigation &&
+        navigation.navigate('resetPassword', {
+          title: 'Enter Phone Number',
+          completeSignUp: 'Complete Signup',
+          full_name: '',
+          email: '',
+          social_id: getSocialId,
+          social_type: getSocialtype,
+        });
+
+
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err.response,
+        'error from _resetNewPassword',
+        JSON.parse(JSON.stringify(err.message)),
+      );
+      dispatch(_error(JSON.parse(JSON.stringify(err.message)) + ' please try again'))
     }
   };
 };
@@ -1010,6 +1112,33 @@ export const _directLogin = ({ Id, type, }, navigation, setUser) => {
     }
   };
 };
+export const _directLoginForGuest = (navigation, setUser) => {
+  return async dispatch => {
+    dispatch(_loading(true));
+    let currentUserForGuest = await AsyncStorage.getItem('currentUserForGuest');
+    currentUserForGuest = JSON.parse(currentUserForGuest)
+    try {
+      // console.log(currentUserForGuest, 'currentUserForGuestcurrentUserForGuest')
+
+      dispatch({ type: CURRENTUSER, payload: currentUserForGuest });
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: 'drawerStack' }],
+        }),
+      );
+      dispatch(_loading(false));
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err,
+        'error from _FbDirectLogin',
+        // JSON.parse(JSON.stringify(err.message)),
+      );
+    }
+  };
+};
 export const _completeSignUp = (
   getPhonneNumber,
   navigation,
@@ -1033,7 +1162,7 @@ export const _completeSignUp = (
     getsocialId,
     getsocialType,
     '9874',
-  ); 
+  );
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -1058,7 +1187,7 @@ export const _completeSignUp = (
         },
       };
       var resp = await axios(option);
-      if (resp.data.status == 200) { 
+      if (resp.data.status == 200) {
         if (resp.data.data.token) {
           const option = {
             method: 'POST',
@@ -1074,6 +1203,8 @@ export const _completeSignUp = (
             },
           };
           var respSocialLogin = await axios(option);
+          console.log(respSocialLogin, getsocialId, getsocialType, 'respSocialLogin');
+
           if (respSocialLogin.data.status === 200) {
 
             if (getsocialType == 'GOOGLE') {
@@ -1081,6 +1212,15 @@ export const _completeSignUp = (
                 await AsyncStorage.setItem('socialId', getsocialId);
                 await AsyncStorage.setItem('socialType', 'Google');
                 await AsyncStorage.setItem('auth', 'google');
+              } catch (error) {
+                console.log(error, 'from async');
+              }
+            }
+            else if (getsocialType == 'APPLE') {
+              try {
+                await AsyncStorage.setItem('socialId', getsocialId);
+                await AsyncStorage.setItem('socialType', 'Apple');
+                await AsyncStorage.setItem('auth', 'apple');
               } catch (error) {
                 console.log(error, 'from async');
               }
@@ -1122,7 +1262,6 @@ export const _completeSignUp = (
         dispatch(_loading(false));
         dispatch(_error(resp.data.error.messageEn));
       }
-      console.log(resp, '_completeSignUp');
     } catch (err) {
       dispatch(_loading(false));
       // dispatch(_error(resp.data.error.messageEn));
@@ -1140,8 +1279,11 @@ export const _updateProfile = (
   currentUser,
   navigation,
   fileURL,
-  mobile,
+  notification,
   fullName,
+  mobile,
+  email,
+  password,
   gender,
   cityName,
 ) => {
@@ -1153,12 +1295,20 @@ export const _updateProfile = (
       type: fileURL.type,
     });
   }
+  if (notification) {
+    data.append('allow_notifications', notification);
+  }
   if (fullName) {
     data.append('full_name', fullName);
   }
   if (mobile) {
-    console.log('email', mobile.replace(/ /g, ''))
-    // data.append('email', mobile);
+    data.append('mobile', mobile);
+  }
+  if (email) {
+    data.append('email', email);
+  }
+  if (password) {
+    data.append('password', password);
   }
   if (gender) {
     data.append('gender', gender == 'male' ? '1' : '2');
@@ -1166,6 +1316,7 @@ export const _updateProfile = (
   if (cityName) {
     data.append('city', cityName);
   }
+  console.log(data, 'append data')
   return async dispatch => {
     const deviceToken = await AsyncStorage.getItem('deviceToken');
     const uniqueId = await AsyncStorage.getItem('uniqueId');
@@ -1254,4 +1405,69 @@ export const _getProfile = (currentUser, navigation, name) => {
       );
     }
   };
+};
+export const _guestLogin = (navigation, countryId) => {
+  return async dispatch => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    const uniqueId = await AsyncStorage.getItem('uniqueId')
+    const guestToken = await AsyncStorage.getItem('guestToken')
+    dispatch(_loading(true));
+
+    try {
+      const option = {
+        method: 'POST',
+        url: `https://cupranationapp.herokuapp.com/apis/mobile/customer/guest-login?deviceToken=${deviceToken}&deviceKey=${uniqueId}`,
+        headers: {
+          'cache-control': 'no-cache',
+          'Allow-Cross-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        data: { "countryId": countryId },
+      };
+      if (guestToken) option.headers.Authorization = guestToken
+
+      var resp = await axios(option);
+      if (resp.data.status == 200) {
+        dispatch({ type: CURRENTUSER, payload: resp.data.data });
+        try {
+          await AsyncStorage.setItem('guestToken', resp.data.data.token);
+          await AsyncStorage.setItem('socialType', 'Guest');
+          await AsyncStorage.setItem('currentUserForGuest', JSON.stringify(resp.data.data));
+
+          dispatch(_loading(false));
+        } catch (error) {
+          dispatch(_loading(false));
+          console.log(error, 'from async');
+        }
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: 'drawerStack' }],
+          }),
+        );
+        dispatch(_loading(false));
+      } else if (resp.data.error.messageEn === 'You Are Unauthorized') {
+        dispatch(_loading(false));
+        Alert.alert('Authentication!', 'You Are Unauthorized Please Login.', [
+          { text: 'OK', onPress: () => dispatch(_logOut(navigation)) },
+        ]);
+      } else {
+        dispatch(_loading(false));
+        if (resp.data.error.messageEn === 'countryId is not valid') {
+          dispatch(_error('Please select country'));
+        }
+        else {
+          dispatch(_error(resp.data.error.messageEn));
+        }
+        // dispatch(_error(resp.data.error.messageEn));
+      }
+    } catch (err) {
+      dispatch(_loading(false));
+      console.log(
+        err,
+        'error from Guest login',
+        JSON.parse(JSON.stringify(err.message)),
+      );
+    };
+  }
 };

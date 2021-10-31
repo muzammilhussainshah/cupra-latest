@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, Alert, View ,Platform} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -20,8 +20,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { _googleAuthSignIn, _facebookAuthSignIn ,_facebookAuthSignUp,_googleAuthSignup} from '../../store/action/authAction';
-
+import { _googleAuthSignIn, _facebookAuthSignIn, _facebookAuthSignUp, _googleAuthSignup,_appleAuthSignIn,_appleAuthSignup } from '../../store/action/authAction';
+import { SignInWithAppleButton } from 'react-native-apple-authentication'
 export const BackGroundContinerImage = styled(FastImage)`
   flex: 1;
   width: null;
@@ -92,6 +92,12 @@ const Facebook = styled(FastImage)`
   margin-left: 5px;
   margin-right: 5px;
 `;
+const Apple = styled(FastImage)`
+  width: 36px;
+  height: 36px;
+  margin-left: 5px;
+  margin-right: 5px;
+`;
 export const SocialMedia = ({ routeName }: any) => {
   console.log(routeName, 'RouteName')
   const dispatch = useDispatch();
@@ -103,9 +109,17 @@ export const SocialMedia = ({ routeName }: any) => {
     });
   }, []);
 
-  const isLoader = useSelector(({ reducer }) => reducer.isLoader);
-  const isError = useSelector(({ reducer }) => reducer.isError);
+  const isLoader = useSelector(({ reducer }:any) => reducer.isLoader);
+  const isError = useSelector(({ reducer }:any) => reducer.isError);
   const navigation = useNavigation();
+
+  const appleSignIn = (result: any) => {
+    if (routeName == "SignIn") {
+      dispatch(_appleAuthSignIn(navigation,result.user,'APPLE'))
+    } else {
+      dispatch(_appleAuthSignup(navigation,result.user,'APPLE'))
+    }
+  }
   return (
     <>
       <Row>
@@ -118,7 +132,7 @@ export const SocialMedia = ({ routeName }: any) => {
             onPress={() => {
               if (routeName == "SignIn") {
                 dispatch(_facebookAuthSignIn(navigation))
-              }else{
+              } else {
                 dispatch(_facebookAuthSignUp(navigation))
               }
             }}
@@ -134,7 +148,7 @@ export const SocialMedia = ({ routeName }: any) => {
             onPress={() => {
               if (routeName == "SignIn") {
                 dispatch(_googleAuthSignIn(navigation))
-              }else{
+              } else {
                 dispatch(_googleAuthSignup(navigation))
               }
             }}
@@ -144,6 +158,19 @@ export const SocialMedia = ({ routeName }: any) => {
               source={require('../../assets/gmail.png')}
             />
           </TouchableOpacity>
+          {Platform.OS === "ios" &&
+          <TouchableOpacity>
+            <Apple
+              resizeMode={FastImage.resizeMode.contain}
+              source={require('../../assets/apple.png')}
+              style={{ position: "absolute", zIndex: 0, width: 38, height: 38 }}
+            />
+            {SignInWithAppleButton({
+              buttonStyle: { height: 40, width: 40, },
+              callBack: appleSignIn,
+              buttonText: " ",
+            })}
+          </TouchableOpacity>}
         </>
         {/* )} */}
       </Row>

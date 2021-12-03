@@ -72,6 +72,7 @@ export const DashBoardStackScreens = () => {
       screenOptions={{
         headerShown: false,
       }}>
+        
       <DashBoardStack.Screen
         name={Routes.HomeDrawer}
         component={BottomTabNavigator}

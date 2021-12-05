@@ -54,7 +54,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:901870504657:android:0af493778d739b12ac13f0",
         "android_client_info": {
-          "package_name": "com.cupranation.cupra"
+          "package_name": "com.cupranation.cupraapp"
         }
       },
       "oauth_client": [
@@ -62,7 +62,7 @@
           "client_id": "901870504657-24tet3qvv2670our442oc5926j5s0gnj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.cupranation.cupra",
+            "package_name": "com.cupranation.cupraapp",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
@@ -70,7 +70,7 @@
           "client_id": "901870504657-p184hol5qks3kqkom8h6tt4cjq38qm79.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.cupranation.cupra",
+            "package_name": "com.cupranation.cupraapp",
             "certificate_hash": "cdeeb7a0de2be4e40977bc4476f43d0b7702df1c"
           }
         },

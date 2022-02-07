@@ -25,6 +25,7 @@ import { SignInWithAppleButton } from 'react-native-apple-authentication'
 export const BackGroundContinerImage = styled(FastImage)`
   flex: 1;
   width: null;
+  background-color: ${Colors.black};
   height: null;
   justify-content: flex-end;
   align-items: center;

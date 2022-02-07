@@ -10,7 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  View, Text
+  View, Text, Alert
 } from 'react-native';
 import {
   Container,
@@ -114,7 +114,6 @@ export const WelcomeScreen: React.FC = () => {
     // console.log(getSocialtype,'getSocialtype')
 
     if (getEmail && getEmail !== 'null') {
-
       dispatch(_signIn({ emailOrPhone: getEmail, password: password }, navigation, setUser));
 
       // navigation.dispatch(
@@ -126,6 +125,7 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Facebook') {
+
       console.log('FacebookFacebookFacebook')
       dispatch(_directLogin({ Id: getsocialId, type: 'FACEBOOK' }, navigation, setUser));
       // navigation.dispatch(
@@ -137,6 +137,7 @@ export const WelcomeScreen: React.FC = () => {
       // setUser(true);
     }
     else if (getSocialtype && getSocialtype == 'Google') {
+
       dispatch(_directLogin({ Id: getsocialId, type: 'GOOGLE' }, navigation, setUser));
     }
     else if (getSocialtype && getSocialtype == 'Apple') {
@@ -144,7 +145,7 @@ export const WelcomeScreen: React.FC = () => {
     }
     else if (getSocialtype && getSocialtype == 'Guest') {
       // console.log('saghirahmedshah')
-      dispatch(_directLoginForGuest(   navigation, setUser));
+      dispatch(_directLoginForGuest(navigation, setUser));
 
       // dispatch({ type: CURRENTUSER, payload: JSON.parse(currentUserForGuest) });
 
@@ -159,8 +160,9 @@ export const WelcomeScreen: React.FC = () => {
 
     else {
       console.log('elseelseelse')
-
-      setUser(false);
+      setTimeout(() => {
+        setUser(false);
+      }, 3000);
     }
   };
 

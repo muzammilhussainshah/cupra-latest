@@ -132,10 +132,11 @@ export const SpashScreen: React.FC<any> = ({
   return (
     <BackgroundContiner style={{backgroundColor:'black'}}>
       <Logo
-        source={require('../assets/images/splash.png')}
+        source={require('../assets/images/spgif.gif')}
+        // source={require('../assets/images/splash.png')}
         resizeMode={FastImage.resizeMode.stretch}
       />
-      <TouchableOpacity
+      {/* <TouchableOpacity
       onPress={()=>getDataAsync()}
       activeOpacity={0.7}
       style={{position: 'absolute' , width: 100, height: 100, alignSelf: 'center', top: '82%'}}>
@@ -143,7 +144,7 @@ export const SpashScreen: React.FC<any> = ({
         style={{ transform: [{ rotate: spin }],  }}
         source={require('../assets/images/st.png')}
         />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
     </BackgroundContiner>
   );
 };

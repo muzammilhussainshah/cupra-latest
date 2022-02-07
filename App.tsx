@@ -8,7 +8,7 @@
  * @format
  */
 import React, { useEffect } from 'react';
-
+import 'react-native-gesture-handler'
 import { Platform, StatusBar, LogBox, NativeModules ,AsyncStorage } from 'react-native';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
